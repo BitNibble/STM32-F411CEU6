@@ -53,6 +53,8 @@ uint32_t (*pclk1)(void);
 uint32_t (*pclk2)(void);
 }STM32FXXX_Query;
 
+void set_reg(volatile uint32_t* reg, uint32_t hbits);
+void reset_reg(volatile uint32_t* reg, uint32_t hbits);
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);

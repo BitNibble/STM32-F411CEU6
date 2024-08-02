@@ -272,6 +272,12 @@ STM32FXXX_Query query_enable(void)
 
 STM32FXXX_Query* query(void){ return (STM32FXXX_Query*) &stm32fxxx_query; }
 
+void set_reg(volatile uint32_t* reg, uint32_t hbits){
+	*reg |= hbits;
+}
+void reset_reg(volatile uint32_t* reg, uint32_t hbits){
+	*reg &= ~hbits;
+}
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
