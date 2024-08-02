@@ -44,12 +44,13 @@ int main(void)
 {
   STM32FXXX_enable();
 
-  gpiob()->clock(on);
+  gpiob()->clock(on); // LCD
+  gpioc()->clock(on); // LED
 
   ARMLCD0_enable((GPIO_TypeDef*)stm()->gpiob->instance);
   FUNC_enable();
 
-  gpiob()->instance->moder.par.pin_13 = 1;
+  gpioc()->instance->moder.par.pin_13 = 1;
 
   while (1)
   {
@@ -59,9 +60,9 @@ int main(void)
 	  lcd0()->string_size(func()->ftoa((double)33/654,10),20);
 
 	  _delay_ms(1000);
-	  set_reg_block(&GPIOB->ODR,1,13,1);
+	  set_reg_block(&GPIOC->ODR,1,13,1);
 	  _delay_ms(1000);
-	  set_reg_block(&GPIOB->ODR,1,13,0);
+	  set_reg_block(&GPIOC->ODR,1,13,0);
   }
 }
 

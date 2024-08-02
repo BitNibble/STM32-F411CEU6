@@ -39,12 +39,8 @@ void ARMLCD0_reboot(void);
 /*** LCD0 Procedure & Function Definition ***/
 ARMLCD0 ARMLCD0_enable(GPIO_TypeDef* reg)
 {
-	// ALLOCACAO MEMORIA PARA Estrutura
-
-	// import parameters
 	ireg = reg;
-	// initialize variables
-	// Direccionar apontadores para PROTOTIPOS
+
 	setup_armlcd0.write = ARMLCD0_write;
 	setup_armlcd0.read = ARMLCD0_read;
 	setup_armlcd0.BF = ARMLCD0_BF;
@@ -56,7 +52,7 @@ ARMLCD0 ARMLCD0_enable(GPIO_TypeDef* reg)
 	setup_armlcd0.clear = ARMLCD0_clear;
 	setup_armlcd0.gotoxy = ARMLCD0_gotoxy;
 	setup_armlcd0.reboot = ARMLCD0_reboot;
-	// LCD INIC
+
 	ARMLCD0_inic();
 	
 	return setup_armlcd0;

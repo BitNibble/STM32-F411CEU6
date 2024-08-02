@@ -61,7 +61,7 @@ all: main-build
 main-build: F411CEU6-2.elf secondary-outputs
 
 dependents:
-	-cd D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release && $(MAKE) clean all
+	-cd D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release && $(MAKE) all
 
 # Tool invocations
 F411CEU6-2.elf F411CEU6-2.map: $(OBJS) $(USER_OBJS) D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release/F411CEU6-2.elf D:\Embedded\STM32-F411CEU6\workspace\F411CEU6-2\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
