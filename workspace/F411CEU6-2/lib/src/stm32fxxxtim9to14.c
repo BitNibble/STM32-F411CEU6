@@ -30,7 +30,7 @@ void STM32FXXXTim9Clock(uint8_t bool)
 }
 void STM32FXXXTim9Nvic(uint8_t bool)
 { // 24
-	if(bool){setbit(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);}else{setbit(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);}
 }
 /*************/
 /*** TIM10 ***/
@@ -41,7 +41,7 @@ void STM32FXXXTim10Clock(uint8_t bool)
 }
 void STM32FXXXTim10Nvic(uint8_t bool)
 { // 25
-	if(bool){setbit(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);}
 }
 /*************/
 /*** TIM11 ***/
@@ -52,7 +52,7 @@ void STM32FXXXTim11Clock(uint8_t bool)
 }
 void STM32FXXXTim11Nvic(uint8_t bool)
 { // 26
-	if(bool){setbit(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
 }
 #ifdef __STM32F446xx_H
 /*************/
@@ -64,7 +64,7 @@ void STM32FXXXTim12Clock(uint8_t bool)
 }
 void STM32FXXXTim12Nvic(uint8_t bool)
 { // 43
-	if(bool){setbit(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);}else{setbit(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);}
 }
 /*************/
 /*** TIM13 ***/
@@ -79,7 +79,7 @@ void STM32FXXXTim13Clock(uint8_t bool)
 }
 void STM32FXXXTim13Nvic(uint8_t bool)
 { // 44
-	if(bool){setbit(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);}else{setbit(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);}
 }
 /*************/
 /*** TIM14 ***/
@@ -90,7 +90,7 @@ void STM32FXXXTim14Clock(uint8_t bool)
 }
 void STM32FXXXTim14Nvic(uint8_t bool)
 { // 45
-	if(bool){setbit(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}else{setbit(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}
 }
 #endif
 /*** TIM9 Procedure & Function Definition ***/

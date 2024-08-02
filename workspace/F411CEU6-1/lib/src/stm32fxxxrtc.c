@@ -74,16 +74,16 @@ void STM32FXXXRtcNvic(uint8_t value)
 { // 3, 41
 	switch(value){
 		case 0b01:
-			setbit(NVIC->ISER, 1, RTC_WKUP_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, RTC_WKUP_IRQn, 1);
 		break;
 		case 0b10:
-			setbit(NVIC->ISER, 1, RTC_Alarm_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, RTC_Alarm_IRQn, 1);
 		break;
 		case 0b101:
-			setbit(NVIC->ICER, 1, RTC_WKUP_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, RTC_WKUP_IRQn, 1);
 		break;
 		case 0b110:
-			setbit(NVIC->ICER, 1, RTC_Alarm_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, RTC_Alarm_IRQn, 1);
 		break;
 	default:
 	break;
@@ -113,7 +113,7 @@ void STM32FXXXRtcBckWrite(uint8_t n, uint8_t data)
 	STM32FXXXPwrClock(1);
 	STM32FXXXBckSramClock(1);
 	STM32FXXXRtcWriteEnable();
-	if(n < 80){ setbit(&RTC->BKP0R, 8, (n * 8), data); }
+	if(n < 80){ set_bit_block(&RTC->BKP0R, 8, (n * 8), data); }
 	STM32FXXXRtcWriteDisable();
 }
 
@@ -121,7 +121,7 @@ uint8_t STM32FXXXRtcBckRead(uint8_t n)
 {
 	uint8_t value = 0;
 	if(n < 80){
-		value = getsetbit(&RTC->BKP0R, 8, (n * 8));
+		value = get_bit_block(&RTC->BKP0R, 8, (n * 8));
 	}
 	return value;
 }
@@ -319,14 +319,14 @@ uint16_t rtc_get_ss(void)
 /*** AUX Procedure & Function Definition ***/
 void STM32FXXXPwrClock(uint8_t bool)
 {
-	setreg(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
+	set_reg_block(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
 }
 void STM32FXXXBckSramClock(uint8_t bool)
 {
 	#ifdef STM32F446xx
-		setreg(&RCC->AHB1ENR, 1, 18, bool); // Backup SRAM interface clock enable
+		set_reg_block(&RCC->AHB1ENR, 1, 18, bool); // Backup SRAM interface clock enable
 	#endif
-	setreg(&RCC->AHB1LPENR, 1, 16, bool); // Backup SRAM interface clock enable
+	set_reg_block(&RCC->AHB1LPENR, 1, 16, bool); // Backup SRAM interface clock enable
 }
 void STM32FXXXRtcWriteEnable(void)
 {

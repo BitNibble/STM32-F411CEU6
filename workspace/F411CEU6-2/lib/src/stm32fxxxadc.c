@@ -18,7 +18,7 @@ static STM32FXXXADC_COMMON stm32fxxx_adc_common;
 // CDR
 uint32_t STM32FXXXADC_cdr(void)
 {
-	return readreg(ADC->CDR, 32, 0);
+	return get_reg_block(ADC->CDR, 32, 0);
 }
 /*** Auxiliary ***/
 STM32FXXXADC_COMMON* stm32fxxx_adc_common_inic(void)

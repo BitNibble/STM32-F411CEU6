@@ -128,27 +128,27 @@ void ARMLCD0_inic(void)
 }
 void ARMLCD0_write(char c, unsigned short D_I)
 { // write to LCD
-	resetpin(ireg,ARMLCD0_RW); // lcd as input
+	reset_hpins(ireg,1 << ARMLCD0_RW); // lcd as input
 	ireg->MODER &= (uint32_t) ~((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset mcu output
 	ireg->MODER |= ((1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2))); // mcu as output
 	
-	if(D_I) setpin(ireg, ARMLCD0_RS); else resetpin(ireg, ARMLCD0_RS);
+	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
 	
-	setpin(ireg, ARMLCD0_EN);
-	if(c & 0x80) setpin(ireg,ARMLCD0_DB7); else resetpin(ireg,ARMLCD0_DB7);
-	if(c & 0x40) setpin(ireg,ARMLCD0_DB6); else resetpin(ireg,ARMLCD0_DB6);
-	if(c & 0x20) setpin(ireg,ARMLCD0_DB5); else resetpin(ireg,ARMLCD0_DB5);
-	if(c & 0x10) setpin(ireg,ARMLCD0_DB4); else resetpin(ireg,ARMLCD0_DB4);
-	resetpin(ireg, ARMLCD0_EN);
+	set_hpins(ireg, 1 << ARMLCD0_EN);
+	if(c & 0x80) set_hpins(ireg,1 << ARMLCD0_DB7); else reset_hpins(ireg,1 << ARMLCD0_DB7);
+	if(c & 0x40) set_hpins(ireg,1 << ARMLCD0_DB6); else reset_hpins(ireg,1 << ARMLCD0_DB6);
+	if(c & 0x20) set_hpins(ireg,1 << ARMLCD0_DB5); else reset_hpins(ireg,1 << ARMLCD0_DB5);
+	if(c & 0x10) set_hpins(ireg,1 << ARMLCD0_DB4); else reset_hpins(ireg,1 << ARMLCD0_DB4);
+	reset_hpins(ireg,1 << ARMLCD0_EN);
 	
-	if(D_I) setpin(ireg, ARMLCD0_RS); else resetpin(ireg, ARMLCD0_RS);
+	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
 	
-	setpin(ireg, ARMLCD0_EN);
-	if(c & 0x08) setpin(ireg,ARMLCD0_DB7); else resetpin(ireg,ARMLCD0_DB7);
-	if(c & 0x04) setpin(ireg,ARMLCD0_DB6); else resetpin(ireg,ARMLCD0_DB6);
-	if(c & 0x02) setpin(ireg,ARMLCD0_DB5); else resetpin(ireg,ARMLCD0_DB5);
-	if(c & 0x01) setpin(ireg,ARMLCD0_DB4); else resetpin(ireg,ARMLCD0_DB4);
-	resetpin(ireg, ARMLCD0_EN);
+	set_hpins(ireg,1 << ARMLCD0_EN);
+	if(c & 0x08) set_hpins(ireg,1 << ARMLCD0_DB7); else reset_hpins(ireg,1 << ARMLCD0_DB7);
+	if(c & 0x04) set_hpins(ireg,1 << ARMLCD0_DB6); else reset_hpins(ireg,1 << ARMLCD0_DB6);
+	if(c & 0x02) set_hpins(ireg,1 << ARMLCD0_DB5); else reset_hpins(ireg,1 << ARMLCD0_DB5);
+	if(c & 0x01) set_hpins(ireg,1 << ARMLCD0_DB4); else reset_hpins(ireg,1 << ARMLCD0_DB4);
+	reset_hpins(ireg,1 << ARMLCD0_EN);
 }
 
 char ARMLCD0_read(unsigned short D_I)
@@ -156,24 +156,24 @@ char ARMLCD0_read(unsigned short D_I)
 	uint32_t data = 0;
 	uint8_t c = 0;
 	ireg->MODER &= (uint32_t) ~((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset mcu input
-	setpin(ireg, ARMLCD0_RW); // lcd as output
+	set_hpins(ireg,1 << ARMLCD0_RW); // lcd as output
 	
-	if(D_I) setpin(ireg, ARMLCD0_RS); else resetpin(ireg, ARMLCD0_RS);
+	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
 	
-	setpin(ireg, ARMLCD0_EN);
+	set_hpins(ireg,1 << ARMLCD0_EN);
 	data = ireg->IDR; // read data
-	resetpin(ireg, ARMLCD0_EN);
+	reset_hpins(ireg,1 << ARMLCD0_EN);
 	
 	if(data & (1 << ARMLCD0_DB7)) c |= 1 << 7; else c &= ~(1 << 7);
 	if(data & (1 << ARMLCD0_DB6)) c |= 1 << 6; else c &= ~(1 << 6);
 	if(data & (1 << ARMLCD0_DB5)) c |= 1 << 5; else c &= ~(1 << 5);
 	if(data & (1 << ARMLCD0_DB4)) c |= 1 << 4; else c &= ~(1 << 4);
 	
-	if(D_I) setpin(ireg, ARMLCD0_RS); else resetpin(ireg, ARMLCD0_RS);
+	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
 	
-	setpin(ireg, ARMLCD0_EN);
+	set_hpins(ireg,1 << ARMLCD0_EN);
 	data = ireg->IDR; // read data
-	resetpin(ireg, ARMLCD0_EN);
+	reset_hpins(ireg,1 << ARMLCD0_EN);
 
 	if(data & (1 << ARMLCD0_DB7)) c |= 1 << 3; else c &= ~(1 << 3);
 	if(data & (1 << ARMLCD0_DB6)) c |= 1 << 2; else c &= ~(1 << 2);

@@ -23,7 +23,7 @@ STM32FXXXPLL_prescaler* Pll_prescaler_inic(void);
 
 uint16_t gethpre(void)
 {
-	uint32_t value = readreg(RCC->CFGR, 4, 4);
+	uint32_t value = get_reg_block(RCC->CFGR, 4, 4);
 	switch(value)
 	{
 		case 0b1000:
@@ -58,7 +58,7 @@ uint16_t gethpre(void)
 }
 uint8_t gethppre1(void)
 {
-	uint32_t value = readreg(RCC->CFGR, 3, 10);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, 10);
 	switch(value)
 	{
 		case 0b100:
@@ -81,7 +81,7 @@ uint8_t gethppre1(void)
 }
 uint8_t gethppre2(void)
 {
-	uint32_t value = readreg(RCC->CFGR, 3, 13);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, 13);
 	switch(value)
 	{
 		case 0b100:
@@ -104,11 +104,11 @@ uint8_t gethppre2(void)
 }
 uint8_t getrtcpre(void)
 {
-	return readreg(RCC->CFGR, 5, 16);
+	return get_reg_block(RCC->CFGR, 5, 16);
 }
 uint8_t gethmco1pre(void)
 {
-	uint32_t value = readreg(RCC->CFGR, 3, 24);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, 24);
 	switch(value)
 	{
 		case 0b100:
@@ -131,7 +131,7 @@ uint8_t gethmco1pre(void)
 }
 uint8_t gethmco2pre(void)
 {
-	uint32_t value = readreg(RCC->CFGR, 3, 27);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, 27);
 	switch(value)
 	{
 		case 0b100:
@@ -154,15 +154,15 @@ uint8_t gethmco2pre(void)
 }
 uint8_t getpllm(void)
 {
-	return readreg(RCC->PLLCFGR, 6, 0);
+	return get_reg_block(RCC->PLLCFGR, 6, 0);
 }
 uint16_t getplln(void)
 {
-	return readreg(RCC->PLLCFGR, 9, 6);
+	return get_reg_block(RCC->PLLCFGR, 9, 6);
 }
 uint8_t getpllp(void)
 {
-	uint32_t value = readreg(RCC->PLLCFGR, 2, 16);
+	uint32_t value = get_reg_block(RCC->PLLCFGR, 2, 16);
 	switch(value)
 	{
 		case 0b00:
@@ -184,21 +184,21 @@ uint8_t getpllp(void)
 }
 uint8_t getpllq(void)
 {
-	return readreg(RCC->PLLCFGR, 4, 24);
+	return get_reg_block(RCC->PLLCFGR, 4, 24);
 }
 uint8_t getpllr(void)
 {
-	return readreg(RCC->PLLCFGR, 3, 28);
+	return get_reg_block(RCC->PLLCFGR, 3, 28);
 }
 uint32_t getpllclk(void)
 {
 	uint32_t source;
-	if( readreg(RCC->PLLCFGR, 1, 22) ) source = HSE_OSC; else source = HSI_RC;
+	if( get_reg_block(RCC->PLLCFGR, 1, 22) ) source = HSE_OSC; else source = HSI_RC;
 	return source;
 }
 uint32_t getsysclk(void)
 {
-	long value = readreg(RCC->CFGR, 2, 2);
+	long value = get_reg_block(RCC->CFGR, 2, 2);
 	switch(value) // SWS[2]: System clock switch status
 	{
 		case 0:
@@ -272,7 +272,7 @@ STM32FXXX_Query query_enable(void)
 
 STM32FXXX_Query* query(void){ return (STM32FXXX_Query*) &stm32fxxx_query; }
 
-uint32_t readreg(uint32_t reg, uint8_t size_block, uint8_t bit_n)
+uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
@@ -280,7 +280,7 @@ uint32_t readreg(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 	reg = (reg >> bit_n);
 	return reg;
 }
-void writereg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
 	uint32_t value = *reg;
@@ -290,7 +290,7 @@ void writereg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_
 	value |= data;
 	*reg = value;
 }
-void setreg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
@@ -298,15 +298,7 @@ void setreg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t 
 	*reg &= ~(mask << bit_n);
 	*reg |= (data << bit_n);
 }
-uint32_t getreg(uint32_t reg, uint8_t size_block, uint8_t bit_n)
-{
-	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	reg &= (mask << bit_n);
-	reg = (reg >> bit_n);
-	return reg;
-}
-uint32_t getsetbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
+uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
 	uint32_t n = 0;
 	if(bit_n > 31){ n = bit_n/32; bit_n = bit_n - (n * 32); } if(size_block > 32){ size_block = 32;}
@@ -316,7 +308,7 @@ uint32_t getsetbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 	value = (value >> bit_n);
 	return value;
 }
-void setbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	uint32_t n = 0;
 	if(bit_n > 31){ n = bit_n/32; bit_n = bit_n - (n * 32); } if(size_block > 32){ size_block = 32;}
@@ -325,29 +317,18 @@ void setbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t 
 	*(reg + n ) &= ~(mask << bit_n);
 	*(reg + n ) |= (data << bit_n);
 }
-uint32_t getbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
+uint32_t get_reg_posmsk(uint32_t reg, uint32_t msk, uint8_t pos)
 {
-	uint32_t n = 0;
-	if(bit_n > 31){ n = bit_n/32; bit_n = bit_n - (n * 32); } if(size_block > 32){ size_block = 32;}
-	uint32_t value = *(reg + n );
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= (mask << bit_n);
-	value = (value >> bit_n);
-	return value;
+	pos &= 0x1F;
+	reg &= msk; reg = (reg >> pos);
+	return reg;
 }
-
-void setregposmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data)
+void set_reg_posmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data)
 {
 	pos &= 0x1F;
 	data = (data << pos); data &= msk;
 	*reg &= ~msk;
 	*reg |= data;
-}
-uint32_t getregposmsk(uint32_t reg, uint32_t msk, uint8_t pos)
-{
-	pos &= 0x1F;
-	reg &= msk; reg = (reg >> pos);
-	return reg;
 }
 void STM32446RegSetBits( uint32_t* reg, uint8_t n_bits, ... )
 {
@@ -382,21 +363,13 @@ void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, u
 	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
 	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
 }
-void sethpins( GPIO_TypeDef* reg, uint16_t hpins )
+void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)hpins;
 }
-void resethpins( GPIO_TypeDef* reg, uint16_t hpins )
+void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)(hpins << 16);
-}
-void setpin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (1 << pin);
-}
-void resetpin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (uint32_t)((1 << pin) << 16);
 }
 
 /***EOF***/

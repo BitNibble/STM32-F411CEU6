@@ -64,7 +64,7 @@ void STM32FXXXRccHEnable(uint8_t hclock)
 {
 	uint8_t set;
 	uint8_t rdy;
-	setreg(&RCC->CR, 1, 19, 1); // CSSON
+	set_reg_block(&RCC->CR, 1, 19, 1); // CSSON
 	for( set = 1, rdy = 1; rdy ; ){
 		if(hclock == 0){ // HSION: Internal high-speed clock enable
 			if( set ){ RCC->CR |= ( 1 << 0); set = 0; }else if( RCC->CR & ( 1 << 1) ) rdy = 0;
@@ -83,44 +83,44 @@ uint8_t STM32FXXXRccHSelect(uint8_t hclock)
 { // SW[1:0]: System clock switch 00 - HSI, 01 - HSE pg133
 	switch(hclock){
 		case 0:
-			setreg(&RCC->CFGR, 2, 0, 0);
+			set_reg_block(&RCC->CFGR, 2, 0, 0);
 		break;
 		case 1: // HSE oscillator selected as system clock
-			setreg(&RCC->CFGR, 2, 0, 1);
+			set_reg_block(&RCC->CFGR, 2, 0, 1);
 		break;
 		case 2: // PLL_P selected as system clock
-			setreg(&RCC->CFGR, 2, 0, 2);
+			set_reg_block(&RCC->CFGR, 2, 0, 2);
 		break;
 		case 3: // PLL_R selected as system clock
 			#ifdef __STM32F446xx_H
 				STM32FXXXRccWriteEnable();
-				setreg(&RCC->CFGR, 2, 0, 3);
+				set_reg_block(&RCC->CFGR, 2, 0, 3);
 				STM32FXXXRccWriteDisable();
 			#else
-				setreg(&RCC->CFGR, 2, 0, 0);
+				set_reg_block(&RCC->CFGR, 2, 0, 0);
 			#endif
 		break;
 		default: // 00: HSI oscillator selected as system clock
-			setreg(&RCC->CFGR, 2, 0, 0);
+			set_reg_block(&RCC->CFGR, 2, 0, 0);
 		break;
 	}
-	return readreg(RCC->CFGR, 2, 2);
+	return get_reg_block(RCC->CFGR, 2, 2);
 }
 uint8_t STM32FXXXRccPLLSelect(uint8_t hclock)
 { // This bit can be written only when PLL and PLLI2S are disabled
-	setreg(&RCC->CR, 1, 24, 0); setreg(&RCC->CR, 1, 26, 0);
+	set_reg_block(&RCC->CR, 1, 24, 0); set_reg_block(&RCC->CR, 1, 26, 0);
 	switch(hclock){
 		case 0: // HSI
-			setreg(&RCC->PLLCFGR, 1, 22, 0);
+			set_reg_block(&RCC->PLLCFGR, 1, 22, 0);
 		break;
 		case 1: // HSE
-			setreg(&RCC->PLLCFGR, 1, 22, 1);
+			set_reg_block(&RCC->PLLCFGR, 1, 22, 1);
 		break;
 		default: // HSI
-			setreg(&RCC->PLLCFGR, 1, 22, 0);
+			set_reg_block(&RCC->PLLCFGR, 1, 22, 0);
 		break;
 	}
-	return readreg(RCC->PLLCFGR, 1, 22);
+	return get_reg_block(RCC->PLLCFGR, 1, 22);
 }
 void STM32FXXXRccLEnable(uint8_t lclock)
 {
@@ -145,117 +145,117 @@ void STM32FXXXRccLSelect(uint8_t lclock)
 	switch(lclock){
 		case 0: // LSI oscillator clock used as the RTC clock
 			STM32FXXXRccWriteEnable();
-			setreg(&RCC->BDCR, 2, 8, 2);
+			set_reg_block(&RCC->BDCR, 2, 8, 2);
 			STM32FXXXRccWriteDisable();
 		break;
 		case 1: // LSE oscillator clock used as the RTC clock
 			STM32FXXXRccWriteEnable();
-			setreg(&RCC->BDCR, 2, 8, 1);
+			set_reg_block(&RCC->BDCR, 2, 8, 1);
 			STM32FXXXRccWriteDisable();
 		break;
 		case 2: // HSE oscillator clock divided by a programmable prescaler
 			STM32FXXXRccWriteEnable();
-			setreg(&RCC->BDCR, 2, 8, 3);
+			set_reg_block(&RCC->BDCR, 2, 8, 3);
 			STM32FXXXRccWriteDisable();
 		break;
 		default: // LSE oscillator clock used as the RTC clock
 			STM32FXXXRccWriteEnable();
-			setreg(&RCC->BDCR, 2, 8, 1);
+			set_reg_block(&RCC->BDCR, 2, 8, 1);
 			STM32FXXXRccWriteDisable();
 		break;
 	}
 }
 void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre)
 {
-	setreg(&RCC->CFGR, 5, 16, rtcpre);
+	set_reg_block(&RCC->CFGR, 5, 16, rtcpre);
 	switch(ppre2){ // 13
 		case 2:
-			setreg(&RCC->CFGR, 3, 13, 4);
+			set_reg_block(&RCC->CFGR, 3, 13, 4);
 		break;
 		case 4:
-			setreg(&RCC->CFGR, 3, 13, 5);
+			set_reg_block(&RCC->CFGR, 3, 13, 5);
 		break;
 		case 8:
-			setreg(&RCC->CFGR, 3, 13, 6);
+			set_reg_block(&RCC->CFGR, 3, 13, 6);
 		break;
 		case 16:
-			setreg(&RCC->CFGR, 3, 13, 7);
+			set_reg_block(&RCC->CFGR, 3, 13, 7);
 		break;
 		default:
-			setreg(&RCC->CFGR, 3, 13, 0);
+			set_reg_block(&RCC->CFGR, 3, 13, 0);
 		break;
 	}
 	switch(ppre1){ // 10
 		case 2:
-			setreg(&RCC->CFGR, 3, 10, 4);
+			set_reg_block(&RCC->CFGR, 3, 10, 4);
 		break;
 		case 4:
-			setreg(&RCC->CFGR, 3, 10, 5);
+			set_reg_block(&RCC->CFGR, 3, 10, 5);
 		break;
 		case 8:
-			setreg(&RCC->CFGR, 3, 10, 6);
+			set_reg_block(&RCC->CFGR, 3, 10, 6);
 		break;
 		case 16:
-			setreg(&RCC->CFGR, 3, 10, 7);
+			set_reg_block(&RCC->CFGR, 3, 10, 7);
 		break;
 		default:
-			setreg(&RCC->CFGR, 3, 10, 0);
+			set_reg_block(&RCC->CFGR, 3, 10, 0);
 		break;
 	}
 	switch(ahbpre){ // 4
 		case 2:
-			setreg(&RCC->CFGR, 4, 4, 8);
+			set_reg_block(&RCC->CFGR, 4, 4, 8);
 		break;
 		case 4:
-			setreg(&RCC->CFGR, 4, 4, 9);
+			set_reg_block(&RCC->CFGR, 4, 4, 9);
 		break;
 		case 8:
-			setreg(&RCC->CFGR, 4, 4, 10);
+			set_reg_block(&RCC->CFGR, 4, 4, 10);
 		break;
 		case 16:
-			setreg(&RCC->CFGR, 4, 4, 11);
+			set_reg_block(&RCC->CFGR, 4, 4, 11);
 		break;
 		case 64:
-			setreg(&RCC->CFGR, 4, 4, 12);
+			set_reg_block(&RCC->CFGR, 4, 4, 12);
 		break;
 		case 128:
-			setreg(&RCC->CFGR, 4, 4, 13);
+			set_reg_block(&RCC->CFGR, 4, 4, 13);
 		break;
 		case 256:
-			setreg(&RCC->CFGR, 4, 4, 14);
+			set_reg_block(&RCC->CFGR, 4, 4, 14);
 			break;
 		case 512:
-			setreg(&RCC->CFGR, 4, 4, 15);
+			set_reg_block(&RCC->CFGR, 4, 4, 15);
 			break;
 		default:
-			setreg(&RCC->CFGR, 4, 4, 0);
+			set_reg_block(&RCC->CFGR, 4, 4, 0);
 		break;
 	}
 }
 // PLL
 void STM32FXXXPLLDivision(uint8_t pllm, uint16_t plln, uint8_t pllp, uint8_t pllq)
 {
-	setreg(&RCC->CR, 1, 24, 0);
-	setreg(&RCC->PLLCFGR,4,24,pllq);
+	set_reg_block(&RCC->CR, 1, 24, 0);
+	set_reg_block(&RCC->PLLCFGR,4,24,pllq);
 	switch(pllp){
 		case 2:
-			setreg(&RCC->PLLCFGR,2,16,0);
+			set_reg_block(&RCC->PLLCFGR,2,16,0);
 		break;
 		case 4:
-			setreg(&RCC->PLLCFGR,2,16,1);
+			set_reg_block(&RCC->PLLCFGR,2,16,1);
 		break;
 		case 6:
-			setreg(&RCC->PLLCFGR,2,16,2);
+			set_reg_block(&RCC->PLLCFGR,2,16,2);
 		break;
 		case 8:
-			setreg(&RCC->PLLCFGR,2,16,3);
+			set_reg_block(&RCC->PLLCFGR,2,16,3);
 		break;
 		default: // 2
-			setreg(&RCC->PLLCFGR,2,16,0);
+			set_reg_block(&RCC->PLLCFGR,2,16,0);
 		break;
 	}
-	setreg(&RCC->PLLCFGR,9,6,plln);
-	setreg(&RCC->PLLCFGR,6,0,pllm);
+	set_reg_block(&RCC->PLLCFGR,9,6,plln);
+	set_reg_block(&RCC->PLLCFGR,6,0,pllm);
 }
 void STM32FXXXRccPLLCLKEnable(void)
 {
@@ -284,7 +284,7 @@ void STM32FXXXRccPLLSAIEnable(void)
 }
 void STM32FXXXRccPwrClock(uint8_t bool)
 {
-	setreg(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
+	set_reg_block(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
 }
 void STM32FXXXRccWriteEnable(void)
 {
@@ -298,7 +298,7 @@ void STM32FXXXRccWriteDisable(void)
 /*** Other ***/
 void STM32FXXXRCC_nvic(uint8_t bool)
 {
-	if(bool){ setbit(NVIC->ISER, 1, RCC_IRQn, 1); } else{ setbit(NVIC->ICER, 1, RCC_IRQn, 1); }
+	if(bool){ set_bit_block(NVIC->ISER, 1, RCC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, RCC_IRQn, 1); }
 }
 /*** Extended ***/
 STM32FXXXRCCPLL* stm32fxxx_rcc_pll_inic(void)

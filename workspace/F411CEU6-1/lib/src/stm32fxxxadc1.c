@@ -28,7 +28,7 @@ void STM32FXXXAdc1Clock(uint8_t bool)
 }
 void STM32FXXXAdc1Nvic(uint8_t bool)
 {
-	if(bool){ setbit(NVIC->ISER, 1, ADC_IRQn, 1); } else{ setbit(NVIC->ICER, 1, ADC_IRQn, 1); }
+	if(bool){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 void STM32FXXXAdc1Inic(void)
 {

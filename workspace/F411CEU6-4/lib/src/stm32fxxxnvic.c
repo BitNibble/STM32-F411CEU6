@@ -17,19 +17,19 @@ static STM32FXXXNVICobj stm32fxxx_nvic;
 /*** NVIC Procedure & Function Definition ***/
 void STM32FXXXNVIC_set_enable( uint8_t IRQn )
 {
-	setbit(NVIC->ISER, 1, IRQn, 1);
+	set_bit_block(NVIC->ISER, 1, IRQn, 1);
 }
 void STM32FXXXNVIC_clear_enable( uint8_t IRQn )
 {
-	setbit(NVIC->ICER, 1, IRQn, 1);
+	set_bit_block(NVIC->ICER, 1, IRQn, 1);
 }
 void STM32FXXXNVIC_set_pending( uint8_t IRQn )
 {
-	setbit(NVIC->ISPR, 1, IRQn, 1);
+	set_bit_block(NVIC->ISPR, 1, IRQn, 1);
 }
 void STM32FXXXNVIC_clear_pending( uint8_t IRQn )
 {
-	setbit(NVIC->ICPR, 1, IRQn, 1);
+	set_bit_block(NVIC->ICPR, 1, IRQn, 1);
 }
 uint8_t STM32FXXXNVIC_active( uint8_t IRQn ) // Query
 {
@@ -37,7 +37,7 @@ uint8_t STM32FXXXNVIC_active( uint8_t IRQn ) // Query
 	uint8_t bool; uint32_t n = 0;
 	if(IRQn > 31){ n = IRQn/32; IRQn = IRQn - (n * 32); }
 	if( *(reg + n ) & (1 << IRQn) ) bool = 1; else bool = 0 ;
-	//return nvic_getsetbit(NVIC->ICPR, 1, IRQn);
+	//return nvic_getset_bit_block(NVIC->ICPR, 1, IRQn);
 	return bool;
 }
 void STM32FXXXNVIC_priority(uint32_t IRQn, uint32_t priority)
@@ -47,7 +47,7 @@ void STM32FXXXNVIC_priority(uint32_t IRQn, uint32_t priority)
 }
 void STM32FXXXNVIC_trigger(uint32_t IRQn)
 {
-	writereg(&NVIC->STIR, 9, 0, IRQn);
+	write_reg_block(&NVIC->STIR, 9, 0, IRQn);
 }
 /*** INIC Procedure & Function Definition ***/
 STM32FXXXNVICobj* nvic_enable(void)

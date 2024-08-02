@@ -26,7 +26,7 @@ void STM32FXXXTim2Clock(uint8_t bool)
 }
 void STM32FXXXTim2Nvic(uint8_t bool)
 { // 28
-	if(bool){setbit(NVIC->ISER, 1, TIM2_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM2_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
 /************/
 /*** TIM3 ***/
@@ -37,7 +37,7 @@ void STM32FXXXTim3Clock(uint8_t bool)
 }
 void STM32FXXXTim3Nvic(uint8_t bool)
 { // 29
-	if(bool){setbit(NVIC->ISER, 1, TIM3_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM3_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
 /************/
 /*** TIM4 ***/
@@ -48,7 +48,7 @@ void STM32FXXXTim4Clock(uint8_t bool)
 }
 void STM32FXXXTim4Nvic(uint8_t bool)
 { // 30
-	if(bool){setbit(NVIC->ISER, 1, TIM4_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM4_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
 /************/
 /*** TIM5 ***/
@@ -59,7 +59,7 @@ void STM32FXXXTim5Clock(uint8_t bool)
 }
 void STM32FXXXTim5Nvic(uint8_t bool)
 { // 50
-	if(bool){setbit(NVIC->ISER, 1, TIM5_IRQn, 1);} else{setbit(NVIC->ICER, 1, TIM5_IRQn, 1);}
+	if(bool){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
 /*** TIM2 INIC Procedure & Function Definition ***/
 STM32FXXX_TIM2* tim2_enable(void)

@@ -59,9 +59,9 @@ int main(void)
 	  lcd0()->string_size(func()->ftoa((double)33/654,10),20);
 
 	  _delay_ms(1000);
-	  setreg(&GPIOB->ODR,1,13,1);
+	  set_reg_block(&GPIOB->ODR,1,13,1);
 	  _delay_ms(1000);
-	  setreg(&GPIOB->ODR,1,13,0);
+	  set_reg_block(&GPIOB->ODR,1,13,0);
   }
 }
 

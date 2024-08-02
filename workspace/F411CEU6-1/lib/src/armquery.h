@@ -53,19 +53,15 @@ uint32_t (*pclk1)(void);
 uint32_t (*pclk2)(void);
 }STM32FXXX_Query;
 
-uint32_t readreg(uint32_t reg, uint8_t size_block, uint8_t bit_n);
-void writereg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-void setreg(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-uint32_t getreg(uint32_t reg, uint8_t size_block, uint8_t bit_n);
-uint32_t getsetbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
-void setbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-uint32_t getbit(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
-void setregposmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data);
-uint32_t getregposmsk(uint32_t reg, uint32_t msk, uint8_t pos);
-void sethpins( GPIO_TypeDef* reg, uint16_t hpins );
-void resethpins( GPIO_TypeDef* reg, uint16_t hpins );
-void setpin( GPIO_TypeDef* reg, uint8_t pin );
-void resetpin( GPIO_TypeDef* reg, uint8_t pin );
+uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
+void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+uint32_t get_reg_posmsk(uint32_t reg, uint32_t msk, uint8_t pos);
+void set_reg_posmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data);
+void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 
 uint32_t getpllclk(void);
 uint32_t getsysclk(void);
