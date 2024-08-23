@@ -401,27 +401,32 @@ void rtc_lenable(unsigned int lclock)
 void rtc_lselect(uint8_t lclock)
 {
 	STM32FXXXRtcWriteEnable();
-	RCC->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // Clear
+	rcc_instance()->bdcr.par.rtcsel = 0;
+	//RCC->BDCR &= (uint32_t) ~((1 << 9) | (1 << 8)); // Clear
 	STM32FXXXRtcWriteDisable();
 	switch(lclock){
 		case 0:
 			STM32FXXXRtcWriteEnable();
-			RCC->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
+			rcc_instance()->bdcr.par.rtcsel = 2;
+			//RCC->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
 			STM32FXXXRtcWriteDisable();
 		break;
 		case 1:
 			STM32FXXXRtcWriteEnable();
-			RCC->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
+			rcc_instance()->bdcr.par.rtcsel = 1;
+			//RCC->BDCR |= (1 << 8); // LSE oscillator clock used as the RTC clock
 			STM32FXXXRtcWriteDisable();
 		break;
 		case 3:
 			STM32FXXXRtcWriteEnable();
-			RCC->BDCR |= ((1 << 8) | (1 << 9)); // HSE oscillator clock divided by a programmable pre-scaler
+			rcc_instance()->bdcr.par.rtcsel = 3;
+			//RCC->BDCR |= ((1 << 8) | (1 << 9)); // HSE oscillator clock divided by a programmable pre-scaler
 			STM32FXXXRtcWriteDisable();
 		break;
 		default:
 			STM32FXXXRtcWriteEnable();
-			RCC->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
+			rcc_instance()->bdcr.par.rtcsel = 2;
+			//RCC->BDCR |= (1 << 9); // LSI oscillator clock used as the RTC clock
 			STM32FXXXRtcWriteDisable();
 		break;
 	}

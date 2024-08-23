@@ -173,6 +173,8 @@ int main(void)
 
   //HAL_I2C_Master_Transmit( &i2c, devaddr, pdata, size, timeout );
 
+  //stm()->rtc->BckWrite(2,33);
+
   while (1)
   {
 	  lcd0()->gotoxy(0,0);
@@ -187,9 +189,10 @@ int main(void)
 	  rtc()->tr2vec(vecT);
 	  lcd0()->string_size(func()->print_v2("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]),14);
 
-	  //lcd0()->gotoxy(3,0);
+	  lcd0()->gotoxy(3,0);
 	  //lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->ui32toa(count5),6); lcd0()->string_size(func()->ui32toa(count7),6);
 	  //lcd0()->string_size(func()->print_v2("pclk1: %d", query()->pclk1()),14);
+	  lcd0()->string(func()->i32toa(stm()->rtc->BckRead(2)));
 
   }
 }
