@@ -44,6 +44,10 @@ int main(void)
 {
   STM32FXXX_enable();
 
+  rtc()->inic(1);
+
+  char vecT[8]; // for calendar
+
   gpiob()->clock(on); // LCD
   gpioc()->clock(on); // LED
 
@@ -58,6 +62,12 @@ int main(void)
 	  lcd0()->string_size("Welcome",7);
 	  lcd0()->gotoxy(1,0);
 	  lcd0()->string_size(func()->ftoa((double)33/654,10),20);
+
+	  lcd0()->gotoxy(2,0);
+	  //lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->i32toa(count5),6); lcd0()->string_size(func()->i32toa(count6),6);
+	  //lcd0()->string_size(func()->print_binary(16,tim1()->cr1->reg),17);
+	  rtc()->tr2vec(vecT);
+	  lcd0()->string_size(func()->print_v2("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]),14);
 
 	  _delay_ms(1000);
 	  set_reg_block(&GPIOC->ODR,1,13,1);

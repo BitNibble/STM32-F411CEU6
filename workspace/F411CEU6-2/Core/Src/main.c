@@ -82,11 +82,12 @@ void tim1_cc2_callback(void){
 int main(void)
 {
   STM32FXXX_enable();
+  rtc()->inic(1); // 1 - LSE 0 - LSI
 
   gpiob()->clock(on); // lcd0
   gpioc()->clock(on); // gpio13
   gpioa()->clock(on); // timer 1 pwm af channel 1
-  rtc()->inic(0); // 1 - LSE 0 - LSI
+
 
   i2c.Instance = (I2C_TypeDef*) i2c1_instance();
 
@@ -163,12 +164,12 @@ int main(void)
 
   char vecT[8]; // for calendar
   //char vecD[8]; // for calendar
-  rtc()->Year(24);
-  rtc()->Month(1);
-  rtc()->Day(1);
-  rtc()->Hour(12);
-  rtc()->Minute(0);
-  rtc()->Second(0);
+  //rtc()->Year(24);
+  //rtc()->Month(1);
+  //rtc()->Day(1);
+  //rtc()->Hour(12);
+  //rtc()->Minute(0);
+  //rtc()->Second(0);
   cdir = 1;
 
   //HAL_I2C_Master_Transmit( &i2c, devaddr, pdata, size, timeout );
