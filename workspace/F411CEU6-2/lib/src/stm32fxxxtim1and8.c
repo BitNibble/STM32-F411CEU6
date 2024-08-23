@@ -36,35 +36,35 @@ void STM32FXXXTim1Nvic(uint8_t value)
 { // 24, 25, 26, 27
 	switch(value){
 		case 0b1000:
-			//setbit(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);
+			//set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);
 			nvic()->set_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b0100:
-			//setbit(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);
+			//set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);
 			nvic()->set_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b0010:
-			//setbit(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
+			//set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
 			nvic()->set_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b0001:
-			//setbit(NVIC->ISER, 1, TIM1_CC_IRQn, 1);
+			//set_bit_block(NVIC->ISER, 1, TIM1_CC_IRQn, 1);
 			nvic()->set_enable(TIM1_CC_IRQn);
 		break;
 		case 0b11000:
-			//setbit(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);
+			//set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);
 			nvic()->clear_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b10100:
-			//setbit(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);
+			//set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);
 			nvic()->clear_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b10010:
-			//setbit(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
+			//set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
 			nvic()->clear_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b10001:
-			//setbit(NVIC->ICER, 1, TIM1_CC_IRQn, 1);
+			//set_bit_block(NVIC->ICER, 1, TIM1_CC_IRQn, 1);
 			nvic()->clear_enable(TIM1_CC_IRQn);
 		break;
 	default:
@@ -83,28 +83,28 @@ void STM32FXXXTim8Nvic(uint8_t value)
 { // 43, 44, 45, 46
 	switch(value){
 		case 0b1000:
-			setbit(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);
 		break;
 		case 0b0100:
-			setbit(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);
 		break;
 		case 0b0010:
-			setbit(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);
 		break;
 		case 0b0001:
-			setbit(NVIC->ISER, 1, TIM8_CC_IRQn, 1);
+			set_bit_block(NVIC->ISER, 1, TIM8_CC_IRQn, 1);
 		break;
 		case 0b11000:
-			setbit(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);
 		break;
 		case 0b10100:
-			setbit(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);
 		break;
 		case 0b10010:
-			setbit(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);
 		break;
 		case 0b10001:
-			setbit(NVIC->ICER, 1, TIM8_CC_IRQn, 1);
+			set_bit_block(NVIC->ICER, 1, TIM8_CC_IRQn, 1);
 		break;
 	default:
 	break;
