@@ -61,6 +61,7 @@ STM32FXXXNVICobj* nvic_enable(void)
 	stm32fxxx_nvic.active = STM32FXXXNVIC_active;
 	stm32fxxx_nvic.priority = STM32FXXXNVIC_priority;
 	stm32fxxx_nvic.trigger = STM32FXXXNVIC_trigger;
+
 	return &stm32fxxx_nvic;
 }
 

@@ -34,38 +34,39 @@ void STM32FXXXTim1Clock(uint8_t bool)
 }
 void STM32FXXXTim1Nvic(uint8_t value)
 { // 24, 25, 26, 27
+	STM32FXXXNVICobj* nvic = nvic_enable();
 	switch(value){
 		case 0b1000:
 			//set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);
-			nvic()->set_enable(TIM1_BRK_TIM9_IRQn);
+			nvic->set_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b0100:
 			//set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);
-			nvic()->set_enable(TIM1_UP_TIM10_IRQn);
+			nvic->set_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b0010:
 			//set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
-			nvic()->set_enable(TIM1_TRG_COM_TIM11_IRQn);
+			nvic->set_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b0001:
 			//set_bit_block(NVIC->ISER, 1, TIM1_CC_IRQn, 1);
-			nvic()->set_enable(TIM1_CC_IRQn);
+			nvic->set_enable(TIM1_CC_IRQn);
 		break;
 		case 0b11000:
 			//set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);
-			nvic()->clear_enable(TIM1_BRK_TIM9_IRQn);
+			nvic->clear_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b10100:
 			//set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);
-			nvic()->clear_enable(TIM1_UP_TIM10_IRQn);
+			nvic->clear_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b10010:
 			//set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
-			nvic()->clear_enable(TIM1_TRG_COM_TIM11_IRQn);
+			nvic->clear_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b10001:
 			//set_bit_block(NVIC->ICER, 1, TIM1_CC_IRQn, 1);
-			nvic()->clear_enable(TIM1_CC_IRQn);
+			nvic->clear_enable(TIM1_CC_IRQn);
 		break;
 	default:
 	break;

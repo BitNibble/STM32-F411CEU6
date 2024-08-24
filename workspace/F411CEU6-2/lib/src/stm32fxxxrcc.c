@@ -79,7 +79,7 @@ void STM32FXXXRccHEnable(uint8_t hclock)
 		else hclock = 0; // default
 	}
 }
-uint8_t STM32FXXXRccHSelect(uint8_t hclock)
+void STM32FXXXRccHSelect(uint8_t hclock)
 { // SW[1:0]: System clock switch 00 - HSI, 01 - HSE pg133
 	switch(hclock){
 		case 0:
@@ -104,7 +104,6 @@ uint8_t STM32FXXXRccHSelect(uint8_t hclock)
 			set_reg_block(&RCC->CFGR, 2, 0, 0);
 		break;
 	}
-	return get_reg_block(RCC->CFGR, 2, 2);
 }
 uint8_t STM32FXXXRccPLLSelect(uint8_t hclock)
 { // This bit can be written only when PLL and PLLI2S are disabled

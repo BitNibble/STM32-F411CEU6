@@ -56,7 +56,7 @@ typedef struct
 	/*** Other ***/
 	void (*inic)(void);
 	void (*henable)(uint8_t hclock);
-	uint8_t (*hselect)(uint8_t sysclk);
+	void (*hselect)(uint8_t sysclk);
 	void (*lenable)(uint8_t lclock);
 	void (*lselect)(uint8_t lclock);
 
@@ -77,7 +77,7 @@ void STM32FXXXRccPLLSAIEnable(void);
 // RCC
 void rcc_start(void);
 void STM32FXXXRccHEnable(uint8_t hclock);
-uint8_t STM32FXXXRccHSelect(uint8_t hclock);
+void STM32FXXXRccHSelect(uint8_t hclock);
 void STM32FXXXRccLEnable(uint8_t lclock);
 void STM32FXXXRccLSelect(uint8_t lclock);
 void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre);
