@@ -12,19 +12,21 @@ Comment:
 
 /*** HARDWARE HANDLER ***/
 /*** ADC ***/
+#ifdef __STM32F411xE_H
+//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
+STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC1_COMMON_BASE;}
+#endif
+#ifdef __STM32F446xx_H
+ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
+#endif
 //ADC_TypeDef* adc1_instance(void){return (ADC_TypeDef*) ADC1_BASE;}
 STM32FXXXADC_TypeDef* adc1_instance(void){return (STM32FXXXADC_TypeDef*) ADC1_BASE;}
 #ifdef __STM32F446xx_H
-ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
 ADC_TypeDef* adc2_instance(void){return (ADC_TypeDef*) ADC2_BASE;}
 ADC_TypeDef* adc3_instance(void){return (ADC_TypeDef*) ADC3_BASE;}
 #endif
-#ifdef __STM32F411xE_H
-STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC1_COMMON_BASE;}
-//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
-#endif
-#ifdef __STM32F446xx_H
 /*** CAN ***/
+#ifdef __STM32F446xx_H
 CAN_TypeDef* can1_instance(void){return (CAN_TypeDef*) CAN1_BASE;}
 CAN_TypeDef* can2_instance(void){return (CAN_TypeDef*) CAN2_BASE;}
 /*** CEC ***/
@@ -65,8 +67,8 @@ DMA_Stream_TypeDef* dma2_stream7_instance(void){return (DMA_Stream_TypeDef*) DMA
 EXTI_TypeDef* exti_instance(void){return (EXTI_TypeDef*) EXTI_BASE;}
 /*** FLASH ***/
 FLASH_TypeDef* flash_instance(void){return (FLASH_TypeDef*) FLASH_R_BASE;}
-#ifdef __STM32F446xx_H
 /*** FMC ***/
+#ifdef __STM32F446xx_H
 FMC_Bank1_TypeDef* fmc_bank1_instance(void){return (FMC_Bank1_TypeDef*) FMC_Bank1_R_BASE;}
 FMC_Bank1E_TypeDef* fmc_bank1e_instance(void){return (FMC_Bank1E_TypeDef*) FMC_Bank1E_R_BASE;}
 FMC_Bank3_TypeDef* fmc_bank3_instance(void){return (FMC_Bank3_TypeDef*) FMC_Bank3_R_BASE;}
@@ -129,10 +131,12 @@ SPI_TypeDef* spi1_instance(void){return (SPI_TypeDef*) SPI1_BASE;}
 SPI_TypeDef* spi2_instance(void){return (SPI_TypeDef*) SPI2_BASE;}
 SPI_TypeDef* spi3_instance(void){return (SPI_TypeDef*) SPI3_BASE;}
 SPI_TypeDef* spi4_instance(void){return (SPI_TypeDef*) SPI4_BASE;}
-#ifdef __STM32F446xx_H
 /*** QUADSPI ***/
+#ifdef __STM32F446xx_H
 QUADSPI_TypeDef* quadspi_instance(void){return (QUADSPI_TypeDef*) QSPI_R_BASE;}
+#endif
 /*** SPDIFRX ***/
+#ifdef __STM32F446xx_H
 SPDIFRX_TypeDef* spdifrx_instance(void){return (SPDIFRX_TypeDef*) SPDIFRX_BASE;}
 #endif
 /*** TIM ***/

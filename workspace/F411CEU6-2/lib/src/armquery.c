@@ -224,21 +224,17 @@ uint32_t getsysclk(void)
 	}
 	return (uint32_t)value;
 }
-
 uint32_t gethclk(void){
 	return getsysclk()/gethpre();
 }
-
 uint32_t getpclk1(void){
 	uint32_t freq = getsysclk()/gethpre();
 	return freq/gethppre1();
 }
-
 uint32_t getpclk2(void){
 	uint32_t freq = getsysclk()/gethpre();
 	return freq/gethppre2();
 }
-
 STM32FXXXSYSTEM_prescaler* System_prescaler_inic(void)
 {
 	stm32fxxx_System_prescaler.AHB = gethpre;
@@ -272,6 +268,7 @@ STM32FXXX_Query query_enable(void)
 
 STM32FXXX_Query* query(void){ return (STM32FXXX_Query*) &stm32fxxx_query; }
 
+/*** Tools ***/
 void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
 }

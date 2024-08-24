@@ -250,8 +250,10 @@ volatile typedef struct{
 		  uint32_t pin_14:4;
 		  uint32_t pin_15:4;
 		} par;
-		uint32_t regl; //0x20
-		uint32_t regh; //0x24
+		struct AFR_2{
+			uint32_t regl; //0x20
+			uint32_t regh; //0x24
+		} dword;
 	} afr;
 } STM32FXXXGPIOX_TypeDef;
 
