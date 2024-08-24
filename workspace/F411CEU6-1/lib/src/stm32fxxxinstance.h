@@ -92,12 +92,12 @@ typedef union{
 /********* HARDWARE HANDLER **********/
 /*************************************/
 /*** ADC ***/
+//ADC_Common_TypeDef* adc_common_instance(void);
+STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
 //ADC_TypeDef* adc1_instance(void);
 STM32FXXXADC_TypeDef* adc1_instance(void);
 ADC_TypeDef* adc2_instance(void);
 ADC_TypeDef* adc3_instance(void);
-//ADC_Common_TypeDef* adc_common_instance(void);
-STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
 #ifdef __STM32F446xx_H
 /*** CAN ***/
 CAN_TypeDef* can1_instance(void);

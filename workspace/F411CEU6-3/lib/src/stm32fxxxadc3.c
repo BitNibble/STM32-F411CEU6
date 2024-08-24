@@ -33,23 +33,24 @@ void STM32FXXXAdc3Nvic(uint8_t bool)
 }
 void STM32FXXXAdc3Inic(void)
 {
-	STM32FXXX_ADC3* adc3_config = adc3_enable();
+	STM32FXXX_ADC3* adc3 = adc3_enable();
 	// ADC Clock
 	// void STM32FXXXAdc3IClock(1); // DACEN: DAC interface clock enable
 	// STM32FXXXAdc3Clock(1) // ADC3EN: ADC3 clock enable
 	// ADC CONFIG
-	STM32FXXXADC3_cr2_eocs(1); // EOCS: End of conversion selection
-	adc3_config->common->ccr->par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
-	STM32FXXXADC3_smpr1_smp15(7); // SMPx[2:0]: Channel x sampling time selection
-	STM32FXXXADC3_cr1_discen(1); // DISCEN: Discontinuous mode on regular channels
-	STM32FXXXADC3_sqr3_sq1(15); // SQ1[4:0]: 1st conversion in regular sequence
+	adc3->instance->cr2.par.eocs = 1; // EOCS: End of conversion selection
+	adc3->common_instance->ccr.par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
+	adc3->instance->smpr1.par.smp15 = 7; // SMPx[2:0]: Channel x sampling time selection
+	adc3->instance->cr1.par.discen = 1; // DISCEN: Discontinuous mode on regular channels
+	adc3->instance->sqr3.par.sq1 = 15; // SQ1[4:0]: 1st conversion in regular sequence
 }
 void STM32FXXXAdc3Start()
 {
+	STM32FXXX_ADC3* adc3 = adc3_enable();
 	// turn on select source and start reading
-	STM32FXXXADC3_cr2_adon(1); // ADON: A/D Converter ON / OFF
+	adc3->instance->cr2.par.adon = 1; // ADON: A/D Converter ON / OFF
 	//
-	STM32FXXXADC3_cr2_swstart(1); // SWSTART: Start conversion of regular channels
+	adc3->instance->cr2.par.swstart = 1; // SWSTART: Start conversion of regular channels
 }
 STM32FXXXADC3single* stm32fxxx_adc3_single_inic(void)
 {

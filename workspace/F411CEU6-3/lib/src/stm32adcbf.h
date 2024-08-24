@@ -238,6 +238,7 @@ volatile typedef struct {
 		uint32_t reg;
 	}dr;
 }STM32FXXXADC_TypeDef;
+
 /*** ADC_Common ***/
 volatile typedef struct {
 	// CSR

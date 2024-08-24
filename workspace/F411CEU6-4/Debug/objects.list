@@ -38,7 +38,6 @@
 "./lib/src/buffer.o"
 "./lib/src/circbuffer.o"
 "./lib/src/explode.o"
-"./lib/src/stm32fxxxadc.o"
 "./lib/src/stm32fxxxadc1.o"
 "./lib/src/stm32fxxxadc2.o"
 "./lib/src/stm32fxxxadc3.o"

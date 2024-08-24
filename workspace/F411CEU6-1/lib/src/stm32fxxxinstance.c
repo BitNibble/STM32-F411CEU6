@@ -15,13 +15,13 @@ Comment:
 //ADC_TypeDef* adc1_instance(void){return (ADC_TypeDef*) ADC1_BASE;}
 STM32FXXXADC_TypeDef* adc1_instance(void){return (STM32FXXXADC_TypeDef*) ADC1_BASE;}
 #ifdef __STM32F446xx_H
+ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
 ADC_TypeDef* adc2_instance(void){return (ADC_TypeDef*) ADC2_BASE;}
 ADC_TypeDef* adc3_instance(void){return (ADC_TypeDef*) ADC3_BASE;}
-ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
 #endif
 #ifdef __STM32F411xE_H
-//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
 STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC1_COMMON_BASE;}
+//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
 #endif
 #ifdef __STM32F446xx_H
 /*** CAN ***/

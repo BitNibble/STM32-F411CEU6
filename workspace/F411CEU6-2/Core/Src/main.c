@@ -82,7 +82,7 @@ void tim1_cc2_callback(void){
 int main(void)
 {
   STM32FXXX_enable();
-  rtc()->inic(1); // 1 - LSE 0 - LSI
+  //rtc()->inic(1); // 1 - LSE 0 - LSI
 
   gpiob()->clock(on); // lcd0
   gpioc()->clock(on); // gpio13
