@@ -92,33 +92,10 @@ void ARMLCD0_inic(void)
 	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
 	_delay_10us(4);
 	
-	//for(repeat = 1 ; repeat ; repeat--){
-		// repeat twice in 4 bit length
-		ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-		ARMLCD0_BF();
-		ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-		ARMLCD0_BF();
+	ARMLCD0_write(0x0C, ARMLCD0_INST); // display on/off control
+	ARMLCD0_BF();
 
-		ARMLCD0_write(0x0C, ARMLCD0_INST); // display on/off control
-		ARMLCD0_BF();
-		ARMLCD0_write(0x0C, ARMLCD0_INST); // display on/off control
-		ARMLCD0_BF();
-
-		ARMLCD0_write(0x01, ARMLCD0_INST); // clear display
-		ARMLCD0_BF();
-		ARMLCD0_write(0x01, ARMLCD0_INST); // clear display
-		ARMLCD0_BF();
-
-		ARMLCD0_write(0x06, ARMLCD0_INST); // entry mode set (crazy settings)
-		ARMLCD0_BF();
-		ARMLCD0_write(0x06, ARMLCD0_INST); // entry mode set (crazy settings)
-		ARMLCD0_BF();
-	//}
-	// INICIALIZATION END
-	// ARMLCD0_write(0x1F, ARMLCD0_INST); // cursor or display shift
-	// _delay_10us(4);
-	// ARMLCD0_write(0x03, ARMLCD0_INST); // return home
-	// _delay_ms(10);
+	ARMLCD0_clear();
 	ARMLCD0_gotoxy(0,0);
 }
 void ARMLCD0_write(char c, unsigned short D_I)

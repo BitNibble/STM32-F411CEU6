@@ -25,6 +25,11 @@ int main(void)
   {
 	  lcd0()->gotoxy(0,0);
 	  lcd0()->string_size("Welcome",7);
+	  _delay_ms(1000);
+	  lcd0()->gotoxy(0,0);
+	  lcd0()->string_size("Sergio",7);
+	  _delay_ms(2000);
+
   }
 }
 
