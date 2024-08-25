@@ -10,16 +10,21 @@
 #include "armlcd.h"
 #include "armfunction.h"
 
-void SystemClock_Config(void);
-
 int main(void)
 {
   STM32FXXX_enable();
-  HAL_Init();
+  //rtc()->inic(1); // 1 - LSE 0 - LSI
+  gpiob()->clock(on); // lcd0
+  gpioc()->clock(on); // gpio13
+  ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
+  FUNC_enable();
+  //HAL_Init();
 
 
   while (1)
   {
+	  lcd0()->gotoxy(0,0);
+	  lcd0()->string_size("Welcome",7);
   }
 }
 
