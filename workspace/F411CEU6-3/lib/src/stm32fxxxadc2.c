@@ -21,11 +21,11 @@ STM32FXXXADC2single* stm32fxxx_adc2_single_inic(void);
 /*** ADC2 ***/
 void STM32FXXXAdc2IClock(uint8_t bool)
 {
-	if(bool){ RCC->APB1ENR |= (1 << 29); }else{ RCC->APB1ENR &= ~(1 << 29); }
+	if(bool){ rcc_instance()->apb1enr.par.dacen = 1; }else{ rcc_instance()->apb1enr.par.dacen = 0; }
 }
 void STM32FXXXAdc2Clock(uint8_t bool)
 {
-	if(bool){ RCC->APB2ENR |= (1 << 9); }else{ RCC->APB2ENR &= ~(1 << 9); }
+	if(bool){ rcc_instance()->apb2enr.par.adc2en = 1; }else{ rcc_instance()->apb2enr.par.adc2en = 0; }
 }
 void STM32FXXXAdc2Nvic(uint8_t bool)
 {

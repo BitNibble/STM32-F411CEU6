@@ -21,11 +21,11 @@ STM32FXXXADC3single* stm32fxxx_adc3_single_inic(void);
 /*** ADC3 ***/
 void STM32FXXXAdc3IClock(uint8_t bool)
 {
-	if(bool){ RCC->APB1ENR |= (1 << 29); }else{ RCC->APB1ENR &= ~(1 << 29); }
+	if(bool){ rcc_instance()->apb1enr.par.dacen = 1; }else{ rcc_instance()->apb1enr.par.dacen = 0; }
 }
 void STM32FXXXAdc3Clock(uint8_t bool)
 {
-	if(bool){ RCC->APB2ENR |= (1 << 10); }else{ RCC->APB2ENR &= ~(1 << 10); }
+	if(bool){ rcc_instance()->apb2enr.par.adc3en = 1; }else{ rcc_instance()->apb2enr.par.adc3en = 0; }
 }
 void STM32FXXXAdc3Nvic(uint8_t bool)
 {

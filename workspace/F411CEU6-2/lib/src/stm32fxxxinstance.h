@@ -16,6 +16,7 @@ Comment:
 // Options: __STM32F446xx_H    __STM32F411xE_H
 #include "stm32f4xx.h"
 #include <inttypes.h>
+
 /*** General Purpose Bit field ***/
 typedef union{
 	struct UN32nibble{
@@ -98,8 +99,8 @@ STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
 STM32FXXXADC_TypeDef* adc1_instance(void);
 ADC_TypeDef* adc2_instance(void);
 ADC_TypeDef* adc3_instance(void);
-#ifdef __STM32F446xx_H
 /*** CAN ***/
+#ifdef __STM32F446xx_H
 CAN_TypeDef* can1_instance(void);
 CAN_TypeDef* can2_instance(void);
 /*** CEC ***/
@@ -107,14 +108,14 @@ CEC_TypeDef* cec_instance(void);
 #endif
 /*** CRC ***/
 CRC_TypeDef* crc_instance(void);
-#ifdef __STM32F446xx_H_H
 /*** DAC ***/
+#ifdef __STM32F446xx_H_H
 DAC_TypeDef* dac_instance(void);
 #endif
 /*** DBGMCU ***/
 DBGMCU_TypeDef* dbgmcu_instance(void);
-#ifdef __STM32F446xx_H_H
 /*** DCMI ***/
+#ifdef __STM32F446xx_H_H
 DCMI_TypeDef* dcmi_instance(void);
 #endif
 /*** DMA ***/
@@ -140,8 +141,8 @@ DMA_Stream_TypeDef* dma2_stream7_instance(void);
 EXTI_TypeDef* exti_instance(void);
 /*** FLASH ***/
 FLASH_TypeDef* flash_instance(void);
-#ifdef __STM32F446xx_H_H
 /*** FMC ***/
+#ifdef __STM32F446xx_H_H
 FMC_Bank1_TypeDef* fmc_bank1_instance(void);
 FMC_Bank1E_TypeDef* fmc_bank1e_instance(void);
 FMC_Bank3_TypeDef* fmc_bank3_instance(void);
@@ -173,8 +174,8 @@ SYSCFG_TypeDef* syscfg_instance(void);
 STM32FXXXI2C_TypeDef* i2c1_instance(void);
 STM32FXXXI2C_TypeDef* i2c2_instance(void);
 STM32FXXXI2C_TypeDef* i2c3_instance(void);
-#ifdef __STM32F446xx_H_H
 /*** FMPI2C ***/
+#ifdef __STM32F446xx_H_H
 FMPI2C_TypeDef* fmpi2c1_instance(void);
 #endif
 /*** IWDG ***/
@@ -202,10 +203,12 @@ SPI_TypeDef* spi1_instance(void);
 SPI_TypeDef* spi2_instance(void);
 SPI_TypeDef* spi3_instance(void);
 SPI_TypeDef* spi4_instance(void);
-#ifdef __STM32F446xx_H_H
 /*** QUADSPI ***/
+#ifdef __STM32F446xx_H_H
 QUADSPI_TypeDef* quadspi_instance(void);
+#endif
 /*** SPDIFRX ***/
+#ifdef __STM32F446xx_H_H
 SPDIFRX_TypeDef* spdifrx_instance(void);
 #endif
 /*** TIM ***/

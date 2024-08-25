@@ -29,19 +29,21 @@ ADC_TypeDef* adc3_instance(void){return (ADC_TypeDef*) ADC3_BASE;}
 #ifdef __STM32F446xx_H
 CAN_TypeDef* can1_instance(void){return (CAN_TypeDef*) CAN1_BASE;}
 CAN_TypeDef* can2_instance(void){return (CAN_TypeDef*) CAN2_BASE;}
+#endif
 /*** CEC ***/
+#ifdef __STM32F446xx_H
 CEC_TypeDef* cec_instance(void){return (CEC_TypeDef*) CEC_BASE;}
 #endif
 /*** CRC ***/
 CRC_TypeDef* crc_instance(void){return (CRC_TypeDef*) CRC_BASE;}
-#ifdef __STM32F446xx_H
 /*** DAC ***/
+#ifdef __STM32F446xx_H
 DAC_TypeDef* dac_instance(void){return (DAC_TypeDef*) DAC_BASE;}
 #endif
 /*** DBGMCU ***/
 DBGMCU_TypeDef* dbgmcu_instance(void){return (DBGMCU_TypeDef*) DBGMCU_BASE;}
-#ifdef __STM32F446xx_H
 /*** DCMI ***/
+#ifdef __STM32F446xx_H
 DCMI_TypeDef* dcmi_instance(void){return (DCMI_TypeDef*) DCMI_BASE;}
 #endif
 /*** DMA ***/
@@ -102,8 +104,8 @@ SYSCFG_TypeDef* syscfg_instance(void){return (SYSCFG_TypeDef*) SYSCFG_BASE;}
 STM32FXXXI2C_TypeDef* i2c1_instance(void){return (STM32FXXXI2C_TypeDef*) I2C1_BASE;}
 STM32FXXXI2C_TypeDef* i2c2_instance(void){return (STM32FXXXI2C_TypeDef*) I2C2_BASE;}
 STM32FXXXI2C_TypeDef* i2c3_instance(void){return (STM32FXXXI2C_TypeDef*) I2C3_BASE;}
-#ifdef __STM32F446xx_H
 /*** FMPI2C ***/
+#ifdef __STM32F446xx_H
 FMPI2C_TypeDef* fmpi2c1_instance(void){return (FMPI2C_TypeDef*) FMPI2C1_BASE;}
 #endif
 /*** IWDG ***/
@@ -200,7 +202,7 @@ USB_OTG_HostTypeDef* usb_otg_host_instance(void){return (USB_OTG_HostTypeDef*) U
 USB_OTG_HostChannelTypeDef* usb_otg_hostchannel_instance(void){return (USB_OTG_HostChannelTypeDef*) USB_OTG_HOST_CHANNEL_BASE;}
 
 /***
-TypeDef -> Base -> Instance -> Handler
+TypeDef -> Instance -> Handler
 ***/
 
 /*** EOF ***/
