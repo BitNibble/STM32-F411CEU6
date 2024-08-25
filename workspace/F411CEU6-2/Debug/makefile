@@ -60,11 +60,8 @@ all: main-build
 # Main-build Target
 main-build: F411CEU6-2.elf secondary-outputs
 
-dependents:
-	-cd D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release && $(MAKE) clean all
-
 # Tool invocations
-F411CEU6-2.elf F411CEU6-2.map: $(OBJS) $(USER_OBJS) D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release/F411CEU6-2.elf D:\Embedded\STM32-F411CEU6\workspace\F411CEU6-2\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+F411CEU6-2.elf F411CEU6-2.map: $(OBJS) $(USER_OBJS) D:\Embedded\STM32-F411CEU6\workspace\F411CEU6-2\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	arm-none-eabi-gcc -o "F411CEU6-2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Embedded\STM32-F411CEU6\workspace\F411CEU6-2\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F411CEU6-2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
@@ -94,6 +91,5 @@ warn-no-linker-script-specified:
 	@echo 'Warning: No linker script specified. Check the linker settings in the build configuration.'
 
 .PHONY: all clean dependents main-build fail-specified-linker-script-missing warn-no-linker-script-specified
-D:/Embedded/STM32-F411CEU6/workspace/F411CEU6-2/Release/F411CEU6-2.elf:
 
 -include ../makefile.targets

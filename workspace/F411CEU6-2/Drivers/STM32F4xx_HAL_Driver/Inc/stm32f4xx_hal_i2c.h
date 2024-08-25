@@ -187,7 +187,7 @@ typedef struct __I2C_HandleTypeDef
 typedef struct
 #endif  /* USE_HAL_I2C_REGISTER_CALLBACKS */
 {
-  I2C_TypeDef               *Instance;      /*!< I2C registers base address               */
+  I2C_TypeDef                *Instance;      /*!< I2C registers base address               */
 
   I2C_InitTypeDef            Init;           /*!< I2C communication parameters             */
 

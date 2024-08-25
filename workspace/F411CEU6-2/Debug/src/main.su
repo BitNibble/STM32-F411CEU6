@@ -1,3 +1,0 @@
-D:/Documents/GitHub_2024/STM32-F446RE/workspace/src/main.c:52:5:main	432	static
-D:/Documents/GitHub_2024/STM32-F446RE/workspace/src/main.c:107:6:TIM1_CC_IRQHandler	8	static
-D:/Documents/GitHub_2024/STM32-F446RE/workspace/src/main.c:149:6:Error_Handler	4	static,ignoring_inline_asm
