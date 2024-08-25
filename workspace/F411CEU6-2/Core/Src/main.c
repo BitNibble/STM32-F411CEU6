@@ -2,25 +2,13 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
   * Author: Sergio Santos
   * <sergio.salazar.santos@gmail.com>
   * License: GNU General Public License
   * Hardware: STM32F4x1 mini_F4x1 Ver. V20 SN: 202005 DevEBox
   * Board Site: mcudev.taobao.com
   * Date: 28022024
-  * Comment:
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-********************************************************************************/
-/****** Comment
+  * Comment
 LCD
 	PB3 - RS
 	PB4 - RW
