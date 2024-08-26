@@ -14,7 +14,7 @@ int main(void)
 {
   STM32FXXX_enable();
   //rtc()->inic(1); // 1 - LSE 0 - LSI
-  gpiob()->clock(on); // lcd0
+  //gpiob()->clock(on); // lcd0
   gpioc()->clock(on); // gpio13
   ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
   FUNC_enable();

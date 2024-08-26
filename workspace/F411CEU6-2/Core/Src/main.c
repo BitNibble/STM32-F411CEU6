@@ -72,7 +72,6 @@ int main(void)
   STM32FXXX_enable();
   //rtc()->inic(1); // 1 - LSE 0 - LSI
 
-  gpiob()->clock(on); // lcd0
   gpioc()->clock(on); // gpio13
   gpioa()->clock(on); // timer 1 pwm af channel 1
 
