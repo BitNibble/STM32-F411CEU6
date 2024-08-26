@@ -72,9 +72,9 @@ int main(void)
   STM32FXXX_enable();
   //rtc()->inic(1); // 1 - LSE 0 - LSI
 
+  gpiob()->clock(on); // lcd and i2c
   gpioc()->clock(on); // gpio13
   gpioa()->clock(on); // timer 1 pwm af channel 1
-
 
   i2c.Instance = (I2C_TypeDef*) i2c1_instance();
 

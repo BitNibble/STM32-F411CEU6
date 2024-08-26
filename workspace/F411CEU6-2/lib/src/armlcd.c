@@ -43,11 +43,13 @@ ARMLCD0 ARMLCD0_enable(GPIO_TypeDef* reg)
 	if(reg == (GPIO_TypeDef*)GPIOA_BASE) RCC->AHB1ENR |= (1 << 0);
 	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 1);
 	if(reg == (GPIO_TypeDef*)GPIOC_BASE) RCC->AHB1ENR |= (1 << 2);
-	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 3);
-	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 4);
-	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 5);
-	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 6);
-	if(reg == (GPIO_TypeDef*)GPIOB_BASE) RCC->AHB1ENR |= (1 << 7);
+	if(reg == (GPIO_TypeDef*)GPIOD_BASE) RCC->AHB1ENR |= (1 << 3);
+	if(reg == (GPIO_TypeDef*)GPIOE_BASE) RCC->AHB1ENR |= (1 << 4);
+	#ifdef __STM32F446xx_H
+		if(reg == (GPIO_TypeDef*)GPIOF_BASE) RCC->AHB1ENR |= (1 << 5);
+		if(reg == (GPIO_TypeDef*)GPIOG_BASE) RCC->AHB1ENR |= (1 << 6);
+	#endif
+	if(reg == (GPIO_TypeDef*)GPIOH_BASE) RCC->AHB1ENR |= (1 << 7);
 
 	setup_armlcd0.write = ARMLCD0_write;
 	setup_armlcd0.read = ARMLCD0_read;
