@@ -30,6 +30,7 @@ timer testing. At 25Mhz and STM32FXXXPrescaler(1, 1, 1, 0);
 #include "stm32fxxxmapping.h"
 #include "armlcd.h"
 #include "armfunction.h"
+#include "explode.h"
 
 uint16_t count0 = 0;
 uint16_t count1 = 0;
@@ -41,6 +42,8 @@ uint16_t count6 = 0;
 uint16_t count7 = 0;
 uint16_t count8 = 0;
 int8_t cdir;
+
+EXPLODE PA;
 
 I2C_HandleTypeDef i2c;
 
@@ -72,9 +75,11 @@ int main(void)
   STM32FXXX_enable();
   //rtc()->inic(1); // 1 - LSE 0 - LSI
 
+  PA = EXPLODE_enable();
+
   gpiob()->clock(on); // lcd and i2c
   gpioc()->clock(on); // gpioc13
-  gpioa()->clock(on); // timer 1 pwm af channel 1
+  gpioa()->clock(on); // timer 1 pwm af channel 1 and K0 button
 
   i2c.Instance = (I2C_TypeDef*) i2c1_instance();
 
@@ -165,6 +170,10 @@ int main(void)
 
   while (1)
   {
+	  /*** preamble ***/
+	  PA.update(&PA.par, gpioa()->instance->idr.word.i);
+	  /******/
+
 	  lcd0()->gotoxy(0,0);
 	  lcd0()->string_size(func()->ui32toa(TIM1->ARR),6); lcd0()->string_size(func()->ui32toa(tim1()->instance->ccr1.par.w0),6); lcd0()->string_size(func()->ui32toa(TIM1->CCR2),6);
 
