@@ -10,10 +10,10 @@ Comment:
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ********************************************************************/
 /*** File Library ***/
-#include"explode.h"
+#include "explode.h"
 
 /*** File Header ***/
-void EXPLODEupdate(explode_parameter* par, IO_var x);
+void EXPLODE_update(explode_parameter* par, IO_var x);
 IO_var EXPLODEhh(explode_parameter* par);
 IO_var EXPLODEll(explode_parameter* par);
 IO_var EXPLODElh(explode_parameter* par);
@@ -39,12 +39,12 @@ EXPLODE EXPLODE_enable( void )
 	// inic VAR
 	setup_explode.par = explode_par_inic();
 	// function pointers
-	setup_explode.update = EXPLODEupdate;
+	setup_explode.update = EXPLODE_update;
 
 	return setup_explode;
 }
 // boot
-void EXPLODEupdate(explode_parameter* par, IO_var x)
+void EXPLODE_update(explode_parameter* par, IO_var x)
 {
 	par->XI = par->XF;
 	par->XF = x;

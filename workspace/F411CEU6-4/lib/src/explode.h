@@ -14,15 +14,13 @@ Comment:
 /*** Global Library ***/
 #include <inttypes.h>
 
+#define STM32F4
+
 /*** Global Constant & Macro ***/
 #if defined (STM32F4)
-	#ifndef IO_var
-		#define IO_var uint32_t
-	#endif
+	#define IO_var uint32_t
 #else
-	#ifndef IO_var
-		#define IO_var uint8_t
-	#endif
+	#define IO_var uint8_t
 #endif
 
 /*** Global TypeDef ***/
