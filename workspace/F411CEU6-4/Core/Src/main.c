@@ -18,6 +18,10 @@ int main(void)
   STM32FXXX_enable();
   PA = EXPLODE_enable();
 
+  uint8_t Menu = 0;
+  uint8_t count_0 = 0;
+  uint16_t incr_0 = 0;
+
   //rtc()->inic(1); // 1 - LSE 0 - LSI
   gpiob()->clock(on); // lcd0
   ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
@@ -38,23 +42,51 @@ int main(void)
 	  PA.update(&PA.par, gpioa()->instance->idr.word.i);
 	  /******/
 
-	  gpioc()->instance->odr.par.pin_13 = 0;
-	  //gpioc()->instance->odr.word.o = (1 << 13);
+	  switch(Menu){
+	  case 0:
+		  lcd0()->gotoxy(0,0);
+		  lcd0()->string_size("Menu 0",7);
+		  gpioc()->instance->odr.par.pin_13 = 0;
 
-	  if(PA.par.LL & 1){
+		  if(PA.par.LH & 1){
+			  incr_0++;
+		  }
+		  if(PA.par.LL & 1){ // Jump menu
+			  _delay_ms(500);
+			  count_0++;
+			  if(count_0 > 5){ Menu = 1; count_0 = 0;}
+		  }else{count_0 = 0;}
+
+
+		  lcd0()->gotoxy(1,0);
+		  lcd0()->string_size(func()->ui32toa(incr_0),20);
+		  break;
+	  case 1:
 		  lcd0()->gotoxy(0,0);
-		  lcd0()->string_size("Welcome",7);
-		  _delay_ms(500);
-		  lcd0()->gotoxy(0,0);
-		  lcd0()->string_size("Sergio",7);
-		  _delay_ms(500);
+		  lcd0()->string_size("Menu 1",7);
+		  gpioc()->instance->odr.par.pin_13 = 1;
+
+
+
+
+
+
+		  if(PA.par.LL & 1){ // Jump menu
+		  	_delay_ms(500);
+		  	count_0++;
+		  	if(count_0 > 5){ Menu = 0; count_0 = 0;}
+		  }else{count_0 = 0;}
+		  break;
+	  default:
+		  break;
 	  }
 
-	  lcd0()->gotoxy(1,0);
-	  lcd0()->string_size(func()->ui32toa(PA.par.LL),20);
 
-  }
-}
+
+
+
+  } /*** While ***/
+} /*** Main ***/
 
 
 void Error_Handler(void)
