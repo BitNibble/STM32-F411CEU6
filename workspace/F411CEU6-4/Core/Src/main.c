@@ -4,7 +4,7 @@
   * @brief          : Main program body
   *
   ******************************************************************************
-  */
+  **/
 #include "main.h"
 #include "stm32fxxxmapping.h"
 #include "armlcd.h"
@@ -16,13 +16,13 @@ EXPLODE PA;
 int main(void)
 {
   STM32FXXX_enable();
+  //rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
   PA = EXPLODE_enable();
 
   uint8_t Menu = 0;
   uint8_t count_0 = 0;
   uint16_t incr_0 = 0;
 
-  //rtc()->inic(1); // 1 - LSE 0 - LSI
   gpiob()->clock(on); // lcd0
   ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
   gpioc()->clock(on); // gpioc13
@@ -35,6 +35,7 @@ int main(void)
   FUNC_enable();
   //HAL_Init();
 
+  char vecT[8]; // for calendar
 
   while (1)
   {
@@ -48,9 +49,10 @@ int main(void)
 		  lcd0()->string_size("Menu 0",7);
 		  gpioc()->instance->odr.par.pin_13 = 0;
 
-		  if(PA.par.LH & 1){
+		  if(PA.par.HL & 1){
 			  incr_0++;
 		  }
+
 		  if(PA.par.LL & 1){ // Jump menu
 			  _delay_ms(500);
 			  count_0++;
@@ -81,7 +83,9 @@ int main(void)
 		  break;
 	  }
 
-
+	  lcd0()->gotoxy(3,0);
+	  rtc()->tr2vec(vecT);
+	  lcd0()->string_size(func()->print_v2("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]),14);
 
 
 
