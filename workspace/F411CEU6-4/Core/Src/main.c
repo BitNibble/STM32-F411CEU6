@@ -36,6 +36,7 @@ int main(void)
   //HAL_Init();
 
   char vecT[8]; // for calendar
+  PA.update(&PA.par, gpioa()->instance->idr.word.i);
 
   while (1)
   {
@@ -49,9 +50,10 @@ int main(void)
 		  lcd0()->string_size("Menu 0",7);
 		  gpioc()->instance->odr.par.pin_13 = 0;
 
-		  if(PA.par.HL & 1){
+		  if(PA.par.LH & 1){
 			  incr_0 = rtc()->get_Hour();
-			  rtc()->Hour(++incr_0);
+			  if(incr_0 > 22){ incr_0 = 0;}else{incr_0++;}
+			  rtc()->Hour(incr_0);
 		  }
 
 		  if(PA.par.LL & 1){ // Jump menu
