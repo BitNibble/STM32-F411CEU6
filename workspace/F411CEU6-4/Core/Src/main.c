@@ -16,7 +16,7 @@ EXPLODE PA;
 int main(void)
 {
   STM32FXXX_enable();
-  //rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
+  rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
   PA = EXPLODE_enable();
 
   uint8_t Menu = 0;
@@ -50,7 +50,8 @@ int main(void)
 		  gpioc()->instance->odr.par.pin_13 = 0;
 
 		  if(PA.par.HL & 1){
-			  incr_0++;
+			  incr_0 = rtc()->get_Hour();
+			  rtc()->Hour(++incr_0);
 		  }
 
 		  if(PA.par.LL & 1){ // Jump menu
