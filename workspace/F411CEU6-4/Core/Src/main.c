@@ -18,7 +18,7 @@ EXPLODE PA;
 int main(void)
 {
 	STM32FXXX_enable();
-	rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
+	//rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
 	PA = EXPLODE_enable();
 
 	uint8_t Menu = 3;
@@ -26,6 +26,7 @@ int main(void)
 	uint16_t incr_0 = 0;
 	uint8_t skip_0 = 0;
 
+	rtc()->bck_sram_clock(1);
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
@@ -116,10 +117,17 @@ int main(void)
 			lcd0()->string_size("Clock",10);
 			gpioc()->instance->odr.par.pin_13 = 1;
 
+			if(PA.par.LH & 1){
+				if(skip_0 < 1){
+					rtc()->bck_sram_clock(0);
+				}
+				skip_0++;
+			}
+
 			if(PA.par.LL & 1){ // Jump menu
 				_delay_ms(JMP_menu);
 				count_0++;
-				if(count_0 > 5){ Menu = 0; count_0 = 0; skip_0 = 0;}
+				if(count_0 > 5){ rtc()->bck_sram_clock(1); Menu = 0; count_0 = 0; skip_0 = 0;}
 			}else{count_0 = 0;}
 
 			break;

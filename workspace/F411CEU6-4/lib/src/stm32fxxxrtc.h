@@ -50,6 +50,8 @@ typedef struct
 	uint8_t (*get_stsu)(void);
 	uint16_t (*get_ss)(void);
 	/*** Other ***/
+	void (*bck_sram_clock)(uint8_t bool);
+	void (*pwr_clock)(uint8_t bool);
 	void (*clock)(uint8_t bool);
 	void (*inic)(uint8_t clock);
 	void (*nvic)(uint8_t value);
