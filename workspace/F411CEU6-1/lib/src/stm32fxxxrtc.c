@@ -26,6 +26,8 @@ void STM32FXXXRtcStopRead(void);
 void STM32FXXXRtcWaitRead(void);
 void STM32FXXXRtcSetTr(uint32_t value);
 void STM32FXXXRtcSetDr(uint32_t value);
+uint8_t rtc_get_hthu(void);
+uint8_t rtc_get_mntmnu(void);
 uint8_t rtc_get_stsu(void);
 uint8_t rtc_get_st(void);
 uint8_t rtc_get_su(void);
@@ -43,6 +45,9 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.Month = STM32FXXXRtcMonth;
 	stm32fxxx_rtc.WeekDay = STM32FXXXRtcWeekDay;
 	stm32fxxx_rtc.Year = STM32FXXXRtcYear;
+	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
+	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
+	stm32fxxx_rtc.get_Second = STM32FXXXRtc_get_Second;
 	stm32fxxx_rtc.Hour = STM32FXXXRtcHour;
 	stm32fxxx_rtc.Minute = STM32FXXXRtcMinute;
 	stm32fxxx_rtc.Second = STM32FXXXRtcSecond;
@@ -53,6 +58,8 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.get_stsu = rtc_get_stsu;
 	stm32fxxx_rtc.get_ss = rtc_get_ss;
 	/*** Other ***/
+	stm32fxxx_rtc.bck_sram_clock = STM32FXXXPwrClock;
+	stm32fxxx_rtc.pwr_clock = STM32FXXXBckSramClock;
 	stm32fxxx_rtc.clock = STM32FXXXRtcClock;
 	stm32fxxx_rtc.nvic = STM32FXXXRtcNvic;
 	stm32fxxx_rtc.inic = STM32FXXXRtcInic;
@@ -128,7 +135,7 @@ uint8_t STM32FXXXRtcBckRead(uint8_t n)
 
 void STM32FXXXRtcHour(uint8_t hour)
 {
-	uint32_t Time;
+	uint32_t Time = 0;
 	uint8_t t, u;
 	const uint32_t mask = 0x003F0000;
 	
@@ -296,24 +303,50 @@ void STM32FXXXRtctr2vec(char* rtc_vect)
 	}
 }
 
+uint8_t rtc_get_hthu(void)
+{ // BCD
+	STM32FXXXRtcWaitRead();
+	uint32_t tr = RTC->TR;
+	return (uint8_t) ((tr >> 16) & 0x003F);
+}
+uint8_t rtc_get_mntmnu(void)
+{ // BCD
+	STM32FXXXRtcWaitRead();
+	uint32_t tr = RTC->TR;
+	return (uint8_t) ((tr >> 8) & 0x007F);
+}
 uint8_t rtc_get_stsu(void)
 { // BCD
+	STM32FXXXRtcWaitRead();
 	uint32_t tr = RTC->TR;
 	return (uint8_t) (tr & 0x007F);
 }
 uint8_t rtc_get_st(void)
 { // BCD
+	STM32FXXXRtcWaitRead();
 	uint32_t tr = RTC->TR;
 	return (uint8_t) (tr >> 4) & 0x07;
 }
 uint8_t rtc_get_su(void)
 { // BCD
+	STM32FXXXRtcWaitRead();
 	uint32_t tr = RTC->TR;
 	return (uint8_t) tr & 0x0F;
 }
 uint16_t rtc_get_ss(void)
 {
+	STM32FXXXRtcWaitRead();
 	return RTC->SSR;
+}
+
+uint8_t STM32FXXXRtc_get_Hour(void){
+	return rtc_bcd2dec(rtc_get_hthu());
+}
+uint8_t STM32FXXXRtc_get_Minute(void){
+	return rtc_bcd2dec(rtc_get_mntmnu());
+}
+uint8_t STM32FXXXRtc_get_Second(void){
+	return rtc_bcd2dec(rtc_get_stsu());
 }
 
 /*** AUX Procedure & Function Definition ***/
@@ -354,7 +387,7 @@ void STM32FXXXRtcStopRead(void)
 }
 void STM32FXXXRtcWaitRead(void)
 { // Wait Data Ready
-	for(rtc_time_out = 200; !(RTC->ISR & (1 << 5)) && rtc_time_out; rtc_time_out--);
+	for(rtc_time_out = 300; !(RTC->ISR & (1 << 5)) && rtc_time_out; rtc_time_out--);
 }
 //RTC
 void STM32FXXXRtcSetTr(uint32_t value)
