@@ -36,7 +36,7 @@ int main(void)
 	uint16_t incr_0 = 0;
 	uint8_t skip_0 = 0;
 
-	rtc()->bck_sram_clock(1);
+	rtc()->bck_sram_clock(on);
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
@@ -52,7 +52,7 @@ int main(void)
 	char vecT[8]; // for calendar
 	PA.update(&PA.par, gpioa()->instance->idr.word.i);
 
-	while (1)
+	while (on)
 	{
 		/*** preamble ***/
 		PA.update(&PA.par, gpioa()->instance->idr.word.i);

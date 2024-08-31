@@ -11,7 +11,10 @@ Comment:
 ************************************************************************/
 #ifndef _74HC595_H_
 	#define _74HC595_H_
-	
+
+/*** Select Switch ***/
+#define STM32F4
+
 /*** Global Constant & Macro ***/
 #if defined (STM32F4)
 	#ifndef IO_var

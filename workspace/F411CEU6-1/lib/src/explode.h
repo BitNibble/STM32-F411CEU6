@@ -14,6 +14,7 @@ Comment:
 /*** Global Library ***/
 #include <inttypes.h>
 
+/*** Select Switch ***/
 #define STM32F4
 
 /*** Global Constant & Macro ***/
