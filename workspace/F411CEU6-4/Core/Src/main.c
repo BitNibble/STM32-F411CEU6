@@ -3,6 +3,7 @@
   * @file           : main.c
   * @brief          : Main program body
   *
+  * A simple Clock
   *
   *   LCD:
   * PB3 - RS
