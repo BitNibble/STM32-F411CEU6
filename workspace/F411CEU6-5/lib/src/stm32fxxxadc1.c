@@ -116,5 +116,3 @@ STM32FXXX_ADC1* adc1(void){ return (STM32FXXX_ADC1*) &stm32fxxx_adc1; }
 
 /*** EOF ***/
 
-
-

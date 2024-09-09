@@ -63,6 +63,8 @@ typedef struct
 		STM32FXXXNVICobj* nvic;
 	#endif
 	// ADC
+	STM32FXXXADC_TypeDef* adc1_instance;
+	STM32FXXXADC_COMMON_TypeDef* adc1_common_instance;
 	#if defined(_STM32FXXXADC1_H_)
 		STM32FXXX_ADC1* adc1;
 	#endif
