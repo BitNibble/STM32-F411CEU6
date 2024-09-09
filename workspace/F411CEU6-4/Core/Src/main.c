@@ -42,7 +42,7 @@ int main(void)
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
 	gpioc()->instance->moder.par.pin_13 = 1;
-	gpioa()->clock(on); // inputs
+	gpioa()->clock(on); // inputs gpioa0
 	gpioa()->instance->moder.par.pin_0 = 0;
 	gpioa()->instance->pupdr.par.pin_0 = 1;
 
