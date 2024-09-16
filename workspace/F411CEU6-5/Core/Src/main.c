@@ -31,7 +31,6 @@ int main(void)
 	//rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
 	PA = EXPLODE_enable();
 
-	rtc()->bck_sram_clock(on);
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
