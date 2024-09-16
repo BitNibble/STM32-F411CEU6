@@ -303,7 +303,7 @@ void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t d
 {
 	uint32_t value = *reg;
 	if(Pos > 31){ Pos = 0;}
-	else{ data &= (Msk >> Pos); value &= ~(Msk); data = (data << Pos); value |= data; *reg = value; }
+	else{ data = (data << Pos); data &= Msk; value &= ~(Msk); value |= data; *reg = value; }
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
@@ -316,7 +316,7 @@ void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
 {
 	if(Pos > 31){ Pos = 0;}
-	else{ data &= (Msk >> Pos); *reg &= ~(Msk); *reg |= (data << Pos); }
+	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
 }
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
@@ -336,19 +336,6 @@ void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 	data &= mask;
 	*(reg + n ) &= ~(mask << bit_n);
 	*(reg + n ) |= (data << bit_n);
-}
-uint32_t get_reg_posmsk(uint32_t reg, uint32_t msk, uint8_t pos)
-{
-	pos &= 0x1F;
-	reg &= msk; reg = (reg >> pos);
-	return reg;
-}
-void set_reg_posmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data)
-{
-	pos &= 0x1F;
-	data = (data << pos); data &= msk;
-	*reg &= ~msk;
-	*reg |= data;
 }
 void STM32446RegSetBits( uint32_t* reg, uint8_t n_bits, ... )
 {
@@ -391,7 +378,6 @@ void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)(hpins << 16);
 }
-
 
 /****** MISCELLANEOUS ******/
 void ADC_TemperatureSetup(void){

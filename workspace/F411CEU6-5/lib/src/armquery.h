@@ -87,8 +87,6 @@ void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-uint32_t get_reg_posmsk(uint32_t reg, uint32_t msk, uint8_t pos);
-void set_reg_posmsk(volatile uint32_t* reg, uint32_t msk, uint8_t pos, uint32_t data);
 void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 
