@@ -34,8 +34,10 @@ int main(void)
 
 	uint8_t Menu = 3;
 	uint8_t count_0 = 0;
+	uint8_t count_1 = ~0;
 	uint16_t incr_0 = 0;
 	uint8_t skip_0 = 0;
+	uint16_t adc_value = 0;
 
 	rtc()->bck_sram_clock(on);
 	gpiob()->clock(on); // lcd0
@@ -49,6 +51,7 @@ int main(void)
 
 	FUNC_enable();
 	//HAL_Init();
+	ADC_TemperatureSetup();
 
 	char vecT[8]; // for calendar
 	PA.update(&PA.par, gpioa()->instance->idr.word.i);
@@ -125,12 +128,17 @@ int main(void)
 			break;
 		case 3:
 			lcd0()->gotoxy(0,0);
-			lcd0()->string_size("Clock",10);
+			lcd0()->string_size("Clock",12);
+			count_1--;
+			if(!count_1){
+				adc_value = ADC_ReadTemperature();
+				lcd0()->string_size(func()->ftoa(CalculateTemperature(adc_value),2),6);
+				lcd0()->putch(0xDF); lcd0()->putch('C');
+			}
 			gpioc()->instance->odr.par.pin_13 = 1;
 
 			if(PA.par.LH & 1){
 				if(skip_0 < 1){
-					rtc()->bck_sram_clock(0);
 				}
 				skip_0++;
 			}
@@ -138,7 +146,7 @@ int main(void)
 			if(PA.par.LL & 1){ // Jump menu
 				_delay_ms(JMP_menu);
 				count_0++;
-				if(count_0 > 5){ rtc()->bck_sram_clock(1); Menu = 0; count_0 = 0; skip_0 = 0;}
+				if(count_0 > 5){ Menu = 0; count_0 = 0; skip_0 = 0;}
 			}else{count_0 = 0;}
 
 			break;

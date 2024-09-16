@@ -58,8 +58,8 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.get_stsu = rtc_get_stsu;
 	stm32fxxx_rtc.get_ss = rtc_get_ss;
 	/*** Other ***/
-	stm32fxxx_rtc.bck_sram_clock = STM32FXXXPwrClock;
-	stm32fxxx_rtc.pwr_clock = STM32FXXXBckSramClock;
+	stm32fxxx_rtc.bck_sram_clock = STM32FXXXBckSramClock;
+	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
 	stm32fxxx_rtc.clock = STM32FXXXRtcClock;
 	stm32fxxx_rtc.nvic = STM32FXXXRtcNvic;
 	stm32fxxx_rtc.inic = STM32FXXXRtcInic;

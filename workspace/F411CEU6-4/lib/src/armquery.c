@@ -392,7 +392,6 @@ void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 	reg->BSRR = (uint32_t)(hpins << 16);
 }
 
-
 /****** MISCELLANEOUS ******/
 void ADC_TemperatureSetup(void){
 	uint8_t countdown;
