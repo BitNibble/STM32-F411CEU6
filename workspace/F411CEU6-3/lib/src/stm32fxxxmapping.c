@@ -32,6 +32,8 @@ STM32FXXX* STM32FXXX_enable(void){
 	#endif
 	/************ MCU ************/
 	// ADC
+	stm32fxxx.adc1_instance = adc1_instance();
+	stm32fxxx.adc1_common_instance = adc_common_instance();
 	#if defined(_STM32FXXXADC1_H_)
 		stm32fxxx.adc1 = adc1_enable();
 	#endif

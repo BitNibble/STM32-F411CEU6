@@ -283,6 +283,12 @@ uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 	reg = (reg >> bit_n);
 	return reg;
 }
+uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
+{
+	if(Pos > 31){ Pos = 0;}
+	else{ reg &= Msk; reg = (reg >> Pos); }
+	return reg;
+}
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
@@ -293,6 +299,12 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 	value |= data;
 	*reg = value;
 }
+void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	uint32_t value = *reg;
+	if(Pos > 31){ Pos = 0;}
+	else{ data &= (Msk >> Pos); value &= ~(Msk); data = (data << Pos); value |= data; *reg = value; }
+}
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	if(bit_n > 31){ bit_n = 0;} if(size_block > 32){ size_block = 32;}
@@ -300,6 +312,11 @@ void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 	data &= mask;
 	*reg &= ~(mask << bit_n);
 	*reg |= (data << bit_n);
+}
+void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	if(Pos > 31){ Pos = 0;}
+	else{ data &= (Msk >> Pos); *reg &= ~(Msk); *reg |= (data << Pos); }
 }
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
@@ -373,6 +390,41 @@ void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)(hpins << 16);
+}
+
+
+/****** MISCELLANEOUS ******/
+void ADC_TemperatureSetup(void){
+	uint8_t countdown;
+	/********** ADC1 **********/
+	//stm()->adc1->clock(on);
+	set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
+	ADC1->CR1 = 0;
+	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L_Msk, ADC_SQR1_L_Pos, OFF);
+	set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1_Msk, ADC_SQR3_SQ1_Pos, 18);
+	set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18_Msk, ADC_SMPR1_SMP18_Pos, 3);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_CONT_Msk, ADC_CR2_CONT_Pos, ON);
+	//set_reg_Msk(&ADC->CCR, ADC_CCR_VBATE_Msk, ADC_CCR_VBATE_Pos, ON);
+	set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE_Msk, ADC_CCR_TSVREFE_Pos, ON);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON_Msk, ADC_CR2_ADON_Pos, ON);
+	for(countdown = 15; countdown; countdown --); // t_STAB
+}
+uint16_t ADC_ReadTemperature(void) {
+	uint16_t adc_value;
+    set_reg_Msk(&ADC1->CR2, ADC_CR2_SWSTART_Msk, ADC_CR2_SWSTART_Pos, ON);
+    while (!get_reg_Msk(ADC1->SR, ADC_SR_EOC_Msk, ADC_SR_EOC_Pos));
+    adc_value = ADC1->DR;
+    return adc_value;
+}
+float CalculateTemperature(uint16_t adc_value) {
+    const float V_25 = 0.76f;  // Voltage at 25°C (in volts)
+    const float Avg_slope = 0.0025f;  // Average slope (in volts/°C)
+    const float V_ref = 3.3f;  // Reference voltage, typically 3.0V or 3.3V
+
+    float V_sense = ((float)adc_value / 4096) * V_ref;
+    float temperature = ((V_sense - V_25) / Avg_slope) + 25.0f;
+
+    return temperature;
 }
 
 /***EOF***/

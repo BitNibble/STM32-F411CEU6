@@ -27,7 +27,31 @@ Comment:
 /****   PLL ON -> 1    PLL OFF = 0   ****/
 #define PLL_ON_OFF 0
 /****************************************/
-
+#ifndef on
+	#define on 1
+#endif
+#ifndef ON
+	#define ON 1
+#endif
+#ifndef off
+	#define off 0
+#endif
+#ifndef OFF
+	#define OFF 0
+#endif
+#ifndef yes
+	#define yes 1
+#endif
+#ifndef YES
+	#define YES 1
+#endif
+#ifndef no
+	#define no 0
+#endif
+#ifndef NO
+	#define NO 0
+#endif
+/****************************************/
 typedef struct{
 uint16_t (*AHB)(void);
 uint8_t (*APB1)(void);
@@ -56,8 +80,11 @@ uint32_t (*pclk2)(void);
 void set_reg(volatile uint32_t* reg, uint32_t hbits);
 void clear_reg(volatile uint32_t* reg, uint32_t hbits);
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 uint32_t get_reg_posmsk(uint32_t reg, uint32_t msk, uint8_t pos);
@@ -82,6 +109,11 @@ uint8_t getpllr(void);
 
 STM32FXXX_Query query_enable(void);
 STM32FXXX_Query* query(void);
+
+/****** MISCELLANEOUS ******/
+void ADC_TemperatureSetup(void);
+uint16_t ADC_ReadTemperature(void);
+float CalculateTemperature(uint16_t adc_value);
 
 #endif
 

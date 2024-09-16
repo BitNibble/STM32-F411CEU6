@@ -18,18 +18,7 @@ Comment:
 #include "armquery.h"
 #include "armsystick.h"
 /****** Define & Macros******/
-#ifndef on
-	#define on 1
-#endif
-#ifndef off
-	#define off 0
-#endif
-#ifndef yes
-	#define yes 1
-#endif
-#ifndef no
-	#define no 0
-#endif
+
 /*** Module Library ***/
 // May comment out modules not being used
 #include "stm32fxxxflash.h"
