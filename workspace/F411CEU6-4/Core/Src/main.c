@@ -196,7 +196,7 @@ int main(void)
 			count_1--;
 			if(!count_1){
 				adc_value = ADC_ReadTemperature();
-				lcd0()->string_size( func()->print_v1(message, 10, "%d %cC", (int32_t)CalculateTemperature(adc_value), (char) 0xDF ), 8);
+				lcd0()->string_size( func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value),1), (char) 0xDF ), 8);
 			}
 			gpioc()->instance->odr.par.pin_13 = 1;
 

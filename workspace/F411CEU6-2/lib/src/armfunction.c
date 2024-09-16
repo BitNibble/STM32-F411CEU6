@@ -62,6 +62,7 @@ char* function_ui16toa(uint16_t n);
 char* function_i32toa(int32_t n);
 char* FUNCui32toa(uint32_t n);
 char* function_ftoa(double num, uint8_t afterpoint);
+char* function_floatToText(float number, int precision);
 /*** 6 ***/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max);
 int function_pmax(int a1, int a2);
@@ -111,7 +112,7 @@ FUNC FUNC_enable( void )
 	setup_func.i32toa = function_i32toa;
 	setup_func.ui32toa = FUNCui32toa;
 	setup_func.ftoa = function_ftoa;
-
+	setup_func.floattotext = function_floatToText;
 	// 6
 	setup_func.trimmer = function_trimmer;
 	setup_func.pmax = function_pmax;
@@ -189,16 +190,6 @@ void function_Reverse(char s[])
 	for ( i = 0, j = function_StringLength(s) - 1; i < j ; i++, j-- ){
 		c = s[i]; s[i] = s[j]; s[j] = c;
 	}
-}
-uint8_t function_UintInvStr(uint32_t num, uint8_t index)
-{
-	for(FUNCstr[index++] = (uint8_t)((num % 10) + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)((num % 10) + '0'));
-	FUNCstr[index] = '\0'; return index;
-}
-uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint)
-{
-	for( num *= 10; afterpoint ; FUNCstr[index++] = (uint8_t)(num + '0'), num -= (uint8_t)num, num *= 10, afterpoint--);
-	FUNCstr[index] = '\0'; return index;
 }
 void function_swap(long *px, long *py)
 {
@@ -401,6 +392,16 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
+uint8_t function_UintInvStr(uint32_t num, uint8_t index)
+{
+	for(FUNCstr[index++] = (uint8_t)((num % 10) + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)((num % 10) + '0'));
+	FUNCstr[index] = '\0'; return index;
+}
+uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint)
+{
+	for( num *= 10; afterpoint ; FUNCstr[index++] = (uint8_t)(num + '0'), num -= (uint8_t)num, num *= 10, afterpoint--);
+	FUNCstr[index] = '\0'; return index;
+}
 char* function_ftoa(double num, uint8_t afterpoint)
 {
 	double ipart, fpart, n; uint8_t k = 0; int8_t sign;
@@ -410,6 +411,11 @@ char* function_ftoa(double num, uint8_t afterpoint)
 	FUNCstr[k++] = '.';
 	function_fPartStr(fpart, k, afterpoint);
 	return FUNCstr;
+}
+char* function_floatToText(float number, int precision) {
+    // Format the float to string with the specified precision
+    sprintf(FUNCstr, "%.*f", precision, number);
+    return FUNCstr;
 }
 /******/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max)

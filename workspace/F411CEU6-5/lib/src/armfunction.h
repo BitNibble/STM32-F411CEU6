@@ -60,6 +60,7 @@ typedef struct
 	char* (*i32toa)(int32_t n);
 	char* (*ui32toa)(uint32_t n);
 	char* (*ftoa)(double num, uint8_t afterpoint);
+	char* (*floattotext)(float number, int precision);
 	/*******/
 	int (*strToInt)(const char string[]);
 	/*******/

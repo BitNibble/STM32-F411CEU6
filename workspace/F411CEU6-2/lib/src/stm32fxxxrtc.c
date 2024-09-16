@@ -41,13 +41,16 @@ STM32FXXX_RTC* rtc_enable(void)
 {
 
 	/***/
+	stm32fxxx_rtc.get_Year = STM32FXXXRtc_get_Year;
+	stm32fxxx_rtc.get_Month = STM32FXXXRtc_get_Month;
+	stm32fxxx_rtc.get_Day = STM32FXXXRtc_get_Day;
+	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
+	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
+	stm32fxxx_rtc.get_Second = STM32FXXXRtc_get_Second;
 	stm32fxxx_rtc.Day = STM32FXXXRtcDay;
 	stm32fxxx_rtc.Month = STM32FXXXRtcMonth;
 	stm32fxxx_rtc.WeekDay = STM32FXXXRtcWeekDay;
 	stm32fxxx_rtc.Year = STM32FXXXRtcYear;
-	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
-	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
-	stm32fxxx_rtc.get_Second = STM32FXXXRtc_get_Second;
 	stm32fxxx_rtc.Hour = STM32FXXXRtcHour;
 	stm32fxxx_rtc.Minute = STM32FXXXRtcMinute;
 	stm32fxxx_rtc.Second = STM32FXXXRtcSecond;
@@ -58,8 +61,8 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.get_stsu = rtc_get_stsu;
 	stm32fxxx_rtc.get_ss = rtc_get_ss;
 	/*** Other ***/
-	stm32fxxx_rtc.bck_sram_clock = STM32FXXXPwrClock;
-	stm32fxxx_rtc.pwr_clock = STM32FXXXBckSramClock;
+	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
+	stm32fxxx_rtc.bck_sram_clock = STM32FXXXBckSramClock;
 	stm32fxxx_rtc.clock = STM32FXXXRtcClock;
 	stm32fxxx_rtc.nvic = STM32FXXXRtcNvic;
 	stm32fxxx_rtc.inic = STM32FXXXRtcInic;
@@ -138,6 +141,7 @@ void STM32FXXXRtcHour(uint8_t hour)
 	uint32_t Time = 0;
 	uint8_t t, u;
 	const uint32_t mask = 0x003F0000;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(hour / 10);
 	u = rtc_dec2bcd(hour % 10);
@@ -147,6 +151,7 @@ void STM32FXXXRtcHour(uint8_t hour)
 	// hu, ht
 	Time |= (uint32_t) ((u << 16) | (t << 20));
 	STM32FXXXRtcSetTr(Time);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcMinute(uint8_t minute)
@@ -154,6 +159,7 @@ void STM32FXXXRtcMinute(uint8_t minute)
 	uint32_t Time;
 	uint8_t t, u;
 	const uint32_t mask = 0x00007F00;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(minute / 10);
 	u = rtc_dec2bcd(minute % 10);
@@ -163,6 +169,7 @@ void STM32FXXXRtcMinute(uint8_t minute)
 	// mnu, mnt
 	Time |= (uint32_t) ((u << 8) | (t << 12));
 	STM32FXXXRtcSetTr(Time);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcSecond(uint8_t second)
@@ -170,6 +177,7 @@ void STM32FXXXRtcSecond(uint8_t second)
 	uint32_t Time;
 	uint8_t t, u;
 	const uint32_t mask = 0x0000007F;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(second / 10);
 	u = rtc_dec2bcd(second % 10);
@@ -179,6 +187,7 @@ void STM32FXXXRtcSecond(uint8_t second)
 	// su, st
 	Time |= (uint32_t) ((u << 0) | (t << 4));
 	STM32FXXXRtcSetTr(Time);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcYear(uint8_t year)
@@ -186,6 +195,7 @@ void STM32FXXXRtcYear(uint8_t year)
 	uint32_t Date;
 	uint8_t t, u;
 	const uint32_t mask = 0x00FF0000;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(year / 10);
 	u = rtc_dec2bcd(year % 10);
@@ -195,6 +205,7 @@ void STM32FXXXRtcYear(uint8_t year)
 	// YU, YT
 	Date |= (uint32_t) ((u << 16) | (t << 20));
 	STM32FXXXRtcSetDr(Date);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcMonth(uint8_t month)
@@ -202,6 +213,7 @@ void STM32FXXXRtcMonth(uint8_t month)
 	uint32_t Date;
 	uint8_t t, u;
 	const uint32_t mask = 0x00001F00;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(month / 10);
 	u = rtc_dec2bcd(month % 10);
@@ -211,6 +223,7 @@ void STM32FXXXRtcMonth(uint8_t month)
 	// MU, MT
 	Date |= (uint32_t) ((u << 8) | (t << 12));
 	STM32FXXXRtcSetDr(Date);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcWeekDay(uint8_t weekday)
@@ -218,6 +231,7 @@ void STM32FXXXRtcWeekDay(uint8_t weekday)
 	uint32_t Date;
 	uint8_t u;
 	const uint32_t mask = 0x0000E0000;
+	STM32FXXXPwrClock(on);
 	
 	u = rtc_dec2bcd(weekday % 10);
 	STM32FXXXRtcWaitRead();
@@ -226,6 +240,7 @@ void STM32FXXXRtcWeekDay(uint8_t weekday)
 	// WDU
 	Date |= (uint32_t) (u << 13);
 	STM32FXXXRtcSetDr(Date);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcDay(uint8_t day)
@@ -233,6 +248,7 @@ void STM32FXXXRtcDay(uint8_t day)
 	uint32_t Date;
 	uint8_t t, u;
 	const uint32_t mask = 0x0000003F;
+	STM32FXXXPwrClock(on);
 	
 	t = rtc_dec2bcd(day / 10);
 	u = rtc_dec2bcd(day % 10);
@@ -242,6 +258,7 @@ void STM32FXXXRtcDay(uint8_t day)
 	// DU, DT
 	Date |= (uint32_t) ((u << 0) | (t << 4));
 	STM32FXXXRtcSetDr(Date);
+	STM32FXXXPwrClock(off);
 }
 
 void STM32FXXXRtcdr2vec(char* rtc_vect)
@@ -303,6 +320,21 @@ void STM32FXXXRtctr2vec(char* rtc_vect)
 	}
 }
 
+uint8_t STM32FXXXRtc_get_Year(void){
+	STM32FXXXRtcWaitRead();
+	uint32_t dr = RTC->DR;
+	return rtc_bcd2dec((dr >> 16) & 0x00FF);
+}
+uint8_t STM32FXXXRtc_get_Month(void){
+	STM32FXXXRtcWaitRead();
+	uint32_t dr = RTC->DR;
+	return rtc_bcd2dec((dr >> 8) & 0x001F);
+}
+uint8_t STM32FXXXRtc_get_Day(void){
+	STM32FXXXRtcWaitRead();
+	uint32_t dr = RTC->DR;
+	return rtc_bcd2dec(dr & 0x003F);
+}
 uint8_t rtc_get_hthu(void)
 { // BCD
 	STM32FXXXRtcWaitRead();
@@ -340,13 +372,19 @@ uint16_t rtc_get_ss(void)
 }
 
 uint8_t STM32FXXXRtc_get_Hour(void){
-	return rtc_bcd2dec(rtc_get_hthu());
+	STM32FXXXRtcWaitRead();
+	uint32_t tr = RTC->TR;
+	return rtc_bcd2dec((tr >> 16) & 0x003F);
 }
 uint8_t STM32FXXXRtc_get_Minute(void){
-	return rtc_bcd2dec(rtc_get_mntmnu());
+	STM32FXXXRtcWaitRead();
+	uint32_t tr = RTC->TR;
+	return rtc_bcd2dec((tr >> 8) & 0x007F);
 }
 uint8_t STM32FXXXRtc_get_Second(void){
-	return rtc_bcd2dec(rtc_get_stsu());
+	STM32FXXXRtcWaitRead();
+	uint32_t tr = RTC->TR;
+	return rtc_bcd2dec(tr & 0x007F);
 }
 
 /*** AUX Procedure & Function Definition ***/

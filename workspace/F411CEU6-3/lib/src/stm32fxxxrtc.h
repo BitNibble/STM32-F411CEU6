@@ -33,13 +33,16 @@ typedef struct
 {
 
 	/***/
+	uint8_t (*get_Year)(void);
+	uint8_t (*get_Month)(void);
+	uint8_t (*get_Day)(void);
+	uint8_t (*get_Hour)(void);
+	uint8_t (*get_Minute)(void);
+	uint8_t (*get_Second)(void);
 	void (*Day)(uint8_t day);
 	void (*Month)(uint8_t month);
 	void (*WeekDay)(uint8_t weekday);
 	void (*Year)(uint8_t year);
-	uint8_t (*get_Hour)(void);
-	uint8_t (*get_Minute)(void);
-	uint8_t (*get_Second)(void);
 	void (*Hour)(uint8_t hour);
 	void (*Minute)(uint8_t minute);
 	void (*Second)(uint8_t second);
@@ -50,8 +53,8 @@ typedef struct
 	uint8_t (*get_stsu)(void);
 	uint16_t (*get_ss)(void);
 	/*** Other ***/
-	void (*bck_sram_clock)(uint8_t bool);
 	void (*pwr_clock)(uint8_t bool);
+	void (*bck_sram_clock)(uint8_t bool);
 	void (*clock)(uint8_t bool);
 	void (*inic)(uint8_t clock);
 	void (*nvic)(uint8_t value);
@@ -68,6 +71,9 @@ void STM32FXXXRtcNvic(uint8_t value);
 void STM32FXXXRtcInic(uint8_t clock);
 void STM32FXXXRtcBckWrite(uint8_t n, uint8_t data);
 uint8_t STM32FXXXRtcBckRead(uint8_t n);
+uint8_t STM32FXXXRtc_get_Year(void);
+uint8_t STM32FXXXRtc_get_Month(void);
+uint8_t STM32FXXXRtc_get_Day(void);
 uint8_t STM32FXXXRtc_get_Hour(void);
 uint8_t STM32FXXXRtc_get_Minute(void);
 uint8_t STM32FXXXRtc_get_Second(void);
