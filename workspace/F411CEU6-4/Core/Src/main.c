@@ -26,20 +26,21 @@
 
 EXPLODE PA;
 
+char message[32];
+
 int main(void)
 {
 	STM32FXXX_enable();
 	//rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
 	PA = EXPLODE_enable();
 
-	uint8_t Menu = 3;
+	uint8_t Menu = 6;
 	uint8_t count_0 = 0;
 	uint8_t count_1 = ~0;
 	uint16_t incr_0 = 0;
 	uint8_t skip_0 = 0;
 	uint16_t adc_value = 0;
 
-	rtc()->bck_sram_clock(on);
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
@@ -48,12 +49,12 @@ int main(void)
 	gpioa()->instance->moder.par.pin_0 = 0;
 	gpioa()->instance->pupdr.par.pin_0 = 1;
 
-
 	FUNC_enable();
 	//HAL_Init();
 	ADC_TemperatureSetup();
 
-	char vecT[8]; // for calendar
+	char vecD[8]; // for calendar date
+	char vecT[8]; // for calendar time
 	PA.update(&PA.par, gpioa()->instance->idr.word.i);
 
 	while (on)
@@ -113,7 +114,7 @@ int main(void)
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
 					incr_0 = rtc()->get_Second();
-					if(incr_0 > 59){ incr_0 = 0;}else{incr_0++;}
+					if(incr_0 > 58){ incr_0 = 0;}else{incr_0++;}
 					rtc()->Second(incr_0);
 				}
 				skip_0++;
@@ -127,13 +128,75 @@ int main(void)
 
 			break;
 		case 3:
+					lcd0()->gotoxy(0,0);
+					lcd0()->string_size("Set Year",10);
+					gpioc()->instance->odr.par.pin_13 = 0;
+
+					if(PA.par.LH & 1){
+						if(skip_0 > 0){
+							incr_0 = rtc()->get_Year();
+							if(incr_0 > 98){ incr_0 = 0;}else{incr_0++;}
+							rtc()->Year(incr_0);
+						}
+						skip_0++;
+					}
+
+					if(PA.par.LL & 1){ // Jump menu
+						_delay_ms(JMP_menu);
+						count_0++;
+						if(count_0 > 5){ Menu = 4; count_0 = 0; skip_0 = 0;}
+					}else{count_0 = 0;}
+
+					break;
+		case 4:
+					lcd0()->gotoxy(0,0);
+					lcd0()->string_size("Set Month",10);
+					gpioc()->instance->odr.par.pin_13 = 1;
+
+					if(PA.par.LH & 1){
+						if(skip_0 > 0){
+							incr_0 = rtc()->get_Month();
+							if(incr_0 > 11){ incr_0 = 0;}else{incr_0++;}
+							rtc()->Month(incr_0);
+						}
+						skip_0++;
+					}
+
+					if(PA.par.LL & 1){ // Jump menu
+						_delay_ms(JMP_menu);
+						count_0++;
+						if(count_0 > 5){ Menu = 5; count_0 = 0; skip_0 = 0;}
+					}else{count_0 = 0;}
+
+					break;
+		case 5:
+					lcd0()->gotoxy(0,0);
+					lcd0()->string_size("Set Day",10);
+					gpioc()->instance->odr.par.pin_13 = 0;
+
+					if(PA.par.LH & 1){
+						if(skip_0 > 0){
+							incr_0 = rtc()->get_Day();
+							if(incr_0 > 30){ incr_0 = 0;}else{incr_0++;}
+							rtc()->Day(incr_0);
+						}
+						skip_0++;
+					}
+
+					if(PA.par.LL & 1){ // Jump menu
+						_delay_ms(JMP_menu);
+						count_0++;
+						if(count_0 > 5){ Menu = 6; count_0 = 0; skip_0 = 0;}
+					}else{count_0 = 0;}
+
+					break;
+		case 6:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Clock",12);
 			count_1--;
 			if(!count_1){
 				adc_value = ADC_ReadTemperature();
-				lcd0()->string_size(func()->ftoa(CalculateTemperature(adc_value),2),6);
-				lcd0()->putch(0xDF); lcd0()->putch('C');
+				lcd0()->string_size( func()->print_v1(message, 10, "%d %cC", (int32_t)CalculateTemperature(adc_value), (char) 0xDF ), 8);
 			}
 			gpioc()->instance->odr.par.pin_13 = 1;
 
@@ -153,6 +216,10 @@ int main(void)
 		default:
 			break;
 		}
+
+		lcd0()->gotoxy(2,0);
+		rtc()->dr2vec(vecD);
+		lcd0()->string_size(func()->print_v2("data: %d%d-%d%d-20%d%d", vecD[5],vecD[6],vecD[3],vecD[4],vecD[0],vecD[1]),16);
 
 		lcd0()->gotoxy(3,0);
 		rtc()->tr2vec(vecT);
