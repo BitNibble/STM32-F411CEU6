@@ -20,15 +20,28 @@ Comment:
 
 /*** Global Constant & Macro ***/
 // ASIGN PORT PINS TO LCD (can be setup in any way)
-#define ARMLCD0_RS 3
-#define ARMLCD0_RW 4
-#define ARMLCD0_EN 5
-#define ARMLCD0_NC 10
-#define ARMLCD0_DB4 6
-#define ARMLCD0_DB5 7
-#define ARMLCD0_DB6 8
-#define ARMLCD0_DB7 9
-
+#ifdef STM32F411xE
+	/*** STM32F411CEU6 GPIOB ***/
+	#define ARMLCD0_RS 3
+	#define ARMLCD0_RW 4
+	#define ARMLCD0_EN 5
+	#define ARMLCD0_NC 10
+	#define ARMLCD0_DB4 6
+	#define ARMLCD0_DB5 7
+	#define ARMLCD0_DB6 8
+	#define ARMLCD0_DB7 9
+#endif
+#ifdef STM32F446xx
+	/*** STM32F446RE GPIOB ***/
+	#define ARMLCD0_RS 0
+	#define ARMLCD0_RW 1
+	#define ARMLCD0_EN 2
+	#define ARMLCD0_NC 3
+	#define ARMLCD0_DB4 4
+	#define ARMLCD0_DB5 5
+	#define ARMLCD0_DB6 6
+	#define ARMLCD0_DB7 7
+#endif
 /*** ARM LCD ***/
 typedef struct
 {

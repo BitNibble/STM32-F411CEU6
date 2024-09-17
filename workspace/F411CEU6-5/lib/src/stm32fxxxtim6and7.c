@@ -12,7 +12,7 @@ Comment:
 #include "stm32fxxxtim6and7.h"
 
 /*** File Variable ***/
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 static STM32FXXX_TIM6 stm32fxxx_tim6;
 static STM32FXXX_TIM7 stm32fxxx_tim7;
 /************/

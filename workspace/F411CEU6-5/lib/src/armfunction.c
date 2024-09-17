@@ -48,7 +48,6 @@ uint8_t function_bcd2dec(uint8_t num);
 uint8_t function_dec2bcd(uint8_t num);
 char* function_dectohex(int32_t num);
 uint8_t function_bcd2bin(uint8_t val);
-uint8_t function_bin2bcd(uint8_t val);
 int function_twocomptoint8bit(int twoscomp);
 int function_twocomptoint10bit(int twoscomp);
 int function_twocomptointnbit(int twoscomp, uint8_t nbits);

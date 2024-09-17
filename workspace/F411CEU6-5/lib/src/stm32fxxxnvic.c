@@ -42,7 +42,7 @@ uint8_t STM32FXXXNVIC_active( uint8_t IRQn ) // Query
 }
 void STM32FXXXNVIC_priority(uint32_t IRQn, uint32_t priority)
 {
-	volatile uint8_t* reg = (uint8_t*) NVIC->IP;
+	volatile uint8_t* reg = (uint8_t*) NVIC->ISPR;
 	*(reg + IRQn ) = priority;
 }
 void STM32FXXXNVIC_trigger(uint32_t IRQn)

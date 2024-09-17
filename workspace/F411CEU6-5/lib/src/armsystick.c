@@ -8,8 +8,9 @@ Update: 16012024
 Comment:
 	
 *******************************************************************************/
-#include "armsystick.h"
 #include "armquery.h"
+#include "armsystick.h"
+
 
 /*** File Variables ***/
 volatile uint32_t DelayCounter;

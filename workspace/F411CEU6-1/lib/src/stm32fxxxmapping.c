@@ -38,12 +38,12 @@ STM32FXXX* STM32FXXX_enable(void){
 		stm32fxxx.adc1 = adc1_enable();
 	#endif
 	#if defined(_STM32FXXXADC2_H_)
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.adc2 = adc2_enable();
 		#endif
 	#endif
 	#if defined(_STM32FXXXADC3_H_)
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.adc3 = adc3_enable();
 		#endif
 	#endif
@@ -98,7 +98,7 @@ STM32FXXX* STM32FXXX_enable(void){
 	// TIM
 	#if defined(_STM32FXXXTIM1AND8_H_)
 		stm32fxxx.tim1 = tim1_enable();
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.tim8 = tim8_enable();
 		#endif
 	#endif
@@ -109,7 +109,7 @@ STM32FXXX* STM32FXXX_enable(void){
 		stm32fxxx.tim5 = tim5_enable();
 	#endif
 	#if defined(_STM32FXXXTIM6AND7_H_)
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.tim6 = tim6_enable();
 			stm32fxxx.tim7 = tim7_enable();
 		#endif
@@ -118,7 +118,7 @@ STM32FXXX* STM32FXXX_enable(void){
 		stm32fxxx.tim9 = tim9_enable();
 		stm32fxxx.tim10 = tim10_enable();
 		stm32fxxx.tim11 = tim11_enable();
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.tim12 = tim12_enable();
 			stm32fxxx.tim13 = tim13_enable();
 			stm32fxxx.tim14 = tim14_enable();
@@ -128,7 +128,7 @@ STM32FXXX* STM32FXXX_enable(void){
 	#if defined(_STM32FXXXUSART_H_)
 		stm32fxxx.usart1 = usart1_enable();
 		stm32fxxx.usart2 = usart2_enable();
-		#ifdef __STM32F446xx_H
+		#ifdef STM32F446xx
 			stm32fxxx.usart3 = usart3_enable();
 			stm32fxxx.uart4 = uart4_enable();
 			stm32fxxx.uart5 = uart5_enable();

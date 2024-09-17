@@ -97,10 +97,12 @@ typedef union{
 STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
 //ADC_TypeDef* adc1_instance(void);
 STM32FXXXADC_TypeDef* adc1_instance(void);
-ADC_TypeDef* adc2_instance(void);
-ADC_TypeDef* adc3_instance(void);
+//ADC_TypeDef* adc2_instance(void);
+STM32FXXXADC_TypeDef* adc2_instance(void);
+//ADC_TypeDef* adc3_instance(void);
+STM32FXXXADC_TypeDef* adc3_instance(void);
 /*** CAN ***/
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 CAN_TypeDef* can1_instance(void);
 CAN_TypeDef* can2_instance(void);
 /*** CEC ***/
@@ -109,13 +111,13 @@ CEC_TypeDef* cec_instance(void);
 /*** CRC ***/
 CRC_TypeDef* crc_instance(void);
 /*** DAC ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 DAC_TypeDef* dac_instance(void);
 #endif
 /*** DBGMCU ***/
 DBGMCU_TypeDef* dbgmcu_instance(void);
 /*** DCMI ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 DCMI_TypeDef* dcmi_instance(void);
 #endif
 /*** DMA ***/
@@ -142,7 +144,7 @@ EXTI_TypeDef* exti_instance(void);
 /*** FLASH ***/
 FLASH_TypeDef* flash_instance(void);
 /*** FMC ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 FMC_Bank1_TypeDef* fmc_bank1_instance(void);
 FMC_Bank1E_TypeDef* fmc_bank1e_instance(void);
 FMC_Bank3_TypeDef* fmc_bank3_instance(void);
@@ -175,7 +177,7 @@ STM32FXXXI2C_TypeDef* i2c1_instance(void);
 STM32FXXXI2C_TypeDef* i2c2_instance(void);
 STM32FXXXI2C_TypeDef* i2c3_instance(void);
 /*** FMPI2C ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 FMPI2C_TypeDef* fmpi2c1_instance(void);
 #endif
 /*** IWDG ***/
@@ -188,8 +190,8 @@ STM32FXXXRCC_TypeDef* rcc_instance(void);
 /*** RTC ***/
 RTC_TypeDef* rtc_instance(void);
 /*** SAI ***/
-#ifdef __STM32F446xx_H_H
-SAI_TypeDef* sai1_instance(void){return (SAI_TypeDef*) SAI1_BASE;}
+#ifdef STM32F446xx
+//SAI_TypeDef* sai1_instance(void){return (SAI_TypeDef*) SAI1_BASE;}
 SAI_Block_TypeDef* sai1_block_a_instance(void);
 SAI_Block_TypeDef* sai1_block_b_instance(void);
 SAI_TypeDef* sai2_instance(void);
@@ -204,11 +206,11 @@ SPI_TypeDef* spi2_instance(void);
 SPI_TypeDef* spi3_instance(void);
 SPI_TypeDef* spi4_instance(void);
 /*** QUADSPI ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 QUADSPI_TypeDef* quadspi_instance(void);
 #endif
 /*** SPDIFRX ***/
-#ifdef __STM32F446xx_H_H
+#ifdef STM32F446xx
 SPDIFRX_TypeDef* spdifrx_instance(void);
 #endif
 /*** TIM ***/

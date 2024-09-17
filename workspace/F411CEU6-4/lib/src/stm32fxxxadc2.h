@@ -19,8 +19,10 @@ Comment:
 typedef struct
 {
 	/*** BitField Mapping ***/
-	ADC_TypeDef* instance;
-	ADC_Common_TypeDef* common_instance;
+	//ADC_TypeDef* instance;
+	STM32FXXXADC_TypeDef* instance;
+	//ADC_Common_TypeDef* common_instance;
+	STM32FXXXADC_COMMON_TypeDef* common_instance;
 	/*** Other ***/
 	STM32FXXXADC2single* single;
 	void (*iclock)(uint8_t bool);

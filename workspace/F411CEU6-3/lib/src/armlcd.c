@@ -45,7 +45,7 @@ ARMLCD0 ARMLCD0_enable(GPIO_TypeDef* reg)
 	if(reg == (GPIO_TypeDef*)GPIOC_BASE) RCC->AHB1ENR |= (1 << 2);
 	if(reg == (GPIO_TypeDef*)GPIOD_BASE) RCC->AHB1ENR |= (1 << 3);
 	if(reg == (GPIO_TypeDef*)GPIOE_BASE) RCC->AHB1ENR |= (1 << 4);
-	#ifdef __STM32F446xx_H
+	#ifdef STM32F446xx
 		if(reg == (GPIO_TypeDef*)GPIOF_BASE) RCC->AHB1ENR |= (1 << 5);
 		if(reg == (GPIO_TypeDef*)GPIOG_BASE) RCC->AHB1ENR |= (1 << 6);
 	#endif
@@ -72,21 +72,20 @@ ARMLCD0* lcd0(void){ return (ARMLCD0*) &setup_armlcd0; }
 
 void ARMLCD0_inic(void)
 {
-	//uint8_t repeat;
-
-	clear_reg(&ireg->MODER,(3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2))); // reset control pins
-	set_reg(&ireg->MODER,(1 << (ARMLCD0_RS * 2)) | (1 << (ARMLCD0_RW * 2)) | (1 << (ARMLCD0_EN * 2))); // control pins as output
+	// uint8_t repeat;
+	// LCD INIC
+	ireg->MODER &= (uint32_t) ~((3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2))); // control pins as output
+	ireg->MODER |= ((1 << (ARMLCD0_RS * 2)) | (1 << (ARMLCD0_RW * 2)) | (1 << (ARMLCD0_EN * 2))); // control pins as output
 	
-	clear_reg(&ireg->PUPDR,(3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset pull up resistors
-	set_reg(&ireg->PUPDR,(1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2))); // enable pull up resistors
+	ireg->PUPDR &= (uint32_t) ~((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // enable pull up resistors
+	ireg->PUPDR |= ((1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2))); // enable pull up resistors
 
-	clear_reg(&ireg->MODER,3 << (ARMLCD0_NC * 2)); // reboot detect input
-	
-	clear_reg(&ireg->PUPDR,3 << (ARMLCD0_NC * 2)); // reset pull up resistors
-	set_reg(&ireg->PUPDR,1 << (ARMLCD0_NC * 2)); // pull up resistors
+	ireg->MODER &= (uint32_t) ~(3 << (ARMLCD0_NC * 2)); // reboot detect input
+	ireg->PUPDR &= (uint32_t) ~(3 << (ARMLCD0_NC * 2)); // pull up resistors
+	ireg->PUPDR |= (1 << (ARMLCD0_NC * 2)); // pull up resistors
 
-	clear_reg(&ireg->OSPEEDR,(3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset speed
-	//ireg->OSPEEDR |= ( (3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)) ); // set speed
+	ireg->OSPEEDR &= (uint32_t) ~( (3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)) ); // set speed
+	ireg->OSPEEDR |= ( (3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)) ); // set speed
 	 
 	armlcd0_detect = ireg->IDR & (1 << ARMLCD0_NC);
 	
@@ -103,7 +102,16 @@ void ARMLCD0_inic(void)
 	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
 	_delay_10us(4);
 	
+	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
+	ARMLCD0_BF();
+
 	ARMLCD0_write(0x0C, ARMLCD0_INST); // display on/off control
+	ARMLCD0_BF();
+
+	ARMLCD0_write(0x01, ARMLCD0_INST); // clear display
+	ARMLCD0_BF();
+
+	ARMLCD0_write(0x06, ARMLCD0_INST); // entry mode set (crazy settings)
 	ARMLCD0_BF();
 
 	ARMLCD0_clear();

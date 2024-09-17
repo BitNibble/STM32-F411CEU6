@@ -14,13 +14,13 @@ Comment:
 #include <string.h>
 
 /*** File Header ***/
-void BUFF_push(bufferparameter* par, BUFFvar data);
-BUFFvar* BUFF_raw(bufferparameter* par);
+void BUFF_push(bufferparameter* par, BUFF_var data);
+BUFF_var* BUFF_raw(bufferparameter* par);
 void BUFF_flush(bufferparameter* par);
-bufferparameter buff_par_inic( uint8_t size_buff, BUFFvar* buff );
+bufferparameter buff_par_inic( uint8_t size_buff, BUFF_var* buff );
 
 /*** BUFF Auxiliar ***/
-bufferparameter buff_par_inic( uint8_t size_buff, BUFFvar* buff )
+bufferparameter buff_par_inic( uint8_t size_buff, BUFF_var* buff )
 {
 	bufferparameter buff_par;
 	// inic VAR
@@ -30,7 +30,7 @@ bufferparameter buff_par_inic( uint8_t size_buff, BUFFvar* buff )
 	return buff_par;
 }
 /*** BUFF Procedure & Function Definition ***/
-BUFF BUFF_enable( uint8_t size_buff, BUFFvar* buff )
+BUFF BUFF_enable( uint8_t size_buff, BUFF_var* buff )
 {
 	// OBJECT STRUCT
 	BUFF ret;
@@ -43,8 +43,8 @@ BUFF BUFF_enable( uint8_t size_buff, BUFFvar* buff )
 	return ret; // return copy
 }
 
-void BUFF_push( bufferparameter* par, BUFFvar data ){
-	BUFFvar* head; BUFFvar* next;
+void BUFF_push( bufferparameter* par, BUFF_var data ){
+	BUFF_var* head; BUFF_var* next;
 	head = par->head;
 	if(data){
 		if( head == par->end ){
@@ -59,12 +59,12 @@ void BUFF_push( bufferparameter* par, BUFFvar data ){
 	}
 }
 
-BUFFvar* BUFF_raw( bufferparameter* par ){
+BUFF_var* BUFF_raw( bufferparameter* par ){
 		return par->orig;
 }
 
 void BUFF_flush( bufferparameter* par ){
-	BUFFvar* head;
+	BUFF_var* head;
 	head = par->orig;
 	par->head = head;
 	*head = 0;

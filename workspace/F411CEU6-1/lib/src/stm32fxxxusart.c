@@ -131,7 +131,7 @@ void STM32FXXXUsart2Parameter( uint8_t wordlength, uint8_t samplingmode, double 
 		USART2->BRR |= ((uint32_t) intpart << 4); // DIV_Mantissa[11:0], default.
 	}
 }
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*** USART3 ***/
 void STM32FXXXUsart3Clock( uint8_t bool )
 {
@@ -379,7 +379,7 @@ STM32FXXX_USART2* usart2_enable(void)
 
 STM32FXXX_USART2*  usart2(void){ return (STM32FXXX_USART2*) &stm32fxxx_usart2; }
 
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*** USART3 INIC Procedure & Function Definition ***/
 STM32FXXX_USART3* usart3_enable(void)
 {

@@ -15,7 +15,7 @@ Comment:
 static STM32FXXX_TIM9 stm32fxxx_tim9;
 static STM32FXXX_TIM10 stm32fxxx_tim10;
 static STM32FXXX_TIM11 stm32fxxx_tim11;
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 	static STM32FXXX_TIM12 stm32fxxx_tim12;
 	static STM32FXXX_TIM13 stm32fxxx_tim13;
 	static STM32FXXX_TIM14 stm32fxxx_tim14;
@@ -54,7 +54,7 @@ void STM32FXXXTim11Nvic(uint8_t bool)
 { // 26
 	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
 }
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*************/
 /*** TIM12 ***/
 /*************/
@@ -141,7 +141,7 @@ STM32FXXX_TIM11* tim11_enable(void)
 
 STM32FXXX_TIM11* tim11(void){ return (STM32FXXX_TIM11*) &stm32fxxx_tim11; }
 
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*** TIM12 Procedure & Function Definition***/
 STM32FXXX_TIM12* tim12_enable(void)
 {

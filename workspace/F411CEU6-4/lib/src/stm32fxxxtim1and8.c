@@ -15,7 +15,7 @@ Comment:
 
 /*** File Variables ***/
 static STM32FXXX_TIM1 stm32fxxx_tim1;
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 	static STM32FXXX_TIM8 stm32fxxx_tim8;
 #endif
 /************/
@@ -72,7 +72,7 @@ void STM32FXXXTim1Nvic(uint8_t value)
 	break;
 	}
 }
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /************/
 /*** TIM8 ***/
 /************/
@@ -129,7 +129,7 @@ STM32FXXX_TIM1* tim1_enable(void)
 
 STM32FXXX_TIM1* tim1(void){ return (STM32FXXX_TIM1*) &stm32fxxx_tim1;}
 
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*** TIM8 INIC Procedure & Function Definition ***/
 STM32FXXX_TIM8* tim8_enable(void)
 {

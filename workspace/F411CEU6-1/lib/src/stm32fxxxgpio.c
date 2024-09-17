@@ -19,7 +19,7 @@ static STM32FXXX_GPIOB stm32fxxx_gpiob;
 static STM32FXXX_GPIOC stm32fxxx_gpioc;
 static STM32FXXX_GPIOD stm32fxxx_gpiod;
 static STM32FXXX_GPIOE stm32fxxx_gpioe;
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
     static STM32FXXX_GPIOF stm32fxxx_gpiof;
     static STM32FXXX_GPIOG stm32fxxx_gpiog;
 #endif
@@ -146,7 +146,7 @@ void STM32FXXXGpioEafr(uint8_t pin, uint8_t data)
 	}
 }
 
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 /*** GPIOF ***/
 void STM32FXXXGpioFclock(uint8_t enable)
 {
@@ -281,7 +281,7 @@ STM32FXXX_GPIOE* gpioe_enable(void)
 
 STM32FXXX_GPIOE* gpioe(void) { return &stm32fxxx_gpioe; }
 
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 STM32FXXX_GPIOF* gpiof_enable(void)
 {
     /*** GPIOF Bit Mapping Link ***/

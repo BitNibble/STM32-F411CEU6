@@ -12,7 +12,7 @@ Comment:
 #include "stm32fxxxadc2.h"
 
 /*** File Variables ***/
-#ifdef __STM32F446xx_H
+#ifdef STM32F446xx
 // ADC2
 static STM32FXXX_ADC2 stm32fxxx_adc2;
 static STM32FXXXADC2single stm32fxxx_adc2_single;

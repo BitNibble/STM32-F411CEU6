@@ -12,19 +12,7 @@ Comment:
 	#define _STM32FXXXRCC_H_
 /*** Library ***/
 #include "armquery.h"
-/*** Define & Macros***/
-#ifndef on
-	#define on 1
-#endif
-#ifndef off
-	#define off 0
-#endif
-#ifndef yes
-	#define yes 1
-#endif
-#ifndef no
-	#define no 0
-#endif
+
 /*** RCC_Common TypeDef ***/
 // RCC -> PLL
 typedef struct

@@ -15,26 +15,26 @@ Comment:
 #include <inttypes.h>
 
 /*** File Constant & Macro ***/
-#define BUFFvar char
+#define BUFF_var char
 
 /*** File TypeDef ***/
 typedef struct {
-	BUFFvar* orig;
-	BUFFvar* head;
-	BUFFvar* end;
+	BUFF_var* orig;
+	BUFF_var* head;
+	BUFF_var* end;
 }bufferparameter;
 
 /*** BUFFER TypeDef ***/
 struct buffer
 {
 	bufferparameter par;
-	void (*push)(bufferparameter* par, BUFFvar data);
-	BUFFvar* (*raw)(bufferparameter* par);
+	void (*push)(bufferparameter* par, BUFF_var data);
+	BUFF_var* (*raw)(bufferparameter* par);
 	void (*flush)(bufferparameter* par);
 };
 typedef struct buffer BUFF;
 
-BUFF BUFF_enable(uint8_t size_buff, BUFFvar* buff);
+BUFF BUFF_enable(uint8_t size_buff, BUFF_var* buff);
 
 #endif
 
