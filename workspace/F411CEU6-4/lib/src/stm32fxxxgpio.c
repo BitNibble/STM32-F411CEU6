@@ -40,12 +40,13 @@ void STM32FXXXGpioAafr(uint8_t pin, uint8_t data)
 {
     const uint8_t BLOCK_SIZE = 4;
     const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+    const uint8_t index = (pin * BLOCK_SIZE) / 32;
+    const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOA->AFR[index] &= ~(MASK << shift);
-        GPIOA->AFR[index] |= (data & MASK) << shift;
+    data &= MASK;
+    if(index < 2){
+    	GPIOA->AFR[index] &= ~( MASK << Pos );
+    	GPIOA->AFR[index] |= ( data << Pos );
     }
 }
 
@@ -61,15 +62,16 @@ void STM32FXXXGpioBclock(uint8_t enable)
 
 void STM32FXXXGpioBafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOB->AFR[index] &= ~(MASK << shift);
-        GPIOB->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOB->AFR[index] &= ~( MASK << Pos );
+		GPIOB->AFR[index] |= ( data << Pos );
+	}
 }
 
 /*** GPIOC ***/
@@ -84,15 +86,16 @@ void STM32FXXXGpioCclock(uint8_t enable)
 
 void STM32FXXXGpioCafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOC->AFR[index] &= ~(MASK << shift);
-        GPIOC->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOC->AFR[index] &= ~( MASK << Pos );
+		GPIOC->AFR[index] |= ( data << Pos );
+	}
 }
 
 /*** GPIOD ***/
@@ -107,15 +110,16 @@ void STM32FXXXGpioDclock(uint8_t enable)
 
 void STM32FXXXGpioDafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOD->AFR[index] &= ~(MASK << shift);
-        GPIOD->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOD->AFR[index] &= ~( MASK << Pos );
+		GPIOD->AFR[index] |= ( data << Pos );
+	}
 }
 
 /*** GPIOE ***/
@@ -130,15 +134,16 @@ void STM32FXXXGpioEclock(uint8_t enable)
 
 void STM32FXXXGpioEafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOE->AFR[index] &= ~(MASK << shift);
-        GPIOE->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOE->AFR[index] &= ~( MASK << Pos );
+		GPIOE->AFR[index] |= ( data << Pos );
+	}
 }
 
 #ifdef __STM32F446xx_H
@@ -154,15 +159,16 @@ void STM32FXXXGpioFclock(uint8_t enable)
 
 void STM32FXXXGpioFafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOF->AFR[index] &= ~(MASK << shift);
-        GPIOF->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOF->AFR[index] &= ~( MASK << Pos );
+		GPIOF->AFR[index] |= ( data << Pos );
+	}
 }
 
 /*** GPIOG ***/
@@ -177,15 +183,16 @@ void STM32FXXXGpioGclock(uint8_t enable)
 
 void STM32FXXXGpioGafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOG->AFR[index] &= ~(MASK << shift);
-        GPIOG->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOG->AFR[index] &= ~( MASK << Pos );
+		GPIOG->AFR[index] |= ( data << Pos );
+	}
 }
 #endif
 
@@ -201,15 +208,16 @@ void STM32FXXXGpioHclock(uint8_t enable)
 
 void STM32FXXXGpioHafr(uint8_t pin, uint8_t data)
 {
-    const uint8_t BLOCK_SIZE = 4;
-    const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    uint8_t index = pin / BLOCK_SIZE;
-    uint8_t shift = (pin % BLOCK_SIZE) * BLOCK_SIZE;
+	const uint8_t BLOCK_SIZE = 4;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t index = (pin * BLOCK_SIZE) / 32;
+	const uint16_t Pos = (pin * BLOCK_SIZE) - (index * 32);
 
-    if (index < 2) {
-        GPIOH->AFR[index] &= ~(MASK << shift);
-        GPIOH->AFR[index] |= (data & MASK) << shift;
-    }
+	data &= MASK;
+	if(index < 2){
+		GPIOH->AFR[index] &= ~( MASK << Pos );
+		GPIOH->AFR[index] |= ( data << Pos );
+	}
 }
 
 /*** Initialization Procedures & Function Definitions ***/

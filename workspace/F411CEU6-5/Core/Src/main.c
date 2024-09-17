@@ -34,16 +34,16 @@ int main(void)
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
-	gpioc()->instance->moder.par.pin_13 = 1;
+	gpioc()->instance->MODER.par.MODER13 = 1;
 	gpioa()->clock(on); // inputs gpioa0
-	gpioa()->instance->moder.par.pin_0 = 0;
-	gpioa()->instance->pupdr.par.pin_0 = 1;
+	gpioa()->instance->MODER.par.MODER0 = 0;
+	gpioa()->instance->PUPDR.par.PUPDR0 = 1;
 
 	FUNC_enable();
 	//HAL_Init();
 
-	gpioc()->instance->bsrr.par.setpin_13 = 1;
-	PA.update(&PA.par, gpioa()->instance->idr.word.i);
+	gpioc()->instance->BSRR.par.BS13 = 1;
+	PA.update(&PA.par, gpioa()->instance->IDR.reg);
 
 	ADC_TemperatureSetup();
 	float temperature = 0;
@@ -52,7 +52,7 @@ int main(void)
 	while (1)
 	{
 		/*** preamble ***/
-		PA.update(&PA.par, gpioa()->instance->idr.word.i);
+		PA.update(&PA.par, gpioa()->instance->IDR.reg);
 		/******/
 		lcd0()->gotoxy(0,0);
 		lcd0()->string_size("Hello!",10);

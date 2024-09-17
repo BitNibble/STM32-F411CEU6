@@ -17,7 +17,6 @@ static STM32FXXX_Query stm32fxxx_query;
 static STM32FXXXSYSTEM_prescaler stm32fxxx_System_prescaler;
 static STM32FXXXPLL_prescaler stm32fxxx_Pll_prescaler;
 
-
 STM32FXXXSYSTEM_prescaler* System_prescaler_inic(void);
 STM32FXXXPLL_prescaler* Pll_prescaler_inic(void);
 

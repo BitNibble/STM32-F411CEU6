@@ -34,7 +34,7 @@ typedef volatile struct {
             uint32_t MODER13: 2;  /* Mode for pin 13 */
             uint32_t MODER14: 2;  /* Mode for pin 14 */
             uint32_t MODER15: 2;  /* Mode for pin 15 */
-        } bit;
+        } par;
         uint32_t reg;
     } MODER;  /* 0x00 */
 
@@ -58,7 +58,7 @@ typedef volatile struct {
             uint32_t OT14: 1;    /* Output type for pin 14 */
             uint32_t OT15: 1;    /* Output type for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
-        } bit;
+        } par;
         uint32_t reg;
     } OTYPER;  /* 0x04 */
 
@@ -81,7 +81,7 @@ typedef volatile struct {
             uint32_t OSPEEDR13: 2; /* Output speed for pin 13 */
             uint32_t OSPEEDR14: 2; /* Output speed for pin 14 */
             uint32_t OSPEEDR15: 2; /* Output speed for pin 15 */
-        } bit;
+        } par;
         uint32_t reg;
     } OSPEEDR;  /* 0x08 */
 
@@ -104,7 +104,7 @@ typedef volatile struct {
             uint32_t PUPDR13: 2; /* Pull-up/Pull-down for pin 13 */
             uint32_t PUPDR14: 2; /* Pull-up/Pull-down for pin 14 */
             uint32_t PUPDR15: 2; /* Pull-up/Pull-down for pin 15 */
-        } bit;
+        } par;
         uint32_t reg;
     } PUPDR;  /* 0x0C */
 
@@ -128,7 +128,7 @@ typedef volatile struct {
             uint32_t ID14: 1;    /* Input data for pin 14 */
             uint32_t ID15: 1;    /* Input data for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
-        } bit;
+        } par;
         uint32_t reg;
     } IDR;  /* 0x10 */
 
@@ -152,7 +152,7 @@ typedef volatile struct {
             uint32_t ODR14: 1;    /* Output data for pin 14 */
             uint32_t ODR15: 1;    /* Output data for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
-        } bit;
+        } par;
         uint32_t reg;
     } ODR;  /* 0x14 */
 
@@ -192,10 +192,10 @@ typedef volatile struct {
             uint32_t BR14: 1;    /* Bit reset for pin 14 */
             uint32_t BR15: 1;    /* Bit reset for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
-        } bit;
+        } par;
         struct {
-            uint16_t BS;   /* Bit set register (low 16 bits) */
-            uint16_t BR;   /* Bit reset register (high 16 bits) */
+            uint16_t BS;   /* Bit set register (low 16 pars) */
+            uint16_t BR;   /* Bit reset register (high 16 pars) */
         } word;
         uint32_t reg;
     } BSRR;  /* 0x18 */
@@ -220,9 +220,9 @@ typedef volatile struct {
             uint32_t LCK14: 1;    /* Lock for pin 14 */
             uint32_t LCK15: 1;    /* Lock for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
-        } bit;
+        } par;
         struct {
-            uint16_t LCKR; /* Lock register (low 16 bits) */
+            uint16_t LCKR; /* Lock register (low 16 pars) */
             uint16_t reserved; /* Reserved for padding */
         } word;
         uint32_t reg;
@@ -247,7 +247,7 @@ typedef volatile struct {
             uint32_t AFR13: 4;    /* Alternate function for pin 13 */
             uint32_t AFR14: 4;    /* Alternate function for pin 14 */
             uint32_t AFR15: 4;    /* Alternate function for pin 15 */
-        } bit;
+        } par;
         struct {
             uint32_t AFRL; /* Alternate function low register (0x20) */
             uint32_t AFRH; /* Alternate function high register (0x24) */

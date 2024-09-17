@@ -44,10 +44,10 @@ int main(void)
 	gpiob()->clock(on); // lcd0
 	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
 	gpioc()->clock(on); // gpioc13
-	gpioc()->instance->MODER.bit.MODER13 = 1;
+	gpioc()->instance->MODER.par.MODER13 = 1;
 	gpioa()->clock(on); // inputs gpioa0
-	gpioa()->instance->MODER.bit.MODER0 = 0;
-	gpioa()->instance->PUPDR.bit.PUPDR0 = 1;
+	gpioa()->instance->MODER.par.MODER0 = 0;
+	gpioa()->instance->PUPDR.par.PUPDR0 = 1;
 
 	FUNC_enable();
 	//HAL_Init();
@@ -67,7 +67,7 @@ int main(void)
 		case 0:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Hour",10);
-			gpioc()->instance->ODR.bit.ODR13 = 0;
+			gpioc()->instance->ODR.par.ODR13 = 0;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -88,7 +88,7 @@ int main(void)
 		case 1:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Minute",10);
-			gpioc()->instance->ODR.bit.ODR13 = 1;
+			gpioc()->instance->ODR.par.ODR13 = 1;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -109,7 +109,7 @@ int main(void)
 		case 2:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Second",10);
-			gpioc()->instance->ODR.bit.ODR13 = 0;
+			gpioc()->instance->ODR.par.ODR13 = 0;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -130,7 +130,7 @@ int main(void)
 		case 3:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Year",10);
-					gpioc()->instance->ODR.bit.ODR13 = 1;
+					gpioc()->instance->ODR.par.ODR13 = 1;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -151,7 +151,7 @@ int main(void)
 		case 4:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Month",10);
-					gpioc()->instance->ODR.bit.ODR13 = 0;
+					gpioc()->instance->ODR.par.ODR13 = 0;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -172,7 +172,7 @@ int main(void)
 		case 5:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Day",10);
-					gpioc()->instance->ODR.bit.ODR13 = 1;
+					gpioc()->instance->ODR.par.ODR13 = 1;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -198,7 +198,7 @@ int main(void)
 				adc_value = ADC_ReadTemperature();
 				lcd0()->string_size( func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value),1), (char) 0xDF ), 8);
 			}
-			gpioc()->instance->ODR.bit.ODR13 = 0;
+			gpioc()->instance->ODR.par.ODR13 = 0;
 
 			if(PA.par.LH & 1){
 				if(skip_0 < 1){

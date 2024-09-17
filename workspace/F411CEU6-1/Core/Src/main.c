@@ -54,7 +54,7 @@ int main(void)
   ARMLCD0_enable((GPIO_TypeDef*)stm()->gpiob->instance);
   FUNC_enable();
 
-  gpioc()->instance->moder.par.pin_13 = 1;
+  gpioc()->instance->MODER.par.MODER13 = 1;
 
   while (1)
   {

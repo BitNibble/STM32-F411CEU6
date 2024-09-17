@@ -56,7 +56,7 @@ void tim1_u_callback(void){
 void tim1_cc1_callback(void){
 	//count2++;
 	//count8=tim1()->cnt->par.w0;
-	gpioc()->instance->bsrr.par.resetpin_13 = 1;
+	gpioc()->instance->BSRR.par.BR13 = 1;
 }
 /**/
 /**/
@@ -66,7 +66,7 @@ void tim1_cc2_callback(void){
 	if(tim1()->instance->ccr1.par.w0 > (tim1()->instance->ccr2.par.w0 - 100)){ cdir = -1; }
 	if(tim1()->instance->ccr1.par.w0 < (1000 + 100)){ cdir = 1; }
 	//count8=tim1()->cnt->par.w0;
-	gpioc()->instance->bsrr.par.setpin_13 = 1;
+	gpioc()->instance->BSRR.par.BS13 = 1;
 }
 /**/
 
@@ -116,16 +116,16 @@ int main(void)
   FUNC_enable();
 
   //gpioc()->instance->moder.par.pin_1 = 1;
-  gpioc()->instance->moder.par.pin_13 = 1;
+  gpioc()->instance->MODER.par.MODER13 = 1;
 
   stm()->tim1->nvic(1);
   //stm()->tim1->nvic(17);
   stm()->tim1->clock(on);
 
-  gpioa()->instance->afr.par.pin_7 = 1; // pin 7 af tim1ch1n
-  gpioa()->instance->afr.par.pin_8 = 1; // pin 8 af tim1ch1
-  gpioa()->instance->moder.par.pin_7 = 2; // AF enable
-  gpioa()->instance->moder.par.pin_8 = 2; // AF enable
+  gpioa()->instance->AFR.par.AFR7 = 1; // pin 7 af tim1ch1n
+  gpioa()->instance->AFR.par.AFR8 = 1; // pin 8 af tim1ch1
+  gpioa()->instance->MODER.par.MODER7 = 2; // AF enable
+  gpioa()->instance->MODER.par.MODER8 = 2; // AF enable
 
   tim1()->instance->ccmr1.tim1and8_ocm_par.oc1m = 6;
   //tim1()->instance->ccmr1.ocm_par.oc1m = 6;
@@ -171,7 +171,7 @@ int main(void)
   while (1)
   {
 	  /*** preamble ***/
-	  PA.update(&PA.par, gpioa()->instance->idr.word.i);
+	  PA.update(&PA.par, gpioa()->instance->IDR.reg);
 	  /******/
 
 	  lcd0()->gotoxy(0,0);
