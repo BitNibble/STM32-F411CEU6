@@ -377,6 +377,14 @@ void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)(hpins << 16);
 }
+void setpin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (1 << pin);
+}
+void resetpin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (uint32_t)((1 << pin) << 16);
+}
 
 /****** MISCELLANEOUS ******/
 void ADC_TemperatureSetup(void){

@@ -90,6 +90,8 @@ uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void setpin( GPIO_TypeDef* reg, uint8_t pin );
+void resetpin( GPIO_TypeDef* reg, uint8_t pin );
 
 uint32_t getpllclk(void);
 uint32_t getsysclk(void);
