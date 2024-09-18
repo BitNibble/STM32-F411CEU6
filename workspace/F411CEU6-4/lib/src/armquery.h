@@ -54,6 +54,7 @@ Comment:
 	#define NO 0
 #endif
 /****************************************/
+
 typedef struct{
 uint16_t (*AHB)(void);
 uint8_t (*APB1)(void);
@@ -72,7 +73,7 @@ uint8_t (*R)(void);
 typedef struct{
 STM32FXXXSYSTEM_prescaler* System_prescaler;
 STM32FXXXPLL_prescaler* Pll_prescaler;
-uint32_t (*PllClock)(void);
+uint32_t (*PllSourceClock)(void);
 uint32_t (*SystemClock)(void);
 uint32_t (*hclk)(void);
 uint32_t (*pclk1)(void);
@@ -94,9 +95,19 @@ void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void setpin( GPIO_TypeDef* reg, uint8_t pin );
 void resetpin( GPIO_TypeDef* reg, uint8_t pin );
 
+/*** Clock ***/
+uint32_t getpllsourceclk(void);
+/*** -----> ***/
+// HSI
+// HSE
 uint32_t getpllclk(void);
+/*** -----> ***/
 uint32_t getsysclk(void);
+uint32_t gethclk(void);
+uint32_t getpclk1(void);
+uint32_t getpclk2(void);
 
+/*** Scaller ***/
 uint16_t gethpre(void);
 uint8_t gethppre1(void);
 uint8_t gethppre2(void);

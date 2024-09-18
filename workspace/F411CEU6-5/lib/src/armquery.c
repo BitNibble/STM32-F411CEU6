@@ -189,11 +189,19 @@ uint8_t getpllr(void)
 {
 	return get_reg_block(RCC->PLLCFGR, 3, 28);
 }
-uint32_t getpllclk(void)
+uint32_t getpllsourceclk(void)
 {
 	uint32_t source;
 	if( get_reg_block(RCC->PLLCFGR, 1, 22) ) source = HSE_OSC; else source = HSI_RC;
 	return source;
+}
+uint32_t getpllclk(void)
+{
+	uint32_t pllclk;
+	pllclk = getpllsourceclk() / getpllm();
+	pllclk /= getpllp();
+	pllclk *= getplln();
+	return pllclk;
 }
 uint32_t getsysclk(void)
 {
@@ -207,13 +215,13 @@ uint32_t getsysclk(void)
 			value = HSE_OSC;
 		break;
 		case 2: // 10: PLL used as the system clock
-			value = getpllclk() / getpllm();
+			value = getpllsourceclk() / getpllm();
 			value /= getpllp();
 			value *= getplln();
 		break;
 		case 3: // 11: PLL_R used as the system clock
 			#ifdef STM32F446xx
-				value = getpllclk() / getpllm();
+				value = getpllsourceclk() / getpllm();
 				value /= getpllr();
 				value *= getplln();
 			#endif
@@ -257,7 +265,7 @@ STM32FXXX_Query query_enable(void)
 {
 	stm32fxxx_query.System_prescaler = System_prescaler_inic();
 	stm32fxxx_query.Pll_prescaler = Pll_prescaler_inic();
-	stm32fxxx_query.PllClock = getpllclk;
+	stm32fxxx_query.PllSourceClock = getpllsourceclk;
 	stm32fxxx_query.SystemClock = getsysclk;
 	stm32fxxx_query.hclk = gethclk;
 	stm32fxxx_query.pclk1 = getpclk1;

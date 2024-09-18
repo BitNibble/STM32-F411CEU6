@@ -153,7 +153,7 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd)
 		  func_lcd->string_size( FUNCui32toa( getsysclk()), 10);
 		  func_lcd->gotoxy(1,0);
 		  func_lcd->string_size("pllclk:",7);
-		  func_lcd->string_size( FUNCui32toa( getpllclk()), 10);
+		  func_lcd->string_size( FUNCui32toa( getpllsourceclk()), 10);
 		  if(toggle & 1){
 		  	func_lcd->gotoxy(2,0);
 		  	func_lcd->string_size("ahb:",4); func_lcd->string_size( FUNCui32toa( gethpre() ), 4);
