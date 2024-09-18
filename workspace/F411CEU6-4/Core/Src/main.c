@@ -8,7 +8,7 @@
   *   LCD:
   * PB3 - RS
   * PB4 - RW
-  * PB5 - E
+  * PB5 - EN
   * PB6 - D4
   * PB7 - D5
   * PB8 - D6
@@ -236,7 +236,6 @@ int main(void)
 
 	} /*** While ***/
 } /*** Main ***/
-
 
 void Error_Handler(void)
 {
