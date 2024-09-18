@@ -15,6 +15,26 @@ Comment:
 // CMD RS
 #define ARMLCD0_INST 0
 #define ARMLCD0_DATA 1
+/****/
+#define ARMLCD0_RS_Msk (1 << ARMLCD0_RS)
+#define ARMLCD0_RW_Msk (1 << ARMLCD0_RW)
+#define ARMLCD0_EN_Msk (1 << ARMLCD0_EN)
+#define ARMLCD0_NC_Msk (1 << ARMLCD0_NC)
+#define ARMLCD0_DB4_Msk (1 << ARMLCD0_DB4)
+#define ARMLCD0_DB5_Msk (1 << ARMLCD0_DB5)
+#define ARMLCD0_DB6_Msk (1 << ARMLCD0_DB6)
+#define ARMLCD0_DB7_Msk (1 << ARMLCD0_DB7)
+#define MODER_CMD_RESET_Msk ((3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)))
+#define MODER_CMD_OUTPUT_Msk ((1 << (ARMLCD0_RS * 2)) | (1 << (ARMLCD0_RW * 2)) | (1 << (ARMLCD0_EN * 2)))
+#define MODER_DATA_RESET_Msk ((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)))
+#define MODER_DATA_INPUT_Msk ((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)))
+#define MODER_DATA_OUTPUT_Msk ((1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2)))
+#define MODER_NC_RESET_Msk (3 << (ARMLCD0_NC * 2))
+#define PUPDR_DATA_RESET_Msk ((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)))
+#define PUPDR_DATA_PULLUP_Msk ((1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2)))
+#define PUPDR_NC_RESET_Msk (3 << (ARMLCD0_NC * 2))
+#define PUPDR_NC_PULLUP_Msk (1 << (ARMLCD0_NC * 2))
+#define OSPEEDR_PINS_RESET_Msk ((3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)))
 
 /*** File Variable ***/
 static ARMLCD0 setup_armlcd0;
@@ -74,20 +94,20 @@ void ARMLCD0_inic(void)
 {
 	// uint8_t repeat;
 	// LCD INIC
-	ireg->MODER &= (uint32_t) ~((3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2))); // control pins as output
-	ireg->MODER |= ((1 << (ARMLCD0_RS * 2)) | (1 << (ARMLCD0_RW * 2)) | (1 << (ARMLCD0_EN * 2))); // control pins as output
+	ireg->MODER &= (uint32_t) ~MODER_CMD_RESET_Msk;
+	ireg->MODER |= MODER_CMD_OUTPUT_Msk; // control pins as output
 	
-	ireg->PUPDR &= (uint32_t) ~((3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // enable pull up resistors
-	ireg->PUPDR |= ((1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2))); // enable pull up resistors
+	ireg->PUPDR &= (uint32_t) ~PUPDR_DATA_RESET_Msk;
+	ireg->PUPDR |= PUPDR_DATA_PULLUP_Msk; // enable pull up resistors
 
-	ireg->MODER &= (uint32_t) ~(3 << (ARMLCD0_NC * 2)); // reboot detect input
-	ireg->PUPDR &= (uint32_t) ~(3 << (ARMLCD0_NC * 2)); // pull up resistors
-	ireg->PUPDR |= (1 << (ARMLCD0_NC * 2)); // pull up resistors
+	ireg->MODER &= (uint32_t) ~MODER_NC_RESET_Msk;
+	ireg->PUPDR &= (uint32_t) ~PUPDR_NC_RESET_Msk;
+	ireg->PUPDR |= PUPDR_NC_PULLUP_Msk; // pull up resistors
 
-	ireg->OSPEEDR &= (uint32_t) ~( (3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)) ); // set speed
-	ireg->OSPEEDR |= ( (3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)) ); // set speed
+	ireg->OSPEEDR &= (uint32_t) ~OSPEEDR_PINS_RESET_Msk;
+	ireg->OSPEEDR |= OSPEEDR_PINS_RESET_Msk; // set speed
 	 
-	armlcd0_detect = ireg->IDR & (1 << ARMLCD0_NC);
+	armlcd0_detect = ireg->IDR & ARMLCD0_NC_Msk;
 	
 	// INICIALIZACAO LCD datasheet
 	_delay_ms(20); // using clock at 16Mhz
@@ -119,57 +139,56 @@ void ARMLCD0_inic(void)
 }
 void ARMLCD0_write(char c, unsigned short D_I)
 { // write to LCD
-	reset_hpins(ireg,1 << ARMLCD0_RW); // lcd as input
-	clear_reg(&ireg->MODER,(3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset mcu output
-	set_reg(&ireg->MODER,(1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2))); // mcu as output
+	reset_hpins(ireg, ARMLCD0_RW_Msk); // lcd as input
+	clear_reg(&ireg->MODER, MODER_DATA_RESET_Msk);
+	set_reg(&ireg->MODER, MODER_DATA_OUTPUT_Msk); // mcu as output
 	
-	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
+	if(D_I) set_hpins(ireg, ARMLCD0_RS_Msk); else reset_hpins(ireg, ARMLCD0_RS_Msk);
 	
-	set_hpins(ireg, 1 << ARMLCD0_EN);
-	if(c & 0x80) set_hpins(ireg,1 << ARMLCD0_DB7); else reset_hpins(ireg,1 << ARMLCD0_DB7);
-	if(c & 0x40) set_hpins(ireg,1 << ARMLCD0_DB6); else reset_hpins(ireg,1 << ARMLCD0_DB6);
-	if(c & 0x20) set_hpins(ireg,1 << ARMLCD0_DB5); else reset_hpins(ireg,1 << ARMLCD0_DB5);
-	if(c & 0x10) set_hpins(ireg,1 << ARMLCD0_DB4); else reset_hpins(ireg,1 << ARMLCD0_DB4);
-	reset_hpins(ireg,1 << ARMLCD0_EN);
+	set_hpins(ireg, ARMLCD0_EN_Msk);
+	if(c & 0x80) set_hpins(ireg, ARMLCD0_DB7_Msk); else reset_hpins(ireg, ARMLCD0_DB7_Msk);
+	if(c & 0x40) set_hpins(ireg, ARMLCD0_DB6_Msk); else reset_hpins(ireg, ARMLCD0_DB6_Msk);
+	if(c & 0x20) set_hpins(ireg, ARMLCD0_DB5_Msk); else reset_hpins(ireg, ARMLCD0_DB5_Msk);
+	if(c & 0x10) set_hpins(ireg, ARMLCD0_DB4_Msk); else reset_hpins(ireg, ARMLCD0_DB4_Msk);
+	reset_hpins(ireg, ARMLCD0_EN_Msk);
 	
-	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
+	if(D_I) set_hpins(ireg, ARMLCD0_RS_Msk); else reset_hpins(ireg, ARMLCD0_RS_Msk);
 	
-	set_hpins(ireg,1 << ARMLCD0_EN);
-	if(c & 0x08) set_hpins(ireg,1 << ARMLCD0_DB7); else reset_hpins(ireg,1 << ARMLCD0_DB7);
-	if(c & 0x04) set_hpins(ireg,1 << ARMLCD0_DB6); else reset_hpins(ireg,1 << ARMLCD0_DB6);
-	if(c & 0x02) set_hpins(ireg,1 << ARMLCD0_DB5); else reset_hpins(ireg,1 << ARMLCD0_DB5);
-	if(c & 0x01) set_hpins(ireg,1 << ARMLCD0_DB4); else reset_hpins(ireg,1 << ARMLCD0_DB4);
-	reset_hpins(ireg,1 << ARMLCD0_EN);
+	set_hpins(ireg, ARMLCD0_EN_Msk);
+	if(c & 0x08) set_hpins(ireg, ARMLCD0_DB7_Msk); else reset_hpins(ireg, ARMLCD0_DB7_Msk);
+	if(c & 0x04) set_hpins(ireg, ARMLCD0_DB6_Msk); else reset_hpins(ireg, ARMLCD0_DB6_Msk);
+	if(c & 0x02) set_hpins(ireg, ARMLCD0_DB5_Msk); else reset_hpins(ireg, ARMLCD0_DB5_Msk);
+	if(c & 0x01) set_hpins(ireg, ARMLCD0_DB4_Msk); else reset_hpins(ireg, ARMLCD0_DB4_Msk);
+	reset_hpins(ireg, ARMLCD0_EN_Msk);
 }
 
 char ARMLCD0_read(unsigned short D_I)
 { // Read from LCD
-	uint32_t data = 0;
-	uint8_t c = 0;
-	clear_reg(&ireg->MODER,(3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2))); // reset mcu input
-	set_hpins(ireg,1 << ARMLCD0_RW); // lcd as output
+	uint32_t data = 0; uint8_t c = 0;
+	clear_reg(&ireg->MODER, MODER_DATA_INPUT_Msk); // mcu as input
+	set_hpins(ireg, ARMLCD0_RW_Msk); // lcd as output
 	
-	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
+	if(D_I) set_hpins(ireg, ARMLCD0_RS_Msk); else reset_hpins(ireg, ARMLCD0_RS_Msk);
 	
-	set_hpins(ireg,1 << ARMLCD0_EN);
+	set_hpins(ireg, ARMLCD0_EN_Msk);
 	data = ireg->IDR; // read data
-	reset_hpins(ireg,1 << ARMLCD0_EN);
+	reset_hpins(ireg, ARMLCD0_EN_Msk);
 	
-	if(data & (1 << ARMLCD0_DB7)) c |= 1 << 7; else c &= ~(1 << 7);
-	if(data & (1 << ARMLCD0_DB6)) c |= 1 << 6; else c &= ~(1 << 6);
-	if(data & (1 << ARMLCD0_DB5)) c |= 1 << 5; else c &= ~(1 << 5);
-	if(data & (1 << ARMLCD0_DB4)) c |= 1 << 4; else c &= ~(1 << 4);
+	if(data & (ARMLCD0_DB7_Msk)) c |= 1 << 7; else c &= ~(1 << 7);
+	if(data & (ARMLCD0_DB6_Msk)) c |= 1 << 6; else c &= ~(1 << 6);
+	if(data & (ARMLCD0_DB5_Msk)) c |= 1 << 5; else c &= ~(1 << 5);
+	if(data & (ARMLCD0_DB4_Msk)) c |= 1 << 4; else c &= ~(1 << 4);
 	
-	if(D_I) set_hpins(ireg,1 << ARMLCD0_RS); else reset_hpins(ireg,1 << ARMLCD0_RS);
+	if(D_I) set_hpins(ireg, ARMLCD0_RS_Msk); else reset_hpins(ireg, ARMLCD0_RS_Msk);
 	
-	set_hpins(ireg,1 << ARMLCD0_EN);
+	set_hpins(ireg, ARMLCD0_EN_Msk);
 	data = ireg->IDR; // read data
-	reset_hpins(ireg,1 << ARMLCD0_EN);
+	reset_hpins(ireg, ARMLCD0_EN_Msk);
 
-	if(data & (1 << ARMLCD0_DB7)) c |= 1 << 3; else c &= ~(1 << 3);
-	if(data & (1 << ARMLCD0_DB6)) c |= 1 << 2; else c &= ~(1 << 2);
-	if(data & (1 << ARMLCD0_DB5)) c |= 1 << 1; else c &= ~(1 << 1);
-	if(data & (1 << ARMLCD0_DB4)) c |= 1 << 0; else c &= ~(1 << 0);
+	if(data & ( ARMLCD0_DB7_Msk)) c |= 1 << 3; else c &= ~(1 << 3);
+	if(data & ( ARMLCD0_DB6_Msk)) c |= 1 << 2; else c &= ~(1 << 2);
+	if(data & ( ARMLCD0_DB5_Msk)) c |= 1 << 1; else c &= ~(1 << 1);
+	if(data & ( ARMLCD0_DB4_Msk)) c |= 1 << 0; else c &= ~(1 << 0);
 
 	return c;
 }
@@ -269,7 +288,7 @@ void ARMLCD0_reboot(void)
 	// low high detect pin NC
 	uint32_t i;
 	uint32_t tmp;
-	tmp = ireg->IDR & (1 << ARMLCD0_NC);
+	tmp = ireg->IDR & ARMLCD0_NC_Msk;
 	i = tmp ^ armlcd0_detect;
 	i &= tmp;
 	if(i)
