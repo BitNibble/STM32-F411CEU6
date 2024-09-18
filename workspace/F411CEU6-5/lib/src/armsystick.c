@@ -23,14 +23,14 @@ uint32_t systick_sysclk_10us(void);
 uint32_t systick_sysclk_ms(void);
 uint32_t systick_sysclk_xs(void);
 /*** File Function Definition ***/
-uint32_t systick_sysclk_us(void)
-{
-	return systick_sysclk_calc_xs = DelayCounter_top / 1000000 - 1;
-}
-uint32_t systick_sysclk_5us(void)
-{
-	return systick_sysclk_calc_xs = DelayCounter_top / 200000 - 1;
-}
+//uint32_t systick_sysclk_us(void)
+//{
+//	return systick_sysclk_calc_xs = DelayCounter_top / 1000000 - 1;
+//}
+//uint32_t systick_sysclk_5us(void)
+//{
+//	return systick_sysclk_calc_xs = DelayCounter_top / 200000 - 1;
+//}
 uint32_t systick_sysclk_10us(void)
 {
 	return systick_sysclk_calc_xs = DelayCounter_top / 100000 - 1;
@@ -93,7 +93,7 @@ void systick_start(void)
 		DelayCounter_top = getsysclk()/(gethpre() * 1);
 	#endif
 	//DelayCounter_top = getsysclk();
-	SysTick->LOAD = 0xffffffff;
+	SysTick->LOAD = 0x00FFFFFF;
 	SysTick->VAL = 0UL;
 	SysTick->CTRL |= ((1 << 1) | (1 << 2));
 }
