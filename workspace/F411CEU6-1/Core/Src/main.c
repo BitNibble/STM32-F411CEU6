@@ -48,13 +48,12 @@ int main(void)
 
   char vecT[8]; // for calendar
 
-  gpiob()->clock(on); // LCD
-  gpioc()->clock(on); // LED
+  RCC->AHB1ENR |= (RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN);
 
-  ARMLCD0_enable((GPIO_TypeDef*)stm()->gpiob->instance);
+  ARMLCD0_enable(GPIOB);
   FUNC_enable();
 
-  gpioc()->instance->MODER.par.MODER13 = 1;
+  GPIOC->MODER |= GPIO_MODER_MODER13_0;
 
   while (1)
   {
@@ -70,9 +69,9 @@ int main(void)
 	  lcd0()->string_size(func()->print_v2("hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]),14);
 
 	  _delay_ms(1000);
-	  set_reg_block(&GPIOC->ODR,1,13,1);
+	  GPIOC->ODR |= GPIO_ODR_ODR_13;
 	  _delay_ms(1000);
-	  set_reg_block(&GPIOC->ODR,1,13,0);
+	  GPIOC->ODR &= ~GPIO_ODR_ODR_13;
   }
 }
 

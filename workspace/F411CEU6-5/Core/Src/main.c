@@ -31,8 +31,7 @@ int main(void)
 	//rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
 	PA = EXPLODE_enable();
 
-	gpiob()->clock(on); // lcd0
-	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
+	ARMLCD0_enable(GPIOB);
 	gpioc()->clock(on); // gpioc13
 	gpioc()->instance->MODER.par.MODER13 = 1;
 	gpioa()->clock(on); // inputs gpioa0

@@ -43,10 +43,9 @@ int main(void)
 {
 	STM32FXXX_enable();
 
-	gpiob()->clock(on);
 	rtc()->inic(0); // 0 - LSI, 1 - LSE, 2 - LSECLK
 
-	ARMLCD0_enable((GPIO_TypeDef*)stm()->gpiob->instance);
+	ARMLCD0_enable(GPIOB);
 	FUNC_enable();
 
 	while (1)
