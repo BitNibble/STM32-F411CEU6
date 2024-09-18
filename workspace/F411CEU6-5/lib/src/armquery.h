@@ -73,7 +73,7 @@ uint8_t (*R)(void);
 typedef struct{
 STM32FXXXSYSTEM_prescaler* System_prescaler;
 STM32FXXXPLL_prescaler* Pll_prescaler;
-uint32_t (*PllSourceClock)(void);
+uint32_t (*PllClock)(void);
 uint32_t (*SystemClock)(void);
 uint32_t (*hclk)(void);
 uint32_t (*pclk1)(void);

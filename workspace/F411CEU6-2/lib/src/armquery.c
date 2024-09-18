@@ -265,7 +265,7 @@ STM32FXXX_Query query_enable(void)
 {
 	stm32fxxx_query.System_prescaler = System_prescaler_inic();
 	stm32fxxx_query.Pll_prescaler = Pll_prescaler_inic();
-	stm32fxxx_query.PllSourceClock = getpllsourceclk;
+	stm32fxxx_query.PllClock = getpllclk;
 	stm32fxxx_query.SystemClock = getsysclk;
 	stm32fxxx_query.hclk = gethclk;
 	stm32fxxx_query.pclk1 = getpclk1;

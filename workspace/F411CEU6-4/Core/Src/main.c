@@ -224,7 +224,7 @@ int main(void)
 		}
 
 		lcd0()->gotoxy(1,0);
-		lcd0()->string_size(func()->ui32toa(getsysclk()/(gethpre() * 1)),16);
+		lcd0()->string_size(func()->ui32toa(getpllclk()),16);
 
 		lcd0()->gotoxy(2,0);
 		rtc()->dr2vec(vecD);
