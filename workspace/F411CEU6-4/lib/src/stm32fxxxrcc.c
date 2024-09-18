@@ -93,9 +93,7 @@ void STM32FXXXRccHSelect(uint8_t hclock)
 		break;
 		case 3: // PLL_R selected as system clock
 			#ifdef STM32F446xx
-				STM32FXXXRccWriteEnable();
 				set_reg_block(&RCC->CFGR, 2, 0, 3);
-				STM32FXXXRccWriteDisable();
 			#else
 				set_reg_block(&RCC->CFGR, 2, 0, 0);
 			#endif

@@ -363,7 +363,7 @@ void STM32446RegResetBits( uint32_t* reg, uint8_t n_bits, ... )
 void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n )
 {
 	const unsigned int n_bits = sizeof(data) * 8;
-	const unsigned int mask = (unsigned int) (pow(2, size_block) - 1);
+	const unsigned int mask = (unsigned int) ((1 << size_block) - 1);
 	unsigned int index = (block_n * size_block) / n_bits;
 	data &= mask;
 	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
@@ -393,19 +393,19 @@ void ADC_TemperatureSetup(void){
 	//stm()->adc1->clock(on);
 	set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
 	ADC1->CR1 = 0;
-	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L_Msk, ADC_SQR1_L_Pos, OFF);
-	set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1_Msk, ADC_SQR3_SQ1_Pos, 18);
-	set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18_Msk, ADC_SMPR1_SMP18_Pos, 3);
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_CONT_Msk, ADC_CR2_CONT_Pos, ON);
-	//set_reg_Msk(&ADC->CCR, ADC_CCR_VBATE_Msk, ADC_CCR_VBATE_Pos, ON);
-	set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE_Msk, ADC_CCR_TSVREFE_Pos, ON);
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON_Msk, ADC_CR2_ADON_Pos, ON);
+	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, OFF);
+	set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, ADC_SQR3_SQ1_Pos, 18);
+	set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, ADC_SMPR1_SMP18_Pos, 3);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_CONT, ADC_CR2_CONT_Pos, ON);
+	//set_reg_Msk(&ADC->CCR, ADC_CCR_VBATE, ADC_CCR_VBATE_Pos, ON);
+	set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE, ADC_CCR_TSVREFE_Pos, ON);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
 	for(countdown = 15; countdown; countdown --); // t_STAB
 }
 uint16_t ADC_ReadTemperature(void) {
 	uint16_t adc_value;
-    set_reg_Msk(&ADC1->CR2, ADC_CR2_SWSTART_Msk, ADC_CR2_SWSTART_Pos, ON);
-    while (!get_reg_Msk(ADC1->SR, ADC_SR_EOC_Msk, ADC_SR_EOC_Pos));
+    set_reg_Msk(&ADC1->CR2, ADC_CR2_SWSTART, ADC_CR2_SWSTART_Pos, ON);
+    while (!get_reg_Msk(ADC1->SR, ADC_SR_EOC, ADC_SR_EOC_Pos));
     adc_value = ADC1->DR;
     return adc_value;
 }
