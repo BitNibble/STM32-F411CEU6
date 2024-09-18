@@ -86,7 +86,12 @@ void _delay_xs(uint32_t xs)
 }
 void systick_start(void)
 {
-	DelayCounter_top = getsysclk()/gethpre();
+	#ifdef STM32F411xE
+		DelayCounter_top = getsysclk()/(gethpre() * 1);
+	#endif
+	#ifdef STM32F446xx
+		DelayCounter_top = getsysclk()/(gethpre() * 1);
+	#endif
 	//DelayCounter_top = getsysclk();
 	SysTick->LOAD = 0xffffffff;
 	SysTick->VAL = 0UL;

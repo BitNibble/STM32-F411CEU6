@@ -223,6 +223,9 @@ int main(void)
 			break;
 		}
 
+		lcd0()->gotoxy(1,0);
+		lcd0()->string_size(func()->ui32toa(getsysclk()/(gethpre() * 1)),16);
+
 		lcd0()->gotoxy(2,0);
 		rtc()->dr2vec(vecD);
 		lcd0()->string_size(func()->print_v2("data: %d%d-%d%d-20%d%d", vecD[5],vecD[6],vecD[3],vecD[4],vecD[0],vecD[1]),16);
