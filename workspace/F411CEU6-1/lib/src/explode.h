@@ -14,11 +14,10 @@ Comment:
 /*** Global Library ***/
 #include <inttypes.h>
 
-/*** Select Switch ***/
+/*** Global Constant & Macro ***/
 #define STM32F4
 
-/*** Global Constant & Macro ***/
-#if defined STM32F4
+#ifdef STM32F4
 	#define IO_var uint32_t
 #else
 	#define IO_var uint8_t

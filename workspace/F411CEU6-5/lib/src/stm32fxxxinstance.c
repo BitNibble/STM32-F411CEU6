@@ -122,7 +122,7 @@ STM32FXXXRCC_TypeDef* rcc_instance(void){return (STM32FXXXRCC_TypeDef*) RCC_BASE
 RTC_TypeDef* rtc_instance(void){return (RTC_TypeDef*) RTC_BASE;}
 /*** SAI ***/
 #ifdef STM32F446xx
-//SAI_TypeDef* sai1_instance(void){return (SAI_TypeDef*) SAI1_BASE;}
+SAI_TypeDef* sai1_instance(void){return (SAI_TypeDef*) SAI1_BASE;}
 SAI_Block_TypeDef* sai1_block_a_instance(void){return (SAI_Block_TypeDef*) SAI1_Block_A_BASE;}
 SAI_Block_TypeDef* sai1_block_b_instance(void){return (SAI_Block_TypeDef*) SAI1_Block_B_BASE;}
 SAI_TypeDef* sai2_instance(void){return (SAI_TypeDef*) SAI2_BASE;}

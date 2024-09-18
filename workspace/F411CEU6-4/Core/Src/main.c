@@ -41,13 +41,13 @@ int main(void)
 	uint8_t skip_0 = 0;
 	uint16_t adc_value = 0;
 
-	gpiob()->clock(on); // lcd0
-	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
-	gpioc()->clock(on); // gpioc13
-	gpioc()->instance->MODER.par.MODER13 = 1;
-	gpioa()->clock(on); // inputs gpioa0
-	gpioa()->instance->MODER.par.MODER0 = 0;
-	gpioa()->instance->PUPDR.par.PUPDR0 = 1;
+	set_reg_Msk(&RCC->AHB1ENR,RCC_AHB1ENR_GPIOBEN_Msk,RCC_AHB1ENR_GPIOBEN_Pos,ON); // lcd0
+	ARMLCD0_enable(GPIOB);
+	set_reg_Msk(&RCC->AHB1ENR,RCC_AHB1ENR_GPIOCEN_Msk,RCC_AHB1ENR_GPIOCEN_Pos,ON); // gpioc13
+	set_reg_Msk(&GPIOC->MODER,GPIO_MODER_MODER13_Msk,GPIO_MODER_MODER13_Pos,1);
+	set_reg_Msk(&RCC->AHB1ENR,RCC_AHB1ENR_GPIOAEN_Msk,RCC_AHB1ENR_GPIOAEN_Pos,ON); // inputs gpioa0
+	set_reg_Msk(&GPIOA->MODER,GPIO_MODER_MODER0_Msk,GPIO_MODER_MODER0_Pos,0);
+	set_reg_Msk(&GPIOA->PUPDR,GPIO_PUPDR_PUPD0_Msk,GPIO_PUPDR_PUPD0_Pos,1);
 
 	FUNC_enable();
 	//HAL_Init();
@@ -55,19 +55,19 @@ int main(void)
 
 	char vecD[8]; // for calendar date
 	char vecT[8]; // for calendar time
-	PA.update(&PA.par, gpioa()->instance->IDR.reg);
+	PA.update(&PA.par, GPIOA->IDR);
 
 	while (on)
 	{
 		/*** preamble ***/
-		PA.update(&PA.par, gpioa()->instance->IDR.reg);
+		PA.update(&PA.par, GPIOA->IDR);
 		/******/
 
 		switch(Menu){
 		case 0:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Hour",10);
-			gpioc()->instance->ODR.par.ODR13 = 0;
+			GPIOC->BSRR = GPIO_BSRR_BR13;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -88,7 +88,7 @@ int main(void)
 		case 1:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Minute",10);
-			gpioc()->instance->ODR.par.ODR13 = 1;
+			GPIOC->BSRR = GPIO_BSRR_BS13;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -109,7 +109,7 @@ int main(void)
 		case 2:
 			lcd0()->gotoxy(0,0);
 			lcd0()->string_size("Set Second",10);
-			gpioc()->instance->ODR.par.ODR13 = 0;
+			GPIOC->BSRR = GPIO_BSRR_BR13;
 
 			if(PA.par.LH & 1){
 				if(skip_0 > 0){
@@ -130,7 +130,7 @@ int main(void)
 		case 3:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Year",10);
-					gpioc()->instance->ODR.par.ODR13 = 1;
+					GPIOC->BSRR = GPIO_BSRR_BS13;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -151,7 +151,7 @@ int main(void)
 		case 4:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Month",10);
-					gpioc()->instance->ODR.par.ODR13 = 0;
+					GPIOC->BSRR = GPIO_BSRR_BR13;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -172,7 +172,7 @@ int main(void)
 		case 5:
 					lcd0()->gotoxy(0,0);
 					lcd0()->string_size("Set Day",10);
-					gpioc()->instance->ODR.par.ODR13 = 1;
+					GPIOC->BSRR = GPIO_BSRR_BS13;
 
 					if(PA.par.LH & 1){
 						if(skip_0 > 0){
@@ -198,7 +198,7 @@ int main(void)
 				adc_value = ADC_ReadTemperature();
 				lcd0()->string_size( func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value),1), (char) 0xDF ), 8);
 			}
-			gpioc()->instance->ODR.par.ODR13 = 0;
+			GPIOC->BSRR = GPIO_BSRR_BR13;
 
 			if(PA.par.LH & 1){
 				if(skip_0 < 1){

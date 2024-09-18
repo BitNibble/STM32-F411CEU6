@@ -5,29 +5,23 @@ Author: Sergio Santos
 License: GNU General Public License
 Hardware: 74HC595
 Date: 25/10/2020
-Update: 05/01/2024
 Comment:
 	tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RET
 ************************************************************************/
 #ifndef _74HC595_H_
 	#define _74HC595_H_
 
-/*** Select Switch ***/
-#define STM32F4
-
-/*** Global Constant & Macro ***/
-#if defined (STM32F4)
-	#ifndef IO_var
-		#define IO_var uint32_t
-	#endif
-#else
-	#ifndef IO_var
-		#define IO_var uint8_t
-	#endif
-#endif
-
 /*** File Library ***/
 #include <inttypes.h>
+
+/*** Global Constant & Macro ***/
+#define STM32F4
+
+#ifdef STM32F4
+	#define IO_var uint32_t
+#else
+	#define IO_var uint8_t
+#endif
 
 /*** File TypeDef ***/
 typedef struct{
