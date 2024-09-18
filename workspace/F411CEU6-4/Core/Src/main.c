@@ -23,6 +23,8 @@
 #include "explode.h"
 
 #define JMP_menu 100
+#define ADC_DELAY 20
+#define ADC_SAMPLE 8
 
 EXPLODE PA;
 
@@ -36,7 +38,8 @@ int main(void)
 
 	uint8_t Menu = 6;
 	uint8_t count_0 = 0;
-	uint8_t count_1 = ~0;
+	uint8_t count_1 = ADC_DELAY;
+	uint8_t n_sample = ADC_SAMPLE;
 	uint16_t incr_0 = 0;
 	uint8_t skip_0 = 0;
 	uint16_t adc_value = 0;
@@ -195,8 +198,11 @@ int main(void)
 			lcd0()->string_size("Clock",12);
 			count_1--;
 			if(!count_1){
-				adc_value = ADC_ReadTemperature();
-				lcd0()->string_size( func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value),1), (char) 0xDF ), 8);
+				count_1 = ADC_DELAY;
+				if(n_sample){
+					n_sample--;
+					adc_value += ADC_ReadTemperature();
+				}else{n_sample = ADC_SAMPLE; adc_value /= (ADC_SAMPLE + 1); lcd0()->string_size( func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value),1), (char) 0xDF ), 8);}
 			}
 			GPIOC->BSRR = GPIO_BSRR_BR13;
 
