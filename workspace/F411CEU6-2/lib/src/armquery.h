@@ -107,7 +107,7 @@ uint32_t gethclk(void);
 uint32_t getpclk1(void);
 uint32_t getpclk2(void);
 
-/*** Scaller ***/
+/*** Scaler ***/
 uint16_t gethpre(void);
 uint8_t gethppre1(void);
 uint8_t gethppre2(void);
