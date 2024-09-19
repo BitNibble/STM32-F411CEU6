@@ -35,6 +35,7 @@ Comment:
 #define PUPDR_NC_RESET_Msk (3 << (ARMLCD0_NC * 2))
 #define PUPDR_NC_PULLUP_Msk (1 << (ARMLCD0_NC * 2))
 #define OSPEEDR_PINS_RESET_Msk ((3 << (ARMLCD0_RS * 2)) | (3 << (ARMLCD0_RW * 2)) | (3 << (ARMLCD0_EN * 2)) | (3 << (ARMLCD0_DB4 * 2)) | (3 << (ARMLCD0_DB5 * 2)) | (3 << (ARMLCD0_DB6 * 2)) | (3 << (ARMLCD0_DB7 * 2)))
+#define OSPEEDR_PINS_25MHZ_Msk ((1 << (ARMLCD0_RS * 2)) | (1 << (ARMLCD0_RW * 2)) | (1 << (ARMLCD0_EN * 2)) | (1 << (ARMLCD0_DB4 * 2)) | (1 << (ARMLCD0_DB5 * 2)) | (1 << (ARMLCD0_DB6 * 2)) | (1 << (ARMLCD0_DB7 * 2)))
 
 /*** File Variable ***/
 static ARMLCD0 setup_armlcd0;
@@ -105,7 +106,7 @@ void ARMLCD0_inic(void)
 	ireg->PUPDR |= PUPDR_NC_PULLUP_Msk; // pull up resistors
 
 	ireg->OSPEEDR &= (uint32_t) ~OSPEEDR_PINS_RESET_Msk;
-	ireg->OSPEEDR |= OSPEEDR_PINS_RESET_Msk; // set speed
+	ireg->OSPEEDR |= OSPEEDR_PINS_25MHZ_Msk; // set speed
 	 
 	armlcd0_detect = ireg->IDR & ARMLCD0_NC_Msk;
 	
