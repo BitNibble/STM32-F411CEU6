@@ -428,5 +428,8 @@ float CalculateTemperature(uint16_t adc_value) {
     return temperature;
 }
 
+/******
+n = bit_n/32; bit_n = bit_n - (n * 32); -> bit_n = bit_n % 32;
+*******/
 /***EOF***/
 

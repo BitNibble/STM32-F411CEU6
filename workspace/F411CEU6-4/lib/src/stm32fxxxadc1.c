@@ -45,7 +45,7 @@ void STM32FXXXAdc1Inic(void)
 	//STM32FXXXADC1_cr1_scan(1);
 	//STM32FXXXADC1_cr2_eocs(1); // EOCS: End of conversion selection
 
-	 adc1_common->ccr.par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
+	 //adc1_common->ccr.par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 	 //adc_common->ccr->par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 
 	adc1->smpr1.par.smp18 = 7; // SMPx[2:0]: Channel x sampling time selection
