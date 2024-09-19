@@ -34,7 +34,7 @@ void STM32FXXXAdc1Nvic(uint8_t bool)
 void STM32FXXXAdc1Inic(void)
 {
 	STM32FXXXADC_TypeDef* adc1 = adc1_instance();
-	STM32FXXXADC_COMMON_TypeDef* adc1_common = adc_common_instance();
+	//STM32FXXXADC_COMMON_TypeDef* adc1_common = adc_common_instance();
 	//STM32FXXXADCCOMMONobj* adc_common = stm32fxxx_adc_common_inic( );
 	// ADC Clock
 	 STM32FXXXAdc1IClock(1); // DACEN: DAC interface clock enable
