@@ -45,8 +45,7 @@ void rcc_start(void)
     // AHB 1,2,4,8,16,64,128,256,512;  APB1 1,2,4,8,16;  APB2 1,2,4,8,16;  RTC 2 to 31
 	//STM32FXXXPrescaler(8, 1, 1, 1); // (8, 1, 1, 0)
 	STM32FXXXPrescaler(1, 1, 1, 0); // (1, 1, 1, 0)
-	STM32FXXXRccHEnable(0); // 0 - HSI
-	STM32FXXXRccHEnable(1); // 1 - HSE
+	STM32FXXXRccHEnable(H_Clock_Source); // 0 - HSI, 1 - HSE
 	STM32FXXXRccPLLSelect(H_Clock_Source); // 0 - HSI, 1 - HSE, H_Clock_Source
 	// M 2 to 63;  N 50 to 432;  P 2,4,6,8;  Q 2 to 15;
 	STM32FXXXPLLDivision((uint32_t)getpllsourceclk()/1000000, 240, 2, 4);

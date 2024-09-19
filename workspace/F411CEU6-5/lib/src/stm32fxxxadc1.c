@@ -34,7 +34,7 @@ void STM32FXXXAdc1Nvic(uint8_t bool)
 void STM32FXXXAdc1Inic(void)
 {
 	STM32FXXXADC_TypeDef* adc1 = adc1_instance();
-	STM32FXXXADC_COMMON_TypeDef* adc1_common = adc_common_instance();
+	//STM32FXXXADC_COMMON_TypeDef* adc1_common = adc_common_instance();
 	//STM32FXXXADCCOMMONobj* adc_common = stm32fxxx_adc_common_inic( );
 	// ADC Clock
 	 STM32FXXXAdc1IClock(1); // DACEN: DAC interface clock enable
@@ -45,7 +45,7 @@ void STM32FXXXAdc1Inic(void)
 	//STM32FXXXADC1_cr1_scan(1);
 	//STM32FXXXADC1_cr2_eocs(1); // EOCS: End of conversion selection
 
-	 adc1_common->ccr.par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
+	 //adc1_common->ccr.par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 	 //adc_common->ccr->par.adcpre = 3; // ADCPRE: ADC prescaler, 11: PCLK2 divided by 8
 
 	adc1->smpr1.par.smp18 = 7; // SMPx[2:0]: Channel x sampling time selection
