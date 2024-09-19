@@ -291,15 +291,11 @@ void clear_reg(volatile uint32_t* reg, uint32_t hbits){
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	if(bit_n > H_BIT);
-	else{
-		if(size_block > N_BITS);
-		else{
-			uint32_t mask = (unsigned int)((1 << size_block) - 1);
-			reg &= (mask << bit_n);
-			reg = (reg >> bit_n);
-		}
-	}
+	if(bit_n > H_BIT){ bit_n = L_BIT; }
+	if(size_block > N_BITS){ size_block = N_BITS; }
+	uint32_t mask = (unsigned int)((1 << size_block) - 1);
+	reg &= (mask << bit_n);
+	reg = (reg >> bit_n);
 	return reg;
 }
 uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
@@ -310,13 +306,18 @@ uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
 }
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT){ bit_n = L_BIT;} if(size_block > N_BITS){ size_block = N_BITS;}
-	uint32_t value = *reg;
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	data &= mask; value &= ~(mask << bit_n);
-	data = (data << bit_n);
-	value |= data;
-	*reg = value;
+	if(bit_n > H_BIT);
+	else{
+		if(size_block > N_BITS);
+		else{
+			uint32_t value = *reg;
+			uint32_t mask = (unsigned int)((1 << size_block) - 1);
+			data &= mask; value &= ~(mask << bit_n);
+			data = (data << bit_n);
+			value |= data;
+			*reg = value;
+		}
+	}
 }
 void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
 {
@@ -326,11 +327,16 @@ void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t d
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT){ bit_n = L_BIT;} if(size_block > N_BITS){ size_block = N_BITS;}
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	data &= mask;
-	*reg &= ~(mask << bit_n);
-	*reg |= (data << bit_n);
+	if(bit_n > H_BIT);
+	else{
+		if(size_block > N_BITS);
+		else{
+			uint32_t mask = (unsigned int)((1 << size_block) - 1);
+			data &= mask;
+			*reg &= ~(mask << bit_n);
+			*reg |= (data << bit_n);
+		}
+	}
 }
 void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
 {
@@ -340,7 +346,8 @@ void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t dat
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
 	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); } if(size_block > N_BITS){ size_block = N_BITS;}
+	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); }
+	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t value = *(reg + n );
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
 	value &= (mask << bit_n);
@@ -350,13 +357,16 @@ uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); } if(size_block > N_BITS){ size_block = N_BITS;}
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	data &= mask;
-	*(reg + n ) &= ~(mask << bit_n);
-	*(reg + n ) |= (data << bit_n);
+	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); }
+	if(size_block > N_BITS);
+	else{
+		uint32_t mask = (unsigned int)((1 << size_block) - 1);
+		data &= mask;
+		*(reg + n ) &= ~(mask << bit_n);
+		*(reg + n ) |= (data << bit_n);
+	}
 }
-void STM32446RegSetBits( uint32_t* reg, uint8_t n_bits, ... )
+void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
 	uint8_t i;
 	if(n_bits > L_BIT && n_bits < N_LIMBITS){ // Filter input
@@ -368,7 +378,7 @@ void STM32446RegSetBits( uint32_t* reg, uint8_t n_bits, ... )
 		va_end(list);
 	}
 }
-void STM32446RegResetBits( uint32_t* reg, uint8_t n_bits, ... )
+void STM32446ResetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
 	uint8_t i;
 	if(n_bits > L_BIT && n_bits < N_LIMBITS){ // Filter input
@@ -380,14 +390,17 @@ void STM32446RegResetBits( uint32_t* reg, uint8_t n_bits, ... )
 		va_end(list);
 	}
 }
-void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int data, unsigned int block_n )
+void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int block_n, unsigned int data )
 {
 	const unsigned int n_bits = sizeof(data) * BYTE_BITS;
-	const unsigned int mask = (unsigned int) ((1 << size_block) - 1);
-	unsigned int index = (block_n * size_block) / n_bits;
-	data &= mask;
-	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
-	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
+	if(size_block > n_bits);
+	else{
+		const unsigned int mask = (unsigned int) ((1 << size_block) - 1);
+		unsigned int index = (block_n * size_block) / n_bits;
+		data &= mask;
+		vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
+		vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
+	}
 }
 void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
