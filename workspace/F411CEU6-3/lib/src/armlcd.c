@@ -111,28 +111,18 @@ void ARMLCD0_inic(void)
 	armlcd0_detect = ireg->IDR & ARMLCD0_NC_Msk;
 	
 	// INICIALIZACAO LCD datasheet
-	_delay_ms(20); // using clock at 16Mhz
-	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_us(39);
-	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_us(100);
-	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_us(39);
-	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-	_delay_us(39);
-	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-	_delay_us(39);
-	
-	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-	ARMLCD0_BF();
-
-	ARMLCD0_write(0x0C, ARMLCD0_INST); // display on/off control
-	ARMLCD0_BF();
-
-	ARMLCD0_write(0x01, ARMLCD0_INST); // clear display
-	ARMLCD0_BF();
-
-	ARMLCD0_write(0x06, ARMLCD0_INST); // entry mode set (crazy settings)
+	_delay_ms(40); // using clock at 16Mhz
+	ARMLCD0_write(0x30, ARMLCD0_INST); // 0x30 function set
+	_delay_us(37);
+	ARMLCD0_write(0x28, ARMLCD0_INST); // 0x28 function set
+	_delay_us(37);
+	ARMLCD0_write(0x28, ARMLCD0_INST); // 0x28 function set
+	_delay_us(37);
+	ARMLCD0_write(0x0C, ARMLCD0_INST); // 0x0C Display ON/OFF control
+	_delay_us(37);
+	ARMLCD0_write(0x01, ARMLCD0_INST); // 0x01 Display clear
+	_delay_ms(2);
+	ARMLCD0_write(0x04, ARMLCD0_INST); // 0x05 Entry mode set
 	ARMLCD0_BF();
 
 	ARMLCD0_clear();
