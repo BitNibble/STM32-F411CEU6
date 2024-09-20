@@ -342,11 +342,11 @@ char* function_print_v2( const char* format, ... )
 char* function_i16toa(int16_t n)
 {
 	uint8_t i;
-	int16_t sign;
-	if ((sign = n) < 0) n = -n;
+	int16_t sign = n;
+	if (sign < 0) n = -n;
 	i = 0;
 	do {
-		FUNCstr[i++] = (char) (n % 10 + '0');
+		FUNCstr[i++] = (char)(n % 10 + '0');
 	}while ((n /= 10) > 0);
 	if (sign < 0) FUNCstr[i++] = '-';
 	FUNCstr[i] = '\0';
@@ -356,7 +356,7 @@ char* function_i16toa(int16_t n)
 char* function_ui16toa(uint16_t n)
 {
 	uint8_t i;
-	for(i = 0, FUNCstr[i++] = n % 10 + '0'; (n /= 10) > 0; FUNCstr[i++] = n % 10 + '0');
+	for(i = 0, FUNCstr[i++] = (char)(n % 10 + '0'); (n /= 10) > 0; FUNCstr[i++] = (char)(n % 10 + '0'));
 	FUNCstr[i] = '\0';
 	function_Reverse(FUNCstr);
 	return FUNCstr;
@@ -364,11 +364,11 @@ char* function_ui16toa(uint16_t n)
 char* function_i32toa(int32_t n)
 {
 	uint8_t i;
-	int32_t sign;
-	if ((sign = n) < 0) n = -n;
+	int32_t sign = n;
+	if (sign < 0) n = -n;
 	i = 0;
 	do {
-		FUNCstr[i++] = (char) (n % 10 + '0');
+		FUNCstr[i++] = (char)(n % 10 + '0');
 	}while ((n /= 10) > 0);
 	if (sign < 0) FUNCstr[i++] = '-';
 	FUNCstr[i] = '\0';
@@ -378,10 +378,15 @@ char* function_i32toa(int32_t n)
 char* FUNCui32toa(uint32_t n)
 {
 	uint8_t i;
-	for(i = 0, FUNCstr[i++] = n % 10 + '0'; (n /= 10) > 0; FUNCstr[i++] = n % 10 + '0');
+	for(i = 0, FUNCstr[i++] = (char)(n % 10 + '0'); (n /= 10) > 0; FUNCstr[i++] = (char)(n % 10 + '0'));
 	FUNCstr[i] = '\0';
 	function_Reverse(FUNCstr);
 	return FUNCstr;
+}
+uint8_t function_UintInvStr(uint32_t num, uint8_t index)
+{
+	for(FUNCstr[index++] = (char)(num % 10 + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)(num % 10 + '0'));
+	FUNCstr[index] = '\0'; return index;
 }
 char* function_print_binary(unsigned int n_bits, unsigned int number)
 {
@@ -390,11 +395,6 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 		(number & i) ? (FUNCstr[c] = '1') : (FUNCstr[c] = '0');
 	FUNCstr[c] = '\0';
 	return FUNCstr;
-}
-uint8_t function_UintInvStr(uint32_t num, uint8_t index)
-{
-	for(FUNCstr[index++] = (uint8_t)((num % 10) + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)((num % 10) + '0'));
-	FUNCstr[index] = '\0'; return index;
 }
 uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint)
 {
