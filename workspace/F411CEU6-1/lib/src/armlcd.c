@@ -113,15 +113,15 @@ void ARMLCD0_inic(void)
 	// INICIALIZACAO LCD datasheet
 	_delay_ms(20); // using clock at 16Mhz
 	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_10us(4);
+	_delay_us(39);
 	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_10us(10);
+	_delay_us(100);
 	ARMLCD0_write(0x38, ARMLCD0_INST); // function set
-	_delay_10us(4);
+	_delay_us(39);
 	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-	_delay_10us(4);
+	_delay_us(39);
 	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
-	_delay_10us(4);
+	_delay_us(39);
 	
 	ARMLCD0_write(0x28, ARMLCD0_INST); // function set 2B
 	ARMLCD0_BF();
