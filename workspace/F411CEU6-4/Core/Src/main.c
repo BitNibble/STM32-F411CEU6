@@ -44,7 +44,7 @@ int main(void)
 	uint8_t skip_0 = 0;
 	uint16_t adc_value = 0;
 
-	//uint32_t test = ~0;
+	//uint32_t test[3] = {~0,~0,~0};
 
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
 	ARMLCD0_enable(GPIOB);
@@ -228,9 +228,9 @@ int main(void)
 		//lcd0()->gotoxy(1,0);
 		//lcd0()->string_size(func()->ui32toa(getpllclk()),16);
 		//write_reg_block(&test,3,2,7);
-		//set_bit_block(&test,3,2,3);
+		//set_bit_block(test,3,32,3);
 		//lcd0()->gotoxy(1,0);
-		//lcd0()->string_size(func()->ui32toa(get_reg_block(test,3,2)),16);
+		//lcd0()->string_size(func()->ui32toa(get_bit_block(test,3,33)),16);
 		//lcd0()->string_size(func()->ui32toa(test),16);
 
 		lcd0()->gotoxy(2,0);

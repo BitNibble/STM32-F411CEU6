@@ -346,7 +346,7 @@ void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t dat
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
 	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); }
+	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
 	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t value = *(reg + n );
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
@@ -357,7 +357,7 @@ uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n/N_BITS; bit_n = bit_n - (n * N_BITS); }
+	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
 	if(size_block > N_BITS);
 	else{
 		uint32_t mask = (unsigned int)((1 << size_block) - 1);
