@@ -338,5 +338,3 @@ STM32FXXX_GPIOH* gpioh(void) { return &stm32fxxx_gpioh; }
 
 /**** EOF ****/
 
-
-
