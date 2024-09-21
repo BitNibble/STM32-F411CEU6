@@ -15,7 +15,7 @@ Comment:
 
 void _delay_us(uint16_t us);
 void _delay_10us(uint16_t dez_us);
-void _delay_ms(uint32_t ms);
+void _delay_ms(uint16_t ms);
 void systick_start(void);
 
 void SysTick_Handler(void);

@@ -50,7 +50,7 @@ void _delay_10us(uint16_t dez_us)
 	for( DelayCounter = 0, SysTick->CTRL |= (1 << 0); !DelayCounter; );
 	SysTick->CTRL &= (uint32_t) ~(1 << 0);
 }
-void _delay_ms(uint32_t ms)
+void _delay_ms(uint16_t ms)
 {
 	uint32_t trigger = systick_sysclk_ms();
 	SysTick->LOAD = trigger;
@@ -66,7 +66,6 @@ void systick_start(void)
 	#ifdef STM32F446xx
 		DelayCounter_top = getsysclk()/(gethpre() * 1);
 	#endif
-	//DelayCounter_top = getsysclk();
 	SysTick->LOAD = 0x00FFFFFF;
 	SysTick->VAL = 0UL;
 	SysTick->CTRL |= ((1 << 1) | (1 << 2));
