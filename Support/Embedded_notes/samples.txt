@@ -1,0 +1,262 @@
+int clamp(int value, int min, int max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+double average(int arr[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    return (double)sum / size;
+}
+unsigned long long factorial(int n) {
+    if (n < 0) return 0; // Handle negative input
+    unsigned long long result = 1;
+    for (int i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+char* string_concat(char *dest, const char *src) {
+    while (*dest) dest++; // Move to the end of dest
+    while ((*dest++ = *src++)); // Copy src to dest
+    return dest;
+}
+int is_prime(int num) {
+    if (num <= 1) return 0;
+    for (int i = 2; i * i <= num; i++) {
+        if (num % i == 0) return 0;
+    }
+    return 1;
+}
+int clamp(int value, int min, int max) {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+double average(int arr[], int size) {
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    return (double)sum / size;
+}
+unsigned long long factorial(int n) {
+    if (n < 0) return 0; // Handle negative input
+    unsigned long long result = 1;
+    for (int i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+char* string_concat(char *dest, const char *src) {
+    while (*dest) dest++; // Move to the end of dest
+    while ((*dest++ = *src++)); // Copy src to dest
+    return dest;
+}
+int is_prime(int num) {
+    if (num <= 1) return 0;
+    for (int i = 2; i * i <= num; i++) {
+        if (num % i == 0) return 0;
+    }
+    return 1;
+}
+void array_reverse(int *arr, int size) {
+    for (int i = 0; i < size / 2; i++) {
+        int temp = arr[i];
+        arr[i] = arr[size - i - 1];
+        arr[size - i - 1] = temp;
+    }
+}
+
+int array_max(int *arr, int size) {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+int array_min(int *arr, int size) {
+    int min = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+    }
+    return min;
+}
+int string_compare(const char *str1, const char *str2) {
+    while (*str1 && (*str1 == *str2)) {
+        str1++;
+        str2++;
+    }
+    return *(unsigned char *)str1 - *(unsigned char *)str2;
+}
+
+void string_concat(char *dest, const char *src, int max_size) {
+    int i = 0;
+    while (dest[i] != '\0' && i < max_size) i++;
+    for (int j = 0; src[j] != '\0' && i < max_size - 1; j++, i++) {
+        dest[i] = src[j];
+    }
+    dest[i] = '\0';
+}
+int is_prime(int num) {
+    if (num <= 1) return 0;
+    for (int i = 2; i <= num / 2; i++) {
+        if (num % i == 0) return 0;
+    }
+    return 1;
+}
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+uint8_t bit_set(uint8_t byte, int position) {
+    return byte | (1 << position);
+}
+
+uint8_t bit_clear(uint8_t byte, int position) {
+    return byte & ~(1 << position);
+}
+
+uint8_t bit_toggle(uint8_t byte, int position) {
+    return byte ^ (1 << position);
+}
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+Node* create_node(int data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = data;
+    new_node->next = NULL;
+    return new_node;
+}
+
+void append(Node** head, int data) {
+    Node* new_node = create_node(data);
+    if (*head == NULL) {
+        *head = new_node;
+        return;
+    }
+    Node* last = *head;
+    while (last->next != NULL) {
+        last = last->next;
+    }
+    last->next = new_node;
+}
+
+void free_list(Node* head) {
+    Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+unsigned long millis(void) {
+    // Replace with your platform's millis implementation
+    return (unsigned long) clock(); // Simple example; use appropriate timer for accuracy
+}
+
+void delay_ms(unsigned long ms) {
+    unsigned long start_time = millis();
+    while (millis() - start_time < ms);
+}
+void write_to_file(const char* filename, const char* content) {
+    FILE* file = fopen(filename, "w");
+    if (file) {
+        fputs(content, file);
+        fclose(file);
+    }
+}
+void read_from_file(const char* filename, char* buffer, size_t size) {
+    FILE* file = fopen(filename, "r");
+    if (file) {
+        fgets(buffer, size, file);
+        fclose(file);
+    }
+}
+void seed_random(unsigned int seed) {
+    srand(seed);
+}
+
+int random_int(int min, int max) {
+    return (rand() % (max - min + 1)) + min;
+}
+void seed_random(unsigned int seed) {
+    srand(seed);
+}
+
+int random_int(int min, int max) {
+    return (rand() % (max - min + 1)) + min;
+}
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void rotate_left(int* arr, int size) {
+    if (size > 0) {
+        int first = arr[0];
+        for (int i = 0; i < size - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        arr[size - 1] = first;
+    }
+}
+void rotate_right(int* arr, int size) {
+    if (size > 0) {
+        int last = arr[size - 1];
+        for (int i = size - 1; i > 0; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[0] = last;
+    }
+}
+void* safe_malloc(size_t size) {
+    void* ptr = malloc(size);
+    if (!ptr) {
+        // Handle memory allocation failure
+        exit(EXIT_FAILURE);
+    }
+    return ptr;
+}
+
+void safe_free(void* ptr) {
+    if (ptr) {
+        free(ptr);
+        ptr = NULL;
+    }
+}

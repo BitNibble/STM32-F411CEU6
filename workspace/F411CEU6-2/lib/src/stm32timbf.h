@@ -14,7 +14,7 @@ Comment:
 #include <inttypes.h>
 
 /*** TIMER Bit Field TypeDef ***/
-volatile typedef struct{
+typedef volatile struct{
 	/*** TIM -> CR1 ***/
 	union {
 		struct TIM_CR1_1{

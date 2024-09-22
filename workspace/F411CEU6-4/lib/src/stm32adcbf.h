@@ -14,7 +14,7 @@ Comment:
 #include <inttypes.h>
 
 /*** ADC 1..3 BitField TypeDef ***/
-volatile typedef struct {
+typedef volatile struct {
 	// SR
 	union {
 		struct {
@@ -240,7 +240,7 @@ volatile typedef struct {
 }STM32FXXXADC_TypeDef;
 
 /*** ADC_Common ***/
-volatile typedef struct {
+typedef volatile struct {
 	// CSR
 	union {
 		struct {

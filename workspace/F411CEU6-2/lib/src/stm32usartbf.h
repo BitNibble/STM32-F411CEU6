@@ -14,7 +14,7 @@ Comment:
 #include <inttypes.h>
 
 /*** USART BitField Mapping TypeDef ***/
-volatile typedef struct{
+typedef volatile struct{
     /*** USART -> SR ***/
     union {
 	    struct {
