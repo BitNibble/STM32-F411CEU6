@@ -11,6 +11,9 @@ Comment:
 #include "armquery.h"
 #include "armsystick.h"
 
+#define SYSTICK_ENABLE (1 << 0)
+#define SYSTICK_TICKINT (1 << 1)
+#define SYSTICK_CLKSOURCE (1 << 2)
 
 /*** File Variables ***/
 volatile uint32_t DelayCounter;

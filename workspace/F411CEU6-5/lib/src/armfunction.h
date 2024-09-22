@@ -34,7 +34,7 @@ typedef struct
 	uint16_t (*SwapByte)(uint16_t num);
 	/******/
 	int (*stringlength)(const char string[]);
-	void (*reverse)(char s[]);
+	void (*reverse)(char* str);
 	unsigned int (*mayia)(unsigned int xi, unsigned int xf, uint8_t nbits);
 	void (*swap)(long *px, long *py);
 	void (*copy)(char to[], char from[]);

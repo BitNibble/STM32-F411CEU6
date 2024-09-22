@@ -13,6 +13,7 @@ Comment:
 /*** File Library ***/
 #include "armfunction.h"
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
@@ -31,7 +32,7 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 ARM_FUNC* arm_func_inic(void);
 /*** File Header ***/
 int function_StringLength (const char string[]);
-void function_Reverse(char s[]);
+void function_Reverse(char* str);
 uint8_t function_UintInvStr(uint32_t num, uint8_t index);
 uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint);
 void function_swap(long *px, long *py);
@@ -183,12 +184,16 @@ int function_StringLength (const char string[])
 	for (count = 0; string[count] != '\0'; count++ ) ;
 	return count;
 }
-void function_Reverse(char s[])
-{
-	char c; int i, j;
-	for ( i = 0, j = function_StringLength(s) - 1; i < j ; i++, j-- ){
-		c = s[i]; s[i] = s[j]; s[j] = c;
-	}
+// Function to reverse a string
+void function_Reverse(char* str) {
+    uint8_t i = 0, j = strlen(str) - 1;
+    while (i < j) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+        i++;
+        j--;
+    }
 }
 void function_swap(long *px, long *py)
 {
@@ -255,16 +260,22 @@ uint8_t function_bcd2bin(uint8_t val)
 {
 	return (val & 0x0f) + (val >> 4) * 10;
 }
-char* function_dectohex(int32_t num)
-{
-	int32_t remainder; uint8_t j;
-	for(j = 0, FUNCstr[j] = '\0'; num; FUNCstr[j] = '\0', num = num / 16){
-		remainder = num % 16;
-		if (remainder < 10) FUNCstr[j++] = (char) (48 + remainder);
-		else FUNCstr[j++] = (char) (55 + remainder);
-	}
-	function_Reverse(FUNCstr);
-	return FUNCstr;
+// Function to convert decimal to hexadecimal
+char* function_dectohex(int32_t num) {
+    int32_t remainder;
+    uint8_t j = 0;
+    if (num == 0) {
+        FUNCstr[j++] = '0';  // Handle case when number is zero
+    } else {
+        while (num && j < FUNCSTRSIZE - 1) { // Prevent buffer overflow
+            remainder = num % 16;
+            FUNCstr[j++] = (remainder < 10) ? (char)(48 + remainder) : (char)(55 + remainder);
+            num = num / 16;
+        }
+    }
+    FUNCstr[j] = '\0';
+    function_Reverse(FUNCstr);
+    return FUNCstr;
 }
 int function_twocomptoint8bit(int twoscomp){
 
@@ -307,19 +318,17 @@ int function_twocomptoint10bit(int twoscomp){
     return value;
   }
 }
-// Two's Complement function, nbits
-int function_twocomptointnbit(int twoscomp, uint8_t nbits){
-  unsigned int signmask;
-  unsigned int mask;
-  signmask = (1 << (nbits - 1));
-  mask = signmask - 1;
-  if ((unsigned int) twoscomp & signmask){
-	twoscomp &= mask;
-    twoscomp -= signmask;
-  }else{
-	  twoscomp &= mask;
-  }
-  return twoscomp;
+// Function to handle two's complement conversion
+int function_twocomptointnbit(int twoscomp, uint8_t nbits) {
+    unsigned int signmask = (1 << (nbits - 1));
+    unsigned int mask = signmask - 1;
+    if ((unsigned int)twoscomp & signmask) {
+        twoscomp &= mask;
+        twoscomp -= signmask;
+    } else {
+        twoscomp &= mask;
+    }
+    return twoscomp;
 }
 /******/
 char* function_print_v1( char* str, uint8_t size_str, const char* format, ... )
@@ -500,15 +509,15 @@ unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 	xi &= mask; xf &= mask; diff = xf ^ xi; trans = diff & xf;
 	return (trans << nbits) | diff;
 }
-uint8_t leap_year_check(uint16_t year){
-	uint8_t i;
-	if (!(year % 400)) i = 1;
-  	else if (!(year % 100)) i = 0;
-  	else if (!(year % 4) ) i = 1;
-  	else i = 0;
-	return i;
+// Function to check leap year
+uint8_t leap_year_check(uint16_t year) {
+    uint8_t i;
+    if (!(year % 400)) i = 1;
+    else if (!(year % 100)) i = 0;
+    else if (!(year % 4)) i = 1;
+    else i = 0;
+    return i;  // Added return statement
 }
-
 /***EOF***/
 
 /******
