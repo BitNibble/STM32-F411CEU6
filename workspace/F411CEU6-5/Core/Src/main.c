@@ -1,92 +1,181 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  *
-  *		LCD:
-  * PB3 - RS
-  * PB4 - RW
-  * PB5 - E
-  * PB6 - D4
-  * PB7 - D5
-  * PB8 - D6
-  * PB9 - D7
-  ******************************************************************************
-  */
+/********************************************************************************
+Title:
+Author: Sergio Manuel Santos
+	<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
+File: main.c 22/09/2024
+Software: STM32CubeIDE v1.16.0 Build: 21983_20240628_1741 (UTC)
+Hardware: STM32F411CEU6 by DevBox
+
+	Button K0:
+GPIO PA0 - Button
+	LED D2:
+GPIO PC13 - D2
+	LCD 4x20:
+GPIO PB3 - RS
+GPIO PB4 - RW
+GPIO PB5 - EN
+GPIO PB6 - D4
+GPIO PB7 - D5
+GPIO PB8 - D6
+GPIO PB9 - D7
+********************************************************************************/
 #include "main.h"
 #include "stm32fxxxmapping.h"
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
 
+#define JMP_menu 100
+
 EXPLODE PA;
 
 int main(void)
 {
-	//uint16_t adc1_dr;
-	//uint32_t count_0 = 0;
-	//uint32_t count_1 = 0;
-	STM32FXXX_enable();
-	//rtc()->inic(1); // 1 - LSE 0 - LSI (only has to be activated once)
-	PA = EXPLODE_enable();
+    STM32FXXX_enable();
+    PA = EXPLODE_enable();
 
-	ARMLCD0_enable(GPIOB);
-	gpioc()->clock(on); // gpioc13
-	gpioc()->instance->MODER.par.MODER13 = 1;
-	gpioa()->clock(on); // inputs gpioa0
-	gpioa()->instance->MODER.par.MODER0 = 0;
-	gpioa()->instance->PUPDR.par.PUPDR0 = 1;
+    uint8_t Menu = 6;
+    uint8_t count_0 = 0;
 
-	FUNC_enable();
-	//HAL_Init();
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
+    ARMLCD0_enable(GPIOB);
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN; // gpioc13
+    set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN; // inputs gpioa0
+    set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODER0, GPIO_MODER_MODER0_Pos, 0);
+    set_reg_Msk(&GPIOA->PUPDR, GPIO_PUPDR_PUPD0, GPIO_PUPDR_PUPD0_Pos, 1);
 
-	gpioc()->instance->BSRR.par.BS13 = 1;
-	PA.update(&PA.par, gpioa()->instance->IDR.reg);
+    FUNC_enable();
 
-	ADC_TemperatureSetup();
-	float temperature = 0;
-	uint16_t adc_value = 0;
+    PA.update(&PA.par, GPIOA->IDR);
 
-	while (1)
-	{
-		/*** preamble ***/
-		PA.update(&PA.par, gpioa()->instance->IDR.reg);
-		/******/
-		lcd0()->gotoxy(0,0);
-		lcd0()->string_size("Hello!",10);
-		lcd0()->gotoxy(1,0);
-		//lcd0()->string_size(func()->ui16toa(adc_value),16);
-		lcd0()->string_size(func()->ftoa(temperature,2),16);
-		lcd0()->gotoxy(3,0);
-		lcd0()->string_size(func()->ui32toa(get_reg_block(ADC1->CR2,1,0)),4);
-		lcd0()->gotoxy(3,4);
-		lcd0()->string_size(func()->ui32toa(get_reg_block(ADC1->SR,1,5)),4);
-		lcd0()->gotoxy(3,8);
-		lcd0()->string_size(func()->ui32toa(get_reg_block(ADC1->SR,1,4)),4);
-		lcd0()->gotoxy(3,12);
-		lcd0()->string_size(func()->ui32toa(get_reg_block(ADC1->SR,1,1)),4);
-		_delay_ms(1000);
-		// Read temperature sensor value
-		adc_value = ADC_ReadTemperature();
-		// Convert to actual temperature
-		temperature = CalculateTemperature(adc_value);
+    while (1)  // Infinite loop
+    {
+        PA.update(&PA.par, GPIOA->IDR);
 
+        switch (Menu) {
+        case 0:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("One", 10);
 
-	}
+            if (PA.par.LL & 1) { // Jump menu
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 1; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 1:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Two", 10);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 2; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 2:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Three", 10);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 3; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 3:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Four", 10);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 4; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 4:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Five", 10);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 5; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 5:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Six", 10);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 6; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 6:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Seven", 12);
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > 5) {
+                    Menu = 0; count_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 void Error_Handler(void)
 {
-	__disable_irq();
-	while (1)
-	{
-	}
+    __disable_irq();
+    while (1) {
+    }
 }
 
-#ifdef  USE_FULL_ASSERT
-	void assert_failed(uint8_t *file, uint32_t line)
-	{
-	}
+#ifdef USE_FULL_ASSERT
+void assert_failed(uint8_t *file, uint32_t line)
+{
+}
 #endif
 

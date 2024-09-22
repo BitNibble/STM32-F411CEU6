@@ -1,21 +1,25 @@
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  *
-  * A simple Clock
-  *
-  *   LCD:
-  * PB3 - RS
-  * PB4 - RW
-  * PB5 - EN
-  * PB6 - D4
-  * PB7 - D5
-  * PB8 - D6
-  * PB9 - D7
-  *
-  ******************************************************************************
-  **/
+/********************************************************************************
+Title: A simple Clock
+Author: Sergio Manuel Santos
+	<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
+File: main.c 22/09/2024
+Software: STM32CubeIDE v1.16.0 Build: 21983_20240628_1741 (UTC)
+Hardware: STM32F411CEU6 by DevBox
+
+	Button K0:
+GPIO PA0 - Button
+	LED D2:
+GPIO PC13 - D2
+	LCD 4x20:
+GPIO PB3 - RS
+GPIO PB4 - RW
+GPIO PB5 - EN
+GPIO PB6 - D4
+GPIO PB7 - D5
+GPIO PB8 - D6
+GPIO PB9 - D7
+********************************************************************************/
 #include "main.h"
 #include "stm32fxxxmapping.h"
 #include "armlcd.h"
