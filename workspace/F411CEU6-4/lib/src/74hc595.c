@@ -30,7 +30,7 @@ hc595_parameter hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint
 	setup_hc595_par.HC595_clkpin = clkpin;
 	setup_hc595_par.HC595_outpin = outpin;
 	
-	#if defined (STM32F446xx)
+	#if defined (STM32F4)
 		*setup_hc595_par.hc595_DDR &= (IO_var) ~((3 << (datapin * 2)) | (3 << (clkpin * 2)) | (3 << (outpin * 2)));
 		*setup_hc595_par.hc595_DDR |= ((1 << (datapin * 2)) | (1 << (clkpin * 2)) | (1 << (outpin * 2)));
 	#else
