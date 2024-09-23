@@ -12,7 +12,7 @@ Comment:
 	#define _STM32FXXXADC1_H_
 
 /*** Library ***/
-#include "stm32fxxxadc.h"
+#include "armquery.h"
 
 /*** ADC TypeDef ***/
 // ADC -> ADC1
@@ -23,9 +23,6 @@ typedef struct
 	STM32FXXXADC_TypeDef* instance;
 	STM32FXXXADC_COMMON_TypeDef* common_instance;
 	/*** Other ***/
-	STM32FXXXADC1single* single;
-	void (*start)(void);
-	void (*iclock)(uint8_t bool);
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);
 }STM32FXXX_ADC1;
@@ -35,13 +32,8 @@ STM32FXXX_ADC1* adc1_enable(void);
 STM32FXXX_ADC1* adc1(void);
 
 /***** ADC1 Procedure & Function Header ******/
-void STM32FXXXAdc1IClock(uint8_t bool);
 void STM32FXXXAdc1Clock(uint8_t bool);
 void STM32FXXXAdc1Nvic(uint8_t bool);
-void STM32FXXXAdc1Inic(void);
-void STM32FXXXAdc1VBAT(void);
-void STM32FXXXAdc1TEMP(void);
-void STM32FXXXAdc1Start(void);
 
 #endif
 
