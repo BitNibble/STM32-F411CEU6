@@ -129,7 +129,7 @@ void ADC_TemperatureSetup(void);
 uint16_t ADC_ReadTemperature(void);
 float CalculateTemperature(uint16_t adc_value);
 
-char* WeekDay_String(uint8_t weekday_n);
+const char* WeekDay_String(uint8_t weekday_n);
 
 #endif
 

@@ -389,7 +389,7 @@ uint8_t STM32FXXXRtc_get_Minute(void){
 	return rtc_bcd2dec((tr >> 8) & 0x007F);
 }
 uint8_t STM32FXXXRtc_get_Second(void){
-	//STM32FXXXRtcWaitRead();
+	STM32FXXXRtcWaitRead();
 	uint32_t tr = RTC->TR;
 	return rtc_bcd2dec(tr & 0x007F);
 }

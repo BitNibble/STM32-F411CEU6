@@ -19,6 +19,14 @@ Comment:
 #define H_BIT 31
 #define L_BIT 0
 
+const char* domingo = "Domingo";
+const char* segunda = "Segunda";
+const char* terca = "Terca";
+const char* quarta = "Quarta";
+const char* quinta = "Quinta";
+const char* sexta = "Sexta";
+const char* sabado = "Sabado";
+
 static STM32FXXX_Query stm32fxxx_query;
 static STM32FXXXSYSTEM_prescaler stm32fxxx_System_prescaler;
 static STM32FXXXPLL_prescaler stm32fxxx_Pll_prescaler;
@@ -452,32 +460,32 @@ float CalculateTemperature(uint16_t adc_value) {
     return temperature;
 }
 
-char* WeekDay_String(uint8_t weekday_n){
-	char* weekday;
+const char* WeekDay_String(uint8_t weekday_n){
+	const char* weekday;
 	switch(weekday_n){
 		case 2:
-			weekday = "Segunda";
+			weekday = segunda;
 		break;
 		case 3:
-			weekday = "Terca";
+			weekday = terca;
 		break;
 		case 4:
-			weekday = "Quarta";
+			weekday = quarta;
 		break;
 		case 5:
-			weekday = "Quinta";
+			weekday = quinta;
 		break;
 		case 6:
-			weekday = "Sexta";
+			weekday = sexta;
 		break;
 		case 7:
-			weekday = "Sabado";
+			weekday = sabado;
 		break;
 		case 1:
-			weekday = "Domingo";
+			weekday = domingo;
 		break;
 		default:
-			weekday = "Domingo";
+			weekday = domingo;
 		break;
 	}
 	return weekday;

@@ -285,7 +285,7 @@ int main(void)
         rtc()->tr2vec(vecT);
 
         lcd0()->gotoxy(1, 0);
-        lcd0()->string_size((char*)WeekDay_String(rtc()->get_WeekDay()), 16);
+        lcd0()->string_size((char*)WeekDay_String(vecD[2]), 16);
 
         lcd0()->gotoxy(2, 0);
         lcd0()->string_size(func()->print_v2("data:    %d%d-%d%d-20%d%d",
