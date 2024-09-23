@@ -35,6 +35,7 @@ typedef struct
 	/***/
 	uint8_t (*get_Year)(void);
 	uint8_t (*get_Month)(void);
+	uint8_t (*get_WeekDay)(void);
 	uint8_t (*get_Day)(void);
 	uint8_t (*get_Hour)(void);
 	uint8_t (*get_Minute)(void);
@@ -73,6 +74,7 @@ void STM32FXXXRtcBckWrite(uint8_t n, uint8_t data);
 uint8_t STM32FXXXRtcBckRead(uint8_t n);
 uint8_t STM32FXXXRtc_get_Year(void);
 uint8_t STM32FXXXRtc_get_Month(void);
+uint8_t STM32FXXXRtc_get_WeekDay(void);
 uint8_t STM32FXXXRtc_get_Day(void);
 uint8_t STM32FXXXRtc_get_Hour(void);
 uint8_t STM32FXXXRtc_get_Minute(void);

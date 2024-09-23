@@ -11,7 +11,6 @@ Comment:
 ************************************************************************/
 #include "armquery.h"
 #include <stdarg.h>
-#include <math.h>
 
 #define BYTE_BITS 8
 #define WORD_BITS 16
@@ -451,6 +450,37 @@ float CalculateTemperature(uint16_t adc_value) {
     float temperature = ((V_sense - V_25) / Avg_slope) + 25.0f;
 
     return temperature;
+}
+
+char* WeekDay_String(uint8_t weekday_n){
+	char* weekday;
+	switch(weekday_n){
+		case 2:
+			weekday = "Segunda";
+		break;
+		case 3:
+			weekday = "Terca";
+		break;
+		case 4:
+			weekday = "Quarta";
+		break;
+		case 5:
+			weekday = "Quinta";
+		break;
+		case 6:
+			weekday = "Sexta";
+		break;
+		case 7:
+			weekday = "Sabado";
+		break;
+		case 1:
+			weekday = "Domingo";
+		break;
+		default:
+			weekday = "Domingo";
+		break;
+	}
+	return weekday;
 }
 
 /******

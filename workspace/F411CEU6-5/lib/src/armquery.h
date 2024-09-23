@@ -14,6 +14,7 @@ Comment:
 
 #include "stm32fxxxinstance.h"
 #include <stdio.h>
+#include <stdint.h>
 
 #ifndef HSI_RC
 	#define HSI_RC 16000000UL
@@ -127,6 +128,8 @@ STM32FXXX_Query* query(void);
 void ADC_TemperatureSetup(void);
 uint16_t ADC_ReadTemperature(void);
 float CalculateTemperature(uint16_t adc_value);
+
+char* WeekDay_String(uint8_t weekday_n);
 
 #endif
 

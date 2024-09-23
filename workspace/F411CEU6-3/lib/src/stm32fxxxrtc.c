@@ -43,6 +43,7 @@ STM32FXXX_RTC* rtc_enable(void)
 	/***/
 	stm32fxxx_rtc.get_Year = STM32FXXXRtc_get_Year;
 	stm32fxxx_rtc.get_Month = STM32FXXXRtc_get_Month;
+	stm32fxxx_rtc.get_WeekDay = STM32FXXXRtc_get_WeekDay;
 	stm32fxxx_rtc.get_Day = STM32FXXXRtc_get_Day;
 	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
 	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
@@ -230,7 +231,7 @@ void STM32FXXXRtcWeekDay(uint8_t weekday)
 {
 	uint32_t Date;
 	uint8_t u;
-	const uint32_t mask = 0x0000E0000;
+	const uint32_t mask = 0x0000E000;
 	STM32FXXXPwrClock(on);
 	
 	u = rtc_dec2bcd(weekday % 10);
@@ -330,6 +331,12 @@ uint8_t STM32FXXXRtc_get_Month(void){
 	uint32_t dr = RTC->DR;
 	return rtc_bcd2dec((dr >> 8) & 0x001F);
 }
+uint8_t STM32FXXXRtc_get_WeekDay(void){
+	STM32FXXXRtcWaitRead();
+	uint32_t dr = RTC->DR;
+	//return rtc_bcd2dec(get_reg_block(dr,3,13));
+	return rtc_bcd2dec((dr >> 13) & 0x0007);
+}
 uint8_t STM32FXXXRtc_get_Day(void){
 	STM32FXXXRtcWaitRead();
 	uint32_t dr = RTC->DR;
@@ -382,7 +389,7 @@ uint8_t STM32FXXXRtc_get_Minute(void){
 	return rtc_bcd2dec((tr >> 8) & 0x007F);
 }
 uint8_t STM32FXXXRtc_get_Second(void){
-	STM32FXXXRtcWaitRead();
+	//STM32FXXXRtcWaitRead();
 	uint32_t tr = RTC->TR;
 	return rtc_bcd2dec(tr & 0x007F);
 }
