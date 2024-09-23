@@ -9,7 +9,7 @@ Comment:
 	wrapper
 *******************************************************************************/
 #ifndef _STM32GPIOBF_H_
-#define _STM32GPIOBF_H_
+	#define _STM32GPIOBF_H_
 
 #include <stdint.h>
 

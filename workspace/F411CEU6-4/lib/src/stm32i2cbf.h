@@ -9,7 +9,7 @@ Comment:
 	
 *******************************************************************************/
 #ifndef _STM32FXXXI2CBF_H_
-#define _STM32FXXXI2CBF_H_
+	#define _STM32FXXXI2CBF_H_
 
 #include <inttypes.h>
 

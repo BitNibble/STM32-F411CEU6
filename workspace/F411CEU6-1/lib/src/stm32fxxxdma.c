@@ -3444,5 +3444,3 @@ STM32FXXXDMA2obj* dma2(void){ return &stm32fxxx_dma2; }
 
 /*** EOF ***/
 
-
-

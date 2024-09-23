@@ -69,5 +69,3 @@ STM32FXXXCRCobj* crc(void){ return (STM32FXXXCRCobj*) &stm32fxxx_crc; }
 
 /*** EOF ***/
 
-
-

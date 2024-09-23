@@ -14,6 +14,12 @@ Comment:
 /*** File Constant & Macro ***/
 #define ZNPID_outMAX 1023
 #define ZNPID_outMIN -1023
+#define BYTE_BITS 8
+#define WORD_BITS 16
+#define N_BITS 32
+#define N_LIMBITS 33
+#define H_BIT 31
+#define L_BIT 0
 
 /*** File Variable ***/
 double ZNPID_tmp;
@@ -29,12 +35,19 @@ double ZNPID_derivative(znpidparameter* par, double PV, double timelapse);
 double ZNPID_delta(double present_value, double past_value);
 double ZNPID_sum(double value_1, double value_2);
 double ZNPID_product(double value_1, double value_2);
-uint32_t znpid_readreg(uint32_t reg, uint32_t size_block, uint32_t bit);
-void znpid_writereg(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data);
-void znpid_setreg(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data);
-void znpid_setbit(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data);
-uint32_t znpid_getbit(volatile uint32_t* reg, uint32_t size_block, uint32_t bit);
 znpidparameter znpid_par_inic(void);
+
+/*** Tools ***/
+void znpid_set_reg(volatile uint32_t* reg, uint32_t hbits);
+void znpid_clear_reg(volatile uint32_t* reg, uint32_t hbits);
+uint32_t znpid_get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+uint32_t znpid_get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
+void znpid_write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void znpid_write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+void znpid_set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void znpid_set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+uint32_t znpid_get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
+void znpid_set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 
 /*** ZNPID Auxiliar  ***/
 znpidparameter znpid_par_inic(void)
@@ -139,61 +152,92 @@ double ZNPID_product(double value_1, double value_2)
 	return (value_1 * value_2);
 }
 
-/*** File Procedure & Function Definition ***/
-uint32_t znpid_readreg(uint32_t reg, uint32_t size_block, uint32_t bit)
-{
-	if(bit > 31){ bit = 0;} if(size_block > 32){ size_block = 32;}
-	uint32_t value = reg;
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= (mask << bit);
-	value = (value >> bit);
-	return value;
+/*** Tools ***/
+void znpid_set_reg(volatile uint32_t* reg, uint32_t hbits){
+	*reg |= hbits;
 }
-
-void znpid_writereg(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data)
-{
-	if(bit > 31){ bit = 0;} if(size_block > 32){ size_block = 32;}
-	uint32_t value = data;
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= mask;
-	value = (value << bit);
-	*reg = value;
+void znpid_clear_reg(volatile uint32_t* reg, uint32_t hbits){
+	*reg &= ~hbits;
 }
-
-void znpid_setreg(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data)
+uint32_t znpid_get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	if(bit > 31){ bit = 0;} if(size_block > 32){ size_block = 32;}
-	uint32_t value = data;
+	if(bit_n > H_BIT){ bit_n = L_BIT; }
+	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= mask;
-	*reg &= ~(mask << bit);
-	*reg |= (value << bit);
+	reg &= (mask << bit_n);
+	reg = (reg >> bit_n);
+	return reg;
 }
-
-void znpid_setbit(volatile uint32_t* reg, uint32_t size_block, uint32_t bit, uint32_t data)
+uint32_t znpid_get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
 {
-	uint32_t n = 0;
-	if(bit > 31){ n = bit/32; bit = bit - (n * 32); } if(size_block > 32){ size_block = 32;}
-	uint32_t value = data;
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= mask;
-	*(reg + n ) &= ~(mask << bit);
-	*(reg + n ) |= (value << bit);
+	if(Pos > H_BIT){ Pos = L_BIT;}
+	else{ reg &= Msk; reg = (reg >> Pos); }
+	return reg;
 }
-
-uint32_t znpid_getbit(volatile uint32_t* reg, uint32_t size_block, uint32_t bit)
+void znpid_write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	uint32_t n = 0;
-	if(bit > 31){ n = bit/32; bit = bit - (n * 32); } if(size_block > 32){ size_block = 32;}
+	if(bit_n > H_BIT);
+	else{
+		if(size_block > N_BITS);
+		else{
+			uint32_t value = *reg;
+			uint32_t mask = (unsigned int)((1 << size_block) - 1);
+			data &= mask; value &= ~(mask << bit_n);
+			data = (data << bit_n);
+			value |= data;
+			*reg = value;
+		}
+	}
+}
+void znpid_write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	uint32_t value = *reg;
+	if(Pos > H_BIT){ Pos = L_BIT;}
+	else{ data = (data << Pos); data &= Msk; value &= ~(Msk); value |= data; *reg = value; }
+}
+void znpid_set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+{
+	if(bit_n > H_BIT);
+	else{
+		if(size_block > N_BITS);
+		else{
+			uint32_t mask = (unsigned int)((1 << size_block) - 1);
+			data &= mask;
+			*reg &= ~(mask << bit_n);
+			*reg |= (data << bit_n);
+		}
+	}
+}
+void znpid_set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	if(Pos > H_BIT){ Pos = L_BIT;}
+	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
+}
+uint32_t znpid_get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
+{
+	uint32_t n = L_BIT;
+	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
+	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t value = *(reg + n );
 	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	value &= (mask << bit);
-	value = (value >> bit);
+	value &= (mask << bit_n);
+	value = (value >> bit_n);
 	return value;
+}
+void znpid_set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+{
+	uint32_t n = L_BIT;
+	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
+	if(size_block > N_BITS);
+	else{
+		uint32_t mask = (unsigned int)((1 << size_block) - 1);
+		data &= mask;
+		*(reg + n ) &= ~(mask << bit_n);
+		*(reg + n ) |= (data << bit_n);
+	}
 }
 
 /***File Interrupt***/
 
 /***EOF***/
-
 
