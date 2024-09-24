@@ -284,16 +284,16 @@ int main(void)
         rtc()->dr2vec(vecD);
         rtc()->tr2vec(vecT);
 
-        lcd0()->gotoxy(1, 0);
-        lcd0()->string_size((char*)WeekDay_String(vecD[2]), 16);
-
         lcd0()->gotoxy(2, 0);
-        lcd0()->string_size(func()->print_v2("data:    %d%d-%d%d-20%d%d",
-                          vecD[5], vecD[6], vecD[3], vecD[4], vecD[0], vecD[1]), 20);
+        lcd0()->string_size(func()->print_v2("%d%d-%d%d-20%d%d",
+                          vecD[5], vecD[6], vecD[3], vecD[4], vecD[0], vecD[1]), 10);
 
-        lcd0()->gotoxy(3, 0);
-        lcd0()->string_size(func()->print_v2("hora:    %d%d:%d%d:%d%d",
-                          vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]), 20);
+        lcd0()->gotoxy(2, 11);
+                lcd0()->string_size((char*)WeekDay_String(vecD[2]), 7);
+
+        lcd0()->gotoxy(3, 11);
+        lcd0()->string_size(func()->print_v2("%d%d:%d%d:%d%d",
+                          vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]), 8);
     }
 }
 
