@@ -313,9 +313,9 @@ uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
 }
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT);
+	if(bit_n > H_BIT){ }
 	else{
-		if(size_block > N_BITS);
+		if(size_block > N_BITS){ }
 		else{
 			uint32_t value = *reg;
 			uint32_t mask = (unsigned int)((1 << size_block) - 1);
@@ -334,9 +334,9 @@ void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t d
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT);
+	if(bit_n > H_BIT){ }
 	else{
-		if(size_block > N_BITS);
+		if(size_block > N_BITS){ }
 		else{
 			uint32_t mask = (unsigned int)((1 << size_block) - 1);
 			data &= mask;
@@ -365,7 +365,7 @@ void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 {
 	uint32_t n = L_BIT;
 	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
-	if(size_block > N_BITS);
+	if(size_block > N_BITS){ }
 	else{
 		uint32_t mask = (unsigned int)((1 << size_block) - 1);
 		data &= mask;
@@ -400,7 +400,7 @@ void STM32446ResetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int block_n, unsigned int data )
 {
 	const unsigned int n_bits = sizeof(data) * BYTE_BITS;
-	if(size_block > n_bits);
+	if(size_block > n_bits){ }
 	else{
 		const unsigned int mask = (unsigned int) ((1 << size_block) - 1);
 		unsigned int index = (block_n * size_block) / n_bits;
@@ -433,7 +433,7 @@ void ADC_TemperatureSetup(void){
 	//stm()->adc1->clock(on);
 	set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
 	ADC1->CR1 = 0;
-	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, OFF);
+	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, 0);
 	set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, ADC_SQR3_SQ1_Pos, 18);
 	set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, ADC_SMPR1_SMP18_Pos, 3);
 	set_reg_Msk(&ADC1->CR2, ADC_CR2_CONT, ADC_CR2_CONT_Pos, ON);

@@ -36,6 +36,7 @@ char message[32];
 int main(void)
 {
     STM32FXXX_enable();
+    rtc()->inic(1);
     PA = EXPLODE_enable();
 
     uint8_t Menu = 7;

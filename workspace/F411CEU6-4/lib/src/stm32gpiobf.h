@@ -249,10 +249,9 @@ typedef volatile struct {
             uint32_t af15: 4;    /* Alternate function for pin 15 */
         } par;
         struct {
-            uint32_t afl; /* Alternate function low register (0x20) */
-            uint32_t afh; /* Alternate function high register (0x24) */
-        } word;
-        uint32_t reg[2]; /* afrL and afrH */
+            uint32_t l; /* Alternate function low register (0x20) */
+            uint32_t h; /* Alternate function high register (0x24) */
+        } reg;
     } afr;  /* 0x20 and 0x24 */
 
 } STM32FXXXGPIOX_TypeDef;
