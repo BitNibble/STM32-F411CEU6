@@ -32,6 +32,7 @@ GPIO PB9 - D7
 
 EXPLODE PA;
 char message[32];
+//uint32_t test[8] = {~0,~0,~0,~0,~0,~0,~0,~0};
 
 int main(void)
 {
@@ -284,6 +285,13 @@ int main(void)
 
         rtc()->dr2vec(vecD);
         rtc()->tr2vec(vecT);
+
+        /*** Testing ***
+        set_bit_block(&test[0],33,20+64,~0);
+        lcd0()->gotoxy(1, 0);
+        lcd0()->string_size(func()->ui32toa(get_bit_block(&test[2],34,20)), 10);
+        //lcd0()->string_size(func()->ui32toa(test[2]), 10);
+        ******/
 
         lcd0()->gotoxy(2, 0);
         lcd0()->string_size(func()->print_v2("%d%d-%d%d-20%d%d",

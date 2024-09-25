@@ -12,12 +12,14 @@ Comment:
 #include "armquery.h"
 #include <stdarg.h>
 
+/****************************************/
 #define BYTE_BITS 8
 #define WORD_BITS 16
 #define N_BITS 32
 #define N_LIMBITS 33
 #define H_BIT 31
 #define L_BIT 0
+/****************************************/
 
 const char* domingo = "Domingo";
 const char* segunda = "Segunda";
@@ -290,88 +292,99 @@ STM32FXXX_Query query_enable(void)
 STM32FXXX_Query* query(void){ return (STM32FXXX_Query*) &stm32fxxx_query; }
 
 /*** Tools ***/
-void set_reg(volatile uint32_t* reg, uint32_t hbits){
+inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
 }
-void clear_reg(volatile uint32_t* reg, uint32_t hbits){
+inline void clear_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg &= ~hbits;
+}
+inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
+{
+	if(Pos > H_BIT){ Pos = L_BIT; reg = 0; }
+	else{ reg &= Msk; reg = (reg >> Pos); }
+	return reg;
+}
+inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	uint32_t value = *reg;
+	if(Pos > H_BIT){ Pos = L_BIT; }
+	else{ data = (data << Pos); data &= Msk; value &= ~(Msk); value |= data; *reg = value; }
+}
+inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+{
+	if(Pos > H_BIT){ Pos = L_BIT; }
+	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
+}
+inline void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
+{
+	reg->BSRR = (uint32_t)hpins;
+}
+inline void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
+{
+	reg->BSRR = (uint32_t)(hpins << WORD_BITS);
+}
+inline void setpin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (1 << pin);
+}
+inline void resetpin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	if(bit_n > H_BIT){ bit_n = L_BIT; }
 	if(size_block > N_BITS){ size_block = N_BITS; }
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
-	reg &= (mask << bit_n);
-	reg = (reg >> bit_n);
-	return reg;
-}
-uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
-{
-	if(Pos > H_BIT){ Pos = L_BIT;}
-	else{ reg &= Msk; reg = (reg >> Pos); }
+	if(bit_n > H_BIT){ bit_n = L_BIT; reg = 0; }
+	else{
+		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		reg &= (mask << bit_n);
+		reg = (reg >> bit_n);
+	}
 	return reg;
 }
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT){ }
+	if(size_block > N_BITS){ size_block = N_BITS; }
+	if(bit_n > H_BIT){ bit_n = H_BIT; }
 	else{
-		if(size_block > N_BITS){ }
-		else{
-			uint32_t value = *reg;
-			uint32_t mask = (unsigned int)((1 << size_block) - 1);
-			data &= mask; value &= ~(mask << bit_n);
-			data = (data << bit_n);
-			value |= data;
-			*reg = value;
-		}
+		uint32_t value = *reg;
+		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		data &= mask; value &= ~(mask << bit_n);
+		data = (data << bit_n);
+		value |= data;
+		*reg = value;
 	}
-}
-void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
-{
-	uint32_t value = *reg;
-	if(Pos > H_BIT){ Pos = L_BIT;}
-	else{ data = (data << Pos); data &= Msk; value &= ~(Msk); value |= data; *reg = value; }
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n > H_BIT){ }
+	if(size_block > N_BITS){ size_block = N_BITS; }
+	if(bit_n > H_BIT){ bit_n = H_BIT; }
 	else{
-		if(size_block > N_BITS){ }
-		else{
-			uint32_t mask = (unsigned int)((1 << size_block) - 1);
-			data &= mask;
-			*reg &= ~(mask << bit_n);
-			*reg |= (data << bit_n);
-		}
+		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		data &= mask;
+		*reg &= ~(mask << bit_n);
+		*reg |= (data << bit_n);
 	}
-}
-void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
-{
-	if(Pos > H_BIT){ Pos = L_BIT;}
-	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
 }
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
-	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
+	uint32_t value;
 	if(size_block > N_BITS){ size_block = N_BITS; }
-	uint32_t value = *(reg + n );
-	uint32_t mask = (unsigned int)((1 << size_block) - 1);
+	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
+	value = *(reg + n );
+	uint32_t mask = (uint32_t)((1 << size_block) - 1);
 	value &= (mask << bit_n);
 	value = (value >> bit_n);
 	return value;
 }
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	uint32_t n = L_BIT;
-	if(bit_n > H_BIT){ n = bit_n / N_BITS; bit_n = bit_n % N_BITS; }
-	if(size_block > N_BITS){ }
-	else{
-		uint32_t mask = (unsigned int)((1 << size_block) - 1);
-		data &= mask;
-		*(reg + n ) &= ~(mask << bit_n);
-		*(reg + n ) |= (data << bit_n);
-	}
+	if(size_block > N_BITS){ size_block = N_BITS; }
+	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
+	uint32_t mask = (uint32_t)((1 << size_block) - 1);
+	data &= mask;
+	*(reg + n ) &= ~(mask << bit_n);
+	*(reg + n ) |= (data << bit_n);
 }
 void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
@@ -397,33 +410,15 @@ void STM32446ResetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 		va_end(list);
 	}
 }
-void STM32446VecSetup( volatile uint32_t vec[], const unsigned int size_block, unsigned int block_n, unsigned int data )
+void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigned int block_n, unsigned int data )
 {
 	const unsigned int n_bits = sizeof(data) * BYTE_BITS;
-	if(size_block > n_bits){ }
-	else{
-		const unsigned int mask = (unsigned int) ((1 << size_block) - 1);
-		unsigned int index = (block_n * size_block) / n_bits;
-		data &= mask;
-		vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
-		vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
-	}
-}
-void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
-{
-	reg->BSRR = (uint32_t)hpins;
-}
-void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
-{
-	reg->BSRR = (uint32_t)(hpins << WORD_BITS);
-}
-void setpin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (1 << pin);
-}
-void resetpin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
+	if(size_block > n_bits){ size_block = n_bits; }
+	const unsigned int mask = (uint32_t) ((1 << size_block) - 1);
+	unsigned int index = (block_n * size_block) / n_bits;
+	data &= mask;
+	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
+	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
 }
 
 /****** MISCELLANEOUS ******/

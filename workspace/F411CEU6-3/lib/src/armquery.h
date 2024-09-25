@@ -22,14 +22,12 @@ Comment:
 #ifndef HSE_OSC
 	#define HSE_OSC 25000000UL
 #endif
-
 /*******   0 -> HSI    1->HSE   *********/
 #define H_Clock_Source 1
 /****************************************/
 /****   PLL ON -> 1    PLL OFF = 0   ****/
 #define PLL_ON_OFF 0
 /****************************************/
-
 #ifndef on
 	#define on 1
 #endif
@@ -81,20 +79,21 @@ uint32_t (*pclk1)(void);
 uint32_t (*pclk2)(void);
 }STM32FXXX_Query;
 
+/*** Tools ***/
 void set_reg(volatile uint32_t* reg, uint32_t hbits);
 void clear_reg(volatile uint32_t* reg, uint32_t hbits);
-uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
 uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
-void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
-void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void setpin( GPIO_TypeDef* reg, uint8_t pin );
 void resetpin( GPIO_TypeDef* reg, uint8_t pin );
+uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
+void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 
 /*** Clock ***/
 uint32_t getpllsourceclk(void);
