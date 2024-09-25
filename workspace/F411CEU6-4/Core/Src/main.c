@@ -31,7 +31,7 @@ GPIO PB9 - D7
 #define ADC_SAMPLE 8
 
 EXPLODE PA;
-char message[32];
+char ADC_msg[32];
 //uint32_t test[8] = {~0,~0,~0,~0,~0,~0,~0,~0};
 
 int main(void)
@@ -255,7 +255,7 @@ int main(void)
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging
-                    lcd0()->string_size(func()->print_v1(message, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value), 1), (char) 0xDF), 8);
+                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value), 1), (char) 0xDF), 8);
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
