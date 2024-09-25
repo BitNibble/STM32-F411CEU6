@@ -59,6 +59,10 @@ typedef volatile struct {
             uint32_t ot15: 1;    /* Output type for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
         } par;
+        struct {
+        	uint16_t ot;   /* Bit set register (low 16 pars) */
+        	uint16_t reserved;   /* Bit reset register (high 16 pars) */
+        } word;
         uint32_t reg;
     } otyper;  /* 0x04 */
 
@@ -129,6 +133,10 @@ typedef volatile struct {
             uint32_t id15: 1;    /* Input data for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
         } par;
+        struct {
+        	uint16_t id;   /* Bit set register (low 16 pars) */
+			uint16_t reserved;   /* Bit reset register (high 16 pars) */
+        } word;
         uint32_t reg;
     } idr;  /* 0x10 */
 
@@ -153,6 +161,10 @@ typedef volatile struct {
             uint32_t od15: 1;    /* Output data for pin 15 */
             uint32_t reserved: 16; /* Reserved for padding */
         } par;
+        struct {
+        	uint16_t od;   /* Bit set register (low 16 pars) */
+			uint16_t reserved;   /* Bit reset register (high 16 pars) */
+        } word;
         uint32_t reg;
     } odr;  /* 0x14 */
 
@@ -191,7 +203,6 @@ typedef volatile struct {
             uint32_t br13: 1;    /* Bit reset for pin 13 */
             uint32_t br14: 1;    /* Bit reset for pin 14 */
             uint32_t br15: 1;    /* Bit reset for pin 15 */
-            uint32_t reserved: 16; /* Reserved for padding */
         } par;
         struct {
             uint16_t bs;   /* Bit set register (low 16 pars) */
