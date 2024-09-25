@@ -8,6 +8,7 @@ Update: 16012024
 Comment:
 	
 *******************************************************************************/
+#include "main.h"
 #include "armquery.h"
 #include "armsystick.h"
 
@@ -78,6 +79,7 @@ void systick_start(void)
 void SysTick_Handler(void)
 {
 	DelayCounter += systick_sysclk_calc_xs;
+	HAL_IncTick();
 }
 /***************************/
 

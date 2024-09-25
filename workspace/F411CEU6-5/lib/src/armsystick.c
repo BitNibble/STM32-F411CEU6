@@ -78,6 +78,7 @@ void systick_start(void)
 void SysTick_Handler(void)
 {
 	DelayCounter += systick_sysclk_calc_xs;
+	HAL_IncTick();
 }
 /***************************/
 
