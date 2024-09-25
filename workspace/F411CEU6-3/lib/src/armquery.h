@@ -15,6 +15,7 @@ Comment:
 #include "stm32fxxxinstance.h"
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 
 #ifndef HSI_RC
 	#define HSI_RC 16000000UL
@@ -129,6 +130,10 @@ uint16_t ADC_ReadTemperature(void);
 float CalculateTemperature(uint16_t adc_value);
 
 const char* WeekDay_String(uint8_t weekday_n);
+
+void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
+void Usart_StopBits( USART_TypeDef* usart, double stopbits );
+void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
 
 #endif
 

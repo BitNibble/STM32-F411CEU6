@@ -486,10 +486,64 @@ const char* WeekDay_String(uint8_t weekday_n){
 	return weekday;
 }
 
+void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength )
+{
+	if(wordlength == 9)
+		usart->CR1 |= (1 << 12); // M: Word length, 1 - 9bit.
+	else if(wordlength == 8)
+		usart->CR1 &= (uint32_t) ~(1 << 12); // M: Word length, 0 - 8bit.
+	else
+		usart->CR1 &= (uint32_t) ~(1 << 12); // M: Word length, 0 - 8bit, default.
+}
+
+void Usart_StopBits( USART_TypeDef* usart, double stopbits )
+{
+	usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12)); // STOP: STOP bits 00 - 1stopbit, default.
+	if(fabs(stopbits - 0.5) < 0.00001) // STOP: STOP bits, 01: 0.5 Stop bit
+		usart->CR2 |= (1 << 12);
+	else if(fabs(stopbits - 1) < 0.00001) // STOP: STOP bits, 00: 1 Stop bit.
+		usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12));
+	else if(fabs(stopbits - 1.5) < 0.00001) // STOP: STOP bits, 11: 1.5 Stop bit
+		usart->CR2 |= ((1 << 13) | (1 << 12));
+	else if(fabs(stopbits - 2) < 0.00001) // STOP: STOP bits, 10: 2 Stop bits
+		usart->CR2 |= (1 << 13);
+	else // STOP: STOP bits, 10: 2 Stop bits
+		usart->CR2 |= (1 << 13);
+}
+
+void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
+{
+	uint8_t sampling;
+	double value, fracpart, intpart;
+
+	if(samplingmode == 8){
+		sampling = 8;
+		usart->CR1 |= (1 << 15); // OVER8: Oversampling mode, 1 - 8.
+	}else if(samplingmode == 16){
+		sampling = 16;
+		usart->CR1 &= (uint32_t) ~(1 << 15); // OVER8: Oversampling mode, 0 - 16.
+	}else{
+		sampling = 16;
+		usart->CR1 &= (uint32_t) ~(1 << 15); // OVER8: Oversampling mode, 0 - 16, default.
+	}
+
+	value = (double) getsysclk() / ( gethpre() * sampling * baudrate );
+	fracpart = modf(value, &intpart);
+	usart->BRR = 0; // clean slate, reset.
+	if(sampling == 16){
+		usart->BRR = (uint32_t) (round(fracpart * 16)); // DIV_Fraction
+		usart->BRR |= ((uint32_t) intpart << 4); // DIV_Mantissa[11:0]
+	}else if(sampling == 8){
+		usart->BRR = (uint32_t) (round(fracpart * 8)); // DIV_Fraction
+		usart->BRR |= ((uint32_t) intpart << 4); // DIV_Mantissa[11:0]
+	}
+}
+
 /******
 n = bit_n/32; bit_n = bit_n - (n * 32); -> bit_n = bit_n % 32;
 (a+b)/a = a/a + b/a = 1 + b/a
 a/b/c/d/e = a/(b*c*d*e)
 *******/
+
 /***EOF***/
 
