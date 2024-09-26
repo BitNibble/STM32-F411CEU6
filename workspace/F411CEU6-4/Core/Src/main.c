@@ -177,7 +177,7 @@ int main(void)
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
                     incr_0 = rtc()->get_Month();
-                    incr_0 = (incr_0 > 11) ? 0 : incr_0 + 1;
+                    incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
                     rtc()->Month(incr_0);
                 }
                 skip_0++;

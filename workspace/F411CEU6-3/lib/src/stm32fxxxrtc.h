@@ -27,7 +27,13 @@ Comment:
 #ifndef DATA_SIZE
 	#define DATA_SIZE 32
 #endif
-
+/*** RTC Interrupt Enum ***/
+typedef enum {
+    RTC_ENABLE_WAKEUP = 0b01,
+    RTC_ENABLE_ALARM = 0b10,
+    RTC_DISABLE_WAKEUP = 0b101,
+    RTC_DISABLE_ALARM = 0b110
+} RTC_Config;
 /*** RTC TypeDef ***/
 typedef struct
 {
@@ -49,16 +55,16 @@ typedef struct
 	void (*Second)(uint8_t second);
 	void (*dr2vec)(char* rtc_vect);
 	void (*tr2vec)(char* rtc_vect);
-	void (*BckWrite)(uint8_t n, uint8_t data);
-	uint8_t (*BckRead)(uint8_t n);
+	void (*BckWrite)(uint8_t registerIndex, uint8_t data);
+	uint8_t (*BckRead)(uint8_t registerIndex);
 	uint8_t (*get_stsu)(void);
 	uint16_t (*get_ss)(void);
 	/*** Other ***/
 	void (*pwr_clock)(uint8_t bool);
 	void (*bck_sram_clock)(uint8_t bool);
-	void (*clock)(uint8_t bool);
+	void (*clock)(uint8_t isEnabled);
 	void (*inic)(uint8_t clock);
-	void (*nvic)(uint8_t value);
+	void (*nvic)(uint8_t config);
 }STM32FXXX_RTC;
 /***/
 
@@ -67,11 +73,11 @@ STM32FXXX_RTC* rtc_enable(void);
 STM32FXXX_RTC* rtc(void);
 
 /*** RTC Procedure & Function Header ***/
-void STM32FXXXRtcClock(uint8_t bool);
-void STM32FXXXRtcNvic(uint8_t value);
+void STM32FXXXConfigureRtcClock(uint8_t isEnabled);
+void STM32FXXXConfigureRtcInterrupt(uint8_t config);
 void STM32FXXXRtcInic(uint8_t clock);
-void STM32FXXXRtcBckWrite(uint8_t n, uint8_t data);
-uint8_t STM32FXXXRtcBckRead(uint8_t n);
+void STM32FXXXRtcBckWrite(uint8_t registerIndex, uint8_t data);
+uint8_t STM32FXXXRtcBckRead(uint8_t registerIndex);
 uint8_t STM32FXXXRtc_get_Year(void);
 uint8_t STM32FXXXRtc_get_Month(void);
 uint8_t STM32FXXXRtc_get_WeekDay(void);
