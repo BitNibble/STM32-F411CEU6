@@ -7,7 +7,7 @@ Hardware: STM32QUERY
 Date: 10/01/2024
 Update: 
 Comment:
-	Tested STM32F446RE and STM32F411CEU6
+	Tested STM32F446RE || STM32F411CEU6
 ************************************************************************/
 #include "armquery.h"
 #include <stdarg.h>
@@ -28,6 +28,14 @@ const char* quarta = "Quarta";
 const char* quinta = "Quinta";
 const char* sexta = "Sexta";
 const char* sabado = "Sabado";
+
+/****************************************/
+
+static uint32_t systick_us;
+static uint32_t systick_10us;
+static uint32_t systick_ms;
+
+/****************************************/
 
 static STM32FXXX_Query stm32fxxx_query;
 static STM32FXXXSYSTEM_prescaler stm32fxxx_System_prescaler;
@@ -419,6 +427,52 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 	data &= mask;
 	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
 	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
+}
+void delay_Configure(void)
+{
+	uint32_t DelayCounter_top;
+
+	#ifdef STM32F411xE
+		DelayCounter_top = getsysclk()/(gethpre() * 1);
+	#endif
+	#ifdef STM32F446xx
+		DelayCounter_top = getsysclk()/(gethpre() * 1);
+	#endif
+
+	systick_us 		= DelayCounter_top / 1000000;
+	systick_10us 	= DelayCounter_top / 100000;
+	systick_ms 		= DelayCounter_top / 1000;
+}
+inline uint32_t get_systick_us(void)
+{
+	return systick_us;
+}
+inline uint32_t get_systick_10us(void)
+{
+	return systick_10us;
+}
+inline uint32_t get_systick_ms(void)
+{
+	return systick_ms;
+}
+void delayMiliseconds(unsigned int ms) {
+    volatile unsigned int count = ms * get_systick_ms( );
+    while (count--);
+}
+void delayMicroseconds(unsigned int us) {
+    volatile unsigned int count = us * get_systick_us( );
+    while (count--);
+}
+void delayAsmMicroseconds(unsigned int us) {
+    // Adjust the loop count accordingly
+    unsigned int count = us * get_systick_us( ); // Rough estimate for timing
+
+    __asm volatile (
+        "1: \n"                    // Label 1
+        "subs %[count], %[count], #1 \n" // Decrement count
+        "bne 1b \n"                // Branch to label 1 if count is not zero
+        : [count] "+r" (count)     // Input/output operand
+    );
 }
 
 /****** MISCELLANEOUS ******/

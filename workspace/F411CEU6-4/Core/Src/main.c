@@ -270,7 +270,8 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
+                //_delay_ms(JMP_menu);
+                delayAsmMicroseconds(JMP_menu * 1000);
                 count_0++;
                 if (count_0 > 5) {
                     Menu = 0; count_0 = 0; skip_0 = 0;

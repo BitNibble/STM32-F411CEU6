@@ -3,11 +3,10 @@
 Author: Sergio Santos 
    <sergio.salazar.santos@gmail.com>
 License: GNU General Public License
-Hardware: STM32
+Hardware: STM32F4
 Date: 12112022
 Comment:
-	STM32F446RE
-	- Make sure the delay are working in the inic function.
+	STM32F446RE || STM32F411CEU6
 ************************************************************************/
 #ifndef _ARMLCD_H_
 	#define _ARMLCD_H_
@@ -15,7 +14,6 @@ Comment:
 /*** Global Library ***/
 //#include <util/delay.h> // if use AVR ATMEL
 #include "armquery.h"
-#include "armsystick.h"
 #include <inttypes.h>
 
 /*** Global Constant & Macro ***/

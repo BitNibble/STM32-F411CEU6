@@ -3,11 +3,10 @@
 Author: Sergio Santos 
 	<sergio.salazar.santos@gmail.com>
 License: GNU General Public License
-Hardware: STM32
+Hardware: STM32F4
 Date: 28052023
 Comment:
-	STM32F446RE and STM32F411CEU6
-	- Make sure the delay are working in the inic function.
+	STM32F446RE || STM32F411CEU6
 ************************************************************************/
 /*** File Library ***/
 #include "armlcd.h"
@@ -55,6 +54,8 @@ void ARMLCD0_hspace(uint32_t n);
 void ARMLCD0_clear(void);
 void ARMLCD0_gotoxy(unsigned int y, unsigned int x);
 void ARMLCD0_reboot(void);
+void ARMLCD0_delayMiliseconds(unsigned int ms);
+void ARMLCD0_delayMicroseconds(unsigned int us);
 
 /*** LCD0 Procedure & Function Definition ***/
 ARMLCD0 ARMLCD0_enable(GPIO_TypeDef* reg)
@@ -111,17 +112,17 @@ void ARMLCD0_inic(void)
 	armlcd0_detect = ireg->IDR & ARMLCD0_NC_Msk;
 	
 	// INICIALIZACAO LCD datasheet
-	_delay_ms(20); // using clock at 16Mhz
+	ARMLCD0_delayMiliseconds(20); // using clock at 16Mhz
 	ARMLCD0_write(0x30, ARMLCD0_INST); // 0x30 function set
-	_delay_10us(4);
+	ARMLCD0_delayMicroseconds(37);
 	ARMLCD0_write(0x28, ARMLCD0_INST); // 0x28 function set
-	_delay_10us(4);
+	ARMLCD0_delayMicroseconds(37);
 	ARMLCD0_write(0x28, ARMLCD0_INST); // 0x28 function set
-	_delay_10us(4);
+	ARMLCD0_delayMicroseconds(37);
 	ARMLCD0_write(0x0C, ARMLCD0_INST); // 0x0C Display ON/OFF control
-	_delay_10us(4);
+	ARMLCD0_delayMicroseconds(37);
 	ARMLCD0_write(0x01, ARMLCD0_INST); // 0x01 Display clear
-	_delay_ms(1.5);
+	ARMLCD0_delayMiliseconds(1.5);
 	ARMLCD0_write(0x04, ARMLCD0_INST); // 0x05 Entry mode set
 	ARMLCD0_BF();
 
@@ -247,7 +248,7 @@ void ARMLCD0_hspace(uint32_t n)
 void ARMLCD0_clear(void)
 {
 	ARMLCD0_write(0x01, ARMLCD0_INST);
-	_delay_10us(200);
+	ARMLCD0_delayMicroseconds(2000);
 }
 
 void ARMLCD0_gotoxy(unsigned int y, unsigned int x)
@@ -285,6 +286,18 @@ void ARMLCD0_reboot(void)
 	if(i)
 		ARMLCD0_inic();
 	armlcd0_detect = tmp;
+}
+
+void ARMLCD0_delayMiliseconds(unsigned int ms) {
+	unsigned int SystemCoreClock = getsysclk()/(gethpre() * 1);
+    volatile unsigned int count = ms * (SystemCoreClock / 1000);
+    while (count--);
+}
+
+void ARMLCD0_delayMicroseconds(unsigned int us) {
+	unsigned int SystemCoreClock = getsysclk()/(gethpre() * 1);
+    volatile unsigned int count = us * (SystemCoreClock / 1000000);
+    while (count--);
 }
 
 /******************************************************************************

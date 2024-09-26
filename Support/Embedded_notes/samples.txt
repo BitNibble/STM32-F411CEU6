@@ -260,3 +260,53 @@ void safe_free(void* ptr) {
         ptr = NULL;
     }
 }
+/*************************************************/
+; Example: Delay in microseconds using assembly (for ARM Cortex-M)
+; Assumes a system clock of 72 MHz
+
+.global delayMicroseconds
+
+delayMicroseconds:
+    ; Input: R0 = delay time in microseconds
+    ; Count is adjusted according to the clock speed
+
+    push {r4}              ; Save registers that will be used
+    mov r4, r0             ; Move delay into r4
+
+delay_loop:
+    ; Adjust the loop count based on clock frequency
+    ; Assuming each loop iteration takes about 1 clock cycle
+    ; For 72 MHz, each instruction takes about 13.89 ns, adjust accordingly
+    ; A rough estimate for ~10 cycles per iteration
+
+    subs r4, r4, #1        ; Decrement the delay counter
+    bne delay_loop         ; Branch if not equal to zero
+
+    pop {r4}               ; Restore registers
+    bx lr                  ; Return from the function
+/*************************************************/
+void delayMicroseconds(unsigned int us) {
+    // Assuming a clock speed of 72 MHz, adjust the loop count accordingly
+    unsigned int count = us * 72; // Rough estimate for timing
+
+    __asm volatile (
+        "1: \n"                    // Label 1
+        "subs %[count], %[count], #1 \n" // Decrement count
+        "bne 1b \n"                // Branch to label 1 if count is not zero
+        : [count] "+r" (count)     // Input/output operand
+    );
+}
+/*************************************************/
+/*** INTERRUPT HEADER ***/
+void Reset_IRQHandler(void);
+void NMI_IRQHandler(void);
+void HardFault_IRQHandler(void);
+void MemManage_IRQHandler(void);
+void BusFault_IRQHandler(void);
+void UsageFault_IRQHandler(void);
+void SVCall_IRQHandler(void);
+void PendSV_IRQHandler(void);
+void Systick_IRQHandler(void);
+void FPU_IRQHandler(void);
+void SysTick_Handler(void);
+/*************************************************/

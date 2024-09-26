@@ -16,52 +16,32 @@ Comment:
 #define SYSTICK_CLKSOURCE (1 << 2)
 
 /*** File Variables ***/
-volatile uint32_t DelayCounter;
-static uint32_t systick_us;
-static uint32_t systick_10us;
-static uint32_t systick_ms;
-static uint32_t systick_xs;
-static uint32_t systick_select;
+volatile uint32_t DelayCounter_0;
 
 /******/
-void _delay_us(uint16_t us)
+void _delay_us(uint32_t us)
 {
-	systick_select = systick_us;
-	SysTick->LOAD = systick_select * us;
-	for( DelayCounter = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter < systick_select; );
+	SysTick->LOAD = get_systick_us( );
+	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < us; );
 	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
-void _delay_10us(uint16_t dez_us)
+void _delay_10us(uint32_t dez_us)
 {
-	systick_select = systick_10us;
-	SysTick->LOAD = systick_select * dez_us;
-	for( DelayCounter = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter < systick_select; );
+	SysTick->LOAD = get_systick_10us( );
+	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < dez_us; );
 	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
-void _delay_ms(uint16_t ms)
+void _delay_ms(uint32_t ms)
 {
-	systick_select = systick_ms;
-	SysTick->LOAD = systick_select * ms;
-	for( DelayCounter = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter < systick_select; );
+	SysTick->LOAD = get_systick_ms( );
+	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < ms; );
 	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
 
 
 void systick_start(void)
 {
-	uint32_t DelayCounter_top;
-
-	#ifdef STM32F411xE
-		DelayCounter_top = getsysclk()/(gethpre() * 1);
-	#endif
-	#ifdef STM32F446xx
-		DelayCounter_top = getsysclk()/(gethpre() * 1);
-	#endif
-
-	systick_us 		= DelayCounter_top / 1000000 - 1;
-	systick_10us 	= DelayCounter_top / 100000 - 1;
-	systick_ms 		= DelayCounter_top / 1000 - 1;
-	systick_xs 		= DelayCounter_top / 100000 - 1;
+	delay_Configure( );
 
 	SysTick->LOAD = 0x00FFFFFF;
 	SysTick->VAL = 0UL;
@@ -71,14 +51,14 @@ void systick_start(void)
 /**** Interrupt Handler ****/
 void SysTick_Handler(void)
 {
-	DelayCounter += systick_select;
+	DelayCounter_0++;
 	HAL_IncTick();
 }
 /***************************/
 
 /******
 Load does not accept values below 70
-
+Note us only work for high frequency clocks.
 
 ******/
 

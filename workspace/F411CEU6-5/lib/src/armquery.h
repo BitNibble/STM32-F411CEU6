@@ -7,7 +7,7 @@ Hardware: STM32QUERY
 Date: 10/01/2024
 Update: 
 Comment:
-	Tested STM32F446RE and STM32F411CEU6
+	Tested STM32F446RE || STM32F411CEU6
 ************************************************************************/
 #ifndef _ARMQUERY_H_
 	#define _ARMQUERY_H_
@@ -95,6 +95,13 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void delay_Configure(void);
+uint32_t get_systick_us(void);
+uint32_t get_systick_10us(void);
+uint32_t get_systick_ms(void);
+void delayMiliseconds(unsigned int ms);
+void delayMicroseconds(unsigned int us);
+void delayAsmMicroseconds(unsigned int us);
 
 /*** Clock ***/
 uint32_t getpllsourceclk(void);
