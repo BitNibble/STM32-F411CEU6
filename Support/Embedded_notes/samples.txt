@@ -310,3 +310,197 @@ void Systick_IRQHandler(void);
 void FPU_IRQHandler(void);
 void SysTick_Handler(void);
 /*************************************************/
+void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
+{
+    uint8_t sampling = 16; // Default to 16
+    if (samplingmode == 8) {
+        sampling = 8;
+        usart->CR1 |= (1 << 15); // Set OVER8 for 8 times oversampling
+    } else {
+        usart->CR1 &= ~(1 << 15); // Clear OVER8 for 16 times oversampling
+    }
+
+    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
+    double fracpart, intpart;
+    fracpart = modf(value, &intpart);
+
+    usart->BRR = 0; // Reset BRR
+    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
+    usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
+    usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
+}
+
+void STM32FXXXRccHEnable(uint8_t hclock)
+{
+    uint8_t set = 1;
+    uint8_t rdy = 1;
+
+    // Enable CSSON
+    set_reg_block(&RCC->CR, 1, 19, 1); // Clock security system enable
+
+    while(rdy)
+    {
+        switch(hclock)
+        {
+            case 0: // HSION: Internal high-speed clock enable
+                if(set) {
+                    RCC->CR |= (1 << 0); // Enable HSI
+                    set = 0;
+                }
+                else if(RCC->CR & (1 << 1)) // Wait for HSIRDY
+                    rdy = 0;
+                break;
+                
+            case 1: // HSEON: External high-speed clock enable
+                if(set) {
+                    RCC->CR |= (1 << 16); // Enable HSE
+                    set = 0;
+                }
+                else if(RCC->CR & (1 << 17)) // Wait for HSERDY
+                    rdy = 0;
+                break;
+
+            case 2: // HSEBYP: HSE clock bypass
+                if(set) {
+                    RCC->CR |= (1 << 18); // Enable HSE bypass
+                    set = 0;
+                }
+                hclock = 1; // Switch to enabling HSE
+                break;
+
+            default: // Invalid value, default to HSI
+                hclock = 0;
+                break;
+        }
+    }
+}
+
+void set_prescaler(uint32_t* reg, uint8_t ppre, uint32_t pos) {
+    uint8_t value;
+
+    switch (ppre) {
+        case 2:
+            value = 4;
+            break;
+        case 4:
+            value = 5;
+            break;
+        case 8:
+            value = 6;
+            break;
+        case 16:
+            value = 7;
+            break;
+        default:
+            value = 0;
+            break;
+    }
+
+    set_reg_block(reg, 3, pos, value);
+}
+
+void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre) {
+    set_reg_block(&RCC->CFGR, 5, 16, rtcpre);
+
+    set_prescaler(&RCC->CFGR, ppre2, 13); // Set APB2 prescaler
+    set_prescaler(&RCC->CFGR, ppre1, 10); // Set APB1 prescaler
+
+    uint8_t ahb_value;
+
+    switch (ahbpre) { // AHB prescaler
+        case 2:
+            ahb_value = 8;
+            break;
+        case 4:
+            ahb_value = 9;
+            break;
+        case 8:
+            ahb_value = 10;
+            break;
+        case 16:
+            ahb_value = 11;
+            break;
+        case 64:
+            ahb_value = 12;
+            break;
+        case 128:
+            ahb_value = 13;
+            break;
+        case 256:
+            ahb_value = 14;
+            break;
+        case 512:
+            ahb_value = 15;
+            break;
+        default:
+            ahb_value = 0;
+            break;
+    }
+
+    set_reg_block(&RCC->CFGR, 4, 4, ahb_value); // Set AHB prescaler
+}
+
+void set_prescaler(uint32_t* reg, uint8_t ppre, uint32_t pos) {
+    uint8_t value;
+
+    switch (ppre) {
+        case 2:
+            value = 4;
+            break;
+        case 4:
+            value = 5;
+            break;
+        case 8:
+            value = 6;
+            break;
+        case 16:
+            value = 7;
+            break;
+        default:
+            value = 0;
+            break;
+    }
+
+    set_reg_block(reg, 3, pos, value);
+}
+
+void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre) {
+    set_reg_block(&RCC->CFGR, 5, 16, rtcpre);
+
+    set_prescaler(&RCC->CFGR, ppre2, 13); // Set APB2 prescaler
+    set_prescaler(&RCC->CFGR, ppre1, 10); // Set APB1 prescaler
+
+    uint8_t ahb_value;
+
+    switch (ahbpre) { // AHB prescaler
+        case 2:
+            ahb_value = 8;
+            break;
+        case 4:
+            ahb_value = 9;
+            break;
+        case 8:
+            ahb_value = 10;
+            break;
+        case 16:
+            ahb_value = 11;
+            break;
+        case 64:
+            ahb_value = 12;
+            break;
+        case 128:
+            ahb_value = 13;
+            break;
+        case 256:
+            ahb_value = 14;
+            break;
+        case 512:
+            ahb_value = 15;
+            break;
+        default:
+            ahb_value = 0;
+            break;
+    }
+
+    set_reg_block(&RCC->CFGR, 4, 4, ahb_value); // Set AHB prescaler
+}

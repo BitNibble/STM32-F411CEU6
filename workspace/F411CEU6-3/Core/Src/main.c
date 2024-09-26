@@ -43,7 +43,7 @@ int main(void)
 {
 	STM32FXXX_enable();
 
-	rtc()->inic(0); // 0 - LSI, 1 - LSE, 2 - LSECLK
+	rtc()->inic(1); // 0 - LSI, 1 - LSE, 2 - LSECLK
 
 	ARMLCD0_enable(GPIOB);
 	FUNC_enable();

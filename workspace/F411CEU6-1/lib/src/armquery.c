@@ -13,12 +13,14 @@ Comment:
 #include <stdarg.h>
 
 /****************************************/
+
 #define BYTE_BITS 8
 #define WORD_BITS 16
 #define N_BITS 32
 #define N_LIMBITS 33
 #define H_BIT 31
 #define L_BIT 0
+
 /****************************************/
 
 const char* domingo = "Domingo";
@@ -229,7 +231,7 @@ uint32_t getpllclk(void)
 }
 uint32_t getsysclk(void)
 {
-	long value = get_reg_block(RCC->CFGR, 2, 2);
+	uint32_t value = get_reg_block(RCC->CFGR, 2, 2);
 	switch(value) // SWS[2]: System clock switch status
 	{
 		case 0:
@@ -430,18 +432,15 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 }
 void delay_Configure(void)
 {
-	uint32_t DelayCounter_top;
+    uint32_t DelayCounter_top;
 
-	#ifdef STM32F411xE
-		DelayCounter_top = getsysclk()/(gethpre() * 1);
-	#endif
-	#ifdef STM32F446xx
-		DelayCounter_top = getsysclk()/(gethpre() * 1);
-	#endif
+    // Calculate DelayCounter_top once for both STM32 families
+    DelayCounter_top = getsysclk() / gethpre(); // Assuming gethpre() returns a valid prescaler
 
-	systick_us 		= DelayCounter_top / 1000000;
-	systick_10us 	= DelayCounter_top / 100000;
-	systick_ms 		= DelayCounter_top / 1000;
+    // Calculate the SysTick values for different delay intervals
+    systick_us     = DelayCounter_top / 1000000; // 1 microsecond
+    systick_10us   = DelayCounter_top / 100000;  // 10 microseconds
+    systick_ms     = DelayCounter_top / 1000;    // 1 millisecond
 }
 inline uint32_t get_systick_us(void)
 {
@@ -509,88 +508,73 @@ float CalculateTemperature(uint16_t adc_value) {
     return temperature;
 }
 
-const char* WeekDay_String(uint8_t weekday_n){
-	const char* weekday;
-	switch(weekday_n){
-		case 2:
-			weekday = segunda;
-		break;
-		case 3:
-			weekday = terca;
-		break;
-		case 4:
-			weekday = quarta;
-		break;
-		case 5:
-			weekday = quinta;
-		break;
-		case 6:
-			weekday = sexta;
-		break;
-		case 7:
-			weekday = sabado;
-		break;
-		case 1:
-			weekday = domingo;
-		break;
-		default:
-			weekday = domingo;
-		break;
-	}
-	return weekday;
+const char* WeekDay_String(uint8_t weekday_n) {
+    // Array of weekday strings, indexed from 0 to 7 for convenience
+    const char* weekdays[] = {
+        "Domingo", // 0 (unused)
+        "Domingo", // 1
+        "Segunda", // 2
+        "Terca",   // 3
+        "Quarta",  // 4
+        "Quinta",  // 5
+        "Sexta",   // 6
+        "Sabado"   // 7
+    };
+
+    // Validate the input and return the corresponding weekday
+    if (weekday_n >= 1 && weekday_n <= 7) {
+        return weekdays[weekday_n];
+    } else {
+        return weekdays[1]; // Default to "domingo"
+    }
 }
 
-void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength )
-{
-	if(wordlength == 9)
-		usart->CR1 |= (1 << 12); // M: Word length, 1 - 9bit.
-	else if(wordlength == 8)
-		usart->CR1 &= (uint32_t) ~(1 << 12); // M: Word length, 0 - 8bit.
-	else
-		usart->CR1 &= (uint32_t) ~(1 << 12); // M: Word length, 0 - 8bit, default.
+void Usart_WordLength(USART_TypeDef* usart, uint8_t wordlength) {
+    // Clear the M bit to reset word length
+    usart->CR1 &= ~(1 << 12);
+
+    if (wordlength == 9) {
+        usart->CR1 |= (1 << 12); // Set M bit for 9-bit word length
+    }
+    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
 }
 
-void Usart_StopBits( USART_TypeDef* usart, double stopbits )
-{
-	usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12)); // STOP: STOP bits 00 - 1stopbit, default.
-	if(fabs(stopbits - 0.5) < 0.00001) // STOP: STOP bits, 01: 0.5 Stop bit
-		usart->CR2 |= (1 << 12);
-	else if(fabs(stopbits - 1) < 0.00001) // STOP: STOP bits, 00: 1 Stop bit.
-		usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12));
-	else if(fabs(stopbits - 1.5) < 0.00001) // STOP: STOP bits, 11: 1.5 Stop bit
-		usart->CR2 |= ((1 << 13) | (1 << 12));
-	else if(fabs(stopbits - 2) < 0.00001) // STOP: STOP bits, 10: 2 Stop bits
-		usart->CR2 |= (1 << 13);
-	else // STOP: STOP bits, 10: 2 Stop bits
-		usart->CR2 |= (1 << 13);
+void Usart_StopBits(USART_TypeDef* usart, double stopbits) {
+    // Reset stop bits configuration
+    usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12));
+
+    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
+        usart->CR2 |= (1 << 12); // Set bit 12
+    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
+        // No additional bits set (already cleared)
+    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
+        usart->CR2 |= (1 << 13) | (1 << 12); // Set both bits
+    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
+        usart->CR2 |= (1 << 13); // Set bit 13
+    } else {
+        // Invalid value, consider setting a default or error handling
+        //usart->CR2 |= (1 << 13); // Default to 2 Stop bits
+    }
 }
 
-void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
+void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
 {
-	uint8_t sampling;
-	double value, fracpart, intpart;
+    uint8_t sampling = 16; // Default to 16
+    if (samplingmode == 8) {
+        sampling = 8;
+        usart->CR1 |= (1 << 15); // Set OVER8 for 8 times oversampling
+    } else {
+        usart->CR1 &= ~(1 << 15); // Clear OVER8 for 16 times oversampling
+    }
 
-	if(samplingmode == 8){
-		sampling = 8;
-		usart->CR1 |= (1 << 15); // OVER8: Oversampling mode, 1 - 8.
-	}else if(samplingmode == 16){
-		sampling = 16;
-		usart->CR1 &= (uint32_t) ~(1 << 15); // OVER8: Oversampling mode, 0 - 16.
-	}else{
-		sampling = 16;
-		usart->CR1 &= (uint32_t) ~(1 << 15); // OVER8: Oversampling mode, 0 - 16, default.
-	}
+    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
+    double fracpart, intpart;
+    fracpart = modf(value, &intpart);
 
-	value = (double) getsysclk() / ( gethpre() * sampling * baudrate );
-	fracpart = modf(value, &intpart);
-	usart->BRR = 0; // clean slate, reset.
-	if(sampling == 16){
-		usart->BRR = (uint32_t) (round(fracpart * 16)); // DIV_Fraction
-		usart->BRR |= ((uint32_t) intpart << 4); // DIV_Mantissa[11:0]
-	}else if(sampling == 8){
-		usart->BRR = (uint32_t) (round(fracpart * 8)); // DIV_Fraction
-		usart->BRR |= ((uint32_t) intpart << 4); // DIV_Mantissa[11:0]
-	}
+    usart->BRR = 0; // Reset BRR
+    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
+    usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
+    usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
 }
 
 /******

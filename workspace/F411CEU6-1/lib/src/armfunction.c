@@ -470,33 +470,55 @@ int function_StrToInt (const char string[])
 // triggerA
 uint32_t function_triggerA(uint32_t ll_io, uint8_t pin, uint32_t counter)
 {
-	mem[3] = 0;
-	if(mem[0] == 0){
-		if( ll_io & (1 << pin) ){ mem[1] = counter; mem[2] = 0; mem[0] = 1; }
-	}
-	if(mem[0] == 1){
-		if( ll_io & (1 << pin) ){ if( counter != mem[1] ){ mem[2]++; mem[1] = counter; } }
-		else{ mem[3] = mem[2]; mem[0] = 0; }
-	}
-	return mem[3];
+    mem[3] = 0;
+    if(mem[0] == 0){
+        if( ll_io & (1 << pin) ){
+            mem[1] = counter;
+            mem[2] = 0;
+            mem[0] = 1;
+        }
+    }
+    else if(mem[0] == 1){
+        if( ll_io & (1 << pin) ){
+            if( counter != mem[1] ){
+                mem[2]++;
+                mem[1] = counter;
+            }
+        }
+        else{
+            mem[3] = mem[2];
+            mem[0] = 0;
+        }
+    }
+    return mem[3];
 }
 // triggerB
 uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter)
 {
-	nen[3] = 0;
+    nen[3] = 0;
 
-	switch( nen[0] ){ // Start value
-		case 0:
-			if( hl_io & (1 << pin) ){ nen[1] = counter; nen[2] = 0; nen[0] = 1; }
-		break;
-		case 1:
-			if( counter != nen[1] ){ nen[2]++; nen[1] = counter; }
-			if( lh_io & (1 << pin) ){ nen[3] = nen[2]; nen[0] = 0; }
-		break;
-		default:
-		break;
-	}
-	return nen[3];
+    switch(nen[0]){ // Start value
+        case 0:
+            if( hl_io & (1 << pin) ){
+                nen[1] = counter;
+                nen[2] = 0;
+                nen[0] = 1;
+            }
+        break;
+
+        case 1:
+            if( counter != nen[1] ){
+                nen[2]++;
+                nen[1] = counter;
+            }
+            if( lh_io & (1 << pin) ){
+                nen[3] = nen[2];
+                nen[0] = 0;
+            }
+        break;
+    }
+
+    return nen[3];
 }
 
 uint32_t read_value(void){ return mem[2];}

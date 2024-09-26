@@ -61,46 +61,75 @@ void rcc_start(void)
 // RCC
 void STM32FXXXRccHEnable(uint8_t hclock)
 {
-	uint8_t set;
-	uint8_t rdy;
-	set_reg_block(&RCC->CR, 1, 19, 1); // CSSON
-	for( set = 1, rdy = 1; rdy ; ){
-		if(hclock == 0){ // HSION: Internal high-speed clock enable
-			if( set ){ RCC->CR |= ( 1 << 0); set = 0; }else if( RCC->CR & ( 1 << 1) ) rdy = 0;
-		}
-		else if(hclock == 1){ // HSEON: HSE clock enable
-			if( set ){ RCC->CR |= ( 1 << 16); set = 0; }else if( RCC->CR & ( 1 << 17) ) rdy = 0;
-		}
-		else if(hclock == 2){ // HSEBYP: HSE clock bypass
-			if( set ){ RCC->CR |= ( 1 << 18 ); }
-			hclock = 1;
-		}
-		else hclock = 0; // default
-	}
+    uint8_t set = 1;
+    uint8_t rdy = 1;
+
+    // Enable CSSON
+    set_reg_block(&RCC->CR, 1, 19, 1); // Clock security system enable
+
+    while(rdy)
+    {
+        switch(hclock)
+        {
+            case 0: // HSION: Internal high-speed clock enable
+                if(set) {
+                    RCC->CR |= (1 << 0); // Enable HSI
+                    set = 0;
+                }
+                else if(RCC->CR & (1 << 1)) // Wait for HSIRDY
+                    rdy = 0;
+                break;
+
+            case 1: // HSEON: External high-speed clock enable
+                if(set) {
+                    RCC->CR |= (1 << 16); // Enable HSE
+                    set = 0;
+                }
+                else if(RCC->CR & (1 << 17)) // Wait for HSERDY
+                    rdy = 0;
+                break;
+
+            case 2: // HSEBYP: HSE clock bypass
+                if(set) {
+                    RCC->CR |= (1 << 18); // Enable HSE bypass
+                    set = 0;
+                }
+                hclock = 1; // Switch to enabling HSE
+                break;
+
+            default: // Invalid value, default to HSI
+                hclock = 0;
+                break;
+        }
+    }
 }
 void STM32FXXXRccHSelect(uint8_t hclock)
-{ // SW[1:0]: System clock switch 00 - HSI, 01 - HSE pg133
-	switch(hclock){
-		case 0:
-			set_reg_block(&RCC->CFGR, 2, 0, 0);
-		break;
-		case 1: // HSE oscillator selected as system clock
-			set_reg_block(&RCC->CFGR, 2, 0, 1);
-		break;
-		case 2: // PLL_P selected as system clock
-			set_reg_block(&RCC->CFGR, 2, 0, 2);
-		break;
-		case 3: // PLL_R selected as system clock
-			#ifdef STM32F446xx
-				set_reg_block(&RCC->CFGR, 2, 0, 3);
-			#else
-				set_reg_block(&RCC->CFGR, 2, 0, 0);
-			#endif
-		break;
-		default: // 00: HSI oscillator selected as system clock
-			set_reg_block(&RCC->CFGR, 2, 0, 0);
-		break;
-	}
+{
+    switch(hclock){
+        case 0: // HSI selected as system clock
+            set_reg_block(&RCC->CFGR, 2, 0, 0);
+            break;
+
+        case 1: // HSE oscillator selected as system clock
+            set_reg_block(&RCC->CFGR, 2, 0, 1);
+            break;
+
+        case 2: // PLL_P selected as system clock
+            set_reg_block(&RCC->CFGR, 2, 0, 2);
+            break;
+
+        case 3: // PLL_R selected as system clock (only on STM32F446xx)
+            #ifdef STM32F446xx
+                set_reg_block(&RCC->CFGR, 2, 0, 3);
+            #else
+                set_reg_block(&RCC->CFGR, 2, 0, 0); // Default to HSI if not STM32F446
+            #endif
+            break;
+
+        default: // Default to HSI (00) if an invalid value is passed
+            set_reg_block(&RCC->CFGR, 2, 0, 0);
+            break;
+    }
 }
 uint8_t STM32FXXXRccPLLSelect(uint8_t hclock)
 { // This bit can be written only when PLL and PLLI2S are disabled
@@ -120,46 +149,80 @@ uint8_t STM32FXXXRccPLLSelect(uint8_t hclock)
 }
 void STM32FXXXRccLEnable(uint8_t lclock)
 {
-	uint8_t set;
-	uint8_t rdy;
-	for( set = 1, rdy = 1; rdy ; ){
-		if(lclock == 0){ // LSION: Internal low-speed oscillator enable
-			if( set ){ RCC->CSR |= ( 1 << 0); set = 0; }else if( RCC->CSR & ( 1 << 1) ) rdy = 0;
-		}
-		else if(lclock == 1){ // LSEON: External low-speed oscillator enable
-			if( set ){ STM32FXXXRccWriteEnable(); RCC->BDCR |= ( 1 << 0); STM32FXXXRccWriteDisable(); set = 0; }else if( RCC->BDCR & ( 1 << 1) ) rdy = 0;
-		}
-		else if(lclock == 2){ // LSEBYP: External low-speed oscillator bypass
-			if( set ){ STM32FXXXRccWriteEnable(); RCC->BDCR |= ( 1 << 2 ); STM32FXXXRccWriteDisable(); }
-			lclock = 1;
-		}
-		else lclock = 0; // default
-	}
+    uint8_t set = 1;
+    uint8_t rdy = 1;
+
+    while(rdy)
+    {
+        switch(lclock)
+        {
+            case 0: // LSION: Internal low-speed oscillator enable
+                if(set)
+                {
+                    RCC->CSR |= (1 << 0); // Enable LSI
+                    set = 0;
+                }
+                else if(RCC->CSR & (1 << 1)) // Wait for LSIRDY
+                {
+                    rdy = 0; // LSI ready
+                }
+                break;
+
+            case 1: // LSEON: External low-speed oscillator enable
+                if(set)
+                {
+                    STM32FXXXRccWriteEnable();
+                    RCC->BDCR |= (1 << 0); // Enable LSE
+                    STM32FXXXRccWriteDisable();
+                    set = 0;
+                }
+                else if(RCC->BDCR & (1 << 1)) // Wait for LSERDY
+                {
+                    rdy = 0; // LSE ready
+                }
+                break;
+
+            case 2: // LSEBYP: External low-speed oscillator bypass
+                if(set)
+                {
+                    STM32FXXXRccWriteEnable();
+                    RCC->BDCR |= (1 << 2); // Enable LSE bypass
+                    STM32FXXXRccWriteDisable();
+                    set = 0;
+                }
+                lclock = 1; // Switch to enabling LSE
+                break;
+
+            default: // Default to enabling LSI (0)
+                lclock = 0;
+                break;
+        }
+    }
 }
 void STM32FXXXRccLSelect(uint8_t lclock)
 {
-	switch(lclock){
+	STM32FXXXRccWriteEnable(); // Enable write access to the backup domain
+
+	switch(lclock)
+	{
 		case 0: // LSI oscillator clock used as the RTC clock
-			STM32FXXXRccWriteEnable();
 			set_reg_block(&RCC->BDCR, 2, 8, 2);
-			STM32FXXXRccWriteDisable();
-		break;
+			break;
+
 		case 1: // LSE oscillator clock used as the RTC clock
-			STM32FXXXRccWriteEnable();
 			set_reg_block(&RCC->BDCR, 2, 8, 1);
-			STM32FXXXRccWriteDisable();
-		break;
+			break;
+
 		case 2: // HSE oscillator clock divided by a programmable prescaler
-			STM32FXXXRccWriteEnable();
 			set_reg_block(&RCC->BDCR, 2, 8, 3);
-			STM32FXXXRccWriteDisable();
-		break;
-		default: // LSE oscillator clock used as the RTC clock
-			STM32FXXXRccWriteEnable();
+			break;
+
+		default: // Default to LSE oscillator clock
 			set_reg_block(&RCC->BDCR, 2, 8, 1);
-			STM32FXXXRccWriteDisable();
-		break;
+			break;
 	}
+
+	STM32FXXXRccWriteDisable(); // Disable write access to the backup domain
 }
 void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre)
 {
