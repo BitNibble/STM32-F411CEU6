@@ -289,14 +289,12 @@ void ARMLCD0_reboot(void)
 }
 
 void ARMLCD0_delayMiliseconds(unsigned int ms) {
-	unsigned int SystemCoreClock = getsysclk()/(gethpre() * 1);
-    volatile unsigned int count = ms * (SystemCoreClock / 1000);
+    volatile unsigned int count = ms * get_systick_ms( );
     while (count--);
 }
 
 void ARMLCD0_delayMicroseconds(unsigned int us) {
-	unsigned int SystemCoreClock = getsysclk()/(gethpre() * 1);
-    volatile unsigned int count = us * (SystemCoreClock / 1000000);
+    volatile unsigned int count = us * get_systick_us( );
     while (count--);
 }
 
