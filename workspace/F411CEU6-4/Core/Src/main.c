@@ -26,7 +26,7 @@ GPIO PB9 - D7
 #include "armfunction.h"
 #include "explode.h"
 
-#define JMP_menu 100
+#define JMP_menu 150
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
 
@@ -37,6 +37,7 @@ char ADC_msg[32];
 int main(void)
 {
     STM32FXXX_enable();
+    HAL_Init();
     rtc()->inic(1);
     PA = EXPLODE_enable();
 
@@ -291,6 +292,10 @@ int main(void)
         lcd0()->gotoxy(1, 0);
         lcd0()->string_size(func()->ui32toa(get_bit_block(&test[2],34,20)), 10);
         //lcd0()->string_size(func()->ui32toa(test[2]), 10);
+        lcd0()->gotoxy(1, 0);
+        //lcd0()->string_size(func()->ui32toa(HAL_GetTick()), 8);
+        //lcd0()->string_size(func()->ui32toa(HAL_GetTickFreq()), 4);
+        lcd0()->string_size(func()->ui32toa(getsysclk()/(gethpre() * 1)), 20);
         ******/
 
         lcd0()->gotoxy(2, 0);
