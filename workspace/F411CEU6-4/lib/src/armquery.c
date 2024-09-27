@@ -23,18 +23,9 @@ Comment:
 
 /****************************************/
 
-const char* domingo = "Domingo";
-const char* segunda = "Segunda";
-const char* terca = "Terca";
-const char* quarta = "Quarta";
-const char* quinta = "Quinta";
-const char* sexta = "Sexta";
-const char* sabado = "Sabado";
-
-/****************************************/
-
 static uint32_t systick_us;
 static uint32_t systick_10us;
+static uint32_t systick_100us;
 static uint32_t systick_ms;
 
 /****************************************/
@@ -438,9 +429,10 @@ void delay_Configure(void)
     DelayCounter_top = getsysclk() / gethpre(); // Assuming gethpre() returns a valid prescaler
 
     // Calculate the SysTick values for different delay intervals
-    systick_us     = DelayCounter_top / 1000000; // 1 microsecond
-    systick_10us   = DelayCounter_top / 100000;  // 10 microseconds
-    systick_ms     = DelayCounter_top / 1000;    // 1 millisecond
+    systick_us 		= (DelayCounter_top / 1000000)? DelayCounter_top / 1000000 : 1; // 1 microsecond
+    systick_10us 	= (DelayCounter_top / 100000)? DelayCounter_top / 100000 : 1;  // 10 microseconds
+    systick_100us 	= (DelayCounter_top / 10000)? DelayCounter_top / 10000 : 1;   // 100 microseconds
+    systick_ms 		= (DelayCounter_top / 1000)? DelayCounter_top / 1000: 1;    // 1 millisecond
 }
 inline uint32_t get_systick_us(void)
 {
@@ -551,9 +543,6 @@ void Usart_StopBits(USART_TypeDef* usart, double stopbits) {
         usart->CR2 |= (1 << 13) | (1 << 12); // Set both bits
     } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
         usart->CR2 |= (1 << 13); // Set bit 13
-    } else {
-        // Invalid value, consider setting a default or error handling
-        //usart->CR2 |= (1 << 13); // Default to 2 Stop bits
     }
 }
 

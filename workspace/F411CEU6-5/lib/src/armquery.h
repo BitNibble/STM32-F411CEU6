@@ -23,6 +23,15 @@ Comment:
 #ifndef HSE_OSC
 	#define HSE_OSC 25000000UL
 #endif
+#ifndef LSI
+	#define LSI 32000UL
+#endif
+#ifndef LSE
+	#define LSE 32768UL
+#endif
+#ifndef HSE_RTC
+	#define HSE_RTC 4000000UL
+#endif
 /*******   0 -> HSI    1->HSE   *********/
 #define H_Clock_Source 1
 /****************************************/
@@ -80,28 +89,8 @@ uint32_t (*pclk1)(void);
 uint32_t (*pclk2)(void);
 }STM32FXXX_Query;
 
-/*** Tools ***/
-void set_reg(volatile uint32_t* reg, uint32_t hbits);
-void clear_reg(volatile uint32_t* reg, uint32_t hbits);
-uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
-void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void setpin( GPIO_TypeDef* reg, uint8_t pin );
-void resetpin( GPIO_TypeDef* reg, uint8_t pin );
-uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
-void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
-void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-void delay_Configure(void);
-uint32_t get_systick_us(void);
-uint32_t get_systick_10us(void);
-uint32_t get_systick_ms(void);
-void delayMiliseconds(unsigned int ms);
-void delayMicroseconds(unsigned int us);
-void delayAsmMicroseconds(unsigned int us);
+STM32FXXX_Query query_enable(void);
+STM32FXXX_Query* query(void);
 
 /*** Clock ***/
 uint32_t getpllsourceclk(void);
@@ -128,8 +117,28 @@ uint8_t getpllp(void);
 uint8_t getpllq(void);
 uint8_t getpllr(void);
 
-STM32FXXX_Query query_enable(void);
-STM32FXXX_Query* query(void);
+/*** Tools ***/
+void set_reg(volatile uint32_t* reg, uint32_t hbits);
+void clear_reg(volatile uint32_t* reg, uint32_t hbits);
+uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
+void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void setpin( GPIO_TypeDef* reg, uint8_t pin );
+void resetpin( GPIO_TypeDef* reg, uint8_t pin );
+uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
+void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void delay_Configure(void);
+uint32_t get_systick_us(void);
+uint32_t get_systick_10us(void);
+uint32_t get_systick_ms(void);
+void delayMiliseconds(unsigned int ms);
+void delayMicroseconds(unsigned int us);
+void delayAsmMicroseconds(unsigned int us);
 
 /****** MISCELLANEOUS ******/
 void ADC_TemperatureSetup(void);

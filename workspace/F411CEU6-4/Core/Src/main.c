@@ -227,7 +227,7 @@ int main(void)
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
                     incr_0 = rtc()->get_Day();
-                    incr_0 = (incr_0 > 30) ? 0 : incr_0 + 1;
+                    incr_0 = (incr_0 > 30) ? 1 : incr_0 + 1;
                     rtc()->Day(incr_0);
                 }
                 skip_0++;
@@ -272,6 +272,7 @@ int main(void)
             if (PA.par.LL & 1) {
                 //_delay_ms(JMP_menu);
                 delayAsmMicroseconds(JMP_menu * 1000);
+                //delayMicroseconds(JMP_menu * 1000);
                 count_0++;
                 if (count_0 > 5) {
                     Menu = 0; count_0 = 0; skip_0 = 0;
