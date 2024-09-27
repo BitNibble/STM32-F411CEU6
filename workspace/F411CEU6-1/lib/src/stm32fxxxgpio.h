@@ -20,7 +20,7 @@ typedef struct
 {
 
 	/*** BitField Mapping ***/
-	STM32FXXXGPIOX_TypeDef* instance;
+	GPIO_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)( uint8_t bool );
 

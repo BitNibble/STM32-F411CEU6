@@ -705,7 +705,7 @@ void rtc_lenable(unsigned int lclock) {
 }
 static void set_rtc_clock_source(uint8_t clock_source) {
     STM32FXXXRtcWriteEnable();
-    rcc_instance()->bdcr.par.rtcsel = clock_source;
+    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, RCC_BDCR_RTCSEL_Pos, clock_source);
     STM32FXXXRtcWriteDisable();
 }
 void rtc_lselect(uint8_t lclock) {
@@ -717,7 +717,7 @@ void rtc_lselect(uint8_t lclock) {
 
     // Clear previous RTC selection
     STM32FXXXRtcWriteEnable();
-    rcc_instance()->bdcr.par.rtcsel = 0; // Clear RTCSEL
+    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, RCC_BDCR_RTCSEL_Pos, 0);
     STM32FXXXRtcWriteDisable();
 
     // Set the selected clock source

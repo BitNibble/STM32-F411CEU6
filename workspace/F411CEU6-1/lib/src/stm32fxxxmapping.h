@@ -52,8 +52,10 @@ typedef struct
 		STM32FXXXNVICobj* nvic;
 	#endif
 	// ADC
-	STM32FXXXADC_TypeDef* adc1_instance;
-	STM32FXXXADC_COMMON_TypeDef* adc1_common_instance;
+	//STM32FXXXADC_TypeDef* adc1_instance;
+	//STM32FXXXADC_COMMON_TypeDef* adc1_common_instance;
+	ADC_TypeDef* adc1_instance;
+	ADC_Common_TypeDef* adc1_common_instance;
 	#if defined(_STM32FXXXADC1_H_)
 		STM32FXXX_ADC1* adc1;
 	#endif
@@ -104,7 +106,7 @@ typedef struct
 		STM32FXXX_PWR* pwr;
 	#endif
 	// RCC
-	STM32FXXXRCC_TypeDef* rcc_instance;
+	RCC_TypeDef* rcc_instance;
 	#if defined(_STM32FXXXRCC_H_)
 		STM32FXXX_RCC* rcc;
 	#endif

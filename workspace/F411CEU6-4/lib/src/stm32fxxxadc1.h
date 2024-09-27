@@ -18,10 +18,9 @@ Comment:
 // ADC -> ADC1
 typedef struct
 {
-
 	/*** BitField Mapping ***/
-	STM32FXXXADC_TypeDef* instance;
-	STM32FXXXADC_COMMON_TypeDef* common_instance;
+	ADC_TypeDef* instance;
+	ADC_Common_TypeDef* common_instance;
 	/*** Other ***/
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);

@@ -17,7 +17,7 @@ Comment:
 typedef struct
 {
 	/*** Bit Field ***/
-	STM32FXXXTIMXX_TypeDef* instance;
+	TIM_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);
@@ -26,7 +26,7 @@ typedef struct
 typedef struct
 {
 	/*** Bit Field ***/
-	STM32FXXXTIMXX_TypeDef* instance;
+	TIM_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);

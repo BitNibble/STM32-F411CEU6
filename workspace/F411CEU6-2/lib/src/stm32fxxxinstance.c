@@ -13,20 +13,20 @@ Comment:
 /*** HARDWARE HANDLER ***/
 /*** ADC ***/
 #if defined(STM32F411xE)
-//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
-STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC1_COMMON_BASE;}
+ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC1_COMMON_BASE;}
+//STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC1_COMMON_BASE;}
 #endif
 #ifdef STM32F446xx
-//ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
-STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC123_COMMON_BASE;}
+ADC_Common_TypeDef* adc_common_instance(void){return (ADC_Common_TypeDef*) ADC123_COMMON_BASE;}
+//STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void){return (STM32FXXXADC_COMMON_TypeDef*) ADC123_COMMON_BASE;}
 #endif
-//ADC_TypeDef* adc1_instance(void){return (ADC_TypeDef*) ADC1_BASE;}
-STM32FXXXADC_TypeDef* adc1_instance(void){return (STM32FXXXADC_TypeDef*) ADC1_BASE;}
+ADC_TypeDef* adc1_instance(void){return (ADC_TypeDef*) ADC1_BASE;}
+//STM32FXXXADC_TypeDef* adc1_instance(void){return (STM32FXXXADC_TypeDef*) ADC1_BASE;}
 #ifdef STM32F446xx
-//ADC_TypeDef* adc2_instance(void){return (ADC_TypeDef*) ADC2_BASE;}
-STM32FXXXADC_TypeDef* adc2_instance(void){return (STM32FXXXADC_TypeDef*) ADC2_BASE;}
-//ADC_TypeDef* adc3_instance(void){return (ADC_TypeDef*) ADC3_BASE;}
-STM32FXXXADC_TypeDef* adc3_instance(void){return (STM32FXXXADC_TypeDef*) ADC3_BASE;}
+ADC_TypeDef* adc2_instance(void){return (ADC_TypeDef*) ADC2_BASE;}
+//STM32FXXXADC_TypeDef* adc2_instance(void){return (STM32FXXXADC_TypeDef*) ADC2_BASE;}
+ADC_TypeDef* adc3_instance(void){return (ADC_TypeDef*) ADC3_BASE;}
+//STM32FXXXADC_TypeDef* adc3_instance(void){return (STM32FXXXADC_TypeDef*) ADC3_BASE;}
 #endif
 /*** CAN ***/
 #ifdef STM32F446xx
@@ -80,33 +80,22 @@ FMC_Bank3_TypeDef* fmc_bank3_instance(void){return (FMC_Bank3_TypeDef*) FMC_Bank
 FMC_Bank5_6_TypeDef* fmc_bank5_6_instance(void){return (FMC_Bank5_6_TypeDef*) FMC_Bank5_6_R_BASE;}
 #endif
 /*** GPIO ***/
-//GPIO_TypeDef* gpioa_instance(void){return (GPIO_TypeDef*) GPIOA_BASE;}
-//GPIO_TypeDef* gpiob_instance(void){return (GPIO_TypeDef*) GPIOB_BASE;}
-//GPIO_TypeDef* gpioc_instance(void){return (GPIO_TypeDef*) GPIOC_BASE;}
-//GPIO_TypeDef* gpiod_instance(void){return (GPIO_TypeDef*) GPIOD_BASE;}
-//GPIO_TypeDef* gpioe_instance(void){return (GPIO_TypeDef*) GPIOE_BASE;}
-STM32FXXXGPIOX_TypeDef* gpioa_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOA_BASE;}
-STM32FXXXGPIOX_TypeDef* gpiob_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOB_BASE;}
-STM32FXXXGPIOX_TypeDef* gpioc_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOC_BASE;}
-STM32FXXXGPIOX_TypeDef* gpiod_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOD_BASE;}
-STM32FXXXGPIOX_TypeDef* gpioe_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOE_BASE;}
+GPIO_TypeDef* gpioa_instance(void){return GPIOA;}
+GPIO_TypeDef* gpiob_instance(void){return GPIOB;}
+GPIO_TypeDef* gpioc_instance(void){return GPIOC;}
+GPIO_TypeDef* gpiod_instance(void){return GPIOD;}
+GPIO_TypeDef* gpioe_instance(void){return GPIOE;}
 #ifdef STM32F446xx
-//GPIO_TypeDef* gpiof_instance(void){return (GPIO_TypeDef*) GPIOF_BASE;}
-//GPIO_TypeDef* gpiog_instance(void){return (GPIO_TypeDef*) GPIOG_BASE;}
-STM32FXXXGPIOX_TypeDef* gpiof_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOF_BASE;}
-STM32FXXXGPIOX_TypeDef* gpiog_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOG_BASE;}
+GPIO_TypeDef* gpiof_instance(void){return GPIOF;}
+GPIO_TypeDef* gpiog_instance(void){return GPIOG;}
 #endif
-//GPIO_TypeDef* gpioh_instance(void){return (GPIO_TypeDef*) GPIOH_BASE;}
-STM32FXXXGPIOX_TypeDef* gpioh_instance(void){return (STM32FXXXGPIOX_TypeDef*) GPIOH_BASE;}
+GPIO_TypeDef* gpioh_instance(void){return GPIOH;}
 /*** SYSCFG ***/
 SYSCFG_TypeDef* syscfg_instance(void){return (SYSCFG_TypeDef*) SYSCFG_BASE;}
 /*** I2C ***/
-//I2C_TypeDef* i2c1_instance(void){return (I2C_TypeDef*) I2C1_BASE;}
-//I2C_TypeDef* i2c2_instance(void){return (I2C_TypeDef*) I2C2_BASE;}
-//I2C_TypeDef* i2c3_instance(void){return (I2C_TypeDef*) I2C3_BASE;}
-STM32FXXXI2C_TypeDef* i2c1_instance(void){return (STM32FXXXI2C_TypeDef*) I2C1_BASE;}
-STM32FXXXI2C_TypeDef* i2c2_instance(void){return (STM32FXXXI2C_TypeDef*) I2C2_BASE;}
-STM32FXXXI2C_TypeDef* i2c3_instance(void){return (STM32FXXXI2C_TypeDef*) I2C3_BASE;}
+I2C_TypeDef* i2c1_instance(void){return I2C1;}
+I2C_TypeDef* i2c2_instance(void){return I2C2;}
+I2C_TypeDef* i2c3_instance(void){return I2C3;}
 /*** FMPI2C ***/
 #ifdef STM32F446xx
 FMPI2C_TypeDef* fmpi2c1_instance(void){return (FMPI2C_TypeDef*) FMPI2C1_BASE;}
@@ -116,8 +105,7 @@ IWDG_TypeDef* iwdg_instance(void){return (IWDG_TypeDef*) IWDG_BASE;}
 /*** PWR ***/
 PWR_TypeDef* pwr_instance(void){return (PWR_TypeDef*) PWR_BASE;}
 /*** RCC ***/
-//RCC_TypeDef* rcc_instance(void){return (RCC_TypeDef*) RCC_BASE;}
-STM32FXXXRCC_TypeDef* rcc_instance(void){return (STM32FXXXRCC_TypeDef*) RCC_BASE;}
+RCC_TypeDef* rcc_instance(void){return (RCC_TypeDef*) RCC_BASE;}
 /*** RTC ***/
 RTC_TypeDef* rtc_instance(void){return (RTC_TypeDef*) RTC_BASE;}
 /*** SAI ***/
@@ -145,55 +133,35 @@ QUADSPI_TypeDef* quadspi_instance(void){return (QUADSPI_TypeDef*) QSPI_R_BASE;}
 SPDIFRX_TypeDef* spdifrx_instance(void){return (SPDIFRX_TypeDef*) SPDIFRX_BASE;}
 #endif
 /*** TIM ***/
-//TIM_TypeDef* tim1_instance(void){return (TIM_TypeDef*) TIM1_BASE;}
-//TIM_TypeDef* tim2_instance(void){return (TIM_TypeDef*) TIM2_BASE;}
-//TIM_TypeDef* tim3_instance(void){return (TIM_TypeDef*) TIM3_BASE;}
-//TIM_TypeDef* tim4_instance(void){return (TIM_TypeDef*) TIM4_BASE;}
-//TIM_TypeDef* tim5_instance(void){return (TIM_TypeDef*) TIM5_BASE;}
-STM32FXXXTIMXX_TypeDef* tim1_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM1_BASE;}
-STM32FXXXTIMXX_TypeDef* tim2_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM2_BASE;}
-STM32FXXXTIMXX_TypeDef* tim3_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM3_BASE;}
-STM32FXXXTIMXX_TypeDef* tim4_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM4_BASE;}
-STM32FXXXTIMXX_TypeDef* tim5_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM5_BASE;}
+TIM_TypeDef* tim1_instance(void){return (TIM_TypeDef*) TIM1_BASE;}
+TIM_TypeDef* tim2_instance(void){return (TIM_TypeDef*) TIM2_BASE;}
+TIM_TypeDef* tim3_instance(void){return (TIM_TypeDef*) TIM3_BASE;}
+TIM_TypeDef* tim4_instance(void){return (TIM_TypeDef*) TIM4_BASE;}
+TIM_TypeDef* tim5_instance(void){return (TIM_TypeDef*) TIM5_BASE;}
 #ifdef STM32F446xx
-//TIM_TypeDef* tim6_instance(void){return (TIM_TypeDef*) TIM6_BASE;}
-//TIM_TypeDef* tim7_instance(void){return (TIM_TypeDef*) TIM7_BASE;}
-STM32FXXXTIMXX_TypeDef* tim6_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM6_BASE;}
-STM32FXXXTIMXX_TypeDef* tim7_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM7_BASE;}
+TIM_TypeDef* tim6_instance(void){return (TIM_TypeDef*) TIM6_BASE;}
+TIM_TypeDef* tim7_instance(void){return (TIM_TypeDef*) TIM7_BASE;}
 #endif
 #ifdef STM32F446xx
-//TIM_TypeDef* tim8_instance(void){return (TIM_TypeDef*) TIM8_BASE;}
-STM32FXXXTIMXX_TypeDef* tim8_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM8_BASE;}
+TIM_TypeDef* tim8_instance(void){return (TIM_TypeDef*) TIM8_BASE;}
 #endif
-//TIM_TypeDef* tim9_instance(void){return (TIM_TypeDef*) TIM9_BASE;}
-//TIM_TypeDef* tim10_instance(void){return (TIM_TypeDef*) TIM10_BASE;}
-//TIM_TypeDef* tim11_instance(void){return (TIM_TypeDef*) TIM11_BASE;}
-STM32FXXXTIMXX_TypeDef* tim9_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM9_BASE;}
-STM32FXXXTIMXX_TypeDef* tim10_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM10_BASE;}
-STM32FXXXTIMXX_TypeDef* tim11_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM11_BASE;}
+TIM_TypeDef* tim9_instance(void){return (TIM_TypeDef*) TIM9_BASE;}
+TIM_TypeDef* tim10_instance(void){return (TIM_TypeDef*) TIM10_BASE;}
+TIM_TypeDef* tim11_instance(void){return (TIM_TypeDef*) TIM11_BASE;}
 #ifdef STM32F446xx
-//TIM_TypeDef* tim12_instance(void){return (TIM_TypeDef*) TIM12_BASE;}
-//TIM_TypeDef* tim13_instance(void){return (TIM_TypeDef*) TIM13_BASE;}
-//TIM_TypeDef* tim14_instance(void){return (TIM_TypeDef*) TIM14_BASE;}
-STM32FXXXTIMXX_TypeDef* tim12_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM12_BASE;}
-STM32FXXXTIMXX_TypeDef* tim13_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM13_BASE;}
-STM32FXXXTIMXX_TypeDef* tim14_instance(void){return (STM32FXXXTIMXX_TypeDef*) TIM14_BASE;}
+TIM_TypeDef* tim12_instance(void){return (TIM_TypeDef*) TIM12_BASE;}
+TIM_TypeDef* tim13_instance(void){return (TIM_TypeDef*) TIM13_BASE;}
+TIM_TypeDef* tim14_instance(void){return (TIM_TypeDef*) TIM14_BASE;}
 #endif
 /*** USART ***/
-//USART_TypeDef* usart1_instance(void){return (USART_TypeDef*) USART1_BASE;}
-//USART_TypeDef* usart2_instance(void){return (USART_TypeDef*) USART2_BASE;}
-TM32FXXXUSARTX_TypeDef* usart1_instance(void){return (TM32FXXXUSARTX_TypeDef*) USART1_BASE;}
-TM32FXXXUSARTX_TypeDef* usart2_instance(void){return (TM32FXXXUSARTX_TypeDef*) USART2_BASE;}
+USART_TypeDef* usart1_instance(void){return (USART_TypeDef*) USART1_BASE;}
+USART_TypeDef* usart2_instance(void){return (USART_TypeDef*) USART2_BASE;}
 #ifdef STM32F446xx
-//USART_TypeDef* usart3_instance(void){return (USART_TypeDef*) USART3_BASE;}
-//USART_TypeDef* uart4_instance(void){return (USART_TypeDef*) UART4_BASE;}
-//USART_TypeDef* uart5_instance(void){return (USART_TypeDef*) UART5_BASE;}
-TM32FXXXUSARTX_TypeDef* usart3_instance(void){return (TM32FXXXUSARTX_TypeDef*) USART3_BASE;}
-TM32FXXXUSARTX_TypeDef* uart4_instance(void){return (TM32FXXXUSARTX_TypeDef*) UART4_BASE;}
-TM32FXXXUSARTX_TypeDef* uart5_instance(void){return (TM32FXXXUSARTX_TypeDef*) UART5_BASE;}
+USART_TypeDef* usart3_instance(void){return (USART_TypeDef*) USART3_BASE;}
+USART_TypeDef* uart4_instance(void){return (USART_TypeDef*) UART4_BASE;}
+USART_TypeDef* uart5_instance(void){return (USART_TypeDef*) UART5_BASE;}
 #endif
-//USART_TypeDef* usart6_instance(void){return (USART_TypeDef*) USART6_BASE;}
-TM32FXXXUSARTX_TypeDef* usart6_instance(void){return (TM32FXXXUSARTX_TypeDef*) USART6_BASE;}
+USART_TypeDef* usart6_instance(void){return (USART_TypeDef*) USART6_BASE;}
 /*** WWDG ***/
 WWDG_TypeDef* wwdg_instance(void){return (WWDG_TypeDef*) WWDG_BASE;}
 /*** USB ***/

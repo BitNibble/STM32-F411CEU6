@@ -19,7 +19,7 @@ typedef struct
 {
 
 	/*** Bit Mapping ***/
-	TM32FXXXUSARTX_TypeDef* instance;
+	USART_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);
@@ -30,7 +30,7 @@ typedef struct
 {
 
 	/*** Bit Mapping ***/
-	TM32FXXXUSARTX_TypeDef* instance;
+	USART_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)(uint8_t bool);
 	void (*nvic)(uint8_t bool);

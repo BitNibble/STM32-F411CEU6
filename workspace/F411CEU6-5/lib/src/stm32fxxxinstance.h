@@ -83,24 +83,24 @@ typedef union{
 	uint64_t n;
 }_UN64var;
 /*** Alternative CMSIS replacement ***/
-#include "stm32gpiobf.h"
-#include "stm32rccbf.h"
-#include "stm32timbf.h"
-#include "stm32usartbf.h"
-#include "stm32adcbf.h"
-#include "stm32i2cbf.h"
+//#include "stm32gpiobf.h"
+//#include "stm32rccbf.h"
+//#include "stm32timbf.h"
+//#include "stm32usartbf.h"
+//#include "stm32adcbf.h"
+//#include "stm32i2cbf.h"
 /*************************************/
 /********* HARDWARE HANDLER **********/
 /*************************************/
 /*** ADC ***/
-//ADC_Common_TypeDef* adc_common_instance(void);
-STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
-//ADC_TypeDef* adc1_instance(void);
-STM32FXXXADC_TypeDef* adc1_instance(void);
-//ADC_TypeDef* adc2_instance(void);
-STM32FXXXADC_TypeDef* adc2_instance(void);
-//ADC_TypeDef* adc3_instance(void);
-STM32FXXXADC_TypeDef* adc3_instance(void);
+ADC_Common_TypeDef* adc_common_instance(void);
+//STM32FXXXADC_COMMON_TypeDef* adc_common_instance(void);
+ADC_TypeDef* adc1_instance(void);
+//STM32FXXXADC_TypeDef* adc1_instance(void);
+ADC_TypeDef* adc2_instance(void);
+//STM32FXXXADC_TypeDef* adc2_instance(void);
+ADC_TypeDef* adc3_instance(void);
+//STM32FXXXADC_TypeDef* adc3_instance(void);
 /*** CAN ***/
 #ifdef STM32F446xx
 CAN_TypeDef* can1_instance(void);
@@ -151,31 +151,20 @@ FMC_Bank3_TypeDef* fmc_bank3_instance(void);
 FMC_Bank5_6_TypeDef* fmc_bank5_6_instance(void);
 #endif
 /*** GPIO ***/
-//GPIO_TypeDef* gpioa_instance(void);
-//GPIO_TypeDef* gpiob_instance(void);
-//GPIO_TypeDef* gpioc_instance(void);
-//GPIO_TypeDef* gpiod_instance(void);
-//GPIO_TypeDef* gpioe_instance(void);
-//GPIO_TypeDef* gpiof_instance(void);
-//GPIO_TypeDef* gpiog_instance(void);
-//GPIO_TypeDef* gpioh_instance(void);
-STM32FXXXGPIOX_TypeDef* gpioa_instance(void);
-STM32FXXXGPIOX_TypeDef* gpiob_instance(void);
-STM32FXXXGPIOX_TypeDef* gpioc_instance(void);
-STM32FXXXGPIOX_TypeDef* gpiod_instance(void);
-STM32FXXXGPIOX_TypeDef* gpioe_instance(void);
-STM32FXXXGPIOX_TypeDef* gpiof_instance(void);
-STM32FXXXGPIOX_TypeDef* gpiog_instance(void);
-STM32FXXXGPIOX_TypeDef* gpioh_instance(void);
+GPIO_TypeDef* gpioa_instance(void);
+GPIO_TypeDef* gpiob_instance(void);
+GPIO_TypeDef* gpioc_instance(void);
+GPIO_TypeDef* gpiod_instance(void);
+GPIO_TypeDef* gpioe_instance(void);
+GPIO_TypeDef* gpiof_instance(void);
+GPIO_TypeDef* gpiog_instance(void);
+GPIO_TypeDef* gpioh_instance(void);
 /*** SYSCFG ***/
 SYSCFG_TypeDef* syscfg_instance(void);
 /*** I2C ***/
-//I2C_TypeDef* i2c1_instance(void);
-//I2C_TypeDef* i2c2_instance(void);
-//I2C_TypeDef* i2c3_instance(void);
-STM32FXXXI2C_TypeDef* i2c1_instance(void);
-STM32FXXXI2C_TypeDef* i2c2_instance(void);
-STM32FXXXI2C_TypeDef* i2c3_instance(void);
+I2C_TypeDef* i2c1_instance(void);
+I2C_TypeDef* i2c2_instance(void);
+I2C_TypeDef* i2c3_instance(void);
 /*** FMPI2C ***/
 #ifdef STM32F446xx
 FMPI2C_TypeDef* fmpi2c1_instance(void);
@@ -185,8 +174,7 @@ IWDG_TypeDef* iwdg_instance(void);
 /*** PWR ***/
 PWR_TypeDef* pwr_instance(void);
 /*** RCC ***/
-//RCC_TypeDef* rcc_instance(void);
-STM32FXXXRCC_TypeDef* rcc_instance(void);
+RCC_TypeDef* rcc_instance(void);
 /*** RTC ***/
 RTC_TypeDef* rtc_instance(void);
 /*** SAI ***/
@@ -214,47 +202,27 @@ QUADSPI_TypeDef* quadspi_instance(void);
 SPDIFRX_TypeDef* spdifrx_instance(void);
 #endif
 /*** TIM ***/
-//TIM_TypeDef* tim1_instance(void);
-//TIM_TypeDef* tim2_instance(void);
-//TIM_TypeDef* tim3_instance(void);
-//TIM_TypeDef* tim4_instance(void);
-//TIM_TypeDef* tim5_instance(void);
-//TIM_TypeDef* tim6_instance(void);
-//TIM_TypeDef* tim7_instance(void);
-//TIM_TypeDef* tim8_instance(void);
-//TIM_TypeDef* tim9_instance(void);
-//TIM_TypeDef* tim10_instance(void);
-//TIM_TypeDef* tim11_instance(void);
-//TIM_TypeDef* tim12_instance(void);
-//TIM_TypeDef* tim13_instance(void);
-//TIM_TypeDef* tim14_instance(void);
-STM32FXXXTIMXX_TypeDef* tim1_instance(void);
-STM32FXXXTIMXX_TypeDef* tim2_instance(void);
-STM32FXXXTIMXX_TypeDef* tim3_instance(void);
-STM32FXXXTIMXX_TypeDef* tim4_instance(void);
-STM32FXXXTIMXX_TypeDef* tim5_instance(void);
-STM32FXXXTIMXX_TypeDef* tim6_instance(void);
-STM32FXXXTIMXX_TypeDef* tim7_instance(void);
-STM32FXXXTIMXX_TypeDef* tim8_instance(void);
-STM32FXXXTIMXX_TypeDef* tim9_instance(void);
-STM32FXXXTIMXX_TypeDef* tim10_instance(void);
-STM32FXXXTIMXX_TypeDef* tim11_instance(void);
-STM32FXXXTIMXX_TypeDef* tim12_instance(void);
-STM32FXXXTIMXX_TypeDef* tim13_instance(void);
-STM32FXXXTIMXX_TypeDef* tim14_instance(void);
+TIM_TypeDef* tim1_instance(void);
+TIM_TypeDef* tim2_instance(void);
+TIM_TypeDef* tim3_instance(void);
+TIM_TypeDef* tim4_instance(void);
+TIM_TypeDef* tim5_instance(void);
+TIM_TypeDef* tim6_instance(void);
+TIM_TypeDef* tim7_instance(void);
+TIM_TypeDef* tim8_instance(void);
+TIM_TypeDef* tim9_instance(void);
+TIM_TypeDef* tim10_instance(void);
+TIM_TypeDef* tim11_instance(void);
+TIM_TypeDef* tim12_instance(void);
+TIM_TypeDef* tim13_instance(void);
+TIM_TypeDef* tim14_instance(void);
 /*** USART ***/
-//USART_TypeDef* usart1_instance(void);
-//USART_TypeDef* usart2_instance(void);
-//USART_TypeDef* usart3_instance(void);
-//USART_TypeDef* uart4_instance(void);
-//USART_TypeDef* uart5_instance(void);
-//USART_TypeDef* usart6_instance(void);
-TM32FXXXUSARTX_TypeDef* usart1_instance(void);
-TM32FXXXUSARTX_TypeDef* usart2_instance(void);
-TM32FXXXUSARTX_TypeDef* usart3_instance(void);
-TM32FXXXUSARTX_TypeDef* uart4_instance(void);
-TM32FXXXUSARTX_TypeDef* uart5_instance(void);
-TM32FXXXUSARTX_TypeDef* usart6_instance(void);
+USART_TypeDef* usart1_instance(void);
+USART_TypeDef* usart2_instance(void);
+USART_TypeDef* usart3_instance(void);
+USART_TypeDef* uart4_instance(void);
+USART_TypeDef* uart5_instance(void);
+USART_TypeDef* usart6_instance(void);
 /*** WWDG ***/
 WWDG_TypeDef* wwdg_instance(void);
 /*** USB ***/

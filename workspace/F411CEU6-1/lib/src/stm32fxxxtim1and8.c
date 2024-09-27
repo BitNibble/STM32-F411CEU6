@@ -25,11 +25,9 @@ void STM32FXXXTim1Clock(uint8_t bool)
 {
 	//if(bool){RCC->APB2ENR |= (1 << 0);}else{RCC->APB2ENR &= ~(1 << 0);}
 	if(bool){
-		//rcc()->instance->apb2enr.par.tim1en = 1;
-		rcc_instance()->apb2enr.par.tim1en = 1;
+		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 1);
 	}else{
-		//rcc()->instance->apb2enr.par.tim1en = 0;
-		rcc_instance()->apb2enr.par.tim1en = 0;
+		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 0);
 	}
 }
 void STM32FXXXTim1Nvic(uint8_t value)
@@ -150,29 +148,29 @@ STM32FXXX_TIM8* tim8(void){ return (STM32FXXX_TIM8*) &stm32fxxx_tim8; }
 /*** TIM1 CC IRQ Request ***/
 void TIM1_CC_IRQHandler(void){
 
-	if(tim1()->instance->sr.tim1and8_par.uif){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_UIF_Msk, TIM_SR_UIF_Pos)){
 		tim1_u_callback();
-		tim1()->instance->sr.tim1and8_par.uif = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_UIF_Msk, TIM_SR_UIF_Pos, 0);
 	}
-	if(tim1()->instance->sr.tim1and8_par.cc1if){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_CC1IF_Msk, TIM_SR_CC1IF_Pos)){
 		tim1_cc1_callback();
-		tim1()->instance->sr.tim1and8_par.cc1if = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_CC1IF_Msk, TIM_SR_CC1IF_Pos, 0);
 	}
-	if(tim1()->instance->sr.tim1and8_par.cc2if){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_CC2IF_Msk, TIM_SR_CC2IF_Pos)){
 		tim1_cc2_callback();
-		tim1()->instance->sr.tim1and8_par.cc2if = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_CC2IF_Msk, TIM_SR_CC2IF_Pos, 0);
 	}
-	if(tim1()->instance->sr.tim1and8_par.tif){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_TIF_Msk, TIM_SR_TIF_Pos)){
 		tim1_t_callback();
-		tim1()->instance->sr.tim1and8_par.tif = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_TIF_Msk, TIM_SR_TIF_Pos, 0);
 	}
-	if(tim1()->instance->sr.tim1and8_par.comif){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_COMIF_Msk, TIM_SR_COMIF_Pos)){
 		tim1_com_callback();
-		tim1()->instance->sr.tim1and8_par.comif = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_COMIF_Msk, TIM_SR_COMIF_Pos, 0);
 	}
-	if(tim1()->instance->sr.tim1and8_par.bif){
+	if(get_reg_Msk(TIM1->SR , TIM_SR_BIF_Msk, TIM_SR_BIF_Pos)){
 		tim1_b_callback();
-		tim1()->instance->sr.tim1and8_par.bif = 0;
+		set_reg_Msk(&TIM1->SR , TIM_SR_BIF_Msk, TIM_SR_BIF_Pos, 0);
 	}
 }
 /***/

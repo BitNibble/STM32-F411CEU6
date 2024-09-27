@@ -35,7 +35,7 @@ typedef struct
 {
 
 	/*** Bit Mapping ***/
-	STM32FXXXRCC_TypeDef* instance;
+	RCC_TypeDef* instance;
 	void (*prescaler)(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre);
 	/*** Extended ***/
 	STM32FXXXRCCPLL* pll;
