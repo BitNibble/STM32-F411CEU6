@@ -20,6 +20,15 @@ Comment:
 /*** Global Define & Macro ***/
 #define FUNCSTRSIZE 31
 
+typedef struct {
+    uint32_t Numerator;   // The numerator of the fraction
+    uint32_t Denominator; // The denominator of the fraction
+    uint32_t Quotient;    // The integer part of the real number
+    uint32_t Remainder;   // The remainder part after division
+    double Fpart;          // The fractional part as a double
+    int8_t sign;          // The sign of the number (-1 for negative, 1 for positive)
+} Real;
+
 typedef struct{
 	void (*dispar4x20)(ARMLCD0* func_lcd);
 }ARM_FUNC;
@@ -33,6 +42,8 @@ typedef struct
 	/******/
 	uint16_t (*SwapByte)(uint16_t num);
 	/******/
+	Real (*divide)(int32_t numerator, int32_t denominator);
+	Real (*realnumber)(double real, uint32_t precision);
 	int (*stringlength)(const char string[]);
 	void (*reverse)(char* str);
 	unsigned int (*mayia)(unsigned int xi, unsigned int xf, uint8_t nbits);
@@ -59,14 +70,14 @@ typedef struct
 	char* (*ui16toa)(uint16_t n);
 	char* (*i32toa)(int32_t n);
 	char* (*ui32toa)(uint32_t n);
-	char* (*ftoa)(double num, uint8_t afterpoint);
+	char* (*ftoa)(double num, uint32_t precision);
 	char* (*floattotext)(float number, int precision);
 	/*******/
 	int (*strToInt)(const char string[]);
 	/*******/
 	long (*trimmer)(long x, long in_min, long in_max, long out_min, long out_max);
 	int (*pmax)(int a1, int a2);
-	int (*gcd_v1)(int u, int v);
+	int (*gcd_v1)(uint32_t a, uint32_t b);
 	long (*gcd_v2)(long a, long b);
 	/******/
 	uint32_t (*triggerA)(uint32_t hllh_io, uint8_t pin, uint32_t counter);

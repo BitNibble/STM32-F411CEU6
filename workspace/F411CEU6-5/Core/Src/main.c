@@ -28,6 +28,7 @@ GPIO PB9 - D7
 
 #define JMP_menu 100
 
+
 EXPLODE PA;
 
 int main(void)
@@ -162,9 +163,28 @@ int main(void)
 
         default:
             break;
-        }
-    }
-}
+        }/*** switch ***/
+        /*** Testing ***/
+		//set_bit_block(&test[0],33,20+64,~0);
+        Real a = func()->realnumber( 56.567 , 10);
+		lcd0()->gotoxy(1, 0);
+		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
+		lcd0()->string_size(func()->ui32toa( a.Quotient ), 10);
+		lcd0()->string_size(func()->ui32toa( a.Remainder ), 10);
+		lcd0()->gotoxy(2, 0);
+		lcd0()->string_size(func()->ftoa( a.Fpart, 10000 ), 8);
+		lcd0()->gotoxy(3, 0);
+		lcd0()->string_size(func()->i16toa( a.sign ), 3);
+		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);
+		lcd0()->string_size(func()->ui32toa( a.Denominator ), 8);
+		//lcd0()->string_size(func()->ui32toa(test[2]), 10);
+		//lcd0()->gotoxy(1, 0);
+		//lcd0()->string_size(func()->ui32toa(HAL_GetTick()), 8);
+		//lcd0()->string_size(func()->ui32toa(HAL_GetTickFreq()), 4);
+		//lcd0()->string_size(func()->ui32toa(getsysclk()/(gethpre() * 1)), 20);
+		/******/
+    }/*** while ***/
+}/*** main ***/
 
 void Error_Handler(void)
 {

@@ -31,10 +31,12 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 
 ARM_FUNC* arm_func_inic(void);
 /*** File Header ***/
+Real function_divide(int32_t numerator, int32_t denominator);
+Real function_realnumber(double real, uint32_t precision);
+/*** 0 ***/
 int function_StringLength (const char string[]);
 void function_Reverse(char* str);
 uint8_t function_UintInvStr(uint32_t num, uint8_t index);
-uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint);
 void function_swap(long *px, long *py);
 /*** 1 ***/
 uint16_t function_SwapByte(uint16_t num);
@@ -60,20 +62,20 @@ char* function_print_binary(unsigned int n_bits, unsigned int number);
 char* function_i16toa(int16_t n);
 char* function_ui16toa(uint16_t n);
 char* function_i32toa(int32_t n);
-char* FUNCui32toa(uint32_t n);
-char* function_ftoa(double num, uint8_t afterpoint);
+char* function_ui32toa(uint32_t n);
+char* function_ftoa(double num, uint32_t precision);
 char* function_floatToText(float number, int precision);
 /*** 6 ***/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max);
 int function_pmax(int a1, int a2);
-int function_gcd_v1 (int u, int v);
+int function_gcd_v1 (uint32_t a, uint32_t b);
 long function_gcd_v2(long a, long b);
 /*** 7 ***/
 int function_StrToInt (const char string[]);
 /*** 8 ***/
 uint32_t function_triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
-uint32_t read_value(void);
+uint32_t function_read_value(void);
 /*** COMMON ***/
 void FUNC_var(void);
 
@@ -82,6 +84,8 @@ FUNC FUNC_enable( void )
 {
 	FUNC_var();
 	/*** TOP ***/
+	setup_func.divide = function_divide;
+	setup_func.realnumber = function_realnumber;
 	setup_func.stringlength = function_StringLength;
 	setup_func.reverse = function_Reverse;
 	setup_func.swap = function_swap;
@@ -110,7 +114,7 @@ FUNC FUNC_enable( void )
 	setup_func.i16toa = function_i16toa;
 	setup_func.ui16toa = function_ui16toa;
 	setup_func.i32toa = function_i32toa;
-	setup_func.ui32toa = FUNCui32toa;
+	setup_func.ui32toa = function_ui32toa;
 	setup_func.ftoa = function_ftoa;
 	setup_func.floattotext = function_floatToText;
 	// 6
@@ -123,7 +127,7 @@ FUNC FUNC_enable( void )
 	// 9
 	setup_func.triggerA = function_triggerA;
 	setup_func.triggerB = function_triggerB;
-	setup_func.value = read_value;
+	setup_func.value = function_read_value;
 	// 10
 	setup_func.arm = arm_func_inic();
 
@@ -151,33 +155,62 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd)
 		  static uint16_t toggle = 0;
 		  func_lcd->gotoxy(0,0);
 		  func_lcd->string_size("sysclk:",7);
-		  func_lcd->string_size( FUNCui32toa( getsysclk()), 10);
+		  func_lcd->string_size( function_ui32toa( getsysclk()), 10);
 		  func_lcd->gotoxy(1,0);
 		  func_lcd->string_size("pllclk:",7);
-		  func_lcd->string_size( FUNCui32toa( getpllclk()), 10);
+		  func_lcd->string_size( function_ui32toa( getpllclk()), 10);
 		  if(toggle & 1){
 		  	func_lcd->gotoxy(2,0);
-		  	func_lcd->string_size("ahb:",4); func_lcd->string_size( FUNCui32toa( gethpre() ), 4);
-		  	func_lcd->string_size("apb1:",5); func_lcd->string_size( FUNCui32toa( gethppre1() ), 3);
+		  	func_lcd->string_size("ahb:",4); func_lcd->string_size( function_ui32toa( gethpre() ), 4);
+		  	func_lcd->string_size("apb1:",5); func_lcd->string_size( function_ui32toa( gethppre1() ), 3);
 		  	func_lcd->gotoxy(3,0);
-		  	func_lcd->string_size("apb2:",5); func_lcd->string_size( FUNCui32toa( gethppre2() ), 3);
-		  	func_lcd->string_size("rtc:",4); func_lcd->string_size( FUNCui32toa( getrtcpre() ), 3);
+		  	func_lcd->string_size("apb2:",5); func_lcd->string_size( function_ui32toa( gethppre2() ), 3);
+		  	func_lcd->string_size("rtc:",4); func_lcd->string_size( function_ui32toa( getrtcpre() ), 3);
 		  }else{
 		  func_lcd->gotoxy(2,0);
-		  	func_lcd->string_size("M:",2); func_lcd->string_size( FUNCui32toa( getpllm() ), 6);
-		  	func_lcd->string_size("N:",2); func_lcd->string_size( FUNCui32toa( getplln() ), 6);
+		  	func_lcd->string_size("M:",2); func_lcd->string_size( function_ui32toa( getpllm() ), 6);
+		  	func_lcd->string_size("N:",2); func_lcd->string_size( function_ui32toa( getplln() ), 6);
 		  	func_lcd->gotoxy(3,0);
-		  	func_lcd->string_size("P:",2); func_lcd->string_size( FUNCui32toa( getpllp() ), 2);
-		  	func_lcd->string_size("Q:",2); func_lcd->string_size( FUNCui32toa( getpllq() ), 7);
+		  	func_lcd->string_size("P:",2); func_lcd->string_size( function_ui32toa( getpllp() ), 2);
+		  	func_lcd->string_size("Q:",2); func_lcd->string_size( function_ui32toa( getpllq() ), 7);
 		  }
 		  func_lcd->gotoxy(3,15);
-		  func_lcd->string_size(FUNCui32toa(toggle),5);
+		  func_lcd->string_size(function_ui32toa(toggle),5);
 		  toggle++;
 		  _delay_ms(6000);
 	#endif
 #endif
 }
-/******/
+// Function to handle division and return a Real structure
+Real function_divide(int32_t numerator, int32_t denominator) {
+    Real result = {0, 1, 0, 0, 0.0, 1};
+    if (denominator == 0) { result.sign = 0; return result; }
+    result.sign = ((numerator < 0) ^ (denominator < 0)) ? -1 : 1; // Handle the sign
+    result.Numerator = (uint32_t)(numerator < 0 ? -numerator : numerator);
+    result.Denominator = (uint32_t)(denominator < 0 ? -denominator : denominator);
+    result.Quotient = result.Numerator / result.Denominator;
+    result.Remainder = result.Numerator % result.Denominator;
+    result.Fpart = (double)result.Remainder / result.Denominator;
+    return result;
+}
+// Function to convert a float to a Real structure with a given precision
+Real function_realnumber(double real, uint32_t precision) {
+    Real result = {0, 1, 0, 0, 0.0, 1};
+    result.sign = (real < 0) ? -1 : 1;
+    double abs_real = fabs(real);
+    result.Quotient = (uint32_t)abs_real;
+    result.Fpart = abs_real - result.Quotient;
+    if (precision > 0 && result.Fpart > 0) {
+        result.Remainder = (uint32_t)(result.Fpart * precision);
+        result.Denominator = precision;
+    } else {
+        result.Remainder = 0;
+        result.Denominator = 1;
+    }
+    result.Numerator = (result.Quotient * result.Denominator) + result.Remainder;
+    return result;
+}
+// StringLength
 int function_StringLength (const char string[])
 {
 	int count;
@@ -384,7 +417,7 @@ char* function_i32toa(int32_t n)
 	function_Reverse(FUNCstr);
 	return FUNCstr;
 }
-char* FUNCui32toa(uint32_t n)
+char* function_ui32toa(uint32_t n)
 {
 	uint8_t i;
 	for(i = 0, FUNCstr[i++] = (char)(n % 10 + '0'); (n /= 10) > 0; FUNCstr[i++] = (char)(n % 10 + '0'));
@@ -405,19 +438,14 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
-uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint)
+char* function_ftoa(double num, uint32_t precision)
 {
-	for( num *= 10; afterpoint ; FUNCstr[index++] = (uint8_t)(num + '0'), num -= (uint8_t)num, num *= 10, afterpoint--);
-	FUNCstr[index] = '\0'; return index;
-}
-char* function_ftoa(double num, uint8_t afterpoint)
-{
-	double ipart, fpart, n; uint8_t k = 0; int8_t sign;
-	if (num < 0){ n = -num; sign = -1;}else{n = num; sign = 1;}
-	ipart = (uint32_t) n; fpart = n - ipart;
-	k = function_UintInvStr(ipart, 0); if (sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0'; function_Reverse(FUNCstr);
+	Real number = function_realnumber(num, precision);
+	uint8_t k = 0;
+	k = function_UintInvStr(number.Remainder, 0);
 	FUNCstr[k++] = '.';
-	function_fPartStr(fpart, k, afterpoint);
+	k = function_UintInvStr(number.Quotient, k); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
+	function_Reverse(FUNCstr);
 	return FUNCstr;
 }
 char* function_floatToText(float number, int precision) {
@@ -437,13 +465,14 @@ int function_pmax(int a1, int a2)
 	if(a1 > a2){ biggest = a1; }else{ biggest = a2; }
 	return biggest;
 }
-int function_gcd_v1 (int u, int v)
+int function_gcd_v1 (uint32_t a, uint32_t b)
 {
-	int temp;
-	while ( v != 0 ) {
-		temp = u % v; u = v; v = temp;
-	}
-	return u;
+	while (b != 0) {
+	        uint32_t temp = b;
+	        b = a % b;
+	        a = temp;
+	    }
+	return a;
 }
 long function_gcd_v2(long a, long b)
 {
@@ -521,7 +550,7 @@ uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t
     return nen[3];
 }
 
-uint32_t read_value(void){ return mem[2];}
+uint32_t function_read_value(void){ return mem[2];}
 /*** Not Used ***/
 unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 {
@@ -532,7 +561,7 @@ unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 	return (trans << nbits) | diff;
 }
 // Function to check leap year
-uint8_t leap_year_check(uint16_t year) {
+uint8_t function_leap_year_check(uint16_t year) {
     uint8_t i;
     if (!(year % 400)) i = 1;
     else if (!(year % 100)) i = 0;
