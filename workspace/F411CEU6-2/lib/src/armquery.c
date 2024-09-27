@@ -429,10 +429,14 @@ void delay_Configure(void)
     DelayCounter_top = getsysclk() / gethpre(); // Assuming gethpre() returns a valid prescaler
 
     // Calculate the SysTick values for different delay intervals
-    systick_us 		= (DelayCounter_top / 1000000)? DelayCounter_top / 1000000 : 1; // 1 microsecond
-    systick_10us 	= (DelayCounter_top / 100000)? DelayCounter_top / 100000 : 1;  // 10 microseconds
-    systick_100us 	= (DelayCounter_top / 10000)? DelayCounter_top / 10000 : 1;   // 100 microseconds
-    systick_ms 		= (DelayCounter_top / 1000)? DelayCounter_top / 1000: 1;    // 1 millisecond
+    systick_us 		= DelayCounter_top / 1000000 - 1 ; // 1 microsecond
+    systick_10us 	= DelayCounter_top / 100000 - 1 ;  // 10 microseconds
+    systick_100us 	= DelayCounter_top / 10000 - 1 ;   // 100 microseconds
+    systick_ms 		= DelayCounter_top / 1000 - 1 ;    // 1 millisecond
+    if(systick_us > 0);else systick_us = 1;
+    if(systick_10us > 0);else systick_10us = 1;
+    if(systick_100us > 0);else systick_100us = 1;
+    if(systick_ms > 0);else systick_ms = 1;
 }
 inline uint32_t get_systick_us(void)
 {
