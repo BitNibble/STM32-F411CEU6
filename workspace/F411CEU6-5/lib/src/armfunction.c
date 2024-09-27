@@ -64,7 +64,6 @@ char* function_ui16toa(uint16_t n);
 char* function_i32toa(int32_t n);
 char* function_ui32toa(uint32_t n);
 char* function_ftoa(double num, uint32_t precision);
-char* function_floatToText(float number, int precision);
 /*** 6 ***/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max);
 int function_pmax(int a1, int a2);
@@ -116,7 +115,6 @@ FUNC FUNC_enable( void )
 	setup_func.i32toa = function_i32toa;
 	setup_func.ui32toa = function_ui32toa;
 	setup_func.ftoa = function_ftoa;
-	setup_func.floattotext = function_floatToText;
 	// 6
 	setup_func.trimmer = function_trimmer;
 	setup_func.pmax = function_pmax;
@@ -447,11 +445,6 @@ char* function_ftoa(double num, uint32_t precision)
 	k = function_UintInvStr(number.Quotient, k); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
 	function_Reverse(FUNCstr);
 	return FUNCstr;
-}
-char* function_floatToText(float number, int precision) {
-    // Format the float to string with the specified precision
-    sprintf(FUNCstr, "%.*f", precision, number);
-    return FUNCstr;
 }
 /******/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max)

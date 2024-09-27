@@ -32,7 +32,6 @@ GPIO PB9 - D7
 
 EXPLODE PA;
 char ADC_msg[32];
-//uint32_t test[8] = {~0,~0,~0,~0,~0,~0,~0,~0};
 
 int main(void)
 {
@@ -256,7 +255,7 @@ int main(void)
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging
-                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->floattotext(CalculateTemperature(adc_value), 1), (char) 0xDF), 8);
+                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->ftoa(CalculateTemperature(adc_value), 10), (char) 0xDF), 8);
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
@@ -288,17 +287,6 @@ int main(void)
 
         rtc()->dr2vec(vecD);
         rtc()->tr2vec(vecT);
-
-        /*** Testing ***
-        set_bit_block(&test[0],33,20+64,~0);
-        lcd0()->gotoxy(1, 0);
-        lcd0()->string_size(func()->ui32toa(get_bit_block(&test[2],34,20)), 10);
-        //lcd0()->string_size(func()->ui32toa(test[2]), 10);
-        lcd0()->gotoxy(1, 0);
-        //lcd0()->string_size(func()->ui32toa(HAL_GetTick()), 8);
-        //lcd0()->string_size(func()->ui32toa(HAL_GetTickFreq()), 4);
-        lcd0()->string_size(func()->ui32toa(getsysclk()/(gethpre() * 1)), 20);
-        ******/
 
         lcd0()->gotoxy(2, 0);
         lcd0()->string_size(func()->print_v2("%d%d-%d%d-20%d%d",

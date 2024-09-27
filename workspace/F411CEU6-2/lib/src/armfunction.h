@@ -25,7 +25,7 @@ typedef struct {
     uint32_t Denominator; // The denominator of the fraction
     uint32_t Quotient;    // The integer part of the real number
     uint32_t Remainder;   // The remainder part after division
-    double Fpart;          // The fractional part as a double
+    double Fpart;         // The fractional part as a double
     int8_t sign;          // The sign of the number (-1 for negative, 1 for positive)
 } Real;
 
@@ -71,7 +71,6 @@ typedef struct
 	char* (*i32toa)(int32_t n);
 	char* (*ui32toa)(uint32_t n);
 	char* (*ftoa)(double num, uint32_t precision);
-	char* (*floattotext)(float number, int precision);
 	/*******/
 	int (*strToInt)(const char string[]);
 	/*******/

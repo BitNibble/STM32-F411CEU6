@@ -28,8 +28,8 @@ GPIO PB9 - D7
 
 #define JMP_menu 100
 
-
 EXPLODE PA;
+//uint32_t test[8] = {~0,~0,~0,~0,~0,~0,~0,~0};
 
 int main(void)
 {
