@@ -26,7 +26,7 @@ GPIO PB9 - D7
 #include "armfunction.h"
 #include "explode.h"
 
-#define JMP_menu 100
+#define JMP_menu 120
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
@@ -256,7 +256,7 @@ int main(void)
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging
-                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->ftoa(CalculateTemperature(adc_value), 10), (char) 0xDF), 8);
+                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->ftoa((double)CalculateTemperature(adc_value), 10), (char) 0xDF), 8);
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
@@ -272,7 +272,7 @@ int main(void)
             if (PA.par.LL & 1) {
                 //_delay_ms(JMP_menu);
                 //delayAsmMicroseconds(JMP_menu * 1000);
-                delayMicroseconds(JMP_menu * 500);
+                delayMicroseconds(JMP_menu * 600);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 0; count_0 = 0; skip_0 = 0;
@@ -280,9 +280,6 @@ int main(void)
             } else {
                 count_0 = 0;
             }
-            break;
-
-        default:
             break;
         }
 

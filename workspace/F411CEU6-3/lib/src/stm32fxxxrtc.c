@@ -66,11 +66,6 @@ void STM32FXXXRtcStopRead(void);
 void STM32FXXXRtcWaitRead(void);
 void STM32FXXXRtcSetTr(uint32_t value);
 void STM32FXXXRtcSetDr(uint32_t value);
-uint8_t rtc_get_hthu(void);
-uint8_t rtc_get_mntmnu(void);
-uint8_t rtc_get_stsu(void);
-uint8_t rtc_get_st(void);
-uint8_t rtc_get_su(void);
 uint16_t rtc_get_ss(void);
 char rtc_bcd2dec(char num);
 char rtc_dec2bcd(char num);
@@ -100,7 +95,6 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.tr2vec = STM32FXXXRtctr2vec;
 	stm32fxxx_rtc.BckWrite = STM32FXXXRtcBckWrite;
 	stm32fxxx_rtc.BckRead = STM32FXXXRtcBckRead;
-	stm32fxxx_rtc.get_stsu = rtc_get_stsu;
 	stm32fxxx_rtc.get_ss = rtc_get_ss;
 	/*** Other ***/
 	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
@@ -524,36 +518,6 @@ uint8_t STM32FXXXRtc_get_Day(void){
 	STM32FXXXRtcWaitRead();
 	uint32_t dr = RTC->DR;
 	return rtc_bcd2dec(dr & 0x003F);
-}
-uint8_t rtc_get_hthu(void)
-{ // BCD
-	STM32FXXXRtcWaitRead();
-	uint32_t tr = RTC->TR;
-	return (uint8_t) ((tr >> 16) & 0x003F);
-}
-uint8_t rtc_get_mntmnu(void)
-{ // BCD
-	STM32FXXXRtcWaitRead();
-	uint32_t tr = RTC->TR;
-	return (uint8_t) ((tr >> 8) & 0x007F);
-}
-uint8_t rtc_get_stsu(void)
-{ // BCD
-	STM32FXXXRtcWaitRead();
-	uint32_t tr = RTC->TR;
-	return (uint8_t) (tr & 0x007F);
-}
-uint8_t rtc_get_st(void)
-{ // BCD
-	STM32FXXXRtcWaitRead();
-	uint32_t tr = RTC->TR;
-	return (uint8_t) (tr >> 4) & 0x07;
-}
-uint8_t rtc_get_su(void)
-{ // BCD
-	STM32FXXXRtcWaitRead();
-	uint32_t tr = RTC->TR;
-	return (uint8_t) tr & 0x0F;
 }
 uint16_t rtc_get_ss(void)
 {

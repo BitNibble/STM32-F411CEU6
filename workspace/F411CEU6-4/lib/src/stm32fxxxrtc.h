@@ -57,7 +57,6 @@ typedef struct
 	void (*tr2vec)(char* rtc_vect);
 	void (*BckWrite)(uint8_t registerIndex, uint8_t data);
 	uint8_t (*BckRead)(uint8_t registerIndex);
-	uint8_t (*get_stsu)(void);
 	uint16_t (*get_ss)(void);
 	/*** Other ***/
 	void (*pwr_clock)(uint8_t bool);
