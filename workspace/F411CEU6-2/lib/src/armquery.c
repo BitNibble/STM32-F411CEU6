@@ -320,15 +320,15 @@ inline void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)hpins;
 }
-inline void reset_hpins( GPIO_TypeDef* reg, uint16_t hpins )
+inline void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
 	reg->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-inline void setpin( GPIO_TypeDef* reg, uint8_t pin )
+inline void set_pin( GPIO_TypeDef* reg, uint8_t pin )
 {
 	reg->BSRR = (1 << pin);
 }
-inline void resetpin( GPIO_TypeDef* reg, uint8_t pin )
+inline void clear_pin( GPIO_TypeDef* reg, uint8_t pin )
 {
 	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
 }
