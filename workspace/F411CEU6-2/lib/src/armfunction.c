@@ -179,8 +179,9 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd)
 	#endif
 #endif
 }
+// Function to calculate power of a base number
 unsigned int function_power(unsigned int base, unsigned int power) {
-	unsigned int result = 1;
+    unsigned int result = 1;
     for (unsigned int i = 0; i < power; i++) {
         result *= base;
     }
@@ -188,7 +189,7 @@ unsigned int function_power(unsigned int base, unsigned int power) {
 }
 // Function to handle division and return a Real structure
 RealNum_TypeDef function_divide(int numerator, int denominator) {
-	RealNum_TypeDef result = {0, 1, 0, 0, 0.0, 1};
+	RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0, 1};
     if (denominator == 0) { result.sign = 0; return result; }
     result.sign = ((numerator < 0) ^ (denominator < 0)) ? -1 : 1; // Handle the sign
     result.Numerator = (uint32_t)(numerator < 0 ? -numerator : numerator);
@@ -199,23 +200,46 @@ RealNum_TypeDef function_divide(int numerator, int denominator) {
     result.Number = result.Quotient + result.Fpart;
     return result;
 }
-// Function to convert a float to a Real structure with a given precision
+// Function to process real numbers and extract integer/fractional parts
 RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
-	RealNum_TypeDef result = {0, 1, 0, 0, 0.0, 1};
-	result.Number = real;
-	result.Precision = function_power( 10, ((decimal > 127) ? 0 : decimal) );
+    RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0, 1};
+
+    // Set the original input number
+    result.Number = real;
+
+    // Handle sign of the number
     result.sign = (real < 0) ? -1 : 1;
+
+    // Convert number to absolute value to work with positive parts
     double abs_real = fabs(real);
-    result.Quotient = (uint32_t)abs_real;
+
+    // Extract the integer part of the number
+    result.Quotient = (unsigned int)abs_real;
+
+    // Extract the fractional part of the number
     result.Fpart = abs_real - result.Quotient;
-    if ( result.Precision > 0 && result.Fpart > 0 ) {
-        result.Remainder = (uint32_t)(result.Fpart * result.Precision);
+
+    // Limit decimal to avoid overflow in precision calculation
+    if (decimal > 127) {
+        decimal = 127;  // Clamp the decimal value to a safe range
+    }
+
+    // Calculate precision as a power of 10 for the specified decimal places
+    result.Precision = function_power(10, decimal);
+
+    // Calculate remainder and set denominator if fractional part exists
+    if (result.Precision > 0 && result.Fpart > 0) {
+        result.Remainder = (unsigned int)(result.Fpart * result.Precision);
         result.Denominator = result.Precision;
     } else {
+        // No fractional part or precision is zero, set remainder to 0
         result.Remainder = 0;
         result.Denominator = 1;
     }
+
+    // Calculate the numerator: (integer part * denominator) + remainder
     result.Numerator = (result.Quotient * result.Denominator) + result.Remainder;
+
     return result;
 }
 // StringLength
@@ -449,12 +473,12 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 }
 unsigned int function_UintInvStr(RealNum_TypeDef num, unsigned int index)
 {
-	for(FUNCstr[index++] = (char)(num.Quotient % 10 + '0'); (num.Quotient /= 10) > 0 ; FUNCstr[index++] = (char)(num.Quotient % 10 + '0'));
+	for( FUNCstr[index++] = (char)(num.Quotient % 10 + '0') ; (num.Quotient /= 10) > 0 ; FUNCstr[index++] = (char)(num.Quotient % 10 + '0') );
 	FUNCstr[index] = '\0'; return index;
 }
 unsigned int function_FloatInvStr(RealNum_TypeDef num, unsigned int index)
 {
-	for(FUNCstr[index] = (char)(num.Remainder % 10 + '0'); (num.Precision /= 10) > 0 ; FUNCstr[index++] = (char)(num.Remainder % 10 + '0'), num.Remainder /= 10);
+	for( ; (num.Precision /= 10) > 0 ; FUNCstr[index++] = (char)(num.Remainder % 10 + '0'), num.Remainder /= 10 );
 	FUNCstr[index] = '\0'; return index;
 }
 char* function_ftoa(double num, unsigned int decimal)

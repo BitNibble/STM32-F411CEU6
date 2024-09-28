@@ -166,14 +166,14 @@ int main(void)
             break;
         }/*** switch ***/
         /*** Testing ***/
-        number = 6;
+        number = 7;
 		//set_bit_block(&test[0],33,20+64,~0);
-        RealNum_TypeDef a = func()->realnumber( -356.089 , number);
+        RealNum_TypeDef a = func()->realnumber( 0 , number);
         //RealNum_TypeDef a = func()->divide( 500 , 123);
 		lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
 		lcd0()->string_size(func()->ui32toa( a.Quotient ), 5);lcd0()->hspace(1);
-		lcd0()->string_size(func()->i32toa( a.Precision ), 13);
+		lcd0()->string_size(func()->i32toa( a.Denominator ), 13);
 		//lcd0()->string_size(func()->ui32toa( pow(10,2) ), 4);
 		lcd0()->gotoxy(2, 0);
 		lcd0()->string_size(func()->ftoa( a.Number, number ), 12);lcd0()->hspace(1);

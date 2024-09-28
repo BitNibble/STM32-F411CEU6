@@ -510,3 +510,14 @@ uint32_t function_power(uint32_t base, uint32_t power)
 	for(i=power;i;base*=base,i--);
 	return base;
 }
+unsigned int function_power(unsigned int base, unsigned int power) {
+    unsigned int result = 1;
+    while (power > 0) {
+        if (power % 2 == 1) {
+            result *= base;
+        }
+        base *= base;
+        power /= 2;
+    }
+    return result;
+}
