@@ -34,7 +34,8 @@ RealNum_TypeDef function_realnumber(double real, unsigned int decimal);
 /*** 0 ***/
 int function_StringLength (const char string[]);
 void function_Reverse(char* str);
-uint8_t function_UintInvStr(unsigned int num, unsigned int index);
+unsigned int function_UintInvStr(RealNum_TypeDef num, unsigned int index);
+unsigned int function_FloatInvStr(RealNum_TypeDef num, unsigned int index);
 void function_swap(long *px, long *py);
 /*** 1 ***/
 uint16_t function_SwapByte(uint16_t num);
@@ -203,13 +204,10 @@ RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
 	RealNum_TypeDef result = {0, 1, 0, 0, 0.0, 1};
 	result.Number = real;
 	result.Precision = function_power( 10, ((decimal > 127) ? 0 : decimal) );
-
     result.sign = (real < 0) ? -1 : 1;
-
     double abs_real = fabs(real);
     result.Quotient = (uint32_t)abs_real;
     result.Fpart = abs_real - result.Quotient;
-
     if ( result.Precision > 0 && result.Fpart > 0 ) {
         result.Remainder = (uint32_t)(result.Fpart * result.Precision);
         result.Denominator = result.Precision;
@@ -229,7 +227,13 @@ int function_StringLength (const char string[])
 }
 // Function to reverse a string
 void function_Reverse(char* str) {
-    uint8_t i = 0, j = strlen(str) - 1;
+    if (str == NULL){ return; }
+    if (*str == '\0'){ return; }
+    if (*str == '\0'){ str[0]='E'; str[1]='r'; str[2]='r'; str[3]='o'; str[4]='r'; str[5]='\0'; return; }
+
+    size_t i = 0;
+    size_t j = strlen(str) - 1;
+
     while (i < j) {
         char temp = str[i];
         str[i] = str[j];
@@ -435,11 +439,6 @@ char* function_ui32toa(uint32_t n)
 	function_Reverse(FUNCstr);
 	return FUNCstr;
 }
-uint8_t function_UintInvStr(unsigned int num, unsigned int index)
-{
-	for(FUNCstr[index++] = (char)(num % 10 + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)(num % 10 + '0'));
-	FUNCstr[index] = '\0'; return index;
-}
 char* function_print_binary(unsigned int n_bits, unsigned int number)
 {
 	unsigned int i, c;
@@ -448,17 +447,27 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
+unsigned int function_UintInvStr(RealNum_TypeDef num, unsigned int index)
+{
+	for(FUNCstr[index++] = (char)(num.Quotient % 10 + '0'); (num.Quotient /= 10) > 0 ; FUNCstr[index++] = (char)(num.Quotient % 10 + '0'));
+	FUNCstr[index] = '\0'; return index;
+}
+unsigned int function_FloatInvStr(RealNum_TypeDef num, unsigned int index)
+{
+	for(FUNCstr[index] = (char)(num.Remainder % 10 + '0'); (num.Precision /= 10) > 0 ; FUNCstr[index++] = (char)(num.Remainder % 10 + '0'), num.Remainder /= 10);
+	FUNCstr[index] = '\0'; return index;
+}
 char* function_ftoa(double num, unsigned int decimal)
 {
 	RealNum_TypeDef number = function_realnumber(num, decimal);
 	unsigned int k = 0;
 	if(number.Precision > 1){
-		k = function_UintInvStr(number.Remainder, 0);
 		FUNCstr[k++] = '.';
-		k = function_UintInvStr(number.Quotient, k); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
+		k = function_UintInvStr(number, k); if (number.sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0';
 		function_Reverse(FUNCstr);
+		function_FloatInvStr(number, k); function_Reverse(FUNCstr + k);
 	}else{
-		k = function_UintInvStr(number.Quotient, 0); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
+		k = function_UintInvStr(number, 0); if (number.sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0';
 		function_Reverse(FUNCstr);
 	}
 	return FUNCstr;

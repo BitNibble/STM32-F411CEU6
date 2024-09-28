@@ -166,22 +166,22 @@ int main(void)
             break;
         }/*** switch ***/
         /*** Testing ***/
-        number = 4;
+        number = 6;
 		//set_bit_block(&test[0],33,20+64,~0);
-        //RealNum_TypeDef a = func()->realnumber( 56.876 , 10000);
-        RealNum_TypeDef a = func()->realnumber( 56.876 , number);
+        RealNum_TypeDef a = func()->realnumber( -356.089 , number);
+        //RealNum_TypeDef a = func()->divide( 500 , 123);
 		lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
-		lcd0()->string_size(func()->ui32toa( a.Quotient ), 8);lcd0()->hspace(2);
-		lcd0()->string_size(func()->ui32toa( a.Precision ), 8);
+		lcd0()->string_size(func()->ui32toa( a.Quotient ), 5);lcd0()->hspace(1);
+		lcd0()->string_size(func()->i32toa( a.Precision ), 13);
 		//lcd0()->string_size(func()->ui32toa( pow(10,2) ), 4);
 		lcd0()->gotoxy(2, 0);
-		lcd0()->string_size(func()->ftoa( a.Number, number ), 8);lcd0()->hspace(2);
-		lcd0()->string_size(func()->ftoa( a.Fpart, number ), 8);
+		lcd0()->string_size(func()->ftoa( a.Number, number ), 12);lcd0()->hspace(1);
+		lcd0()->string_size(func()->ftoa( a.Fpart, number ), 7);
 		lcd0()->gotoxy(3, 0);
 		//lcd0()->string_size(func()->i16toa( a.sign ), 3);
-		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);lcd0()->hspace(2);
-		lcd0()->string_size(func()->ui32toa( a.Remainder ), 8);
+		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);lcd0()->hspace(1);
+		lcd0()->string_size(func()->ui32toa( a.Remainder ), 11);
 		//lcd0()->string_size(func()->ui32toa( a.Denominator ), 8);
 		//lcd0()->string_size(func()->ui32toa(test[2]), 10);
 		//lcd0()->gotoxy(1, 0);
