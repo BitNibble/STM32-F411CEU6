@@ -26,9 +26,9 @@ typedef struct {
 	unsigned int Quotient;    // The integer part of the real number
 	unsigned int Remainder;   // The remainder part after division
 	unsigned int Precision;   // The number of decimal points
-    double Number;         // The input number
-    double Fpart;          // The fractional part as a double
-    int sign;          // The sign of the number (-1 for negative, 1 for positive)
+    double Number;            // The input number
+    double Fpart;             // The fractional part as a double
+    int sign;                 // The sign of the number (-1 for negative, 1 for positive)
 } RealNum_TypeDef;
 
 typedef struct{
