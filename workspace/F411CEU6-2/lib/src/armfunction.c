@@ -31,12 +31,13 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 
 ARM_FUNC* arm_func_inic(void);
 /*** File Header ***/
-Real function_divide(int32_t numerator, int32_t denominator);
-Real function_realnumber(double real, uint32_t precision);
+unsigned int function_power(unsigned int x, unsigned int y);
+RealNum_TypeDef function_divide(int numerator, int denominator);
+RealNum_TypeDef function_realnumber(double real, unsigned int decimal);
 /*** 0 ***/
 int function_StringLength (const char string[]);
 void function_Reverse(char* str);
-uint8_t function_UintInvStr(uint32_t num, uint8_t index);
+uint8_t function_UintInvStr(unsigned int num, unsigned int index);
 void function_swap(long *px, long *py);
 /*** 1 ***/
 uint16_t function_SwapByte(uint16_t num);
@@ -63,7 +64,7 @@ char* function_i16toa(int16_t n);
 char* function_ui16toa(uint16_t n);
 char* function_i32toa(int32_t n);
 char* function_ui32toa(uint32_t n);
-char* function_ftoa(double num, uint32_t precision);
+char* function_ftoa(double num, unsigned int decimal);
 /*** 6 ***/
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max);
 int function_pmax(int a1, int a2);
@@ -83,6 +84,7 @@ FUNC FUNC_enable( void )
 {
 	FUNC_var();
 	/*** TOP ***/
+	setup_func.power = function_power;
 	setup_func.divide = function_divide;
 	setup_func.realnumber = function_realnumber;
 	setup_func.stringlength = function_StringLength;
@@ -179,9 +181,16 @@ void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd)
 	#endif
 #endif
 }
+unsigned int function_power(unsigned int base, unsigned int power) {
+	unsigned int result = 1;
+    for (unsigned int i = 0; i < power; i++) {
+        result *= base;
+    }
+    return result;
+}
 // Function to handle division and return a Real structure
-Real function_divide(int32_t numerator, int32_t denominator) {
-    Real result = {0, 1, 0, 0, 0.0, 1};
+RealNum_TypeDef function_divide(int numerator, int denominator) {
+	RealNum_TypeDef result = {0, 1, 0, 0, 0.0, 1};
     if (denominator == 0) { result.sign = 0; return result; }
     result.sign = ((numerator < 0) ^ (denominator < 0)) ? -1 : 1; // Handle the sign
     result.Numerator = (uint32_t)(numerator < 0 ? -numerator : numerator);
@@ -189,18 +198,24 @@ Real function_divide(int32_t numerator, int32_t denominator) {
     result.Quotient = result.Numerator / result.Denominator;
     result.Remainder = result.Numerator % result.Denominator;
     result.Fpart = (double)result.Remainder / result.Denominator;
+    result.Number = result.Quotient + result.Fpart;
     return result;
 }
 // Function to convert a float to a Real structure with a given precision
-Real function_realnumber(double real, uint32_t precision) {
-    Real result = {0, 1, 0, 0, 0.0, 1};
+RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
+	RealNum_TypeDef result = {0, 1, 0, 0, 0.0, 1};
+	result.Number = real;
+	result.Precision = function_power( 10, ((decimal > 127) ? 0 : decimal) );
+
     result.sign = (real < 0) ? -1 : 1;
+
     double abs_real = fabs(real);
     result.Quotient = (uint32_t)abs_real;
     result.Fpart = abs_real - result.Quotient;
-    if (precision > 0 && result.Fpart > 0) {
-        result.Remainder = (uint32_t)(result.Fpart * precision);
-        result.Denominator = precision;
+
+    if ( result.Precision > 0 && result.Fpart > 0 ) {
+        result.Remainder = (uint32_t)(result.Fpart * result.Precision);
+        result.Denominator = result.Precision;
     } else {
         result.Remainder = 0;
         result.Denominator = 1;
@@ -423,7 +438,7 @@ char* function_ui32toa(uint32_t n)
 	function_Reverse(FUNCstr);
 	return FUNCstr;
 }
-uint8_t function_UintInvStr(uint32_t num, uint8_t index)
+uint8_t function_UintInvStr(unsigned int num, unsigned int index)
 {
 	for(FUNCstr[index++] = (char)(num % 10 + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)(num % 10 + '0'));
 	FUNCstr[index] = '\0'; return index;
@@ -436,14 +451,19 @@ char* function_print_binary(unsigned int n_bits, unsigned int number)
 	FUNCstr[c] = '\0';
 	return FUNCstr;
 }
-char* function_ftoa(double num, uint32_t precision)
+char* function_ftoa(double num, unsigned int decimal)
 {
-	Real number = function_realnumber(num, precision);
-	uint8_t k = 0;
-	k = function_UintInvStr(number.Remainder, 0);
-	FUNCstr[k++] = '.';
-	k = function_UintInvStr(number.Quotient, k); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
-	function_Reverse(FUNCstr);
+	RealNum_TypeDef number = function_realnumber(num, decimal);
+	unsigned int k = 0;
+	if(number.Precision > 1){
+		k = function_UintInvStr(number.Remainder, 0);
+		FUNCstr[k++] = '.';
+		k = function_UintInvStr(number.Quotient, k); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
+		function_Reverse(FUNCstr);
+	}else{
+		k = function_UintInvStr(number.Quotient, 0); if (number.sign < 0) FUNCstr[k++] = '-';FUNCstr[k] = '\0';
+		function_Reverse(FUNCstr);
+	}
 	return FUNCstr;
 }
 /******/

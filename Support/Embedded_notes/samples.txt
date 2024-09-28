@@ -504,3 +504,9 @@ void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t r
 
     set_reg_block(&RCC->CFGR, 4, 4, ahb_value); // Set AHB prescaler
 }
+uint32_t function_power(uint32_t base, uint32_t power)
+{
+	uint32_t i = 0;
+	for(i=power;i;base*=base,i--);
+	return base;
+}

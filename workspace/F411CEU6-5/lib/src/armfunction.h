@@ -21,13 +21,15 @@ Comment:
 #define FUNCSTRSIZE 31
 
 typedef struct {
-    uint32_t Numerator;   // The numerator of the fraction
-    uint32_t Denominator; // The denominator of the fraction
-    uint32_t Quotient;    // The integer part of the real number
-    uint32_t Remainder;   // The remainder part after division
-    double Fpart;         // The fractional part as a double
-    int8_t sign;          // The sign of the number (-1 for negative, 1 for positive)
-} Real;
+	unsigned int Numerator;   // The numerator of the fraction
+	unsigned int Denominator; // The denominator of the fraction
+	unsigned int Quotient;    // The integer part of the real number
+	unsigned int Remainder;   // The remainder part after division
+	unsigned int Precision;   // The number of decimal points
+    double Number;         // The input number
+    double Fpart;          // The fractional part as a double
+    int sign;          // The sign of the number (-1 for negative, 1 for positive)
+} RealNum_TypeDef;
 
 typedef struct{
 	void (*dispar4x20)(ARMLCD0* func_lcd);
@@ -42,8 +44,9 @@ typedef struct
 	/******/
 	uint16_t (*SwapByte)(uint16_t num);
 	/******/
-	Real (*divide)(int32_t numerator, int32_t denominator);
-	Real (*realnumber)(double real, uint32_t precision);
+	unsigned int (*power)(unsigned int x, unsigned int y);
+	RealNum_TypeDef (*divide)(int numerator, int denominator);
+	RealNum_TypeDef (*realnumber)(double real, unsigned int decimal);
 	int (*stringlength)(const char string[]);
 	void (*reverse)(char* str);
 	unsigned int (*mayia)(unsigned int xi, unsigned int xf, uint8_t nbits);
@@ -70,7 +73,7 @@ typedef struct
 	char* (*ui16toa)(uint16_t n);
 	char* (*i32toa)(int32_t n);
 	char* (*ui32toa)(uint32_t n);
-	char* (*ftoa)(double num, uint32_t precision);
+	char* (*ftoa)(double num, unsigned int decimal);
 	/*******/
 	int (*strToInt)(const char string[]);
 	/*******/

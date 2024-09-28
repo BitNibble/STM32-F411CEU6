@@ -38,6 +38,7 @@ int main(void)
 
     uint8_t Menu = 6;
     uint8_t count_0 = 0;
+    int number = 0;
 
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
     ARMLCD0_enable(GPIOB);
@@ -165,18 +166,23 @@ int main(void)
             break;
         }/*** switch ***/
         /*** Testing ***/
+        number = 4;
 		//set_bit_block(&test[0],33,20+64,~0);
-        Real a = func()->realnumber( 56.567 , 10);
+        //RealNum_TypeDef a = func()->realnumber( 56.876 , 10000);
+        RealNum_TypeDef a = func()->realnumber( 56.876 , number);
 		lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
-		lcd0()->string_size(func()->ui32toa( a.Quotient ), 10);
-		lcd0()->string_size(func()->ui32toa( a.Remainder ), 10);
+		lcd0()->string_size(func()->ui32toa( a.Quotient ), 8);lcd0()->hspace(2);
+		lcd0()->string_size(func()->ui32toa( a.Precision ), 8);
+		//lcd0()->string_size(func()->ui32toa( pow(10,2) ), 4);
 		lcd0()->gotoxy(2, 0);
-		lcd0()->string_size(func()->ftoa( a.Fpart, 10000 ), 8);
+		lcd0()->string_size(func()->ftoa( a.Number, number ), 8);lcd0()->hspace(2);
+		lcd0()->string_size(func()->ftoa( a.Fpart, number ), 8);
 		lcd0()->gotoxy(3, 0);
-		lcd0()->string_size(func()->i16toa( a.sign ), 3);
-		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);
-		lcd0()->string_size(func()->ui32toa( a.Denominator ), 8);
+		//lcd0()->string_size(func()->i16toa( a.sign ), 3);
+		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);lcd0()->hspace(2);
+		lcd0()->string_size(func()->ui32toa( a.Remainder ), 8);
+		//lcd0()->string_size(func()->ui32toa( a.Denominator ), 8);
 		//lcd0()->string_size(func()->ui32toa(test[2]), 10);
 		//lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ui32toa(HAL_GetTick()), 8);
