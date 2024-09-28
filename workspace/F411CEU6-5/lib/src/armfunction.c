@@ -16,6 +16,8 @@ Comment:
 #include <string.h>
 #include <stdarg.h>
 
+#define MAX_FUNCSTR_LEN (FUNCSTRSIZE + 1)
+
 /*** File Variable ***/
 static FUNC setup_func;
 static ARM_FUNC setup_arm_func;
@@ -40,8 +42,8 @@ void function_swap(long *px, long *py);
 /*** 1 ***/
 uint16_t function_SwapByte(uint16_t num);
 /*** 2 ***/
-void function_copy(char to[], char from[]);
-void function_squeeze(char s[], int c);
+void function_copy(char to[], const char from[], size_t to_size);
+void function_squeeze(char s[], char c);
 void function_shellsort(int v[], int n);
 char* function_resizestr(char *string, int size);
 int function_trim(char s[]);
@@ -242,13 +244,22 @@ RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
 
     return result;
 }
-// StringLength
-int function_StringLength (const char string[])
-{
-	int count;
-	for (count = 0; string[count] != '\0'; count++ ) ;
-	return count;
+// Function to calculate the length of a string
+int function_StringLength(const char string[]) {
+    if (string == NULL) {
+        return 0;  // Return 0 for NULL pointer (or handle this as needed)
+    }
+    if (*string == '\0') {
+    	return 0;  // Return 0 for '\0' pointer (or handle this as needed)
+    }
+
+    int count = 0;
+    while (string[count] != '\0') {
+        count++;
+    }
+    return count;
 }
+/****
 // Function to reverse a string
 void function_Reverse(char* str) {
     if (str == NULL){ return; }
@@ -266,37 +277,82 @@ void function_Reverse(char* str) {
         j--;
     }
 }
-void function_swap(long *px, long *py)
-{
-	long temp = *px; *px = *py; *py = temp;
+*****/
+/*****/
+void function_Reverse(char* str) {
+    if (str == NULL){ return; } // Check for null pointer
+    if (*str == '\0'){ return; }
+
+    int n = strlen(str);
+    for (int i = 0; i < n / 2; i++) {
+        char temp = str[i];
+        str[i] = str[n - i - 1];
+        str[n - i - 1] = temp;
+    }
 }
-uint16_t function_SwapByte(uint16_t num)
-{
-	uint16_t tp;
-	tp = (uint16_t)(num << 8);
-	return (num >> 8) | tp;
+/*****/
+void function_swap(long *px, long *py) {
+    // Check for NULL pointers to avoid dereferencing NULL
+    if (px == NULL || py == NULL) {
+        return; // Simply return if either pointer is NULL
+    }
+
+    // Swap the values
+    long temp = *px;
+    *px = *py;
+    *py = temp;
 }
-void function_copy(char to[], char from[])
-{
-	int i = 0;
-	while ((to[i] = from[i]) != '\0') ++i;
+uint16_t function_SwapByte(uint16_t num) {
+    uint16_t tp;
+    tp = (uint16_t)(num << 8);
+    return (num >> 8) | tp;
 }
-void function_squeeze(char s[], int c)
-{
-	int i, j;
-	for (i = 0, j = 0; (s[i] != '\0'); i++){
-		if (s[i] != c) s[j++] = s[i];
-	}
-	s[j] = '\0';
+void function_copy(char to[], const char from[], size_t to_size) {
+    // Check for NULL pointers
+    if (to == NULL || from == NULL) {
+        return;
+    }
+
+    int i = 0;
+
+    // Copy each character while checking the destination size
+    while (i < to_size - 1 && (to[i] = from[i]) != '\0') {
+        ++i;
+    }
+
+    // Ensure the destination string is null-terminated
+    to[i] = '\0';
 }
-void function_shellsort(int v[], int n)
-{
-	int gap, i, j, temp;
-	for (gap = n / 2; gap > 0; gap /= 2)
-		for (i = gap; i < n; i++)
-			for (j = i - gap; j >= 0 && v[j] > v[j + gap]; j -= gap){
-				temp = v[j]; v[j] = v[j + gap]; v[j + gap] = temp;
-			}
+void function_squeeze(char s[], char c) {
+    if (s == NULL) {
+        return; // Handle NULL input gracefully
+    }
+
+    int i, j;
+    for (i = 0, j = 0; s[i] != '\0'; i++) {
+        if (s[i] != c) {
+            s[j++] = s[i];
+        }
+    }
+
+    s[j] = '\0'; // Null-terminate the string after squeezing
+}
+void function_shellsort(int v[], int n) {
+    int gap, i, j;
+
+    // Start with a gap and reduce it each iteration
+    for (gap = n / 2; gap > 0; gap /= 2) {
+        // Perform gapped insertion sort for this gap size
+        for (i = gap; i < n; i++) {
+            // Save the element to be compared
+            int temp = v[i];
+            // Perform the comparisons and swaps within the gap
+            for (j = i - gap; j >= 0 && v[j] > temp; j -= gap) {
+                v[j + gap] = v[j];  // Move element up if it's larger than temp
+            }
+            v[j + gap] = temp;  // Place temp in the correct position
+        }
+    }
 }
 char* function_resizestr(char *string, int size)
 {

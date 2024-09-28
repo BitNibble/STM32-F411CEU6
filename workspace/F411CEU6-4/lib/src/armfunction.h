@@ -51,8 +51,8 @@ typedef struct
 	void (*reverse)(char* str);
 	unsigned int (*mayia)(unsigned int xi, unsigned int xf, uint8_t nbits);
 	void (*swap)(long *px, long *py);
-	void (*copy)(char to[], char from[]);
-	void (*squeeze)(char s[], int c);
+	void (*copy)(char to[], const char from[], size_t to_size);
+	void (*squeeze)(char s[], char c);
 	void (*shellsort)(int v[], int n);
 	char* (*resizestr)(char *string, int size);
 	int (*trim)(char s[]);

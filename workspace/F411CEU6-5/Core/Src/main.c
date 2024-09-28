@@ -166,9 +166,9 @@ int main(void)
             break;
         }/*** switch ***/
         /*** Testing ***/
-        number = 7;
+        number = 6;
 		//set_bit_block(&test[0],33,20+64,~0);
-        RealNum_TypeDef a = func()->realnumber( 0 , number);
+        RealNum_TypeDef a = func()->realnumber( 67.900701 , number);
         //RealNum_TypeDef a = func()->divide( 500 , 123);
 		lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
