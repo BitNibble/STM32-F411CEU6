@@ -59,8 +59,8 @@ typedef struct
 	uint8_t (*BckRead)(uint8_t registerIndex);
 	uint16_t (*get_ss)(void);
 	/*** Other ***/
-	void (*pwr_clock)(uint8_t bool);
-	void (*bck_sram_clock)(uint8_t bool);
+	void (*pwr_clock)(uint8_t state);
+	void (*bck_sram_clock)(uint8_t state);
 	void (*clock)(uint8_t isEnabled);
 	void (*inic)(uint8_t clock);
 	void (*nvic)(uint8_t config);

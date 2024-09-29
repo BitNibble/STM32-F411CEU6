@@ -16,15 +16,15 @@ Comment:
 static STM32FXXX_ADC1 stm32fxxx_adc1;
 /*** File Procedure & Function Header ***/
 /*** ADC1 ***/
-void STM32FXXXAdc1Clock(uint8_t bool)
+void STM32FXXXAdc1Clock(uint8_t state)
 {
-	if(bool){ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, 1); }
+	if(state){ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, 1); }
 	else{ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, 0); }
 
 }
-void STM32FXXXAdc1Nvic(uint8_t bool)
+void STM32FXXXAdc1Nvic(uint8_t state)
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 /*** ADC1 INIC Procedure & Function Definition ***/
 STM32FXXX_ADC1* adc1_enable(void)

@@ -107,7 +107,7 @@ void ARMLCD0_inic(void)
 	ireg->PUPDR |= PUPDR_NC_PULLUP_Msk; // pull up resistors
 
 	ireg->OSPEEDR &= (uint32_t) ~OSPEEDR_PINS_RESET_Msk;
-	//ireg->OSPEEDR |= OSPEEDR_PINS_25MHZ_Msk; // set speed
+	ireg->OSPEEDR |= OSPEEDR_PINS_25MHZ_Msk; // set speed
 	 
 	armlcd0_detect = ireg->IDR & ARMLCD0_NC_Msk;
 	

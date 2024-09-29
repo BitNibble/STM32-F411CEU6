@@ -20,46 +20,46 @@ static STM32FXXX_TIM5 stm32fxxx_tim5;
 /************/
 /*** TIM2 ***/
 /************/
-void STM32FXXXTim2Clock(uint8_t bool)
+void STM32FXXXTim2Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 0);}else{RCC->APB1ENR &= ~(1 << 0);}
+	if(state){RCC->APB1ENR |= (1 << 0);}else{RCC->APB1ENR &= ~(1 << 0);}
 }
-void STM32FXXXTim2Nvic(uint8_t bool)
+void STM32FXXXTim2Nvic(uint8_t state)
 { // 28
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
 /************/
 /*** TIM3 ***/
 /************/
-void STM32FXXXTim3Clock(uint8_t bool)
+void STM32FXXXTim3Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 1);}else{RCC->APB1ENR &= ~(1 << 1);}
+	if(state){RCC->APB1ENR |= (1 << 1);}else{RCC->APB1ENR &= ~(1 << 1);}
 }
-void STM32FXXXTim3Nvic(uint8_t bool)
+void STM32FXXXTim3Nvic(uint8_t state)
 { // 29
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
 /************/
 /*** TIM4 ***/
 /************/
-void STM32FXXXTim4Clock(uint8_t bool)
+void STM32FXXXTim4Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 2);}else{RCC->APB1ENR &= ~(1 << 2);}
+	if(state){RCC->APB1ENR |= (1 << 2);}else{RCC->APB1ENR &= ~(1 << 2);}
 }
-void STM32FXXXTim4Nvic(uint8_t bool)
+void STM32FXXXTim4Nvic(uint8_t state)
 { // 30
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
 /************/
 /*** TIM5 ***/
 /************/
-void STM32FXXXTim5Clock(uint8_t bool)
+void STM32FXXXTim5Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 3);}else{RCC->APB1ENR &= ~(1 << 3);}
+	if(state){RCC->APB1ENR |= (1 << 3);}else{RCC->APB1ENR &= ~(1 << 3);}
 }
-void STM32FXXXTim5Nvic(uint8_t bool)
+void STM32FXXXTim5Nvic(uint8_t state)
 { // 50
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
 /*** TIM2 INIC Procedure & Function Definition ***/
 STM32FXXX_TIM2* tim2_enable(void)

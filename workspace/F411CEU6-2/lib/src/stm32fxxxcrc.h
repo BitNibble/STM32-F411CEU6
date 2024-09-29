@@ -23,7 +23,7 @@ typedef struct
 	uint8_t (*get_idr)(void);
 	void (*reset)(void);
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
+	void (*clock)(uint8_t state);
 }STM32FXXXCRCobj;
 
 STM32FXXXCRCobj* crc_enable(void);
@@ -36,7 +36,7 @@ void STM32FXXXCRC_idr(uint8_t value);
 uint8_t STM32FXXXCRC_get_idr(void);
 void STM32FXXXCRC_reset(void);
 /*** Other ***/
-void STM32FXXXCRC_clock(uint8_t bool);
+void STM32FXXXCRC_clock(uint8_t state);
 
 #endif
 

@@ -15,6 +15,7 @@ Comment:
 #include "stm32fxxxinstance.h"
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <math.h>
 
 #ifndef HSI_RC

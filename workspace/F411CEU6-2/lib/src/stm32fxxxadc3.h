@@ -22,8 +22,8 @@ typedef struct
 	ADC_TypeDef* instance;
 	ADC_Common_TypeDef* common_instance;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
-	void (*nvic)(uint8_t bool);
+	void (*clock)(uint8_t state);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_ADC3;
 
 // INIC
@@ -31,8 +31,8 @@ STM32FXXX_ADC3* adc3_enable(void);
 STM32FXXX_ADC3* adc3(void);
 
 /***** ADC3 Procedure & Function Header ******/
-void STM32FXXXAdc3Clock(uint8_t bool);
-void STM32FXXXAdc3Nvic(uint8_t bool);
+void STM32FXXXAdc3Clock(uint8_t state);
+void STM32FXXXAdc3Nvic(uint8_t state);
 
 #endif
 

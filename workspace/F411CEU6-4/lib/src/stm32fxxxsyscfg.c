@@ -53,17 +53,17 @@ void SYSCFG_pmc_adcxdc2(uint8_t value)
 {
 	set_reg_block(&SYSCFG->PMC, 3, 16, value);
 }
-void SYSCFG_pmc_adc1dc2(uint8_t bool)
+void SYSCFG_pmc_adc1dc2(uint8_t state)
 {
-	set_reg_block(&SYSCFG->PMC, 1, 16, bool);
+	set_reg_block(&SYSCFG->PMC, 1, 16, state);
 }
-void SYSCFG_pmc_adc2dc2(uint8_t bool)
+void SYSCFG_pmc_adc2dc2(uint8_t state)
 {
-	set_reg_block(&SYSCFG->PMC, 1, 17, bool);
+	set_reg_block(&SYSCFG->PMC, 1, 17, state);
 }
-void SYSCFG_pmc_adc3dc2(uint8_t bool)
+void SYSCFG_pmc_adc3dc2(uint8_t state)
 {
-	set_reg_block(&SYSCFG->PMC, 1, 18, bool);
+	set_reg_block(&SYSCFG->PMC, 1, 18, state);
 }
 // exticr1
 void SYSCFG_exticr1_exti3(uint8_t value)
@@ -138,25 +138,25 @@ uint8_t SYSCFG_cmpcr_ready(void)
 {
 	return get_reg_block(SYSCFG->CMPCR, 1, 8);
 }
-void SYSCFG_cmpcr_cmp_pd(uint8_t bool)
+void SYSCFG_cmpcr_cmp_pd(uint8_t state)
 {
-	set_reg_block(&SYSCFG->CMPCR, 1, 0, bool);
+	set_reg_block(&SYSCFG->CMPCR, 1, 0, state);
 }
 // cfgr
 #ifdef STM32F446xx
-void SYSCFG_cfgr_fmpi2c1_sda(uint8_t bool)
+void SYSCFG_cfgr_fmpi2c1_sda(uint8_t state)
 {
-	set_reg_block(&SYSCFG->CFGR, 1, 1, bool);
+	set_reg_block(&SYSCFG->CFGR, 1, 1, state);
 }
-void SYSCFG_cfgr_fmpi2c1_scl(uint8_t bool)
+void SYSCFG_cfgr_fmpi2c1_scl(uint8_t state)
 {
-	set_reg_block(&SYSCFG->CFGR, 1, 0, bool);
+	set_reg_block(&SYSCFG->CFGR, 1, 0, state);
 }
 #endif
 /*** Other ***/
-void SYSCFG_Clock(uint8_t bool)
+void SYSCFG_Clock(uint8_t state)
 {
-	if(bool){ RCC->AHB2ENR |= (1 << 14); } else{ RCC->AHB2ENR &= ~(1 << 14); }
+	if(state){ RCC->AHB2ENR |= (1 << 14); } else{ RCC->AHB2ENR &= ~(1 << 14); }
 
 }
 /***********************************************/

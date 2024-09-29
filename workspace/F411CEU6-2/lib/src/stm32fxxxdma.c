@@ -162,13 +162,13 @@ STM32FXXXDMA_func* stm32fxxx_dma2_func_inic(void);
 /*******************************************/
 /*** DMA Procedure & Function Definition ***/
 /*******************************************/
-void STM32FXXXDma1Clock(uint8_t bool)
+void STM32FXXXDma1Clock(uint8_t state)
 {
-	if(bool){ RCC->AHB1ENR |= (1 << 21); } else{ RCC->AHB1ENR &= ~(1 << 21); }
+	if(state){ RCC->AHB1ENR |= (1 << 21); } else{ RCC->AHB1ENR &= ~(1 << 21); }
 }
-void STM32FXXXDma2Clock(uint8_t bool)
+void STM32FXXXDma2Clock(uint8_t state)
 {
-	if(bool){ RCC->AHB1ENR |= (1 << 22); } else{ RCC->AHB1ENR &= ~(1 << 22); }
+	if(state){ RCC->AHB1ENR |= (1 << 22); } else{ RCC->AHB1ENR &= ~(1 << 22); }
 }
 /********************************************/
 /************* DMA1 Bit Mapping *************/
@@ -514,21 +514,21 @@ void STM32FXXXDMA1_stream0_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream0->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream0_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream0_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream0_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream0->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream0_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream0_cr_msize(uint8_t value)
 {
@@ -538,45 +538,45 @@ void STM32FXXXDMA1_stream0_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream0->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream0_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream0_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream0_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream0_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream0->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream0_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream0_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream0_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream0_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream0_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream0_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream0_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream0->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM0 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream0_cr_inic(void)
@@ -634,21 +634,21 @@ void STM32FXXXDMA1_stream1_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream1->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream1_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream1_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream1_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream1->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream1_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream1_cr_msize(uint8_t value)
 {
@@ -658,45 +658,45 @@ void STM32FXXXDMA1_stream1_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream1->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream1_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream1_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream1_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream1_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream1->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream1_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream1_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream1_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream1_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream1_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream1_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream1_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream1->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM1 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream1_cr_inic(void)
@@ -754,21 +754,21 @@ void STM32FXXXDMA1_stream2_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream2->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream2_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream2_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream2_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream2->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream2_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream2_cr_msize(uint8_t value)
 {
@@ -778,45 +778,45 @@ void STM32FXXXDMA1_stream2_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream2->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream2_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream2_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream2_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream2_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream2->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream2_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream2_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream2_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream2_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream2_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream2_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream2_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream2->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM2 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream2_cr_inic(void)
@@ -874,21 +874,21 @@ void STM32FXXXDMA1_stream3_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream3->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream3_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream3_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream3_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream3->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream3_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream3_cr_msize(uint8_t value)
 {
@@ -898,45 +898,45 @@ void STM32FXXXDMA1_stream3_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream3->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream3_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream3_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream3_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream3_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream3->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream3_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream3_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream3_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream3_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream3_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream3_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream3_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream3->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM3 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream3_cr_inic(void)
@@ -994,21 +994,21 @@ void STM32FXXXDMA1_stream4_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream4->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream4_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream4_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream4_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream4->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream4_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream4_cr_msize(uint8_t value)
 {
@@ -1018,45 +1018,45 @@ void STM32FXXXDMA1_stream4_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream4->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream4_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream4_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream4_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream4_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream4->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream4_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream4_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream4_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream4_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream4_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream4_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream4_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream4->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM4 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream4_cr_inic(void)
@@ -1114,21 +1114,21 @@ void STM32FXXXDMA1_stream5_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream5->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream5_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream5_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream5_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream5->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream5_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream5_cr_msize(uint8_t value)
 {
@@ -1138,45 +1138,45 @@ void STM32FXXXDMA1_stream5_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream5->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream5_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream5_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream5_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream5_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream5->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream5_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream5_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream5_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream5_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream5_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream5_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream5_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream5->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM5 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream5_cr_inic(void)
@@ -1234,21 +1234,21 @@ void STM32FXXXDMA1_stream6_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream6->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream6_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream6_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream6_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream6->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream6_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream6_cr_msize(uint8_t value)
 {
@@ -1258,45 +1258,45 @@ void STM32FXXXDMA1_stream6_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream6->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream6_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream6_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream6_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream6_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream6->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream6_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream6_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream6_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream6_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream6_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream6_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream6_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream6->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM6 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream6_cr_inic(void)
@@ -1354,21 +1354,21 @@ void STM32FXXXDMA1_stream7_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream7->CR, 2, 21, value);
 }
-void STM32FXXXDMA1_stream7_cr_ct(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 19, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 19, state);
 }
-void STM32FXXXDMA1_stream7_cr_dbm(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 18, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 18, state);
 }
 void STM32FXXXDMA1_stream7_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream7->CR, 2, 16, value);
 }
-void STM32FXXXDMA1_stream7_cr_pincos(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 15, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 15, state);
 }
 void STM32FXXXDMA1_stream7_cr_msize(uint8_t value)
 {
@@ -1378,45 +1378,45 @@ void STM32FXXXDMA1_stream7_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream7->CR, 2, 11, value);
 }
-void STM32FXXXDMA1_stream7_cr_minc(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 10, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 10, state);
 }
-void STM32FXXXDMA1_stream7_cr_pinc(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 9, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 9, state);
 }
-void STM32FXXXDMA1_stream7_cr_circ(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 8, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 8, state);
 }
 void STM32FXXXDMA1_stream7_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream7->CR, 2, 7, value);
 }
-void STM32FXXXDMA1_stream7_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 5, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 5, state);
 }
-void STM32FXXXDMA1_stream7_cr_tcie(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 4, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 4, state);
 }
-void STM32FXXXDMA1_stream7_cr_htie(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 3, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 3, state);
 }
-void STM32FXXXDMA1_stream7_cr_teie(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 2, state);
 }
-void STM32FXXXDMA1_stream7_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 1, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 1, state);
 }
-void STM32FXXXDMA1_stream7_cr_en(uint8_t bool)
+void STM32FXXXDMA1_stream7_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->CR, 1, 0, bool);
+	set_reg_block(&DMA1_Stream7->CR, 1, 0, state);
 }
 /*** Inic DMA1 STREAM7 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma1_stream7_cr_inic(void)
@@ -1462,17 +1462,17 @@ void stm32fxxx_dma1_stream7_m1a(volatile long unsigned int mem1_addr)
 	DMA1_Stream7->M1AR = mem1_addr;
 }
 // DMA1 STREAM0 FCR
-void STM32FXXXDMA1_stream0_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream0_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream0->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream0_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream0->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream0_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream0_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream0->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream0->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream0_fcr_fth(uint8_t value)
 {
@@ -1490,17 +1490,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream0_fcr_inic(void)
 	return &stm32fxxx_dma1_stream0_fcr;
 }
 // DMA1 STREAM1 FCR
-void STM32FXXXDMA1_stream1_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream1_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream1->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream1_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream1->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream1_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream1_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream1->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream1->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream1_fcr_fth(uint8_t value)
 {
@@ -1518,17 +1518,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream1_fcr_inic(void)
 	return &stm32fxxx_dma1_stream1_fcr;
 }
 // DMA1 STREAM2 FCR
-void STM32FXXXDMA1_stream2_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream2_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream2->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream2_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream2->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream2_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream2_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream2->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream2->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream2_fcr_fth(uint8_t value)
 {
@@ -1546,17 +1546,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream2_fcr_inic(void)
 	return &stm32fxxx_dma1_stream2_fcr;
 }
 // DMA1 STREAM3 FCR
-void STM32FXXXDMA1_stream3_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream3_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream3->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream3_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream3->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream3_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream3_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream3->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream3->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream3_fcr_fth(uint8_t value)
 {
@@ -1574,17 +1574,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream3_fcr_inic(void)
 	return &stm32fxxx_dma1_stream3_fcr;
 }
 // DMA1 STREAM4 FCR
-void STM32FXXXDMA1_stream4_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream4_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream4->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream4_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream4->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream4_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream4_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream4->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream4->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream4_fcr_fth(uint8_t value)
 {
@@ -1602,17 +1602,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream4_fcr_inic(void)
 	return &stm32fxxx_dma1_stream4_fcr;
 }
 // DMA1 STREAM5 FCR
-void STM32FXXXDMA1_stream5_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream5_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream5->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream5_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream5->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream5_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream5_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream5->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream5->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream5_fcr_fth(uint8_t value)
 {
@@ -1630,17 +1630,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream5_fcr_inic(void)
 	return &stm32fxxx_dma1_stream5_fcr;
 }
 // DMA1 STREAM6 FCR
-void STM32FXXXDMA1_stream6_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream6_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream6->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream6_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream6->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream6_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream6_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream6->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream6->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream6_fcr_fth(uint8_t value)
 {
@@ -1658,17 +1658,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma1_stream6_fcr_inic(void)
 	return &stm32fxxx_dma1_stream6_fcr;
 }
 // DMA1 STREAM0 FCR
-void STM32FXXXDMA1_stream7_fcr_feie(uint8_t bool)
+void STM32FXXXDMA1_stream7_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->FCR, 1, 7, bool);
+	set_reg_block(&DMA1_Stream7->FCR, 1, 7, state);
 }
 void STM32FXXXDMA1_stream7_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA1_Stream7->FCR, 3, 3, value);
 }
-void STM32FXXXDMA1_stream7_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA1_stream7_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA1_Stream7->FCR, 1, 2, bool);
+	set_reg_block(&DMA1_Stream7->FCR, 1, 2, state);
 }
 void STM32FXXXDMA1_stream7_fcr_fth(uint8_t value)
 {
@@ -2145,21 +2145,21 @@ void STM32FXXXDMA2_stream0_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream0->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream0_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream0_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream0_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream0->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream0_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream0_cr_msize(uint8_t value)
 {
@@ -2169,45 +2169,45 @@ void STM32FXXXDMA2_stream0_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream0->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream0_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream0_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream0_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream0_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream0->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream0_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream0_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream0_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream0_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream0_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream0_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream0_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream0->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM0 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream0_cr_inic(void)
@@ -2265,21 +2265,21 @@ void STM32FXXXDMA2_stream1_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream1->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream1_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream1_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream1_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream1->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream1_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream1_cr_msize(uint8_t value)
 {
@@ -2289,45 +2289,45 @@ void STM32FXXXDMA2_stream1_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream1->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream1_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream1_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream1_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream1_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream1->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream1_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream1_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream1_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream1_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream1_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream1_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream1_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream1->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM1 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream1_cr_inic(void)
@@ -2385,21 +2385,21 @@ void STM32FXXXDMA2_stream2_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream2->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream2_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream2_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream2_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream2->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream2_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream2_cr_msize(uint8_t value)
 {
@@ -2409,45 +2409,45 @@ void STM32FXXXDMA2_stream2_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream2->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream2_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream2_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream2_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream2_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream2->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream2_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream2_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream2_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream2_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream2_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream2_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream2_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream2->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM2 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream2_cr_inic(void)
@@ -2505,21 +2505,21 @@ void STM32FXXXDMA2_stream3_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream3->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream3_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream3_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream3_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream3->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream3_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream3_cr_msize(uint8_t value)
 {
@@ -2529,45 +2529,45 @@ void STM32FXXXDMA2_stream3_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream3->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream3_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream3_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream3_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream3_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream3->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream3_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream3_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream3_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream3_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream3_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream3_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream3_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream3->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM3 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream3_cr_inic(void)
@@ -2625,21 +2625,21 @@ void STM32FXXXDMA2_stream4_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream4->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream4_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream4_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream4_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream4->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream4_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream4_cr_msize(uint8_t value)
 {
@@ -2649,45 +2649,45 @@ void STM32FXXXDMA2_stream4_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream4->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream4_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream4_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream4_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream4_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream4->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream4_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream4_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream4_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream4_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream4_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream4_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream4_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream4->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM4 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream4_cr_inic(void)
@@ -2745,21 +2745,21 @@ void STM32FXXXDMA2_stream5_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream5->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream5_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream5_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream5_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream5->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream5_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream5_cr_msize(uint8_t value)
 {
@@ -2769,45 +2769,45 @@ void STM32FXXXDMA2_stream5_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream5->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream5_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream5_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream5_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream5_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream5->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream5_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream5_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream5_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream5_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream5_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream5_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream5_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream5->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM5 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream5_cr_inic(void)
@@ -2865,21 +2865,21 @@ void STM32FXXXDMA2_stream6_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream6->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream6_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream6_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream6_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream6->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream6_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream6_cr_msize(uint8_t value)
 {
@@ -2889,45 +2889,45 @@ void STM32FXXXDMA2_stream6_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream6->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream6_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream6_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream6_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream6_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream6->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream6_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream6_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream6_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream6_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream6_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream6_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream6_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream6->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM6 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream6_cr_inic(void)
@@ -2985,21 +2985,21 @@ void STM32FXXXDMA2_stream7_cr_pburst(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream7->CR, 2, 21, value);
 }
-void STM32FXXXDMA2_stream7_cr_ct(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_ct(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 19, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 19, state);
 }
-void STM32FXXXDMA2_stream7_cr_dbm(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_dbm(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 18, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 18, state);
 }
 void STM32FXXXDMA2_stream7_cr_pl(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream7->CR, 2, 16, value);
 }
-void STM32FXXXDMA2_stream7_cr_pincos(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_pincos(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 15, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 15, state);
 }
 void STM32FXXXDMA2_stream7_cr_msize(uint8_t value)
 {
@@ -3009,45 +3009,45 @@ void STM32FXXXDMA2_stream7_cr_psize(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream7->CR, 2, 11, value);
 }
-void STM32FXXXDMA2_stream7_cr_minc(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_minc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 10, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 10, state);
 }
-void STM32FXXXDMA2_stream7_cr_pinc(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_pinc(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 9, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 9, state);
 }
-void STM32FXXXDMA2_stream7_cr_circ(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_circ(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 8, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 8, state);
 }
 void STM32FXXXDMA2_stream7_cr_dir(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream7->CR, 2, 7, value);
 }
-void STM32FXXXDMA2_stream7_cr_pfctrl(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_pfctrl(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 5, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 5, state);
 }
-void STM32FXXXDMA2_stream7_cr_tcie(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_tcie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 4, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 4, state);
 }
-void STM32FXXXDMA2_stream7_cr_htie(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_htie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 3, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 3, state);
 }
-void STM32FXXXDMA2_stream7_cr_teie(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_teie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 2, state);
 }
-void STM32FXXXDMA2_stream7_cr_dmeie(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_dmeie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 1, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 1, state);
 }
-void STM32FXXXDMA2_stream7_cr_en(uint8_t bool)
+void STM32FXXXDMA2_stream7_cr_en(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->CR, 1, 0, bool);
+	set_reg_block(&DMA2_Stream7->CR, 1, 0, state);
 }
 /*** Inic DMA2 STREAM7 CR ***/
 STM32FXXXDMA_STREAM_cr* stm32fxxx_dma2_stream7_cr_inic(void)
@@ -3093,17 +3093,17 @@ void stm32fxxx_dma2_stream7_m1a(volatile long unsigned int mem1_addr)
 	DMA2_Stream7->M1AR = mem1_addr;
 }
 // DMA2 STREAM0 FCR
-void STM32FXXXDMA2_stream0_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream0_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream0->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream0_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream0->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream0_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream0_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream0->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream0->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream0_fcr_fth(uint8_t value)
 {
@@ -3121,17 +3121,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream0_fcr_inic(void)
 	return &stm32fxxx_dma2_stream0_fcr;
 }
 // DMA2 STREAM1 FCR
-void STM32FXXXDMA2_stream1_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream1_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream1->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream1_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream1->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream1_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream1_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream1->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream1->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream1_fcr_fth(uint8_t value)
 {
@@ -3149,17 +3149,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream1_fcr_inic(void)
 	return &stm32fxxx_dma2_stream1_fcr;
 }
 // DMA2 STREAM2 FCR
-void STM32FXXXDMA2_stream2_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream2_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream2->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream2_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream2->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream2_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream2_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream2->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream2->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream2_fcr_fth(uint8_t value)
 {
@@ -3177,17 +3177,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream2_fcr_inic(void)
 	return &stm32fxxx_dma2_stream2_fcr;
 }
 // DMA2 STREAM3 FCR
-void STM32FXXXDMA2_stream3_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream3_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream3->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream3_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream3->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream3_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream3_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream3->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream3->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream3_fcr_fth(uint8_t value)
 {
@@ -3205,17 +3205,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream3_fcr_inic(void)
 	return &stm32fxxx_dma2_stream3_fcr;
 }
 // DMA1 STREAM4 FCR
-void STM32FXXXDMA2_stream4_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream4_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream4->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream4_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream4->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream4_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream4_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream4->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream4->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream4_fcr_fth(uint8_t value)
 {
@@ -3233,17 +3233,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream4_fcr_inic(void)
 	return &stm32fxxx_dma2_stream4_fcr;
 }
 // DMA1 STREAM5 FCR
-void STM32FXXXDMA2_stream5_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream5_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream5->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream5_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream5->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream5_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream5_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream5->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream5->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream5_fcr_fth(uint8_t value)
 {
@@ -3261,17 +3261,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream5_fcr_inic(void)
 	return &stm32fxxx_dma2_stream5_fcr;
 }
 // DMA1 STREAM6 FCR
-void STM32FXXXDMA2_stream6_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream6_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream6->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream6_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream6->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream6_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream6_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream6->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream6->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream6_fcr_fth(uint8_t value)
 {
@@ -3289,17 +3289,17 @@ STM32FXXXDMA_STREAM_fcr* stm32fxxx_dma2_stream6_fcr_inic(void)
 	return &stm32fxxx_dma2_stream6_fcr;
 }
 // DMA2 STREAM0 FCR
-void STM32FXXXDMA2_stream7_fcr_feie(uint8_t bool)
+void STM32FXXXDMA2_stream7_fcr_feie(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->FCR, 1, 7, bool);
+	set_reg_block(&DMA2_Stream7->FCR, 1, 7, state);
 }
 void STM32FXXXDMA2_stream7_fcr_fs(uint8_t value)
 {
 	set_reg_block(&DMA2_Stream7->FCR, 3, 3, value);
 }
-void STM32FXXXDMA2_stream7_fcr_dmdis(uint8_t bool)
+void STM32FXXXDMA2_stream7_fcr_dmdis(uint8_t state)
 {
-	set_reg_block(&DMA2_Stream7->FCR, 1, 2, bool);
+	set_reg_block(&DMA2_Stream7->FCR, 1, 2, state);
 }
 void STM32FXXXDMA2_stream7_fcr_fth(uint8_t value)
 {

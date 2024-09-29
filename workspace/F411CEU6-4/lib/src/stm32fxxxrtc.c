@@ -56,8 +56,8 @@ static uint32_t rtc_time_out;
 
 /*** File Procedure & Function Header ***/
 /***/
-void STM32FXXXPwrClock(uint8_t bool);
-void STM32FXXXBckSramClock(uint8_t bool);
+void STM32FXXXPwrClock(uint8_t state);
+void STM32FXXXBckSramClock(uint8_t state);
 void STM32FXXXRtcWriteEnable(void);
 void STM32FXXXRtcWriteDisable(void);
 void STM32FXXXRtcRegUnlock(void);
@@ -542,16 +542,16 @@ uint8_t STM32FXXXRtc_get_Second(void){
 }
 
 /*** AUX Procedure & Function Definition ***/
-void STM32FXXXPwrClock(uint8_t bool)
+void STM32FXXXPwrClock(uint8_t state)
 {
-	set_reg_block(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
+	set_reg_block(&RCC->APB1ENR, 1, 28, state); // Power interface clock enable
 }
-void STM32FXXXBckSramClock(uint8_t bool)
+void STM32FXXXBckSramClock(uint8_t state)
 {
 	#ifdef STM32F446xx
-		set_reg_block(&RCC->AHB1ENR, 1, 18, bool); // Backup SRAM interface clock enable
+		set_reg_block(&RCC->AHB1ENR, 1, 18, state); // Backup SRAM interface clock enable
 	#endif
-	set_reg_block(&RCC->AHB1LPENR, 1, 16, bool); // Backup SRAM interface clock enable
+	set_reg_block(&RCC->AHB1LPENR, 1, 16, state); // Backup SRAM interface clock enable
 }
 void STM32FXXXRtcWriteEnable(void)
 {

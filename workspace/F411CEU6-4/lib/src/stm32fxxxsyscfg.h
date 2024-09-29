@@ -24,9 +24,9 @@ typedef struct
 typedef struct
 {
 	void (*adcxdc2)(uint8_t value);
-	void (*adc1dc2)(uint8_t bool);
-	void (*adc2dc2)(uint8_t bool);
-	void (*adc3dc2)(uint8_t bool);
+	void (*adc1dc2)(uint8_t state);
+	void (*adc2dc2)(uint8_t state);
+	void (*adc3dc2)(uint8_t state);
 }SYSCFG_pmc;
 typedef struct
 {
@@ -59,7 +59,7 @@ typedef struct
 typedef struct
 {
 	uint8_t (*ready)(void);
-	void (*cmp_pd)(uint8_t bool);
+	void (*cmp_pd)(uint8_t state);
 }SYSCFG_cmpcr;
 typedef struct
 {
@@ -82,7 +82,7 @@ typedef struct
 	SYSCFG_cmpcr* cmpcr;
 	SYSCFG_cfgr* cfgr;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
+	void (*clock)(uint8_t state);
 }STM32FXXXSYSCFGobj;
 /*************************************/
 /************ INIC SYSCFG ************/
@@ -92,15 +92,15 @@ STM32FXXXSYSCFGobj* syscfg(void);
 /***********************************************/
 /********* Procedure & Function Header *********/
 /***********************************************/
-void SYSCFG_Clock(uint8_t bool);
+void SYSCFG_Clock(uint8_t state);
 // memrmp
 void SYSCFG_memrmp_swp_fmc(uint8_t value);
 void SYSCFG_memrmp_mem_mode(uint8_t value);
 // pmc
 void SYSCFG_pmc_adcxdc2(uint8_t value);
-void SYSCFG_pmc_adc1dc2(uint8_t bool);
-void SYSCFG_pmc_adc2dc2(uint8_t bool);
-void SYSCFG_pmc_adc3dc2(uint8_t bool);
+void SYSCFG_pmc_adc1dc2(uint8_t state);
+void SYSCFG_pmc_adc2dc2(uint8_t state);
+void SYSCFG_pmc_adc3dc2(uint8_t state);
 // exticr1
 void SYSCFG_exticr1_exti3(uint8_t value);
 void SYSCFG_exticr1_exti2(uint8_t value);
@@ -123,10 +123,10 @@ void SYSCFG_exticr4_exti13(uint8_t value);
 void SYSCFG_exticr4_exti12(uint8_t value);
 // cmpcr
 uint8_t SYSCFG_cmpcr_ready(void);
-void SYSCFG_cmpcr_cmp_pd(uint8_t bool);
+void SYSCFG_cmpcr_cmp_pd(uint8_t state);
 // cfgr
-void SYSCFG_cfgr_fmpi2c1_sda(uint8_t bool);
-void SYSCFG_cfgr_fmpi2c1_scl(uint8_t bool);
+void SYSCFG_cfgr_fmpi2c1_sda(uint8_t state);
+void SYSCFG_cfgr_fmpi2c1_scl(uint8_t state);
 /***********************************************/
 /*** INTERRUPT HEADER ***/
 void PVD_IRQHandler(void);

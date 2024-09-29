@@ -24,73 +24,73 @@ static STM32FXXX_TIM11 stm32fxxx_tim11;
 /************/
 /*** TIM9 ***/
 /************/
-void STM32FXXXTim9Clock(uint8_t bool)
+void STM32FXXXTim9Clock(uint8_t state)
 {
-	if(bool){RCC->APB2ENR |= (1 << 16);}else{RCC->APB2ENR &= ~(1 << 16);}
+	if(state){RCC->APB2ENR |= (1 << 16);}else{RCC->APB2ENR &= ~(1 << 16);}
 }
-void STM32FXXXTim9Nvic(uint8_t bool)
+void STM32FXXXTim9Nvic(uint8_t state)
 { // 24
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);}
 }
 /*************/
 /*** TIM10 ***/
 /*************/
-void STM32FXXXTim10Clock(uint8_t bool)
+void STM32FXXXTim10Clock(uint8_t state)
 {
-	if(bool){RCC->APB2ENR |= (1 << 17);}else{RCC->APB2ENR &= ~(1 << 17);}
+	if(state){RCC->APB2ENR |= (1 << 17);}else{RCC->APB2ENR &= ~(1 << 17);}
 }
-void STM32FXXXTim10Nvic(uint8_t bool)
+void STM32FXXXTim10Nvic(uint8_t state)
 { // 25
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);}
 }
 /*************/
 /*** TIM11 ***/
 /*************/
-void STM32FXXXTim11Clock(uint8_t bool)
+void STM32FXXXTim11Clock(uint8_t state)
 {
-	if(bool){RCC->APB2ENR |= (1 << 18);}else{RCC->APB2ENR &= ~(1 << 18);}
+	if(state){RCC->APB2ENR |= (1 << 18);}else{RCC->APB2ENR &= ~(1 << 18);}
 }
-void STM32FXXXTim11Nvic(uint8_t bool)
+void STM32FXXXTim11Nvic(uint8_t state)
 { // 26
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
 }
 #ifdef STM32F446xx
 /*************/
 /*** TIM12 ***/
 /*************/
-void STM32FXXXTim12Clock(uint8_t bool)
+void STM32FXXXTim12Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 6);}else{RCC->APB1ENR &= ~(1 << 6);}
+	if(state){RCC->APB1ENR |= (1 << 6);}else{RCC->APB1ENR &= ~(1 << 6);}
 }
-void STM32FXXXTim12Nvic(uint8_t bool)
+void STM32FXXXTim12Nvic(uint8_t state)
 { // 43
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);}
 }
 /*************/
 /*** TIM13 ***/
 /*************/
-void STM32FXXXTim13Clock(uint8_t bool)
+void STM32FXXXTim13Clock(uint8_t state)
 {
-	if(bool){
+	if(state){
 		RCC->APB1ENR |= (1 << 7); // timer 13 clock enabled
 	}else{
 		RCC->APB1ENR &= ~(1 << 7); //timer 13 clock disabled
 	}
 }
-void STM32FXXXTim13Nvic(uint8_t bool)
+void STM32FXXXTim13Nvic(uint8_t state)
 { // 44
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);}
 }
 /*************/
 /*** TIM14 ***/
 /*************/
-void STM32FXXXTim14Clock(uint8_t bool)
+void STM32FXXXTim14Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 8);}else{RCC->APB1ENR &= ~(1 << 8);}
+	if(state){RCC->APB1ENR |= (1 << 8);}else{RCC->APB1ENR &= ~(1 << 8);}
 }
-void STM32FXXXTim14Nvic(uint8_t bool)
+void STM32FXXXTim14Nvic(uint8_t state)
 { // 45
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}
 }
 #endif
 /*** TIM9 Procedure & Function Definition ***/

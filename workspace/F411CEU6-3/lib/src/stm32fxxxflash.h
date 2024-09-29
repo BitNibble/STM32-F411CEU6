@@ -35,11 +35,11 @@ Comment:
 // ACR
 typedef struct
 {
-	void (*dcrst)(uint8_t bool);
-	void (*icrst)(uint8_t bool);
-	void (*dcen)(uint8_t bool);
-	void (*icen)(uint8_t bool);
-	void (*prften)(uint8_t bool);
+	void (*dcrst)(uint8_t state);
+	void (*icrst)(uint8_t state);
+	void (*dcen)(uint8_t state);
+	void (*icen)(uint8_t state);
+	void (*prften)(uint8_t state);
 	void (*latency)(uint8_t value);
 }STM32FXXXFLASH_acr;
 // SR
@@ -65,29 +65,29 @@ typedef struct
 typedef struct
 {
 	void (*lock)(void);
-	void (*errie)(uint8_t bool);
-	void (*eopie)(uint8_t bool);
+	void (*errie)(uint8_t state);
+	void (*eopie)(uint8_t state);
 	void (*strt)(void);
 	void (*psize)(uint8_t value);
 	void (*snb)(uint8_t value);
-	void (*mer)(uint8_t bool);
-	void (*ser)(uint8_t bool);
-	void (*pg)(uint8_t bool);
+	void (*mer)(uint8_t state);
+	void (*ser)(uint8_t state);
+	void (*pg)(uint8_t state);
 }STM32FXXXFLASH_cr;
 // OPTCR
 typedef struct
 {
-	void (*sprmod)(uint8_t bool);
+	void (*sprmod)(uint8_t state);
 	void (*n_wrp)(uint8_t value);
 	uint8_t (*get_n_wrp)(void);
 	void (*rdp)(uint8_t value);
 	uint8_t(*get_rdp)(void);
-	void (*nrst_stdby)(uint8_t bool);
-	void (*nrst_stop)(uint8_t bool);
-	void (*wdg_sw)(uint8_t bool);
+	void (*nrst_stdby)(uint8_t state);
+	void (*nrst_stop)(uint8_t state);
+	void (*wdg_sw)(uint8_t state);
 	void (*bor_lev)(uint8_t value);
-	void (*optstrt)(uint8_t bool);
-	void (*optlock)(uint8_t bool);
+	void (*optstrt)(uint8_t state);
+	void (*optlock)(uint8_t state);
 }STM32FXXXFLASH_optcr;
 /*** FLASH TypeDef ***/
 typedef struct
@@ -101,21 +101,21 @@ typedef struct
 	void (*keyr)(uint32_t);
 	void (*optkeyr)(uint32_t);
 	/*** Other ***/
-	void (*nvic)(uint8_t bool);
+	void (*nvic)(uint8_t state);
 }STM32FXXXFLASHobj;
 
 STM32FXXXFLASHobj* flash_enable(void);
 STM32FXXXFLASHobj* flash(void);
 
 /*** Procedure & Function Header ***/
-void STM32FXXXFLASH_nvic(uint8_t bool);
+void STM32FXXXFLASH_nvic(uint8_t state);
 /*** FLASH Bit Mapping Header ***/
 // ACR
-void STM32FXXXFLASH_acr_dcrst(uint8_t bool);
-void STM32FXXXFLASH_acr_icrst(uint8_t bool);
-void STM32FXXXFLASH_acr_dcen(uint8_t bool);
-void STM32FXXXFLASH_acr_icen(uint8_t bool);
-void STM32FXXXFLASH_acr_prften(uint8_t bool);
+void STM32FXXXFLASH_acr_dcrst(uint8_t state);
+void STM32FXXXFLASH_acr_icrst(uint8_t state);
+void STM32FXXXFLASH_acr_dcen(uint8_t state);
+void STM32FXXXFLASH_acr_icen(uint8_t state);
+void STM32FXXXFLASH_acr_prften(uint8_t state);
 void STM32FXXXFLASH_acr_latency(uint8_t value);
 // SR
 uint8_t STM32FXXXFLASH_sr_bsy(void);
@@ -135,26 +135,26 @@ uint8_t STM32FXXXFLASH_sr_eop(void);
 void STM32FXXXFLASH_sr_clear_eop(void);
 // CR
 void STM32FXXXFLASH_cr_lock(void);
-void STM32FXXXFLASH_cr_errie(uint8_t bool);
-void STM32FXXXFLASH_cr_eopie(uint8_t bool);
+void STM32FXXXFLASH_cr_errie(uint8_t state);
+void STM32FXXXFLASH_cr_eopie(uint8_t state);
 void STM32FXXXFLASH_cr_strt(void);
 void STM32FXXXFLASH_cr_psize(uint8_t value);
 void STM32FXXXFLASH_cr_snb(uint8_t value);
-void STM32FXXXFLASH_cr_mer(uint8_t bool);
-void STM32FXXXFLASH_cr_ser(uint8_t bool);
-void STM32FXXXFLASH_cr_pg(uint8_t bool);
+void STM32FXXXFLASH_cr_mer(uint8_t state);
+void STM32FXXXFLASH_cr_ser(uint8_t state);
+void STM32FXXXFLASH_cr_pg(uint8_t state);
 // OPTCR
-void STM32FXXXFLASH_optcr_sprmod(uint8_t bool);
+void STM32FXXXFLASH_optcr_sprmod(uint8_t state);
 void STM32FXXXFLASH_optcr_n_wrp(uint8_t value);
 uint8_t STM32FXXXFLASH_optcr_get_n_wrp(void);
 void STM32FXXXFLASH_optcr_rdp(uint8_t value);
 uint8_t STM32FXXXFLASH_optcr_get_rdp(void);
-void STM32FXXXFLASH_optcr_nrst_stdby(uint8_t bool);
-void STM32FXXXFLASH_optcr_nrst_stop(uint8_t bool);
-void STM32FXXXFLASH_optcr_wdg_sw(uint8_t bool);
+void STM32FXXXFLASH_optcr_nrst_stdby(uint8_t state);
+void STM32FXXXFLASH_optcr_nrst_stop(uint8_t state);
+void STM32FXXXFLASH_optcr_wdg_sw(uint8_t state);
 void STM32FXXXFLASH_optcr_bor_lev(uint8_t value);
-void STM32FXXXFLASH_optcr_optstrt(uint8_t bool);
-void STM32FXXXFLASH_optcr_optlock(uint8_t bool);
+void STM32FXXXFLASH_optcr_optstrt(uint8_t state);
+void STM32FXXXFLASH_optcr_optlock(uint8_t state);
 // KEYR
 void STM32FXXXFLASH_keyr_key(uint32_t value);
 // OPTKEYR

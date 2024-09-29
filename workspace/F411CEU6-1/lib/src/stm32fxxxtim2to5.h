@@ -20,8 +20,8 @@ typedef struct
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
-	void (*nvic)(uint8_t bool);
+	void (*clock)(uint8_t state);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_TIM2, STM32FXXX_TIM5;
 // ( 3 and 4 ) TIM
 typedef struct
@@ -30,8 +30,8 @@ typedef struct
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
-	void (*nvic)(uint8_t bool);
+	void (*clock)(uint8_t state);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_TIM3, STM32FXXX_TIM4;
 /***********************/
 /*** INIC TIM 2 to 5 ***/
@@ -47,23 +47,23 @@ STM32FXXX_TIM5* tim5(void);
 /****************************************/
 /*** TIM2 Procedure & Function Header ***/
 /****************************************/
-void STM32FXXXTim2Clock(uint8_t bool);
-void STM32FXXXTim2Nvic(uint8_t bool);
+void STM32FXXXTim2Clock(uint8_t state);
+void STM32FXXXTim2Nvic(uint8_t state);
 /****************************************/
 /*** TIM3 Procedure & Function Header ***/
 /****************************************/
-void STM32FXXXTim3Clock(uint8_t bool);
-void STM32FXXXTim3Nvic(uint8_t bool);
+void STM32FXXXTim3Clock(uint8_t state);
+void STM32FXXXTim3Nvic(uint8_t state);
 /****************************************/
 /*** TIM4 Procedure & Function Header ***/
 /****************************************/
-void STM32FXXXTim4Clock(uint8_t bool);
-void STM32FXXXTim4Nvic(uint8_t bool);
+void STM32FXXXTim4Clock(uint8_t state);
+void STM32FXXXTim4Nvic(uint8_t state);
 /****************************************/
 /*** TIM5 Procedure & Function Header ***/
 /****************************************/
-void STM32FXXXTim5Clock(uint8_t bool);
-void STM32FXXXTim5Nvic(uint8_t bool);
+void STM32FXXXTim5Clock(uint8_t state);
+void STM32FXXXTim5Nvic(uint8_t state);
 /*** TIM5 Bit Mapping Header ***/
 // CNT
 void STM32FXXXTim5_cnt(uint32_t value);

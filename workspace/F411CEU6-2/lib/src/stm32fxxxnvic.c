@@ -34,11 +34,11 @@ void STM32FXXXNVIC_clear_pending( uint8_t IRQn )
 uint8_t STM32FXXXNVIC_active( uint8_t IRQn ) // Query
 {
 	volatile uint32_t* reg = NVIC->IABR;
-	uint8_t bool; uint32_t n = 0;
+	uint8_t state; uint32_t n = 0;
 	if(IRQn > 31){ n = IRQn/32; IRQn = IRQn - (n * 32); }
-	if( *(reg + n ) & (1 << IRQn) ) bool = 1; else bool = 0 ;
+	if( *(reg + n ) & (1 << IRQn) ) state = 1; else state = 0 ;
 	//return nvic_getset_bit_block(NVIC->ICPR, 1, IRQn);
-	return bool;
+	return state;
 }
 void STM32FXXXNVIC_priority(uint32_t IRQn, uint32_t priority)
 {

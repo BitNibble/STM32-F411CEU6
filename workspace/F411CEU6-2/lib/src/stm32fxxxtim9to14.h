@@ -19,8 +19,8 @@ typedef struct
 	/*** Bit Field ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
-	void (*nvic)(uint8_t bool);
+	void (*clock)(uint8_t state);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_TIM9, STM32FXXX_TIM12;
 // ( 10/11/13/14 ) TIM
 typedef struct
@@ -28,8 +28,8 @@ typedef struct
 	/*** Bit Field ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/
-	void (*clock)(uint8_t bool);
-	void (*nvic)(uint8_t bool);
+	void (*clock)(uint8_t state);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_TIM10, STM32FXXX_TIM11, STM32FXXX_TIM13, STM32FXXX_TIM14;
 /************************/
 /*** INIC TIM 9 to 14 ***/
@@ -49,33 +49,33 @@ STM32FXXX_TIM14* tim14(void);
 /****************************************/
 /*** TIM9 Procedure & Function Header ***/
 /****************************************/
-void STM32FXXXTim9Clock(uint8_t bool);
-void STM32FXXXTim9Nvic(uint8_t bool);
+void STM32FXXXTim9Clock(uint8_t state);
+void STM32FXXXTim9Nvic(uint8_t state);
 /*****************************************/
 /*** TIM10 Procedure & Function Header ***/
 /*****************************************/
-void STM32FXXXTim10Clock(uint8_t bool);
-void STM32FXXXTim10Nvic(uint8_t bool);
+void STM32FXXXTim10Clock(uint8_t state);
+void STM32FXXXTim10Nvic(uint8_t state);
 /*****************************************/
 /*** TIM11 Procedure & Function Header ***/
 /*****************************************/
-void STM32FXXXTim11Clock(uint8_t bool);
-void STM32FXXXTim11Nvic(uint8_t bool);
+void STM32FXXXTim11Clock(uint8_t state);
+void STM32FXXXTim11Nvic(uint8_t state);
 /*****************************************/
 /*** TIM12 Procedure & Function Header ***/
 /*****************************************/
-void STM32FXXXTim12Clock(uint8_t bool);
-void STM32FXXXTim12Nvic(uint8_t bool);
+void STM32FXXXTim12Clock(uint8_t state);
+void STM32FXXXTim12Nvic(uint8_t state);
 /*****************************************/
 /*** TIM13 Procedure & Function Header ***/
 /*****************************************/
-void STM32FXXXTim13Clock(uint8_t bool);
-void STM32FXXXTim13Nvic(uint8_t bool);
+void STM32FXXXTim13Clock(uint8_t state);
+void STM32FXXXTim13Nvic(uint8_t state);
 /*****************************************/
 /*** TIM14 Procedure & Function Header ***/
 /*****************************************/
-void STM32FXXXTim14Clock(uint8_t bool);
-void STM32FXXXTim14Nvic(uint8_t bool);
+void STM32FXXXTim14Clock(uint8_t state);
+void STM32FXXXTim14Nvic(uint8_t state);
 /*** INTERRUPT HEADER ***/
 void TIM1_BRK_TIM9_IRQHandler(void);
 void TIM1_UP_TIM10_IRQHandler(void);

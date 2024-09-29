@@ -17,12 +17,14 @@ Comment:
 #include <stdarg.h>
 
 #define MAX_FUNCSTR_LEN (FUNCSTRSIZE + 1)
+#define INT_MAX 0xFFFFFFFF
+#define INT_MIN 0x00000000
 
 /*** File Variable ***/
 static FUNC setup_func;
 static ARM_FUNC setup_arm_func;
 
-static char FUNCstr[FUNCSTRSIZE + 1];
+static char FUNCstr[MAX_FUNCSTR_LEN];
 static uint32_t mem[4];
 static uint32_t nen[4];
 /*** SYSTEM ***/
@@ -191,40 +193,46 @@ unsigned int function_power(unsigned int base, unsigned int power) {
 }
 // Function to handle division and return a Real structure
 RealNum_TypeDef function_divide(int numerator, int denominator) {
-	RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0, 1};
-    if (denominator == 0) { result.sign = 0; return result; }
-    result.sign = ((numerator < 0) ^ (denominator < 0)) ? -1 : 1; // Handle the sign
+    RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0}; // Default result
+
+    // Handle case for division by zero
+    if (denominator == 0) {
+        result.sign = 0; // Indicate invalid result due to division by zero
+        return result;
+    }
+
+    // Handle the sign of the result
+    result.sign = ((numerator < 0) ^ (denominator < 0)) ? -1 : 1;
     result.Numerator = (uint32_t)(numerator < 0 ? -numerator : numerator);
     result.Denominator = (uint32_t)(denominator < 0 ? -denominator : denominator);
+
+    // Calculate quotient and remainder
     result.Quotient = result.Numerator / result.Denominator;
     result.Remainder = result.Numerator % result.Denominator;
+
+    // Calculate fractional part
     result.Fpart = (double)result.Remainder / result.Denominator;
+
+    // Calculate the complete number
     result.Number = result.Quotient + result.Fpart;
+
     return result;
 }
 // Function to process real numbers and extract integer/fractional parts
 RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
     RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0, 1};
-
     // Set the original input number
     result.Number = real;
-
     // Handle sign of the number
     result.sign = (real < 0) ? -1 : 1;
-
     // Convert number to absolute value to work with positive parts
     double abs_real = fabs(real);
-
     // Extract the integer part of the number
     result.Quotient = (unsigned int)abs_real;
-
     // Extract the fractional part of the number
     result.Fpart = abs_real - result.Quotient;
-
     // Limit decimal to avoid overflow in precision calculation
-    if (decimal > 127) {
-        decimal = 127;  // Clamp the decimal value to a safe range
-    }
+    if (decimal > 127) { decimal = 127; } // Clamp the decimal value to a safe range
 
     // Calculate precision as a power of 10 for the specified decimal places
     result.Precision = function_power(10, decimal);
@@ -356,23 +364,33 @@ void function_shellsort(int v[], int n) {
 }
 char* function_resizestr(char *string, int size)
 {
-	int i; FUNCstr[size] = '\0';
-	for(i = 0; i < size; i++){
-		if(*(string + i) == '\0'){
-			for(; i < size; i++){ FUNCstr[i] = ' '; }
-			break;
-		}
-		FUNCstr[i] = *(string + i);
-	}
-	return FUNCstr;
+    int i;
+    if (!string) return NULL;  // Check for null pointer
+
+    FUNCstr[size] = '\0';  // Terminate the string at the specified size
+
+    for(i = 0; i < size; i++){
+        if(*(string + i) == '\0'){
+            for(; i < size; i++){
+                FUNCstr[i] = ' ';  // Fill remaining spaces with ' '
+            }
+            break;
+        }
+        FUNCstr[i] = *(string + i);  // Copy character by character
+    }
+    return FUNCstr;  // Return the resized string
 }
 int function_trim(char s[])
 {
-	int n;
-	for (n = function_StringLength(s) - 1; n >= 0; n--)
-		if (s[n] != ' ' && s[n] != '\t' && s[n] != '\n') break;
-	s[n + 1] = '\0';
-	return n;
+    int n;
+    for (n = function_StringLength(s) - 1; n >= 0; n--) {
+        if (s[n] != ' ' && s[n] != '\t' && s[n] != '\n') {
+            break;  // Found the last non-whitespace character
+        }
+    }
+
+    s[n + 1] = '\0';  // Trim the string by placing the null terminator
+    return n >= 0 ? n : 0;  // Ensure it returns 0 if the string was all whitespace
 }
 /******/
 uint8_t function_bcd2dec(uint8_t num)
@@ -387,145 +405,211 @@ uint8_t function_bcd2bin(uint8_t val)
 {
 	return (val & 0x0f) + (val >> 4) * 10;
 }
-// Function to convert decimal to hexadecimal
 char* function_dectohex(int32_t num) {
     int32_t remainder;
     uint8_t j = 0;
+
     if (num == 0) {
         FUNCstr[j++] = '0';  // Handle case when number is zero
     } else {
-        while (num && j < FUNCSTRSIZE - 1) { // Prevent buffer overflow
+        while (num && j < FUNCSTRSIZE - 1) {  // Prevent buffer overflow
             remainder = num % 16;
-            FUNCstr[j++] = (remainder < 10) ? (char)(48 + remainder) : (char)(55 + remainder);
+            FUNCstr[j++] = (remainder < 10) ? (char)(48 + remainder) : (char)(55 + remainder);  // Convert to '0'-'9' or 'A'-'F'
             num = num / 16;
         }
     }
-    FUNCstr[j] = '\0';
-    function_Reverse(FUNCstr);
-    return FUNCstr;
-}
-int function_twocomptoint8bit(int twoscomp){
 
-  int value;
-	// Let's see if the byte is negative
-  if (twoscomp & 0x80){
-    // Invert
-    twoscomp = ~twoscomp + 1;
-		twoscomp = (twoscomp & 0xFF);
-    // Cast as int and multiply by negative one
-    value = (int)(twoscomp) * (-1);
-    return value;
-  }else{
-    // Byte is non-negative, therefore convert to decimal and display
-    // Make sure we are never over 1279
-    twoscomp = (twoscomp & 0x7F);
-    // Cast as int and return
-    value = (int)(twoscomp);
-    return value;
-  }
+    FUNCstr[j] = '\0';  // Null-terminate the string
+    function_Reverse(FUNCstr);  // Reverse the string since it's generated in reverse order
+    return FUNCstr;  // Return the hexadecimal string
 }
-// Two's Complement function, shifts 10 bit binary to signed integers (-512 to 512)
-int function_twocomptoint10bit(int twoscomp){
-	int value;
-  // Let's see if the byte is negative
-  if (twoscomp & 0x200){
-    // Invert
-    twoscomp = ~twoscomp + 1;
-    twoscomp = (twoscomp & 0x3FF);
-    // Cast as int and multiply by negative one
-    value = (int)(twoscomp) * (-1);
-    return value;
-  }else{
-    // Serial.println("We entered the positive loop");
-    // Byte is non-negative, therefore convert to decimal and display
-    twoscomp = (twoscomp & 0x1FF);
-    // Cast as int and return
-    // Serial.println(twoscomp);
-    value = (int)(twoscomp);
-    return value;
-  }
-}
-// Function to handle two's complement conversion
-int function_twocomptointnbit(int twoscomp, uint8_t nbits) {
-    unsigned int signmask = (1 << (nbits - 1));
-    unsigned int mask = signmask - 1;
-    if ((unsigned int)twoscomp & signmask) {
-        twoscomp &= mask;
-        twoscomp -= signmask;
+int function_twocomptoint8bit(int twoscomp) {
+
+    // Check if the byte represents a negative number (sign bit is 1)
+    if (twoscomp & 0x80) {
+        // Convert two's complement to negative integer
+        return (int)(twoscomp - 256);
     } else {
-        twoscomp &= mask;
+        // For positive values, return the number directly
+        return (int)(twoscomp & 0x7F);  // Mask with 0x7F to ensure it stays 7-bit positive
     }
+}
+int function_twocomptoint10bit(int twoscomp) {
+    // Check if the number is negative (sign bit is 1)
+    if (twoscomp & 0x200) {
+        // For negative numbers, subtract 1024 (since 10-bit two's complement range is -512 to 511)
+        return twoscomp - 1024;
+    } else {
+        // For positive numbers, mask the 9 least significant bits (ignoring the sign bit)
+        return twoscomp & 0x1FF;
+    }
+}
+int function_twocomptointnbit(int twoscomp, uint8_t nbits) {
+    unsigned int sign_bit = (1 << (nbits - 1));  // Mask for the sign bit
+    unsigned int value_mask = sign_bit - 1;      // Mask for the remaining bits
+
+    // Check if the sign bit is set
+    if ((unsigned int)twoscomp & sign_bit) {
+        twoscomp &= value_mask;  // Clear the sign bit
+        twoscomp -= sign_bit;    // Subtract to get the correct negative value
+    } else {
+        twoscomp &= value_mask;  // For positive numbers, just mask out extra bits
+    }
+
     return twoscomp;
 }
 /******/
-char* function_print_v1( char* str, uint8_t size_str, const char* format, ... )
-{
-	va_list aptr; int ret;
-	va_start(aptr, format);
-	ret = vsnprintf( str, size_str, (const char*) format, aptr );
-	va_end(aptr);
-	if(ret < 0){ return NULL; }else return str;
+char* function_print_v1(char* str, uint8_t size_str, const char* format, ...) {
+    va_list aptr;
+    int ret;
+
+    va_start(aptr, format);
+    ret = vsnprintf(str, size_str, format, aptr);
+    va_end(aptr);
+
+    // Check for errors or truncation
+    if (ret < 0) {
+        return NULL; // Error occurred
+    } else if (ret >= size_str) {
+        // Output was truncated
+        str[size_str - 1] = '\0'; // Ensure null-termination
+    }
+
+    return str; // Return the formatted string
 }
-char* function_print_v2( const char* format, ... )
-{
-	va_list aptr; int ret;
-	va_start(aptr, format);
-	ret = vsnprintf( FUNCstr, FUNCSTRSIZE, (const char*) format, aptr );
-	va_end(aptr);
-	if(ret < 0){ return NULL; }else return FUNCstr;
+char* function_print_v2(const char* format, ...) {
+    va_list aptr;
+    int ret;
+
+    va_start(aptr, format);
+    ret = vsnprintf(FUNCstr, FUNCSTRSIZE, format, aptr);
+    va_end(aptr);
+
+    // Check for errors
+    if (ret < 0) {
+        return NULL; // Error occurred
+    }
+
+    // Check if output was truncated
+    if (ret >= FUNCSTRSIZE) {
+        // Output was truncated, ensure null-termination
+        FUNCstr[FUNCSTRSIZE - 1] = '\0';
+    }
+
+    return FUNCstr; // Return the formatted string
 }
 /******/
-char* function_i16toa(int16_t n)
-{
-	uint8_t i;
-	int16_t sign = n;
-	if (sign < 0) n = -n;
-	i = 0;
-	do {
-		FUNCstr[i++] = (char)(n % 10 + '0');
-	}while ((n /= 10) > 0);
-	if (sign < 0) FUNCstr[i++] = '-';
-	FUNCstr[i] = '\0';
-	function_Reverse(FUNCstr);
-	return FUNCstr;
+char* function_i16toa(int16_t n) {
+    uint8_t i = 0;
+    int16_t sign = n;
+
+    // Handle negative values
+    if (sign < 0) {
+        n = -n;
+    }
+
+    // Convert integer to string in reverse order
+    do {
+        FUNCstr[i++] = (char)(n % 10 + '0');
+    } while ((n /= 10) > 0);
+
+    // Add the negative sign if the number was negative
+    if (sign < 0) {
+        FUNCstr[i++] = '-';
+    }
+
+    FUNCstr[i] = '\0'; // Null-terminate the string
+
+    // Reverse the string to get the correct order
+    function_Reverse(FUNCstr);
+
+    return FUNCstr; // Return the formatted string
 }
-char* function_ui16toa(uint16_t n)
-{
-	uint8_t i;
-	for(i = 0, FUNCstr[i++] = (char)(n % 10 + '0'); (n /= 10) > 0; FUNCstr[i++] = (char)(n % 10 + '0'));
-	FUNCstr[i] = '\0';
-	function_Reverse(FUNCstr);
-	return FUNCstr;
+char* function_ui16toa(uint16_t n) {
+    uint8_t i = 0;
+
+    // Handle the special case for zero
+    if (n == 0) {
+        FUNCstr[i++] = '0';
+    } else {
+        // Convert integer to string in reverse order
+        do {
+            FUNCstr[i++] = (char)(n % 10 + '0');
+        } while ((n /= 10) > 0);
+    }
+
+    FUNCstr[i] = '\0'; // Null-terminate the string
+
+    // Reverse the string to get the correct order
+    function_Reverse(FUNCstr);
+
+    return FUNCstr; // Return the formatted string
 }
-char* function_i32toa(int32_t n)
-{
-	uint8_t i;
-	int32_t sign = n;
-	if (sign < 0) n = -n;
-	i = 0;
-	do {
-		FUNCstr[i++] = (char)(n % 10 + '0');
-	}while ((n /= 10) > 0);
-	if (sign < 0) FUNCstr[i++] = '-';
-	FUNCstr[i] = '\0';
-	function_Reverse(FUNCstr);
-	return FUNCstr;
+char* function_i32toa(int32_t n) {
+    uint8_t i = 0;
+    int32_t sign = n;
+
+    // Handle negative values
+    if (sign < 0) {
+        n = -n;
+    }
+
+    // Special case for zero
+    if (n == 0) {
+        FUNCstr[i++] = '0';
+    } else {
+        // Convert integer to string in reverse order
+        do {
+            FUNCstr[i++] = (char)(n % 10 + '0');
+        } while ((n /= 10) > 0);
+    }
+
+    // Add the negative sign if the number was negative
+    if (sign < 0) {
+        FUNCstr[i++] = '-';
+    }
+
+    FUNCstr[i] = '\0'; // Null-terminate the string
+
+    // Reverse the string to get the correct order
+    function_Reverse(FUNCstr);
+
+    return FUNCstr; // Return the formatted string
 }
-char* function_ui32toa(uint32_t n)
-{
-	uint8_t i;
-	for(i = 0, FUNCstr[i++] = (char)(n % 10 + '0'); (n /= 10) > 0; FUNCstr[i++] = (char)(n % 10 + '0'));
-	FUNCstr[i] = '\0';
-	function_Reverse(FUNCstr);
-	return FUNCstr;
+char* function_ui32toa(uint32_t n) {
+    uint8_t i = 0;
+
+    // Handle the special case for zero
+    if (n == 0) {
+        FUNCstr[i++] = '0';
+    } else {
+        // Convert integer to string in reverse order
+        do {
+            FUNCstr[i++] = (char)(n % 10 + '0');
+        } while ((n /= 10) > 0);
+    }
+
+    FUNCstr[i] = '\0'; // Null-terminate the string
+
+    // Reverse the string to get the correct order
+    function_Reverse(FUNCstr);
+
+    return FUNCstr; // Return the formatted string
 }
-char* function_print_binary(unsigned int n_bits, unsigned int number)
-{
-	unsigned int i, c;
-	for(i = (1 << (n_bits - 1)), c = 0; i; i >>= 1, c++)
-		(number & i) ? (FUNCstr[c] = '1') : (FUNCstr[c] = '0');
-	FUNCstr[c] = '\0';
-	return FUNCstr;
+char* function_print_binary(unsigned int n_bits, unsigned int number) {
+    // Check for valid number of bits
+    if (n_bits > 32) n_bits = 32; // Cap at 32 bits for uint32_t
+
+    unsigned int i;
+    unsigned int c = 0;
+
+    // Generate binary representation
+    for (i = (1U << (n_bits - 1)); i; i >>= 1, c++) {
+        FUNCstr[c] = (number & i) ? '1' : '0';
+    }
+
+    FUNCstr[c] = '\0'; // Null-terminate the string
+    return FUNCstr; // Return the formatted string
 }
 unsigned int function_UintInvStr(RealNum_TypeDef num, unsigned int index)
 {
@@ -553,46 +637,90 @@ char* function_ftoa(double num, unsigned int decimal)
 	return FUNCstr;
 }
 /******/
-long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max)
-// same as arduino map function
-{
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max) {
+    // Check for valid input range to prevent division by zero
+    if (in_max == in_min) {
+        // Return a value that makes sense; could be either out_min or out_max
+        return (out_min + out_max) / 2; // Midpoint of output range
+    }
+
+    // Calculate the scaled value, ensuring we do not overflow
+    long mapped_value = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+
+    // Clamp the result to the output range
+    if (mapped_value < out_min) {
+        return out_min;
+    } else if (mapped_value > out_max) {
+        return out_max;
+    }
+
+    return mapped_value; // Return the mapped value
 }
-int function_pmax(int a1, int a2)
-{
-	int biggest;
-	if(a1 > a2){ biggest = a1; }else{ biggest = a2; }
-	return biggest;
+int function_pmax(int a1, int a2) {
+    return (a1 > a2) ? a1 : a2;
 }
-int function_gcd_v1 (uint32_t a, uint32_t b)
-{
-	while (b != 0) {
-	        uint32_t temp = b;
-	        b = a % b;
-	        a = temp;
-	    }
-	return a;
+int function_gcd_v1(uint32_t a, uint32_t b) {
+    while (b != 0) {
+        uint32_t temp = b;  // Store the current value of b
+        b = a % b;          // Incorrectly assigns b, should use temp
+        a = temp;           // Assign the previous b to a
+    }
+    return a;               // Return the GCD
 }
-long function_gcd_v2(long a, long b)
-{
-	long r;
-	if (a < b) function_swap(&a, &b);
-	if (!b){
-		while ((r = a % b) != 0) {
-			a = b; b = r;
-		}
-	}
-	return b;
+long function_gcd_v2(long a, long b) {
+    long r;
+
+    // Swap if a is less than b
+    if (a < b) {
+        function_swap(&a, &b);
+    }
+
+    // Handle case when b is zero directly
+    if (b == 0) {
+        return a; // If b is zero, GCD is a
+    }
+
+    // Euclidean algorithm
+    while ((r = a % b) != 0) {
+        a = b;
+        b = r;
+    }
+
+    return b; // Return the GCD
 }
 /******/
-int function_StrToInt (const char string[])
-{
-	int i, intValue, result = 0;
-	for ( i = 0; string[i] >= '0' && string[i] <= '9'; ++i ){
-		intValue = string[i] - '0';
-		result = result * 10 + intValue;
-	}
-	return result;
+int function_StrToInt(const char string[]) {
+    int i = 0;
+    int result = 0;
+    bool isNegative = false;
+
+    // Skip leading whitespaces
+    while (string[i] == ' ') {
+        i++;
+    }
+
+    // Check for negative sign
+    if (string[i] == '-') {
+        isNegative = true;
+        i++;
+    } else if (string[i] == '+') {
+        i++; // Optional: handle '+' as well
+    }
+
+    // Convert string to integer
+    for (; string[i] >= '0' && string[i] <= '9'; ++i) {
+        int intValue = string[i] - '0';
+
+        // Check for overflow
+        if (result > (INT_MAX - intValue) / 10) {
+            // Handle overflow as you prefer (e.g., return INT_MAX or some error code)
+            return isNegative ? INT_MIN : INT_MAX; // Example handling
+        }
+
+        result = result * 10 + intValue;
+    }
+
+    return isNegative ? -result : result;
 }
 /******/
 // triggerA

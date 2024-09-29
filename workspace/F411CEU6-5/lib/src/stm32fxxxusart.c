@@ -23,13 +23,13 @@ static STM32FXXX_USART2 stm32fxxx_usart2;
 static STM32FXXX_USART6 stm32fxxx_usart6;
 /*** USART Procedure & Function Definition ***/
 /*** USART1 ***/
-void STM32FXXXUsart1Clock( uint8_t bool )
+void STM32FXXXUsart1Clock( uint8_t state )
 {
-	if(bool){ RCC->APB2ENR |= (1 << 4); }else{ RCC->APB2ENR &= ~(1 << 4); }
+	if(state){ RCC->APB2ENR |= (1 << 4); }else{ RCC->APB2ENR &= ~(1 << 4); }
 }
-void STM32FXXXUsart1Nvic( uint8_t bool )
+void STM32FXXXUsart1Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, USART1_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART1_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, USART1_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART1_IRQn, 1); }
 }
 void STM32FXXXUsart1Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the usart parameters, using real values.
@@ -79,13 +79,13 @@ void STM32FXXXUsart1Parameter( uint8_t wordlength, uint8_t samplingmode, double 
 	}
 }
 /*** USART2 ***/
-void STM32FXXXUsart2Clock( uint8_t bool )
+void STM32FXXXUsart2Clock( uint8_t state )
 {
-	if(bool){ RCC->APB1ENR |= (1 << 17); }else{ RCC->APB1ENR &= ~(1 << 17); }
+	if(state){ RCC->APB1ENR |= (1 << 17); }else{ RCC->APB1ENR &= ~(1 << 17); }
 }
-void STM32FXXXUsart2Nvic( uint8_t bool )
+void STM32FXXXUsart2Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, USART2_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART2_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, USART2_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART2_IRQn, 1); }
 }
 void STM32FXXXUsart2Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the usart parameters, using real values.
@@ -133,13 +133,13 @@ void STM32FXXXUsart2Parameter( uint8_t wordlength, uint8_t samplingmode, double 
 }
 #ifdef STM32F446xx
 /*** USART3 ***/
-void STM32FXXXUsart3Clock( uint8_t bool )
+void STM32FXXXUsart3Clock( uint8_t state )
 {
-	if(bool){ RCC->APB1ENR |= (1 << 18); }else{ RCC->APB1ENR &= ~(1 << 18); }
+	if(state){ RCC->APB1ENR |= (1 << 18); }else{ RCC->APB1ENR &= ~(1 << 18); }
 }
-void STM32FXXXUsart3Nvic( uint8_t bool )
+void STM32FXXXUsart3Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, USART3_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART3_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, USART3_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART3_IRQn, 1); }
 }
 void STM32FXXXUsart3Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the usart parameters, using real values.
@@ -186,14 +186,14 @@ void STM32FXXXUsart3Parameter( uint8_t wordlength, uint8_t samplingmode, double 
 	}
 }
 /*** UART4 ***/
-void STM32FXXXUart4Clock( uint8_t bool )
+void STM32FXXXUart4Clock( uint8_t state )
 {
-	if(bool){ RCC->APB1ENR |= (1 << 19); }else{ RCC->APB1ENR &= ~(1 << 19); }
+	if(state){ RCC->APB1ENR |= (1 << 19); }else{ RCC->APB1ENR &= ~(1 << 19); }
 
 }
-void STM32FXXXUart4Nvic( uint8_t bool )
+void STM32FXXXUart4Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, UART4_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, UART4_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, UART4_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, UART4_IRQn, 1); }
 }
 void STM32FXXXUart4Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the uart parameters, using real values.
@@ -240,14 +240,14 @@ void STM32FXXXUart4Parameter( uint8_t wordlength, uint8_t samplingmode, double s
 	}
 }
 /*** UART5 ***/
-void STM32FXXXUart5Clock( uint8_t bool )
+void STM32FXXXUart5Clock( uint8_t state )
 {
-	if(bool){ RCC->APB1ENR |= (1 << 20); } // UART5EN: USART5 clock enable
+	if(state){ RCC->APB1ENR |= (1 << 20); } // UART5EN: USART5 clock enable
 	else{ RCC->APB1ENR &= ~(1 << 20); } // UART5EN: USART5 clock disable
 }
-void STM32FXXXUart5Nvic( uint8_t bool )
+void STM32FXXXUart5Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, UART5_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, UART5_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, UART5_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, UART5_IRQn, 1); }
 }
 void STM32FXXXUart5Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the uart parameters, using real values.
@@ -296,13 +296,13 @@ void STM32FXXXUart5Parameter( uint8_t wordlength, uint8_t samplingmode, double s
 
 #endif
 /*** USART6 ***/
-void STM32FXXXUsart6Clock( uint8_t bool )
+void STM32FXXXUsart6Clock( uint8_t state )
 {
-	if(bool){ RCC->APB2ENR |= (1 << 5); }else{ RCC->APB2ENR &= ~(1 << 5); }
+	if(state){ RCC->APB2ENR |= (1 << 5); }else{ RCC->APB2ENR &= ~(1 << 5); }
 }
-void STM32FXXXUsart6Nvic( uint8_t bool )
+void STM32FXXXUsart6Nvic( uint8_t state )
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, USART6_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART6_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, USART6_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART6_IRQn, 1); }
 }
 void STM32FXXXUsart6Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate )
 // Sets the usart parameters, using real values.

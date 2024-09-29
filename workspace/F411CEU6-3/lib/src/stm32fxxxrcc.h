@@ -48,14 +48,14 @@ typedef struct
 	void (*lenable)(uint8_t lclock);
 	void (*lselect)(uint8_t lclock);
 
-	void (*nvic)(uint8_t bool);
+	void (*nvic)(uint8_t state);
 }STM32FXXX_RCC;
 
 STM32FXXX_RCC* rcc_enable(void);
 STM32FXXX_RCC* rcc(void);
 
 /*** Procedure & Function Header ***/
-void STM32FXXXRCC_nvic(uint8_t bool);
+void STM32FXXXRCC_nvic(uint8_t state);
 /*** RCC Procedure & Function Header ***/
 // PLL
 void STM32FXXXPLLDivision(uint8_t pllm, uint16_t plln, uint8_t pllp, uint8_t pllq);

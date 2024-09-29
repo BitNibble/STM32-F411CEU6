@@ -21,10 +21,10 @@ static STM32FXXX_TIM1 stm32fxxx_tim1;
 /************/
 /*** TIM1 ***/
 /************/
-void STM32FXXXTim1Clock(uint8_t bool)
+void STM32FXXXTim1Clock(uint8_t state)
 {
-	//if(bool){RCC->APB2ENR |= (1 << 0);}else{RCC->APB2ENR &= ~(1 << 0);}
-	if(bool){
+	//if(state){RCC->APB2ENR |= (1 << 0);}else{RCC->APB2ENR &= ~(1 << 0);}
+	if(state){
 		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 1);
 	}else{
 		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 0);
@@ -74,9 +74,9 @@ void STM32FXXXTim1Nvic(uint8_t value)
 /************/
 /*** TIM8 ***/
 /************/
-void STM32FXXXTim8Clock(uint8_t bool)
+void STM32FXXXTim8Clock(uint8_t state)
 {
-	if(bool){RCC->APB2ENR |= (1 << 1);}else{RCC->APB2ENR &= ~(1 << 1);}
+	if(state){RCC->APB2ENR |= (1 << 1);}else{RCC->APB2ENR &= ~(1 << 1);}
 }
 void STM32FXXXTim8Nvic(uint8_t value)
 { // 43, 44, 45, 46

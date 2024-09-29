@@ -21,49 +21,49 @@ STM32FXXXPWR_cr* stm32fxxx_pwr_cr_inic(void);
 STM32FXXXPWR_csr* stm32fxxx_pwr_csr_inic(void);
 /*** PWR Bit Mapping ***/
 // CR
-void STM32FXXXPWR_cr_fissr(uint8_t bool)
+void STM32FXXXPWR_cr_fissr(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 21, bool);
+	set_reg_block(&PWR->CR, 1, 21, state);
 }
-void STM32FXXXPWR_cr_fmssr(uint8_t bool)
+void STM32FXXXPWR_cr_fmssr(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 20, bool);
+	set_reg_block(&PWR->CR, 1, 20, state);
 }
 void STM32FXXXPWR_cr_uden(uint8_t value)
 {
 	set_reg_block(&PWR->CR, 2, 18, value);
 }
-void STM32FXXXPWR_cr_odswen(uint8_t bool)
+void STM32FXXXPWR_cr_odswen(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 17, bool);
+	set_reg_block(&PWR->CR, 1, 17, state);
 }
-void STM32FXXXPWR_cr_oden(uint8_t bool)
+void STM32FXXXPWR_cr_oden(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 16, bool);
+	set_reg_block(&PWR->CR, 1, 16, state);
 }
 void STM32FXXXPWR_cr_vos(uint8_t value)
 {
 	set_reg_block(&PWR->CR, 2, 14, value);
 }
-void STM32FXXXPWR_cr_adcdc1(uint8_t bool)
+void STM32FXXXPWR_cr_adcdc1(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 13, bool);
+	set_reg_block(&PWR->CR, 1, 13, state);
 }
-void STM32FXXXPWR_cr_mruds(uint8_t bool)
+void STM32FXXXPWR_cr_mruds(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 11, bool);
+	set_reg_block(&PWR->CR, 1, 11, state);
 }
-void STM32FXXXPWR_cr_lpuds(uint8_t bool)
+void STM32FXXXPWR_cr_lpuds(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 10, bool);
+	set_reg_block(&PWR->CR, 1, 10, state);
 }
-void STM32FXXXPWR_cr_fpds(uint8_t bool)
+void STM32FXXXPWR_cr_fpds(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 9, bool);
+	set_reg_block(&PWR->CR, 1, 9, state);
 }
-void STM32FXXXPWR_cr_dbp(uint8_t bool)
+void STM32FXXXPWR_cr_dbp(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 8, bool);
+	set_reg_block(&PWR->CR, 1, 8, state);
 }
 void STM32FXXXPWR_cr_pls(uint8_t value)
 {
@@ -73,9 +73,9 @@ uint8_t STM32FXXXPWR_cr_get_pls(void)
 {
 	return get_reg_block(PWR->CR, 3, 5);
 }
-void STM32FXXXPWR_cr_pvde(uint8_t bool)
+void STM32FXXXPWR_cr_pvde(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 4, bool);
+	set_reg_block(&PWR->CR, 1, 4, state);
 }
 void STM32FXXXPWR_cr_clear_csbf(void)
 {
@@ -85,13 +85,13 @@ void STM32FXXXPWR_cr_clear_cwuf(void)
 {
 	set_reg_block(&PWR->CR, 1, 2, 1);
 }
-void STM32FXXXPWR_cr_pdds(uint8_t bool)
+void STM32FXXXPWR_cr_pdds(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 1, bool);
+	set_reg_block(&PWR->CR, 1, 1, state);
 }
-void STM32FXXXPWR_cr_lpds(uint8_t bool)
+void STM32FXXXPWR_cr_lpds(uint8_t state)
 {
-	set_reg_block(&PWR->CR, 1, 0, bool);
+	set_reg_block(&PWR->CR, 1, 0, state);
 }
 // CSR
 uint8_t STM32FXXXPWR_udrdy(void)
@@ -114,17 +114,17 @@ uint8_t STM32FXXXPWR_csr_vosrdy(void)
 {
 	return get_reg_block(PWR->CSR, 1, 14);
 }
-void STM32FXXXPWR_csr_bre(uint8_t bool)
+void STM32FXXXPWR_csr_bre(uint8_t state)
 {
-	set_reg_block(&PWR->CSR, 1, 9, bool);
+	set_reg_block(&PWR->CSR, 1, 9, state);
 }
-void STM32FXXXPWR_csr_ewup1(uint8_t bool)
+void STM32FXXXPWR_csr_ewup1(uint8_t state)
 {
-	set_reg_block(&PWR->CSR, 1, 8, bool);
+	set_reg_block(&PWR->CSR, 1, 8, state);
 }
-void STM32FXXXPWR_csr_ewup2(uint8_t bool)
+void STM32FXXXPWR_csr_ewup2(uint8_t state)
 {
-	set_reg_block(&PWR->CSR, 1, 7, bool);
+	set_reg_block(&PWR->CSR, 1, 7, state);
 }
 uint8_t STM32FXXXPWR_csr_brr(void)
 {
@@ -143,9 +143,9 @@ uint8_t STM32FXXXPWR_csr_wuf(void)
 	return get_reg_block(PWR->CSR, 1, 0);
 }
 /*** Other ***/
-void STM32FXXXPWR_clock(uint8_t bool)
+void STM32FXXXPWR_clock(uint8_t state)
 {
-	if(bool){ RCC->APB1ENR |= (1 << 28); }
+	if(state){ RCC->APB1ENR |= (1 << 28); }
 	else{ RCC->APB1ENR &= ~(1 << 28); }
 }
 /*** Auxiliar ***/

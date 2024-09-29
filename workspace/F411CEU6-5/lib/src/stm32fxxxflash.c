@@ -25,25 +25,25 @@ STM32FXXXFLASH_cr* stm32fxxx_flash_cr_inic(void);
 STM32FXXXFLASH_optcr* stm32fxxx_flash_optcr_inic(void);
 /*** FLASH Bit Mapping ***/
 // ACR
-void STM32FXXXFLASH_acr_dcrst(uint8_t bool)
+void STM32FXXXFLASH_acr_dcrst(uint8_t state)
 {
-	set_reg_block(&FLASH->ACR, 1, 12, bool);
+	set_reg_block(&FLASH->ACR, 1, 12, state);
 }
-void STM32FXXXFLASH_acr_icrst(uint8_t bool)
+void STM32FXXXFLASH_acr_icrst(uint8_t state)
 {
-	set_reg_block(&FLASH->ACR, 1, 11, bool);
+	set_reg_block(&FLASH->ACR, 1, 11, state);
 }
-void STM32FXXXFLASH_acr_dcen(uint8_t bool)
+void STM32FXXXFLASH_acr_dcen(uint8_t state)
 {
-	set_reg_block(&FLASH->ACR, 1, 10, bool);
+	set_reg_block(&FLASH->ACR, 1, 10, state);
 }
-void STM32FXXXFLASH_acr_icen(uint8_t bool)
+void STM32FXXXFLASH_acr_icen(uint8_t state)
 {
-	set_reg_block(&FLASH->ACR, 1, 9, bool);
+	set_reg_block(&FLASH->ACR, 1, 9, state);
 }
-void STM32FXXXFLASH_acr_prften(uint8_t bool)
+void STM32FXXXFLASH_acr_prften(uint8_t state)
 {
-	set_reg_block(&FLASH->ACR, 1, 8, bool);
+	set_reg_block(&FLASH->ACR, 1, 8, state);
 }
 void STM32FXXXFLASH_acr_latency(uint8_t value)
 {
@@ -125,13 +125,13 @@ void STM32FXXXFLASH_cr_lock(void)
 {
 	set_reg_block(&FLASH->CR, 1, 31, 1);
 }
-void STM32FXXXFLASH_cr_errie(uint8_t bool)
+void STM32FXXXFLASH_cr_errie(uint8_t state)
 {
-	set_reg_block(&FLASH->CR, 1, 25, bool);
+	set_reg_block(&FLASH->CR, 1, 25, state);
 }
-void STM32FXXXFLASH_cr_eopie(uint8_t bool)
+void STM32FXXXFLASH_cr_eopie(uint8_t state)
 {
-	set_reg_block(&FLASH->CR, 1, 24, bool);
+	set_reg_block(&FLASH->CR, 1, 24, state);
 }
 void STM32FXXXFLASH_cr_strt(void)
 {
@@ -145,22 +145,22 @@ void STM32FXXXFLASH_cr_snb(uint8_t value)
 {
 	set_reg_block(&FLASH->CR, 4, 3, value);
 }
-void STM32FXXXFLASH_cr_mer(uint8_t bool)
+void STM32FXXXFLASH_cr_mer(uint8_t state)
 {
-	set_reg_block(&FLASH->CR, 1, 2, bool);
+	set_reg_block(&FLASH->CR, 1, 2, state);
 }
-void STM32FXXXFLASH_cr_ser(uint8_t bool)
+void STM32FXXXFLASH_cr_ser(uint8_t state)
 {
-	set_reg_block(&FLASH->CR, 1, 1, bool);
+	set_reg_block(&FLASH->CR, 1, 1, state);
 }
-void STM32FXXXFLASH_cr_pg(uint8_t bool)
+void STM32FXXXFLASH_cr_pg(uint8_t state)
 {
-	set_reg_block(&FLASH->CR, 1, 0, bool);
+	set_reg_block(&FLASH->CR, 1, 0, state);
 }
 // OPTCR
-void STM32FXXXFLASH_optcr_sprmod(uint8_t bool)
+void STM32FXXXFLASH_optcr_sprmod(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 31, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 31, state);
 }
 void STM32FXXXFLASH_optcr_n_wrp(uint8_t value)
 {
@@ -178,34 +178,34 @@ uint8_t STM32FXXXFLASH_optcr_get_rdp(void)
 {
 	return get_reg_block(FLASH->OPTCR, 8, 8);
 }
-void STM32FXXXFLASH_optcr_nrst_stdby(uint8_t bool)
+void STM32FXXXFLASH_optcr_nrst_stdby(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 7, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 7, state);
 }
-void STM32FXXXFLASH_optcr_nrst_stop(uint8_t bool)
+void STM32FXXXFLASH_optcr_nrst_stop(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 6, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 6, state);
 }
-void STM32FXXXFLASH_optcr_wdg_sw(uint8_t bool)
+void STM32FXXXFLASH_optcr_wdg_sw(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 5, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 5, state);
 }
 void STM32FXXXFLASH_optcr_bor_lev(uint8_t value)
 {
 	set_reg_block(&FLASH->OPTCR, 2, 2, value);
 }
-void STM32FXXXFLASH_optcr_optstrt(uint8_t bool)
+void STM32FXXXFLASH_optcr_optstrt(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 1, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 1, state);
 }
-void STM32FXXXFLASH_optcr_optlock(uint8_t bool)
+void STM32FXXXFLASH_optcr_optlock(uint8_t state)
 {
-	set_reg_block(&FLASH->OPTCR, 1, 0, bool);
+	set_reg_block(&FLASH->OPTCR, 1, 0, state);
 }
 /*** Other ***/
-void STM32FXXXFLASH_nvic(uint8_t bool)
+void STM32FXXXFLASH_nvic(uint8_t state)
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, FLASH_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, FLASH_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, FLASH_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, FLASH_IRQn, 1); }
 }
 /*** FLASH Auxiliar ***/
 STM32FXXXFLASH_acr* stm32fxxx_flash_acr_inic(void)

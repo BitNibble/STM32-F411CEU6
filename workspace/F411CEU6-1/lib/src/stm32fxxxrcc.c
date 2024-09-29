@@ -23,7 +23,7 @@ STM32FXXXRCCPLL* stm32fxxx_rcc_pll_inic(void);
 STM32FXXXRCCPLLI2S* stm32fxxx_rcc_plli2s_inic(void);
 STM32FXXXRCCPLLSAI* stm32fxxx_rcc_pllsai_inic(void);
 /******/
-void STM32FXXXRccPwrClock(uint8_t bool);
+void STM32FXXXRccPwrClock(uint8_t state);
 void STM32FXXXRccWriteEnable(void);
 void STM32FXXXRccWriteDisable(void);
 uint8_t STM32FXXXRccPLLSelect(uint8_t hclock);
@@ -341,9 +341,9 @@ void STM32FXXXRccPLLSAIEnable(void)
 	//else
 		//RCC->CR &= (unsigned int) ~(1 << 28);
 }
-void STM32FXXXRccPwrClock(uint8_t bool)
+void STM32FXXXRccPwrClock(uint8_t state)
 {
-	set_reg_block(&RCC->APB1ENR, 1, 28, bool); // Power interface clock enable
+	set_reg_block(&RCC->APB1ENR, 1, 28, state); // Power interface clock enable
 }
 void STM32FXXXRccWriteEnable(void)
 {
@@ -355,9 +355,9 @@ void STM32FXXXRccWriteDisable(void)
 }
 /*** RCC Bit Mapping Definition ***/
 /*** Other ***/
-void STM32FXXXRCC_nvic(uint8_t bool)
+void STM32FXXXRCC_nvic(uint8_t state)
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, RCC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, RCC_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, RCC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, RCC_IRQn, 1); }
 }
 /*** Extended ***/
 STM32FXXXRCCPLL* stm32fxxx_rcc_pll_inic(void)
