@@ -18,10 +18,10 @@ typedef struct
 	/*** Bit Mapping ***/
 	/*** Other ***/
 	void (*access)(void);
-}STM32FXXXSRAMobj;
+}STM32FXXX_SRAM;
 
-STM32FXXXSRAMobj* sram_enable(void);
-STM32FXXXSRAMobj* sram(void);
+STM32FXXX_SRAM* sram_enable(void);
+STM32FXXX_SRAM* sram(void);
 
 /***** SRAM Procedure & Function Header ******/
 void STM32FXXXSramAccess(void);

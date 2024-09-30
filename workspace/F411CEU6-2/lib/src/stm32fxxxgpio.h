@@ -19,7 +19,10 @@ typedef struct
 	/*** BitField Mapping ***/
 	GPIO_TypeDef* instance;
 	/*** Other ***/
+	void (*afr)(uint8_t pin, uint8_t data);
+	/*************/
 	void (*clock)( uint8_t state );
+	/*************/
 
 }STM32FXXX_GPIOA, STM32FXXX_GPIOB, STM32FXXX_GPIOC, \
  STM32FXXX_GPIOD, STM32FXXX_GPIOE, STM32FXXX_GPIOF, \

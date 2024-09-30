@@ -24,10 +24,10 @@ typedef struct
 	void (*priority)(uint32_t IRQn, uint32_t priority);
 	void (*trigger)(uint32_t IRQn);
 	/*** Other ***/
-}STM32FXXXNVICobj;
+}STM32FXXX_NVIC;
 
-STM32FXXXNVICobj* nvic_enable(void);
-STM32FXXXNVICobj* nvic(void);
+STM32FXXX_NVIC* nvic_enable(void);
+STM32FXXX_NVIC* nvic(void);
 
 /*** NVIC Bit Mapping Header ***/
 // NVIC

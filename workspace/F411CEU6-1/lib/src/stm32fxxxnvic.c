@@ -12,7 +12,7 @@ Comment:
 #include "stm32fxxxnvic.h"
 
 /*** File Variable ***/
-static STM32FXXXNVICobj stm32fxxx_nvic;
+static STM32FXXX_NVIC stm32fxxx_nvic;
 
 /*** NVIC Procedure & Function Definition ***/
 void STM32FXXXNVIC_set_enable( uint8_t IRQn )
@@ -50,7 +50,7 @@ void STM32FXXXNVIC_trigger(uint32_t IRQn)
 	write_reg_block(&NVIC->STIR, 9, 0, IRQn);
 }
 /*** INIC Procedure & Function Definition ***/
-STM32FXXXNVICobj* nvic_enable(void)
+STM32FXXX_NVIC* nvic_enable(void)
 {
 	/*** NVIC Bit Mapping Link ***/
 	stm32fxxx_nvic.set_enable = STM32FXXXNVIC_set_enable;
@@ -64,7 +64,7 @@ STM32FXXXNVICobj* nvic_enable(void)
 	return &stm32fxxx_nvic;
 }
 
-STM32FXXXNVICobj* nvic(void){ return (STM32FXXXNVICobj*) &stm32fxxx_nvic; }
+STM32FXXX_NVIC* nvic(void){ return (STM32FXXX_NVIC*) &stm32fxxx_nvic; }
 
 /******
 1º Sequence

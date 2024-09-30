@@ -88,14 +88,14 @@ typedef struct
 	/*** Other ***/
 	void (*clock)(uint8_t state);
 	STM32FXXXDMA_func* func;
-}STM32FXXXDMAobj, STM32FXXXDMA1obj, STM32FXXXDMA2obj;
+}STM32FXXX_DMA, STM32FXXX_DMA1, STM32FXXX_DMA2;
 /*************************************/
 /*************************************/
-STM32FXXXDMA1obj* dma1_enable(void);
-STM32FXXXDMA1obj* dma1(void);
+STM32FXXX_DMA1* dma1_enable(void);
+STM32FXXX_DMA1* dma1(void);
 
-STM32FXXXDMA2obj* dma2_enable(void);
-STM32FXXXDMA2obj* dma2(void);
+STM32FXXX_DMA2* dma2_enable(void);
+STM32FXXX_DMA2* dma2(void);
 /***** DMA Procedure & Function Header ******/
 /*** DMA ***/
 void STM32FXXXDma1Clock(uint8_t state);

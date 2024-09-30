@@ -31,7 +31,7 @@ void STM32FXXXTim1Clock(uint8_t state)
 }
 void STM32FXXXTim1Nvic(uint8_t value)
 { // 24, 25, 26, 27
-	STM32FXXXNVICobj* nvic = nvic_enable();
+	STM32FXXX_NVIC* nvic = nvic_enable();
 	switch(value){
 		case 0b1000:
 			//set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);

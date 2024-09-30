@@ -81,12 +81,12 @@ typedef struct
 	SYSCFG_cfgr* cfgr;
 	/*** Other ***/
 	void (*clock)(uint8_t state);
-}STM32FXXXSYSCFGobj;
+}STM32FXXX_SYSCFG;
 /*************************************/
 /************ INIC SYSCFG ************/
 /*************************************/
-STM32FXXXSYSCFGobj* syscfg_enable(void);
-STM32FXXXSYSCFGobj* syscfg(void);
+STM32FXXX_SYSCFG* syscfg_enable(void);
+STM32FXXX_SYSCFG* syscfg(void);
 /***********************************************/
 /********* Procedure & Function Header *********/
 /***********************************************/

@@ -20,7 +20,7 @@ static SYSCFG_exticr3 exticr3;
 static SYSCFG_exticr4 exticr4;
 static SYSCFG_cmpcr cmpcr;
 static SYSCFG_cfgr cfgr;
-static STM32FXXXSYSCFGobj stm32fxxx_syscfg;
+static STM32FXXX_SYSCFG stm32fxxx_syscfg;
 
 /****************************************/
 /*** File Procedure & Function Header ***/
@@ -232,7 +232,7 @@ SYSCFG_cfgr* SYSCFG_cfgr_inic(void)
 /************************************************/
 /**** SYSCFG Procedure & Function Definition ****/
 /************************************************/
-STM32FXXXSYSCFGobj* syscfg_enable(void)
+STM32FXXX_SYSCFG* syscfg_enable(void)
 {
 	/*** LINK ***/
 	stm32fxxx_syscfg.memrmp = SYSCFG_memrmp_inic();
@@ -248,7 +248,7 @@ STM32FXXXSYSCFGobj* syscfg_enable(void)
 	return &stm32fxxx_syscfg;
 }
 
-STM32FXXXSYSCFGobj* syscfg(void){ return (STM32FXXXSYSCFGobj*) &stm32fxxx_syscfg; }
+STM32FXXX_SYSCFG* syscfg(void){ return (STM32FXXX_SYSCFG*) &stm32fxxx_syscfg; }
 
 /*** EOF ***/
 

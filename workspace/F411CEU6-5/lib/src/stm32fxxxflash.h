@@ -102,10 +102,10 @@ typedef struct
 	void (*optkeyr)(uint32_t);
 	/*** Other ***/
 	void (*nvic)(uint8_t state);
-}STM32FXXXFLASHobj;
+}STM32FXXX_FLASH;
 
-STM32FXXXFLASHobj* flash_enable(void);
-STM32FXXXFLASHobj* flash(void);
+STM32FXXX_FLASH* flash_enable(void);
+STM32FXXX_FLASH* flash(void);
 
 /*** Procedure & Function Header ***/
 void STM32FXXXFLASH_nvic(uint8_t state);

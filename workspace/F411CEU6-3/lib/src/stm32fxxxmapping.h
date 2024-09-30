@@ -16,24 +16,24 @@ Comment:
 	#define _STM32FXXXMAPPING_H_
 /*** Module Library ***/
 // May comment out modules not being used
-//#include "stm32fxxxflash.h"
-//#include "stm32fxxxcrc.h"
-//#include "stm32fxxxpwr.h"
+#include "stm32fxxxflash.h"
+#include "stm32fxxxcrc.h"
+#include "stm32fxxxpwr.h"
 #include "stm32fxxxrcc.h"
-//#include "stm32fxxxnvic.h"
-//#include "stm32fxxxsram.h"
+#include "stm32fxxxnvic.h"
+#include "stm32fxxxsram.h"
 #include "stm32fxxxgpio.h"
-//#include "stm32fxxxsyscfg.h"
-//#include "stm32fxxxdma.h"
+#include "stm32fxxxsyscfg.h"
+#include "stm32fxxxdma.h"
 #include "stm32fxxxadc1.h"
-//#include "stm32fxxxadc2.h"
+#include "stm32fxxxadc2.h"
 #include "stm32fxxxadc3.h"
 #include "stm32fxxxrtc.h"
-//#include "stm32fxxxusart.h"
+#include "stm32fxxxusart.h"
 #include "stm32fxxxtim1and8.h"
-//#include "stm32fxxxtim2to5.h"
-//#include "stm32fxxxtim6and7.h"
-//#include "stm32fxxxtim9to14.h"
+#include "stm32fxxxtim2to5.h"
+#include "stm32fxxxtim6and7.h"
+#include "stm32fxxxtim9to14.h"
 /***** Libraries *****/
 #include "armquery.h"
 #include "armsystick.h"
@@ -41,7 +41,7 @@ Comment:
 typedef struct
 {
 	#if defined(_STM32FXXXNVIC_H_)
-		STM32FXXXNVICobj* nvic;
+		STM32FXXX_NVIC* nvic;
 	#endif
 	#if defined(_STM32FXXXADC1_H_)
 		STM32FXXX_ADC1* adc1;
@@ -53,14 +53,14 @@ typedef struct
 		STM32FXXX_ADC3* adc3;
 	#endif
 	#if defined(_STM32FXXXCRC_H_)
-		STM32FXXXCRCobj* crc;
+		STM32FXXX_CRC* crc;
 	#endif
 	#if defined(_STM32FXXXDMA_H_)
-		STM32FXXXDMA1obj* dma1;
-		STM32FXXXDMA2obj* dma2;
+		STM32FXXX_DMA1* dma1;
+		STM32FXXX_DMA2* dma2;
 	#endif
 	#if defined(_STM32FXXXFLASH_H_)
-		STM32FXXXFLASHobj* flash;
+		STM32FXXX_FLASH* flash;
 	#endif
 	#if defined(_STM32FXXXGPIO_H_)
 		STM32FXXX_GPIOA* gpioa;
@@ -73,7 +73,7 @@ typedef struct
 		STM32FXXX_GPIOH* gpioh;
 	#endif
 	#if defined(_STM32FXXXSYSCFG_H_)
-		STM32FXXXSYSCFGobj* syscfg;
+		STM32FXXX_SYSCFG* syscfg;
 	#endif
 	#if defined(_STM32FXXXPWR_H_)
 		STM32FXXX_PWR* pwr;
@@ -85,7 +85,7 @@ typedef struct
 		STM32FXXX_RTC* rtc;
 	#endif
 	#if defined(_STM32FXXXSRAM_H_)
-		STM32FXXXSRAMobj* sram;
+		STM32FXXX_SRAM* sram;
 	#endif
 	#if defined(_STM32FXXXTIM1AND8_H_)
 		STM32FXXX_TIM1* tim1;
