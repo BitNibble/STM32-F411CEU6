@@ -63,17 +63,17 @@ int main(void)
 
     char vecD[8]; // for calendar date
     char vecT[8]; // for calendar time
-    PA.update(&PA.par, GPIOA->IDR);
+    PA.update(&PA.par, stm()->gpioa->instance->IDR);
 
     while (1)  // Infinite loop
     {
-        PA.update(&PA.par, GPIOA->IDR);
+        PA.update(&PA.par, gpioa_instance()->IDR);
 
         switch (Menu) {
         case 0:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Hour", 12);
-            GPIOC->BSRR = GPIO_BSRR_BR13;
+            gpioc_instance()->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -98,7 +98,7 @@ int main(void)
         case 1:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Minute", 12);
-            GPIOC->BSRR = GPIO_BSRR_BS13;
+            stm()->gpioc->instance->BSRR = GPIO_BSRR_BS13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
