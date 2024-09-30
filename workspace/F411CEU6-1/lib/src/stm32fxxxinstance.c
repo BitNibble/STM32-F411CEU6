@@ -24,14 +24,16 @@ Comment:
 /*** ADC ***/
 #if defined(STM32F411xE)
 ADC_Common_TypeDef* adc_common_instance(void){return ADC1_COMMON;}
-#endif
-#ifdef STM32F446xx
+#elif defined (STM32F446xx)
 ADC_Common_TypeDef* adc_common_instance(void){return ADC123_COMMON;}
 #endif
 ADC_TypeDef* adc1_instance(void){return ADC1;}
 #ifdef STM32F446xx
 ADC_TypeDef* adc2_instance(void){return ADC2;}
 ADC_TypeDef* adc3_instance(void){return ADC3;}
+#else
+ADC_TypeDef* adc2_instance(void){return NULL;}
+ADC_TypeDef* adc3_instance(void){return NULL;}
 #endif
 /*** CAN ***/
 #ifdef STM32F446xx

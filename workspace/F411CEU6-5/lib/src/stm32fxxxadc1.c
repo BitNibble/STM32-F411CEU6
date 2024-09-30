@@ -13,6 +13,7 @@ Comment:
 
 #define ON 1
 #define OFF 0
+#define ADC_STAB_DELAY 15
 
 /*** File Variables ***/
 // ADC1
@@ -45,20 +46,24 @@ STM32FXXX_ADC1* adc1_enable(void)
 STM32FXXX_ADC1* adc1(void){ return (STM32FXXX_ADC1*) &stm32fxxx_adc1; }
 
 /****** MISCELLANEOUS ******/
-void ADC_TemperatureSetup(void){
-	uint8_t countdown;
-	/********** ADC1 **********/
-	//stm()->adc1->clock(on);
-	set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
-	ADC1->CR1 = 0;
-	set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, 0);
-	set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, ADC_SQR3_SQ1_Pos, 18);
-	set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, ADC_SMPR1_SMP18_Pos, 3);
-	//set_reg_Msk(&ADC1->CR2, ADC_CR2_CONT, ADC_CR2_CONT_Pos, ON);
-	//set_reg_Msk(&ADC->CCR, ADC_CCR_VBATE, ADC_CCR_VBATE_Pos, ON);
-	set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE, ADC_CCR_TSVREFE_Pos, ON);
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
-	for(countdown = 15; countdown; countdown --); // t_STAB
+void ADC_TemperatureSetup(void) {
+    uint8_t countdown;
+
+    // Enable ADC1 clock
+    set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
+
+    // Configure ADC1 parameters
+    ADC1->CR1 = 0; // Clear control register
+    set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, 0);
+    set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, ADC_SQR3_SQ1_Pos, 18);
+    set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, ADC_SMPR1_SMP18_Pos, 3);
+
+    // Enable temperature sensor
+    set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE, ADC_CCR_TSVREFE_Pos, ON);
+    set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
+
+    // Stabilization delay
+    for(countdown = ADC_STAB_DELAY; countdown; countdown--);
 }
 uint16_t ADC_ReadTemperature(void) {
 	uint16_t adc_value;
