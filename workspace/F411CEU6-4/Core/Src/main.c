@@ -257,7 +257,7 @@ int main(void)
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging
-                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%s %cC", (char*)func()->ftoa((double)CalculateTemperature(adc_value), 1), (char) 0xDF), 8);
+                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%.1f %cC", CalculateTemperature(adc_value), (char) 0xDF), 8);
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
