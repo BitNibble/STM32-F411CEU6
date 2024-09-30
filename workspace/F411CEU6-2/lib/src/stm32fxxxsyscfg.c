@@ -234,8 +234,6 @@ SYSCFG_cfgr* SYSCFG_cfgr_inic(void)
 /************************************************/
 STM32FXXXSYSCFGobj* syscfg_enable(void)
 {
-
-
 	/*** LINK ***/
 	stm32fxxx_syscfg.memrmp = SYSCFG_memrmp_inic();
 	stm32fxxx_syscfg.pmc = SYSCFG_pmc_inic();

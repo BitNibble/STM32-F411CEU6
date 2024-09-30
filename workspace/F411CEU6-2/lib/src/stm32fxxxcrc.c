@@ -43,8 +43,6 @@ void STM32FXXXCRC_clock(uint8_t state)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXXCRCobj* crc_enable(void)
 {
-
-
 	/***CRC Bit Mapping Link***/
 	stm32fxxx_crc.dr = STM32FXXXCRC_dr;
 	stm32fxxx_crc.get_dr = STM32FXXXCRC_get_dr;

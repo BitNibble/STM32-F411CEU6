@@ -70,7 +70,6 @@ typedef struct
 /***************************************/
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	SYSCFG_memrmp* memrmp;
 	SYSCFG_pmc* pmc;

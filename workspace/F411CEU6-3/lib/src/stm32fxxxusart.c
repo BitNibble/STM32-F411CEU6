@@ -16,11 +16,9 @@ Comment:
 /*** File Variable ***/
 static STM32FXXX_USART1 stm32fxxx_usart1;
 static STM32FXXX_USART2 stm32fxxx_usart2;
-#ifdef __STM32F446xx_H
-	static STM32FXXX_USART3 stm32fxxx_usart3;
-	static STM32FXXX_UART4 stm32fxxx_uart4;
-	static STM32FXXX_UART5 stm32fxxx_uart5;
-#endif
+static STM32FXXX_USART3 stm32fxxx_usart3;
+static STM32FXXX_UART4 stm32fxxx_uart4;
+static STM32FXXX_UART5 stm32fxxx_uart5;
 static STM32FXXX_USART6 stm32fxxx_usart6;
 /*** USART Procedure & Function Definition ***/
 /*** USART1 ***/
@@ -352,9 +350,8 @@ void STM32FXXXUsart6Parameter( uint8_t wordlength, uint8_t samplingmode, double 
 /*** USART1 INIC Procedure & Function Definition ***/
 STM32FXXX_USART1* usart1_enable(void)
 {
-
 	/*** USART1 Bit Mapping Link ***/
-	stm32fxxx_usart1.instance = usart1_instance();
+	stm32fxxx_usart1.instance = USART1;
 	// Other
 	stm32fxxx_usart1.clock = STM32FXXXUsart1Clock;
 	stm32fxxx_usart1.nvic = STM32FXXXUsart1Nvic;
@@ -368,9 +365,8 @@ STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
 /*** USART2 INIC Procedure & Function Definition ***/
 STM32FXXX_USART2* usart2_enable(void)
 {
-
 	/*** USART2 Bit Mapping Link ***/
-	stm32fxxx_usart2.instance = usart2_instance();
+	stm32fxxx_usart2.instance = USART2;
 	// Other
 	stm32fxxx_usart2.clock = STM32FXXXUsart2Clock;
 	stm32fxxx_usart2.nvic = STM32FXXXUsart2Nvic;
@@ -380,13 +376,15 @@ STM32FXXX_USART2* usart2_enable(void)
 
 STM32FXXX_USART2*  usart2(void){ return (STM32FXXX_USART2*) &stm32fxxx_usart2; }
 
-#ifdef STM32F446xx
 /*** USART3 INIC Procedure & Function Definition ***/
 STM32FXXX_USART3* usart3_enable(void)
 {
-
 	/*** USART3 Bit Mapping Link ***/
-	stm32fxxx_usart3.instance = usart3_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_usart3.instance = USART3;
+	#else
+		stm32fxxx_usart3.instance = NULL;
+	#endif
 	// Other
 	stm32fxxx_usart3.clock = STM32FXXXUsart3Clock;
 	stm32fxxx_usart3.nvic = STM32FXXXUsart3Nvic;
@@ -399,9 +397,12 @@ STM32FXXX_USART3*  usart3(void){ return (STM32FXXX_USART3*) &stm32fxxx_usart3; }
 /*** UART4 INIC Procedure & Function Definition ***/
 STM32FXXX_UART4* uart4_enable(void)
 {
-
 	/*** UART4 Bit Mapping Link ***/
-	stm32fxxx_uart4.instance = uart4_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_uart4.instance = UART4;
+	#else
+		stm32fxxx_uart4.instance = NULL;
+	#endif
 	// Other
 	stm32fxxx_uart4.clock = STM32FXXXUart4Clock;
 	stm32fxxx_uart4.nvic = STM32FXXXUart4Nvic;
@@ -414,9 +415,12 @@ STM32FXXX_UART4*  uart4(void){ return (STM32FXXX_UART4*) &stm32fxxx_uart4; }
 /*** UART5 INIC Procedure & Function Definition ***/
 STM32FXXX_UART5* uart5_enable(void)
 {
-
 	/*** UART5 Bit Mapping Link ***/
-	stm32fxxx_uart5.instance = uart5_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_uart5.instance = UART5;
+	#else
+		stm32fxxx_uart5.instance = NULL;
+	#endif
 	// Other
 	stm32fxxx_uart5.clock = STM32FXXXUart5Clock;
 	stm32fxxx_uart5.nvic = STM32FXXXUart5Nvic;
@@ -426,13 +430,11 @@ STM32FXXX_UART5* uart5_enable(void)
 
 STM32FXXX_UART5*  uart5(void){ return (STM32FXXX_UART5*) &stm32fxxx_uart5; }
 
-#endif
 /*** USART6 INIC Procedure & Function Definition ***/
 STM32FXXX_USART6* usart6_enable(void)
 {
-
 	/*** USART6 Bit Mapping Link ***/
-	stm32fxxx_usart6.instance = usart6_instance();
+	stm32fxxx_usart6.instance = USART6;
 	// Other
 	stm32fxxx_usart6.clock = STM32FXXXUsart6Clock;
 	stm32fxxx_usart6.nvic = STM32FXXXUsart6Nvic;

@@ -15,9 +15,8 @@ Comment:
 
 /*** File Variables ***/
 static STM32FXXX_TIM1 stm32fxxx_tim1;
-#ifdef STM32F446xx
-	static STM32FXXX_TIM8 stm32fxxx_tim8;
-#endif
+static STM32FXXX_TIM8 stm32fxxx_tim8;
+
 /************/
 /*** TIM1 ***/
 /************/
@@ -116,7 +115,7 @@ void STM32FXXXTim8Nvic(uint8_t value)
 STM32FXXX_TIM1* tim1_enable(void)
 {
 	/*** TIM1 Bit Field ***/
-	stm32fxxx_tim1.instance = tim1_instance();
+	stm32fxxx_tim1.instance = TIM1;
 	// CLOCK
 	stm32fxxx_tim1.clock = STM32FXXXTim1Clock;
 	// NVIC
@@ -127,12 +126,15 @@ STM32FXXX_TIM1* tim1_enable(void)
 
 STM32FXXX_TIM1* tim1(void){ return (STM32FXXX_TIM1*) &stm32fxxx_tim1;}
 
-#ifdef STM32F446xx
 /*** TIM8 INIC Procedure & Function Definition ***/
 STM32FXXX_TIM8* tim8_enable(void)
 {
 	/*** TIM8 Bit Field ***/
-	stm32fxxx_tim8.instance = tim8_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_tim8.instance = TIM8;
+	#else
+		stm32fxxx_tim8.instance = NULL;
+	#endif
 	// CLOCK
 	stm32fxxx_tim8.clock = STM32FXXXTim8Clock;
 	// NVIC
@@ -142,8 +144,6 @@ STM32FXXX_TIM8* tim8_enable(void)
 }
 
 STM32FXXX_TIM8* tim8(void){ return (STM32FXXX_TIM8*) &stm32fxxx_tim8; }
-
-#endif
 
 /*** TIM1 CC IRQ Request ***/
 void TIM1_CC_IRQHandler(void){

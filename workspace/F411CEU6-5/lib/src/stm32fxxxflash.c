@@ -210,7 +210,6 @@ void STM32FXXXFLASH_nvic(uint8_t state)
 /*** FLASH Auxiliar ***/
 STM32FXXXFLASH_acr* stm32fxxx_flash_acr_inic(void)
 {
-
 	// ACR
 	stm32fxxx_flash_acr.dcrst = STM32FXXXFLASH_acr_dcrst;
 	stm32fxxx_flash_acr.icrst = STM32FXXXFLASH_acr_icrst;
@@ -222,7 +221,6 @@ STM32FXXXFLASH_acr* stm32fxxx_flash_acr_inic(void)
 }
 STM32FXXXFLASH_sr* stm32fxxx_flash_sr_inic(void)
 {
-
 	// SR
 	stm32fxxx_flash_sr.bsy = STM32FXXXFLASH_sr_bsy;
 	stm32fxxx_flash_sr.rderr = STM32FXXXFLASH_sr_rderr;
@@ -243,7 +241,6 @@ STM32FXXXFLASH_sr* stm32fxxx_flash_sr_inic(void)
 }
 STM32FXXXFLASH_cr* stm32fxxx_flash_cr_inic(void)
 {
-
 	// CR
 	stm32fxxx_flash_cr.lock = STM32FXXXFLASH_cr_lock;
 	stm32fxxx_flash_cr.errie = STM32FXXXFLASH_cr_errie;
@@ -258,7 +255,6 @@ STM32FXXXFLASH_cr* stm32fxxx_flash_cr_inic(void)
 }
 STM32FXXXFLASH_optcr* stm32fxxx_flash_optcr_inic(void)
 {
-
 	// OPTCR
 	stm32fxxx_flash_optcr.sprmod = STM32FXXXFLASH_optcr_sprmod;
 	stm32fxxx_flash_optcr.n_wrp = STM32FXXXFLASH_optcr_n_wrp;
@@ -276,9 +272,6 @@ STM32FXXXFLASH_optcr* stm32fxxx_flash_optcr_inic(void)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXXFLASHobj* flash_enable(void)
 {
-
-
-
 	/*** FLASH Bit Mapping Link ***/
 	stm32fxxx_flash.acr = stm32fxxx_flash_acr_inic();
 	stm32fxxx_flash.sr = stm32fxxx_flash_sr_inic();

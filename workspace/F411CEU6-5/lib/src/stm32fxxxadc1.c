@@ -33,10 +33,9 @@ void STM32FXXXAdc1Nvic(uint8_t state)
 /*** ADC1 INIC Procedure & Function Definition ***/
 STM32FXXX_ADC1* adc1_enable(void)
 {
-
 	/*** ADC1 Bit Mapping Link ***/
-	stm32fxxx_adc1.instance = adc1_instance();
-	stm32fxxx_adc1.common_instance = adc_common_instance();
+	stm32fxxx_adc1.instance = ADC1;
+	stm32fxxx_adc1.common_instance = ADC1_COMMON;
 	/*** Other ***/
 	stm32fxxx_adc1.clock = STM32FXXXAdc1Clock;
 	stm32fxxx_adc1.nvic = STM32FXXXAdc1Nvic;

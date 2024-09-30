@@ -12,11 +12,12 @@ Comment:
 #include "stm32fxxxadc2.h"
 
 /*** File Variables ***/
-#ifdef STM32F446xx
+//#ifdef STM32F446xx
 // ADC2
 static STM32FXXX_ADC2 stm32fxxx_adc2;
 /*** File Procedure & Function Header ***/
 /*** ADC2 ***/
+#ifdef STM32F446xx
 void STM32FXXXAdc2Clock(uint8_t bool)
 {
 	if(bool){ rcc_instance()->apb2enr.par.adc2en = 1; }else{ rcc_instance()->apb2enr.par.adc2en = 0; }
@@ -25,13 +26,18 @@ void STM32FXXXAdc2Nvic(uint8_t bool)
 {
 	if(bool){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
+#endif
 /*** ADC2 INIC Procedure & Function Definition ***/
 STM32FXXX_ADC2* adc2_enable(void)
 {
-
 	/*** ADC2 Bit Mapping Link ***/
-	stm32fxxx_adc2.instance = adc2_instance();
-	stm32fxxx_adc2.common_instance = adc_common_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_adc2.instance = ADC2;
+		stm32fxxx_adc2.common_instance = ADC123_COMMON;
+	#else
+		stm32fxxx_adc2.instance = NULL;
+		stm32fxxx_adc2.common_instance = NULL;
+	#endif
 	// Other
 	stm32fxxx_adc2.clock = STM32FXXXAdc2Clock;
 	stm32fxxx_adc2.nvic = STM32FXXXAdc2Nvic;
@@ -40,7 +46,7 @@ STM32FXXX_ADC2* adc2_enable(void)
 
 STM32FXXX_ADC2* adc2(void){ return (STM32FXXX_ADC2*) &stm32fxxx_adc2; }
 
-#endif
+//#endif
 
 /******
 1º Sequence

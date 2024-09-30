@@ -42,7 +42,6 @@ void STM32FXXXSramAccess(void)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXXSRAMobj* sram_enable(void)
 {
-
 	stm32fxxx_sram.access = STM32FXXXSramAccess;
 	return &stm32fxxx_sram;
 }

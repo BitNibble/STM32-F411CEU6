@@ -15,11 +15,9 @@ Comment:
 static STM32FXXX_TIM9 stm32fxxx_tim9;
 static STM32FXXX_TIM10 stm32fxxx_tim10;
 static STM32FXXX_TIM11 stm32fxxx_tim11;
-#ifdef STM32F446xx
-	static STM32FXXX_TIM12 stm32fxxx_tim12;
-	static STM32FXXX_TIM13 stm32fxxx_tim13;
-	static STM32FXXX_TIM14 stm32fxxx_tim14;
-#endif
+static STM32FXXX_TIM12 stm32fxxx_tim12;
+static STM32FXXX_TIM13 stm32fxxx_tim13;
+static STM32FXXX_TIM14 stm32fxxx_tim14;
 /*** TIMER 9 to 14 Procedure & Function Definition ***/
 /************/
 /*** TIM9 ***/
@@ -96,9 +94,8 @@ void STM32FXXXTim14Nvic(uint8_t state)
 /*** TIM9 Procedure & Function Definition ***/
 STM32FXXX_TIM9* tim9_enable(void)
 {
-
 	/*** TIM9 Bit Mapping Link ***/
-	stm32fxxx_tim9.instance = tim9_instance();
+	stm32fxxx_tim9.instance = TIM9;
 	// CLOCK
 	stm32fxxx_tim9.clock = STM32FXXXTim9Clock;
 	// NVIC
@@ -112,9 +109,8 @@ STM32FXXX_TIM9* tim9(void){ return (STM32FXXX_TIM9*) &stm32fxxx_tim9; }
 /*** TIM10 Procedure & Function Definition***/
 STM32FXXX_TIM10* tim10_enable(void)
 {
-
 	/*** TIM10 Bit Mapping Link ***/
-	stm32fxxx_tim10.instance = tim10_instance();
+	stm32fxxx_tim10.instance = TIM10;
 	// CLOCK
 	stm32fxxx_tim10.clock = STM32FXXXTim10Clock;
 	// NVIC
@@ -128,9 +124,8 @@ STM32FXXX_TIM10* tim10(void){ return (STM32FXXX_TIM10*) &stm32fxxx_tim10; }
 /*** TIM11 Procedure & Function Definition***/
 STM32FXXX_TIM11* tim11_enable(void)
 {
-
 	/*** TIM11 Bit Mapping Link ***/
-	stm32fxxx_tim11.instance = tim11_instance();
+	stm32fxxx_tim11.instance = TIM11;
 	// CLOCK
 	stm32fxxx_tim11.clock = STM32FXXXTim11Clock;
 	// NVIC
@@ -141,13 +136,15 @@ STM32FXXX_TIM11* tim11_enable(void)
 
 STM32FXXX_TIM11* tim11(void){ return (STM32FXXX_TIM11*) &stm32fxxx_tim11; }
 
-#ifdef STM32F446xx
 /*** TIM12 Procedure & Function Definition***/
 STM32FXXX_TIM12* tim12_enable(void)
 {
-
 	/*** TIM12 Bit Mapping Link ***/
-	stm32fxxx_tim12.instance = tim12_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_tim12.instance = TIM12;
+	#else
+		stm32fxxx_tim12.instance = NULL;
+	#endif
 	// CLOCK
 	stm32fxxx_tim12.clock = STM32FXXXTim12Clock;
 	// NVIC
@@ -161,9 +158,12 @@ STM32FXXX_TIM12* tim12(void){ return (STM32FXXX_TIM12*) &stm32fxxx_tim12; }
 /*** TIM13 Procedure & Function Definition***/
 STM32FXXX_TIM13* tim13_enable(void)
 {
-
 	/*** TIM13 Bit Mapping Link ***/
-	stm32fxxx_tim13.instance = tim13_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_tim13.instance = TIM13;
+	#else
+		stm32fxxx_tim13.instance = NULL;
+	#endif
 	// CLOCK
 	stm32fxxx_tim13.clock = STM32FXXXTim13Clock;
 	// NVIC
@@ -177,9 +177,12 @@ STM32FXXX_TIM13* tim13(void){ return (STM32FXXX_TIM13*) &stm32fxxx_tim13; }
 /*** TIM14 Procedure & Function Definition ***/
 STM32FXXX_TIM14* tim14_enable(void)
 {
-
 	/*** TIM14 Bit Mapping Link ***/
-	stm32fxxx_tim14.instance = tim14_instance();
+	#ifdef STM32F446xx
+		stm32fxxx_tim14.instance = TIM14;
+	#else
+		stm32fxxx_tim14.instance = NULL;
+	#endif
 	// CLOCK
 	stm32fxxx_tim14.clock = STM32FXXXTim14Clock;
 	// NVIC
@@ -189,8 +192,6 @@ STM32FXXX_TIM14* tim14_enable(void)
 }
 
 STM32FXXX_TIM14* tim14(void){ return (STM32FXXX_TIM14*) &stm32fxxx_tim14; }
-
-#endif
 
 /******
 1º Sequence

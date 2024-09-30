@@ -151,7 +151,6 @@ void STM32FXXXPWR_clock(uint8_t state)
 /*** Auxiliar ***/
 STM32FXXXPWR_cr* stm32fxxx_pwr_cr_inic(void)
 {
-
 	// CR
 	stm32fxxx_pwr_cr.fissr = STM32FXXXPWR_cr_fissr;
 	stm32fxxx_pwr_cr.fmssr = STM32FXXXPWR_cr_fmssr;
@@ -175,7 +174,6 @@ STM32FXXXPWR_cr* stm32fxxx_pwr_cr_inic(void)
 }
 STM32FXXXPWR_csr* stm32fxxx_pwr_csr_inic(void)
 {
-
 	// CSR
 	stm32fxxx_pwr_csr.udrdy = STM32FXXXPWR_udrdy;
 	stm32fxxx_pwr_csr.clear_udrdy = STM32FXXXPWR_csr_clear_udrdy;
@@ -194,8 +192,6 @@ STM32FXXXPWR_csr* stm32fxxx_pwr_csr_inic(void)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXX_PWR* pwr_enable(void)
 {
-
-
 	stm32fxxx_pwr.clock = STM32FXXXPWR_clock;
 	/*** PWR Bit Mapping Link ***/
 	stm32fxxx_pwr.cr = stm32fxxx_pwr_cr_inic();

@@ -65,7 +65,7 @@ void STM32FXXXTim5Nvic(uint8_t state)
 STM32FXXX_TIM2* tim2_enable(void)
 {
 	/*** TIM2 Bit Mapping Link ***/
-	stm32fxxx_tim2.instance = tim2_instance();
+	stm32fxxx_tim2.instance = TIM2;
 	// CLOCK
 	stm32fxxx_tim2.clock = STM32FXXXTim2Clock;
 	// NVIC
@@ -80,7 +80,7 @@ STM32FXXX_TIM2* tim2(void){ return (STM32FXXX_TIM2*) &stm32fxxx_tim2; }
 STM32FXXX_TIM3* tim3_enable(void)
 {
 	/*** TIM3 Bit Mapping Link ***/
-	stm32fxxx_tim3.instance = tim3_instance();
+	stm32fxxx_tim3.instance = TIM3;
 	// CLOCK
 	stm32fxxx_tim3.clock = STM32FXXXTim3Clock;
 	// NVIC
@@ -95,7 +95,7 @@ STM32FXXX_TIM3* tim3(void){ return (STM32FXXX_TIM3*) &stm32fxxx_tim3; }
 STM32FXXX_TIM4* tim4_enable(void)
 {
 	/*** TIM4 Bit Mapping Link ***/
-	stm32fxxx_tim4.instance = tim4_instance();
+	stm32fxxx_tim4.instance = TIM4;
 	// CLOCK
 	stm32fxxx_tim4.clock = STM32FXXXTim4Clock;
 	// NVIC
@@ -110,7 +110,7 @@ STM32FXXX_TIM4* tim4(void){ return (STM32FXXX_TIM4*) &stm32fxxx_tim4; }
 STM32FXXX_TIM5* tim5_enable(void)
 {
 	/*** TIM5 Bit Mapping Link ***/
-	stm32fxxx_tim5.instance = tim5_instance();
+	stm32fxxx_tim5.instance = TIM5;
 	// CLOCK
 	stm32fxxx_tim5.clock = STM32FXXXTim5Clock;
 	// NVIC

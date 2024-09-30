@@ -19,10 +19,8 @@ static STM32FXXX_GPIOB stm32fxxx_gpiob;
 static STM32FXXX_GPIOC stm32fxxx_gpioc;
 static STM32FXXX_GPIOD stm32fxxx_gpiod;
 static STM32FXXX_GPIOE stm32fxxx_gpioe;
-#ifdef STM32F446xx
-    static STM32FXXX_GPIOF stm32fxxx_gpiof;
-    static STM32FXXX_GPIOG stm32fxxx_gpiog;
-#endif
+static STM32FXXX_GPIOF stm32fxxx_gpiof;
+static STM32FXXX_GPIOG stm32fxxx_gpiog;
 static STM32FXXX_GPIOH stm32fxxx_gpioh;
 
 /*** GPIO Procedure & Function Definition ***/
@@ -281,11 +279,14 @@ STM32FXXX_GPIOE* gpioe_enable(void)
 
 STM32FXXX_GPIOE* gpioe(void) { return &stm32fxxx_gpioe; }
 
-#ifdef STM32F446xx
 STM32FXXX_GPIOF* gpiof_enable(void)
 {
     /*** GPIOF Bit Mapping Link ***/
-    stm32fxxx_gpiof.instance = GPIOF;
+	#ifdef STM32F446xx
+    	stm32fxxx_gpiof.instance = GPIOF;
+	#else
+    	stm32fxxx_gpiof.instance = NULL;
+	#endif
     /*** GPIOF RCC Clock Enable ***/
     stm32fxxx_gpiof.clock = STM32FXXXGpioFclock;
     /*** Other ***/
@@ -297,7 +298,11 @@ STM32FXXX_GPIOF* gpiof(void) { return &stm32fxxx_gpiof; }
 STM32FXXX_GPIOG* gpiog_enable(void)
 {
     /*** GPIOG Bit Mapping Link ***/
-    stm32fxxx_gpiog.instance = GPIOG;
+	#ifdef STM32F446xx
+    	stm32fxxx_gpiog.instance = GPIOG;
+	#else
+    	stm32fxxx_gpiog.instance = NULL;
+	#endif
     /*** GPIOG RCC Clock Enable ***/
     stm32fxxx_gpiog.clock = STM32FXXXGpioGclock;
     /*** Other ***/
@@ -305,7 +310,6 @@ STM32FXXX_GPIOG* gpiog_enable(void)
 }
 
 STM32FXXX_GPIOG* gpiog(void) { return &stm32fxxx_gpiog; }
-#endif
 
 STM32FXXX_GPIOH* gpioh_enable(void)
 {

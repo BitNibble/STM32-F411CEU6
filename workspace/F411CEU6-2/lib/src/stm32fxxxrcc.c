@@ -383,7 +383,6 @@ STM32FXXXRCCPLLSAI* stm32fxxx_rcc_pllsai_inic(void)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXX_RCC* rcc_enable(void)
 {
-
 	/*** RCC Bit Mapping Link ***/
 	stm32fxxx_rcc.instance = RCC;
 	stm32fxxx_rcc.prescaler = STM32FXXXPrescaler;
