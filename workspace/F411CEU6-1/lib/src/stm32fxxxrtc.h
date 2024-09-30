@@ -10,10 +10,8 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXRTC_H_
 	#define _STM32FXXXRTC_H_
-
 /*** Library ***/
-#include "armquery.h"
-
+#include "stm32fxxxinstance.h"
 /*** Define & Macro ***/
 #ifndef RTC_KEY1
 	#define RTC_KEY1 0xCA
@@ -93,6 +91,8 @@ void STM32FXXXRtcMonth(uint8_t month);
 void STM32FXXXRtcWeekDay(uint8_t weekday);
 void STM32FXXXRtcdr2vec(char* rtc_vect);
 void STM32FXXXRtctr2vec(char* rtc_vect);
+/*** General RTC Function Prototypes ***/
+const char* WeekDay_String(uint8_t weekday_n);
 
 /*** INTERRUPT ***/
 void RTC_WKUP_IRQHandler(void);

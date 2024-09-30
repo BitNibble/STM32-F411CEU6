@@ -10,10 +10,8 @@ Comment:
 ************************************************************************/
 #ifndef _EXPLODE_H_
 	#define _EXPLODE_H_
-
 /*** Global Library ***/
 #include <inttypes.h>
-
 /*** Global Constant & Macro ***/
 #define STM32F4
 
@@ -22,7 +20,6 @@ Comment:
 #else
 	#define IO_var uint8_t
 #endif
-
 /*** Global TypeDef ***/
 typedef struct {
 	IO_var XI;

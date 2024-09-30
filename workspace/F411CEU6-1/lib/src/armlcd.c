@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 /*** File Library ***/
 #include "armlcd.h"
+#include "armsystick.h"
 /*** File Constant & Macro ***/
 // CMD RS
 #define ARMLCD0_INST 0

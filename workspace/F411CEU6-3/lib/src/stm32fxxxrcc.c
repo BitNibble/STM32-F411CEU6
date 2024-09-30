@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 /*** File Library ***/
 #include <stm32fxxxrcc.h>
+#include "armquery.h"
 
 /*** File Variables ***/
 static STM32FXXXRCCPLL stm32fxxx_rcc_pll;

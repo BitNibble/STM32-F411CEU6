@@ -11,11 +11,10 @@ Comment:
 #ifndef _STM32FXXXNVIC_H_
 	#define _STM32FXXXNVIC_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** NVIC TypeDef ***/
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	void (*set_enable)( uint8_t IRQn );
 	void (*clear_enable)( uint8_t IRQn );

@@ -11,7 +11,7 @@ Comment:
 #ifndef _STM32FXXXPWR_H_
 	#define _STM32FXXXPWR_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** PWR Bit Mapping TypeDef ***/
 // CR
 typedef struct

@@ -10,10 +10,8 @@ Comment:
 ************************************************************************/
 #ifndef _ZNPID_H_
 	#define _ZNPID_H_
-
 /*** File Library ***/
 #include <inttypes.h>
-
 /*** File TypeDef ***/
 typedef struct {
 	double c; // constant p

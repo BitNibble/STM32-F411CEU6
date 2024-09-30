@@ -11,13 +11,11 @@ Comment:
 #ifndef _STM32FXXXUSART_H_
 	#define _STM32FXXXUSART_H_
 /*** Library ***/
-#include "armquery.h"
-
+#include "stm32fxxxinstance.h"
 /*** USART 1..6 Handler TypeDef ***/
 // USART -> USART1,2,3,6
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	USART_TypeDef* instance;
 	/*** Other ***/
@@ -79,6 +77,10 @@ void STM32FXXXUart5Parameter( uint8_t wordlength, uint8_t samplingmode, double s
 void STM32FXXXUsart6Clock( uint8_t state );
 void STM32FXXXUsart6Nvic( uint8_t state );
 void STM32FXXXUsart6Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+/*** General USART Function Prototypes ***/
+void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
+void Usart_StopBits( USART_TypeDef* usart, double stopbits );
+void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
 /*** INTERRUPT HEADER ***/
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);

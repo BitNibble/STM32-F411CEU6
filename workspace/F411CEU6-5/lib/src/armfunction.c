@@ -12,13 +12,17 @@ Comment:
 *************************************************************************/
 /*** File Library ***/
 #include "armfunction.h"
+#include "armquery.h"
+#include "armsystick.h"
+#include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <stdarg.h>
+#include <math.h>
 
 #define MAX_FUNCSTR_LEN (FUNCSTRSIZE + 1)
-#define INT_MAX 0xFFFFFFFF
-#define INT_MIN 0x00000000
 
 /*** File Variable ***/
 static FUNC setup_func;
@@ -78,6 +82,17 @@ int function_StrToInt (const char string[]);
 uint32_t function_triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
 uint32_t function_read_value(void);
+/********************************************************************/
+// Function to convert an integer to a string
+void int_to_string(int value, char* buffer, size_t buffer_size);
+// Function to convert an unsigned integer to a string
+void uint_to_string(unsigned int value, char* buffer, size_t buffer_size);
+// Function to convert a string to an integer
+int32_t string_to_int(const char* str);
+// Function to convert a string to an unsigned integer
+uint32_t string_to_uint(const char* str);
+// Function to convert an integer to a hexadecimal string
+void int_to_hex_string(unsigned int value, char* buffer, size_t buffer_size);
 /*** COMMON ***/
 void FUNC_var(void);
 
@@ -721,6 +736,39 @@ int function_StrToInt(const char string[]) {
     }
 
     return isNegative ? -result : result;
+}
+/********************************************************************/
+// Function to convert a signed integer to a string
+void int_to_string(int value, char* buffer, size_t buffer_size) {
+    if (buffer_size > 0) {
+        snprintf(buffer, buffer_size, "%d", value);
+    }
+}
+// Function to convert an unsigned integer to a string
+void uint_to_string(unsigned int value, char* buffer, size_t buffer_size) {
+    if (buffer_size > 0) {
+        snprintf(buffer, buffer_size, "%u", value);
+    }
+}
+// Function to convert a string to a signed integer
+int32_t string_to_int(const char* str) {
+    return (int32_t)strtol(str, NULL, 10);
+}
+// Function to convert a string to an unsigned integer
+uint32_t string_to_uint(const char* str) {
+    return (uint32_t)strtoul(str, NULL, 10);
+}
+// Function to convert an integer to a hexadecimal string
+void int_to_hex_string(unsigned int value, char* buffer, size_t buffer_size) {
+    if (buffer_size > 0) {
+        snprintf(buffer, buffer_size, "0x%X", value);
+    }
+}
+// Function to convert a floating-point number to a string
+void float_to_string(float value, char* buffer, size_t buffer_size) {
+    if (buffer_size > 0) {
+        snprintf(buffer, buffer_size, "%.2f", value); // Adjust the format as needed
+    }
 }
 /******/
 // triggerA

@@ -10,13 +10,11 @@ Comment:
 ************************************************************************/
 #ifndef _STM32FXXXINSTANCE_H_
 	#define _STM32FXXXINSTANCE_H_
-
 /************ CMSIS BASE *************/
 // SELECTION OF CHIP (CMSIS Access to its libraries)
 // Options: __STM32F446xx_H    __STM32F411xE_H
 #include "stm32f4xx.h"
 #include <inttypes.h>
-
 /*** General Purpose Bit field ***/
 typedef union{
 	struct UN32nibble{
@@ -232,6 +230,22 @@ USB_OTG_INEndpointTypeDef* usb_otg_inendpoint_instance(void);
 USB_OTG_OUTEndpointTypeDef* usb_otg_outendpoint_instance(void);
 USB_OTG_HostTypeDef* usb_otg_host_instance(void);
 USB_OTG_HostChannelTypeDef* usb_otg_hotchannel_instance(void);
+
+/*** Tools ***/
+void set_reg(volatile uint32_t* reg, uint32_t hbits);
+void clear_reg(volatile uint32_t* reg, uint32_t hbits);
+uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
+void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void set_pin( GPIO_TypeDef* reg, uint8_t pin );
+void clear_pin( GPIO_TypeDef* reg, uint8_t pin );
+uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
+void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
+void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 
 #endif
 

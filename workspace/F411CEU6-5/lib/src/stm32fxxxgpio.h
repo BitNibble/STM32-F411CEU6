@@ -11,14 +11,11 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXGPIO_H_
 	#define _STM32FXXXGPIO_H_
-
 /*** File Library ***/
-#include "armquery.h"
-
+#include "stm32fxxxinstance.h"
 /*** GPIO -> GPIO ***/
 typedef struct
 {
-
 	/*** BitField Mapping ***/
 	GPIO_TypeDef* instance;
 	/*** Other ***/

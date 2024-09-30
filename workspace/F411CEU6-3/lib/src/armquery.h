@@ -11,13 +11,9 @@ Comment:
 ************************************************************************/
 #ifndef _ARMQUERY_H_
 	#define _ARMQUERY_H_
-
-#include "stm32fxxxinstance.h"
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <math.h>
-
+/*** File Library ***/
+#include <inttypes.h>
+/*** File Constant & Macro ***/
 #ifndef HSI_RC
 	#define HSI_RC 16000000UL
 #endif
@@ -118,39 +114,8 @@ uint8_t getpllp(void);
 uint8_t getpllq(void);
 uint8_t getpllr(void);
 
-/*** Tools ***/
-void set_reg(volatile uint32_t* reg, uint32_t hbits);
-void clear_reg(volatile uint32_t* reg, uint32_t hbits);
-uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
-void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void set_pin( GPIO_TypeDef* reg, uint8_t pin );
-void clear_pin( GPIO_TypeDef* reg, uint8_t pin );
-uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
-void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
-void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
-void delay_Configure(void);
-uint32_t get_systick_us(void);
-uint32_t get_systick_10us(void);
-uint32_t get_systick_ms(void);
-void delayMiliseconds(unsigned int ms);
-void delayMicroseconds(unsigned int us);
-void delayAsmMicroseconds(unsigned int us);
-
 /****** MISCELLANEOUS ******/
-void ADC_TemperatureSetup(void);
-uint16_t ADC_ReadTemperature(void);
-float CalculateTemperature(uint16_t adc_value);
-
-const char* WeekDay_String(uint8_t weekday_n);
-
-void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
-void Usart_StopBits( USART_TypeDef* usart, double stopbits );
-void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
+void enable_fpu(void);
 
 #endif
 

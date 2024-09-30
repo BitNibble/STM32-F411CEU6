@@ -10,8 +10,6 @@ Comment:
 ******************************************************************************/
 /*** File Library ***/
 #include "buffer.h"
-#include <stdio.h>
-#include <string.h>
 
 /*** File Header ***/
 void BUFF_push(bufferparameter* par, BUFF_var data);

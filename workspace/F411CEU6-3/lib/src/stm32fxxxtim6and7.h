@@ -11,12 +11,11 @@ Comment:
 #ifndef _STM32FXXXTIM6AND7_H_
 	#define _STM32FXXXTIM6AND7_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** TIMER TypeDef***/
 // ( 6 and 7 ) TIM 
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/

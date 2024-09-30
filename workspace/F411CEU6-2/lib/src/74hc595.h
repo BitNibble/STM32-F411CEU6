@@ -10,19 +10,15 @@ Comment:
 ************************************************************************/
 #ifndef _74HC595_H_
 	#define _74HC595_H_
-
 /*** File Library ***/
 #include <inttypes.h>
-
 /*** Global Constant & Macro ***/
 #define STM32F4
-
 #ifdef STM32F4
 	#define IO_var uint32_t
 #else
 	#define IO_var uint8_t
 #endif
-
 /*** File TypeDef ***/
 typedef struct{
 	uint8_t HC595_datapin;
@@ -31,7 +27,6 @@ typedef struct{
 	volatile IO_var *hc595_DDR;
 	volatile IO_var *hc595_PORT;
 }hc595_parameter;
-
 /*** 74HC595 TypeDef ***/
 typedef struct
 {

@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 /*** File Library ***/
 #include "stm32fxxxusart.h"
+#include "armquery.h"
 #include <math.h>
 
 /*** File Variable ***/
@@ -440,6 +441,52 @@ STM32FXXX_USART6* usart6_enable(void)
 }
 
 STM32FXXX_USART6*  usart6(void){ return (STM32FXXX_USART6*) &stm32fxxx_usart6; }
+
+/*** General USART Function Definitions ***/
+void Usart_WordLength(USART_TypeDef* usart, uint8_t wordlength) {
+    // Clear the M bit to reset word length
+    usart->CR1 &= ~(1 << 12);
+
+    if (wordlength == 9) {
+        usart->CR1 |= (1 << 12); // Set M bit for 9-bit word length
+    }
+    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
+}
+
+void Usart_StopBits(USART_TypeDef* usart, double stopbits) {
+    // Reset stop bits configuration
+    usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12));
+
+    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
+        usart->CR2 |= (1 << 12); // Set bit 12
+    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
+        // No additional bits set (already cleared)
+    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
+        usart->CR2 |= (1 << 13) | (1 << 12); // Set both bits
+    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
+        usart->CR2 |= (1 << 13); // Set bit 13
+    }
+}
+
+void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
+{
+    uint8_t sampling = 16; // Default to 16
+    if (samplingmode == 8) {
+        sampling = 8;
+        usart->CR1 |= (1 << 15); // Set OVER8 for 8 times oversampling
+    } else {
+        usart->CR1 &= ~(1 << 15); // Clear OVER8 for 16 times oversampling
+    }
+
+    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
+    double fracpart, intpart;
+    fracpart = modf(value, &intpart);
+
+    usart->BRR = 0; // Reset BRR
+    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
+    usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
+    usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
+}
 
 /*** EOF ***/
 

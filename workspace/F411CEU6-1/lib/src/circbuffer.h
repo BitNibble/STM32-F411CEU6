@@ -10,13 +10,10 @@ Comment:
 *******************************************************************************/
 #ifndef _CIRCBUFFER_H_
 	#define _CIRCBUFFER_H_
-
 /*** Library ***/
 #include <inttypes.h>
-
 /*** Define & Macro ***/
 #define CIRCBUFF_var char
-
 /*** CIRCBUFFER par TypeDef ***/
 typedef struct
 {

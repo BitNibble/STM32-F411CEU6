@@ -11,7 +11,7 @@ Comment:
 #ifndef _STM32FXXXTIM1AND8_H_
 	#define _STM32FXXXTIM1AND8_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*************************/
 /*** TIMER1and8 TypeDef***/
 /*************************/

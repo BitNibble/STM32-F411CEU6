@@ -11,7 +11,7 @@ Comment:
 #ifndef _STM32FXXXTIM9TO14_H_
 	#define _STM32FXXXTIM9TO14_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** TIMER 9 TO 14 TypeDef***/
 // ( 9/12 ) TIM
 typedef struct

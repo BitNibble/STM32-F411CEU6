@@ -11,6 +11,9 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxrtc.h"
 
+#define ON 1
+#define OFF 0
+
 #define RTC_CLOCK_ENABLE_BIT 15
 #define MAX_BACKUP_REGISTERS 80
 #define BACKUP_REGISTER_BITS 8
@@ -699,6 +702,27 @@ void rtc_lselect(uint8_t lclock) {
             // Default case (redundant due to input validation, but kept for clarity)
             set_rtc_clock_source(RTCSEL_LSI);
             break;
+    }
+}
+/*** General RTC Function Definitions ***/
+const char* WeekDay_String(uint8_t weekday_n) {
+    // Array of weekday strings, indexed from 0 to 7 for convenience
+    const char* weekdays[] = {
+        "Domingo", // 0 (unused)
+        "Domingo", // 1
+        "Segunda", // 2
+        "Terca",   // 3
+        "Quarta",  // 4
+        "Quinta",  // 5
+        "Sexta",   // 6
+        "Sabado"   // 7
+    };
+
+    // Validate the input and return the corresponding weekday
+    if (weekday_n >= 1 && weekday_n <= 7) {
+        return weekdays[weekday_n];
+    } else {
+        return weekdays[1]; // Default to "domingo"
     }
 }
 

@@ -10,10 +10,8 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXADC2_H_
 	#define _STM32FXXXADC2_H_
-
 /*** Library ***/
-#include "armquery.h"
-
+#include "stm32fxxxinstance.h"
 /*** ADC TypeDef ***/
 // ADC -> ADC2
 typedef struct

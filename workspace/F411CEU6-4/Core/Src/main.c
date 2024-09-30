@@ -38,6 +38,7 @@ int main(void)
 {
     STM32FXXX_enable();
     HAL_Init();
+    enable_fpu();
     rtc()->inic(1);
     PA = EXPLODE_enable();
 

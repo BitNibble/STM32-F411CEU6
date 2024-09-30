@@ -11,12 +11,11 @@ Comment:
 #ifndef _STM32FXXXTIM2TO5_H_
 	#define _STM32FXXXTIM2TO5_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** TIMER 2 to 5 TypeDef ***/
 // ( 2 and 5 ) TIM
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
 	/*** Other ***/

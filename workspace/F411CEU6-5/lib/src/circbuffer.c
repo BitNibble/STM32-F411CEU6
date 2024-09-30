@@ -9,8 +9,6 @@ Comment:
     Circular Buffer
 ******************************************************************************/
 /*** File Library***/
-#include <stdio.h>
-#include <string.h>
 #include "circbuffer.h"
 
 /*** File Header ***/

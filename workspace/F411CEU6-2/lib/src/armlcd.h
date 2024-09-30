@@ -10,12 +10,8 @@ Comment:
 ************************************************************************/
 #ifndef _ARMLCD_H_
 	#define _ARMLCD_H_
-
 /*** Global Library ***/
-//#include <util/delay.h> // if use AVR ATMEL
-#include "armquery.h"
-#include <inttypes.h>
-
+#include "stm32fxxxinstance.h"
 /*** Global Constant & Macro ***/
 // ASIGN PORT PINS TO LCD (can be setup in any way)
 #ifdef STM32F411xE

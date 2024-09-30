@@ -10,9 +10,8 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXSYSCFG_H_
 	#define _STM32FXXXSYSCFG_H_
-
 /*** File Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /***************************************/
 /***** SYSCFG Bit Mapping TypeDef ****/
 /***************************************/

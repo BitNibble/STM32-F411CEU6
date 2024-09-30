@@ -10,13 +10,10 @@ Comment:
 *******************************************************************************/
 #ifndef _BUFFER_H_
 	#define _BUFFER_H_
-
 /*** File Library ***/
 #include <inttypes.h>
-
 /*** File Constant & Macro ***/
 #define BUFF_var char
-
 /*** File TypeDef ***/
 typedef struct {
 	BUFF_var* orig;

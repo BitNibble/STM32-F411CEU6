@@ -11,11 +11,10 @@ Comment:
 #ifndef _STM32FXXXCRC_H_
 	#define _STM32FXXXCRC_H_
 /*** Library ***/
-#include "armquery.h"
+#include "stm32fxxxinstance.h"
 /*** CRC TypeDef ***/
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	void (*dr)(uint32_t value);
 	uint32_t (*get_dr)(void);

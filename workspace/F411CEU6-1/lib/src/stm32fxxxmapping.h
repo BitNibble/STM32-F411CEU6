@@ -14,11 +14,6 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXMAPPING_H_
 	#define _STM32FXXXMAPPING_H_
-/***** Global Libraries *****/
-#include "armquery.h"
-#include "armsystick.h"
-/****** Define & Macros******/
-
 /*** Module Library ***/
 // May comment out modules not being used
 #include "stm32fxxxflash.h"
@@ -39,6 +34,9 @@ Comment:
 #include "stm32fxxxtim2to5.h"
 #include "stm32fxxxtim6and7.h"
 #include "stm32fxxxtim9to14.h"
+/***** Libraries *****/
+#include "armquery.h"
+#include "armsystick.h"
 /***************** STM32FXXX TypeDef *****************/
 typedef struct
 {

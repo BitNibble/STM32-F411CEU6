@@ -12,14 +12,12 @@ Comment:
 ************************************************************************/
 #ifndef _ARMFUNCTION_H_
 	#define _ARMFUNCTION_H_
-
 /*** Global Library ***/
-#include "armquery.h"
-#include "armsystick.h"
+#include <inttypes.h>
 #include "armlcd.h"
 /*** Global Define & Macro ***/
 #define FUNCSTRSIZE 31
-
+/*** Typedef ***/
 typedef struct {
     unsigned int Numerator;   // The numerator of the fraction
     unsigned int Denominator; // The denominator of the fraction
