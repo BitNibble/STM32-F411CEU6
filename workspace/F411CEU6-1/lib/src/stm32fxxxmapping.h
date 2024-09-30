@@ -30,7 +30,7 @@ Comment:
 #include "stm32fxxxadc3.h"
 #include "stm32fxxxrtc.h"
 //#include "stm32fxxxusart.h"
-//#include "stm32fxxxtim1and8.h"
+#include "stm32fxxxtim1and8.h"
 //#include "stm32fxxxtim2to5.h"
 //#include "stm32fxxxtim6and7.h"
 //#include "stm32fxxxtim9to14.h"
