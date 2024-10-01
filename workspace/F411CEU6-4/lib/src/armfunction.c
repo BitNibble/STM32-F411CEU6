@@ -211,7 +211,7 @@ unsigned int function_power(unsigned int base, unsigned int power) {
 }
 // Function to handle division and return a Real structure
 RealNum_TypeDef function_divide(int numerator, int denominator) {
-    RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0}; // Default result
+    RealNum_TypeDef result = {0, 1, 0, 0, 1, 0.0, 0.0}; // Default result
 
     // Handle case for division by zero
     if (denominator == 0) {
@@ -238,7 +238,7 @@ RealNum_TypeDef function_divide(int numerator, int denominator) {
 }
 // Function to process real numbers and extract integer/fractional parts
 RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
-    RealNum_TypeDef result = {0, 1, 0, 0, 0, 0.0, 0.0, 1};
+    RealNum_TypeDef result = {0, 1, 0, 0, 1, 0.0, 0.0, 1};
     // Set the original input number
     result.Number = real;
     // Handle sign of the number
@@ -616,26 +616,27 @@ char* function_print_binary(unsigned int n_bits, unsigned int number) {
 }
 unsigned int function_UintInvStr(RealNum_TypeDef num, unsigned int index)
 {
+	unsigned int start = index;
 	for( FUNCstr[index++] = (char)(num.Quotient % 10 + '0') ; (num.Quotient /= 10) > 0 ; FUNCstr[index++] = (char)(num.Quotient % 10 + '0') );
-	FUNCstr[index] = '\0'; return index;
+	FUNCstr[index] = '\0'; function_Reverse(FUNCstr + start); return index;
 }
 unsigned int function_FloatInvStr(RealNum_TypeDef num, unsigned int index)
 {
+	unsigned int start = index;
 	for( ; (num.Precision /= 10) > 0 ; FUNCstr[index++] = (char)(num.Remainder % 10 + '0'), num.Remainder /= 10 );
-	FUNCstr[index] = '\0'; return index;
+	FUNCstr[index] = '\0'; function_Reverse(FUNCstr + start); return index;
 }
 char* function_ftoa(double num, unsigned int decimal)
 {
 	RealNum_TypeDef number = function_realnumber(num, decimal);
 	unsigned int k = 0;
 	if(number.Precision > 1){
-		FUNCstr[k++] = '.';
-		k = function_UintInvStr(number, k); if (number.sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0';
-		function_Reverse(FUNCstr);
-		function_FloatInvStr(number, k); function_Reverse(FUNCstr + k);
+		if (number.sign < 0) FUNCstr[k++] = '-';
+		k = function_UintInvStr(number, k);  FUNCstr[k++] = '.'; FUNCstr[k] = '\0';
+		function_FloatInvStr(number, k);
 	}else{
-		k = function_UintInvStr(number, 0); if (number.sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0';
-		function_Reverse(FUNCstr);
+		if (number.sign < 0) FUNCstr[k++] = '-';
+		function_UintInvStr(number, k);
 	}
 	return FUNCstr;
 }
