@@ -63,8 +63,7 @@ typedef struct
 	int (*twocomptoint10bit)(int twoscomp);
 	int (*twocomptointnbit)(int twoscomp, uint8_t nbits);
 	/******/
-	char* (*print_v1)( char* str, uint8_t size_str, const char* format, ... );
-	char* (*print_v2)( const char *format, ... );
+	int (*format_string)(char *buffer, size_t size, const char *format, ...);
 	char* (*print_binary)(unsigned int n_bits, unsigned int number);
 	/*******/
 	char* (*i16toa)(int16_t n);

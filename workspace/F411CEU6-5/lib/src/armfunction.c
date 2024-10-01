@@ -24,6 +24,10 @@ Comment:
 #include <math.h>
 
 #define MAX_FUNCSTR_LEN (FUNCSTRSIZE + 1)
+#define SUCCESS 0
+#define ERROR_BUFFER_OVERFLOW 1
+#define ERROR_FORMATTING 2
+#define ERROR_INVALID_BUFFER 3
 
 /*** File Variable ***/
 static FUNC setup_func;
@@ -63,8 +67,7 @@ int function_twocomptoint8bit(int twoscomp);
 int function_twocomptoint10bit(int twoscomp);
 int function_twocomptointnbit(int twoscomp, uint8_t nbits);
 /*** 4 ***/
-char* function_print_v1( char* str, uint8_t size_str, const char* format, ... );
-char* function_print_v2(const char *format, ... );
+int function_format_string(char *buffer, size_t size, const char *format, ...);
 char* function_print_binary(unsigned int n_bits, unsigned int number);
 /*** 5 ***/
 char* function_i16toa(int16_t n);
@@ -126,8 +129,7 @@ FUNC FUNC_enable( void )
 	setup_func.twocomptoint10bit = function_twocomptoint10bit;
 	setup_func.twocomptointnbit = function_twocomptointnbit;
 	// 4
-	setup_func.print_v1 = function_print_v1;
-	setup_func.print_v2 = function_print_v2;
+	setup_func.format_string = function_format_string;
 	setup_func.print_binary = function_print_binary;
 	// 5
 	setup_func.i16toa = function_i16toa;
@@ -475,44 +477,29 @@ int function_twocomptointnbit(int twoscomp, uint8_t nbits) {
     return twoscomp;
 }
 /******/
-char* function_print_v1(char* str, uint8_t size_str, const char* format, ...) {
-    va_list aptr;
-    int ret;
-
-    va_start(aptr, format);
-    ret = vsnprintf(str, size_str, format, aptr);
-    va_end(aptr);
-
-    // Check for errors or truncation
-    if (ret < 0) {
-        return NULL; // Error occurred
-    } else if (ret >= size_str) {
-        // Output was truncated
-        str[size_str - 1] = '\0'; // Ensure null-termination
+int function_format_string(char *buffer, size_t size, const char *format, ...) {
+    // Check for valid buffer and size
+    if (buffer == NULL || size == 0) {
+        return ERROR_INVALID_BUFFER; // Buffer is invalid
     }
 
-    return str; // Return the formatted string
-}
-char* function_print_v2(const char* format, ...) {
-    va_list aptr;
-    int ret;
+    va_list args;
+    va_start(args, format);
 
-    va_start(aptr, format);
-    ret = vsnprintf(FUNCstr, FUNCSTRSIZE, format, aptr);
-    va_end(aptr);
+    // Use vsnprintf to format the string and get the number of characters that would be written
+    int written = vsnprintf(buffer, size, format, args);
+
+    va_end(args);
 
     // Check for errors
-    if (ret < 0) {
-        return NULL; // Error occurred
+    if (written < 0) {
+        return ERROR_FORMATTING; // Formatting error
+    } else if ((size_t)written >= size) {
+        buffer[size - 1] = '\0'; // Ensure null-termination
+        return ERROR_BUFFER_OVERFLOW; // Buffer was too small
     }
 
-    // Check if output was truncated
-    if (ret >= FUNCSTRSIZE) {
-        // Output was truncated, ensure null-termination
-        FUNCstr[FUNCSTRSIZE - 1] = '\0';
-    }
-
-    return FUNCstr; // Return the formatted string
+    return SUCCESS; // Successful formatting
 }
 /******/
 char* function_i16toa(int16_t n) {

@@ -25,6 +25,7 @@ GPIO PB9 - D7
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
+#include <stdio.h>
 
 #define JMP_menu 120
 #define JMP_menu_repeat 5
@@ -33,6 +34,7 @@ GPIO PB9 - D7
 
 EXPLODE PA;
 char ADC_msg[32];
+char str[32];
 
 int main(void)
 {
@@ -49,6 +51,7 @@ int main(void)
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
     uint16_t adc_value = 0;
+    const char unit = (char)0xDF;
 
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
     ARMLCD0_enable(GPIOB);
@@ -257,7 +260,9 @@ int main(void)
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging
-                    lcd0()->string_size(func()->print_v1(ADC_msg, 10, "%.1f %cC", CalculateTemperature(adc_value), (char) 0xDF), 8);
+                    //temperature = CalculateTemperature(adc_value);
+                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value), unit);
+                    lcd0()->string_size(str, 8);
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
@@ -288,15 +293,15 @@ int main(void)
         rtc()->tr2vec(vecT);
 
         lcd0()->gotoxy(2, 0);
-        lcd0()->string_size(func()->print_v2("%d%d-%d%d-20%d%d",
-                          vecD[5], vecD[6], vecD[3], vecD[4], vecD[0], vecD[1]), 10);
+        func()->format_string(str,32,"%d%d-%d%d-20%d%d",vecD[5], vecD[6], vecD[3], vecD[4], vecD[0], vecD[1]);
+        lcd0()->string_size(str, 10);
 
         lcd0()->gotoxy(2, 11);
                 lcd0()->string_size((char*)WeekDay_String(vecD[2]), 7);
 
         lcd0()->gotoxy(3, 11);
-        lcd0()->string_size(func()->print_v2("%d%d:%d%d:%d%d",
-                          vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]), 8);
+        func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);
+        lcd0()->string_size(str, 8);
     }
 }
 
