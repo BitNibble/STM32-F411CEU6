@@ -250,7 +250,7 @@ RealNum_TypeDef function_realnumber(double real, unsigned int decimal) {
     // Extract the fractional part of the number
     result.Fpart = abs_real - result.Quotient;
     // Limit decimal to avoid overflow in precision calculation
-    if (decimal > 127) { decimal = 127; } // Clamp the decimal value to a safe range
+    if (decimal > 9) { decimal = 9; } // Clamp the decimal value to a safe range
 
     // Calculate precision as a power of 10 for the specified decimal places
     result.Precision = function_power(10, decimal);
