@@ -11,35 +11,32 @@ Comment:
 #include "armsystick.h"
 #include "stm32fxxxinstance.h"
 #include "armquery.h"
-
+/******/
 #define SYSTICK_ENABLE (1 << 0)
 #define SYSTICK_TICKINT (1 << 1)
 #define SYSTICK_CLKSOURCE (1 << 2)
-
+/******/
 static uint32_t systick_us;
 static uint32_t systick_10us;
 static uint32_t systick_100us;
 static uint32_t systick_ms;
-
 /*** File Variables ***/
 volatile uint32_t DelayCounter_0;
 /******/
 void delay_Configure(void)
 {
     uint32_t DelayCounter_top;
-
     // Calculate DelayCounter_top once for both STM32 families
     DelayCounter_top = getsysclk() / gethpre(); // Assuming gethpre() returns a valid prescaler
-
     // Calculate the SysTick values for different delay intervals
     systick_us 		= DelayCounter_top / 1000000 - 1 ; // 1 microsecond
     systick_10us 	= DelayCounter_top / 100000 - 1 ;  // 10 microseconds
     systick_100us 	= DelayCounter_top / 10000 - 1 ;   // 100 microseconds
     systick_ms 		= DelayCounter_top / 1000 - 1 ;    // 1 millisecond
-    if(systick_us > 0);else systick_us = 1;
-    if(systick_10us > 0);else systick_10us = 1;
-    if(systick_100us > 0);else systick_100us = 1;
-    if(systick_ms > 0);else systick_ms = 1;
+    if(systick_us > 0);else systick_us = 70;
+    if(systick_10us > 0);else systick_10us = 70;
+    if(systick_100us > 0);else systick_100us = 70;
+    if(systick_ms > 0);else systick_ms = 70;
 }
 inline uint32_t get_systick_us(void)
 {
@@ -91,17 +88,15 @@ void _delay_ms(uint32_t ms)
 	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < ms; );
 	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
-
-
+/******/
 void systick_start(void)
 {
 	delay_Configure( );
-
+	/******/
 	SysTick->LOAD = 0x00FFFFFF;
 	SysTick->VAL = 0UL;
 	SysTick->CTRL |= (SYSTICK_TICKINT | SYSTICK_CLKSOURCE);
 }
-
 /**** Interrupt Handler ****/
 void SysTick_Handler(void)
 {
