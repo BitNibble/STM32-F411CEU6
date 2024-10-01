@@ -78,6 +78,7 @@ void rtc_lselect(uint8_t lclock);
 /*** RTC Procedure & Function Definition ***/
 STM32FXXX_RTC* rtc_enable(void)
 {
+	stm32fxxx_rtc.instance = RTC;
 	/***/
 	stm32fxxx_rtc.get_Year = STM32FXXXRtc_get_Year;
 	stm32fxxx_rtc.get_Month = STM32FXXXRtc_get_Month;

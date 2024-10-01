@@ -35,7 +35,7 @@ typedef enum {
 /*** RTC TypeDef ***/
 typedef struct
 {
-
+	RTC_TypeDef* instance;
 	/***/
 	uint8_t (*get_Year)(void);
 	uint8_t (*get_Month)(void);

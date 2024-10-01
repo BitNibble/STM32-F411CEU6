@@ -52,6 +52,7 @@ void STM32FXXXNVIC_trigger(uint32_t IRQn)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXX_NVIC* nvic_enable(void)
 {
+	stm32fxxx_nvic.instance = NVIC;
 	/*** NVIC Bit Mapping Link ***/
 	stm32fxxx_nvic.set_enable = STM32FXXXNVIC_set_enable;
 	stm32fxxx_nvic.clear_enable = STM32FXXXNVIC_clear_enable;

@@ -192,10 +192,12 @@ STM32FXXXPWR_csr* stm32fxxx_pwr_csr_inic(void)
 /*** INIC Procedure & Function Definition ***/
 STM32FXXX_PWR* pwr_enable(void)
 {
-	stm32fxxx_pwr.clock = STM32FXXXPWR_clock;
+	stm32fxxx_pwr.instance = PWR;
 	/*** PWR Bit Mapping Link ***/
 	stm32fxxx_pwr.cr = stm32fxxx_pwr_cr_inic();
 	stm32fxxx_pwr.csr = stm32fxxx_pwr_csr_inic();
+	/*** Other ***/
+	stm32fxxx_pwr.clock = STM32FXXXPWR_clock;
 	return &stm32fxxx_pwr;
 }
 

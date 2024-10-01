@@ -12,6 +12,7 @@ Comment:
 #include <stdarg.h>
 
 /****************************************/
+#define NIBBLE_BITS 4
 #define BYTE_BITS 8
 #define WORD_BITS 16
 #define N_BITS 32
