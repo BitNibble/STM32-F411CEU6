@@ -53,9 +53,9 @@ int main(void)
     uint16_t adc_value = 0;
     const char unit = (char)0xDF;
 
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
+    stm()->rcc->instance->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
     ARMLCD0_enable(GPIOB);
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN; // gpioc13
+    rcc()->instance->AHB1ENR |= RCC_AHB1ENR_GPIOCEN; // gpioc13
     set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN; // inputs gpioa0
     set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODER0, GPIO_MODER_MODER0_Pos, 0);

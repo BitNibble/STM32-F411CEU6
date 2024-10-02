@@ -282,7 +282,7 @@ void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 		va_list list;
 		va_start(list, n_bits);
 		for(i = 0; i < n_bits; i++){
-			*reg |= (uint32_t)(1 << va_arg(list, uint32_t));
+			*reg |= (uint32_t)(1 << va_arg(list, int));
 		}
 		va_end(list);
 	}
@@ -294,7 +294,7 @@ void STM32446ResetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 		va_list list;
 		va_start(list, n_bits);
 		for(i = 0; i < n_bits; i++){
-			*reg &= (uint32_t)~((1 << va_arg(list, uint32_t)) << WORD_BITS);
+			*reg &= (uint32_t)~(1 << va_arg(list, int));
 		}
 		va_end(list);
 	}
