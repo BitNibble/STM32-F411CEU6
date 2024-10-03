@@ -3,17 +3,19 @@
 /*** File Variable ***/
 static TWI_HandleTypeDef twi_handle;
 
+void TWI_Init(I2C_TypeDef* instance);
+void TWI_Start(void);
+void TWI_Connect(uint16_t address, uint8_t rw);
+void TWI_Master_Write(uint8_t data);
+uint8_t TWI_Master_Read(uint8_t ack_nack);
+void TWI_Stop(void);
+uint8_t TWI_Status(void);
+
 /*** Procedure & Function ***/
-TWI_HandleTypeDef TWI_Init(I2C_TypeDef* instance) {
+TWI_HandleTypeDef TWI_enable(I2C_TypeDef* instance) {
 	twi_handle.instance = instance;
 
-	// Initialize I2C peripheral
-	instance->CR1 |= I2C_CR1_SWRST;  // Software reset
-	instance->CR1 &= ~I2C_CR1_SWRST; // Release reset
-	instance->CR2 |= (I2C_SCL_CLOCK / 1000000) & I2C_CR2_FREQ; // Set SCL frequency
-	instance->CCR = (100000000 / (2 * TWI_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
-	instance->TRISE = (I2C_SCL_CLOCK / 1000000) + 1; // Set TRISE
-	instance->CR1 |= I2C_CR1_PE; // Enable I2C
+	TWI_Init(instance);
 
 	twi_handle.start = TWI_Start;
 	twi_handle.connect = TWI_Connect;
@@ -23,6 +25,16 @@ TWI_HandleTypeDef TWI_Init(I2C_TypeDef* instance) {
 	twi_handle.status = TWI_Status;
 
 	return twi_handle;
+}
+
+void TWI_Init(I2C_TypeDef* instance) {
+	// Initialize I2C peripheral
+	instance->CR1 |= I2C_CR1_SWRST;  // Software reset
+	instance->CR1 &= ~I2C_CR1_SWRST; // Release reset
+	instance->CR2 |= (I2C_SCL_CLOCK / 1000000) & I2C_CR2_FREQ; // Set SCL frequency
+	instance->CCR = (100000000 / (2 * TWI_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
+	instance->TRISE = (I2C_SCL_CLOCK / 1000000) + 1; // Set TRISE
+	instance->CR1 |= I2C_CR1_PE; // Enable I2C
 }
 
 TWI_HandleTypeDef* TWI(void) {

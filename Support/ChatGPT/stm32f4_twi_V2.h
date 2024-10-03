@@ -26,6 +26,6 @@ typedef struct {
 
 /*** Global Header ***/
 TWI_HandleTypeDef* TWI(void);
-TWI_HandleTypeDef TWI_Init(I2C_TypeDef* instance);
+TWI_HandleTypeDef TWI_enable(I2C_TypeDef* instance);
 
 #endif
