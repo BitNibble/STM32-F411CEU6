@@ -21,7 +21,7 @@ void STM32FXXXI2c_Init(I2C_TypeDef* instance) {
 	instance->CR1 |= I2C_CR1_SWRST;  // Software reset
 	instance->CR1 &= ~I2C_CR1_SWRST; // Release reset
 	instance->CR2 |= ((uint32_t)(I2C_SCL_CLOCK / 1000000)) & I2C_CR2_FREQ; // Set SCL frequency
-	instance->CCR = (query()->SystemClock() / (2 * I2C_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
+	instance->CCR = (query()->pclk1() / (2 * I2C_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
 	instance->TRISE = (I2C_SCL_CLOCK / 1000000) + 1; // Set TRISE
 	instance->CR1 |= I2C_CR1_PE; // Enable I2C
 }
@@ -45,7 +45,7 @@ void STM32FXXXI2c1_Start(void) {
 void STM32FXXXI2c1_Connect(uint16_t address, uint8_t rw) {
 	if (rw) {
 		address |= 1; // Read
-		} else {
+	} else {
 		address &= ~1; // Write
 	}
 	I2C1->DR = address; // Send address
@@ -136,7 +136,6 @@ void STM32FXXXI2c3_Start(void) {
 	I2C3->CR1 |= I2C_CR1_START; // Generate start condition
 	while (!(I2C3->SR1 & I2C_SR1_SB)); // Wait for start condition
 }
-
 void STM32FXXXI2c3_Connect(uint16_t address, uint8_t rw) {
 	if (rw) {
 		address |= 1; // Read
@@ -147,12 +146,10 @@ void STM32FXXXI2c3_Connect(uint16_t address, uint8_t rw) {
 	while (!(I2C3->SR1 & I2C_SR1_ADDR)); // Wait for address sent
 	(void)I2C3->SR2; // Clear ADDR flag
 }
-
 void STM32FXXXI2c3_Master_Write(uint8_t data) {
 	I2C3->DR = data; // Send data
 	while (!(I2C3->SR1 & I2C_SR1_TXE)); // Wait for transmit data register empty
 }
-
 uint8_t STM32FXXXI2c3_Master_Read(uint8_t ack_nack) {
 	if (ack_nack) {
 		I2C3->CR1 |= I2C_CR1_ACK; // Send ACK
@@ -162,17 +159,14 @@ uint8_t STM32FXXXI2c3_Master_Read(uint8_t ack_nack) {
 	while (!(I2C3->SR1 & I2C_SR1_RXNE)); // Wait for data received
 	return I2C3->DR; // Return received data
 }
-
 void STM32FXXXI2c3_Stop(void) {
 	uint32_t time_out = 0;
 	I2C3->CR1 |= I2C_CR1_STOP; // Generate stop condition
 	for ( time_out = 200; (I2C3->CR1 & I2C_CR1_STOP) && time_out; time_out-- ); // Wait for stop condition to be generated
 }
-
 uint8_t STM32FXXXI2c3_Status(void) {
 	return I2C3->SR1; // Return status register 1
 }
-
 /**************************************************************************************************/
 /*** I2C1 INIC Handler ***/
 STM32FXXX_I2C1_Handler* i2c1_enable(void)
