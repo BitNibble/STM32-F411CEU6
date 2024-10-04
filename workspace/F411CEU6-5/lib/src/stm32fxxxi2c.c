@@ -11,24 +11,24 @@ Comment:
 #include "stm32fxxxi2c.h"
 #include "armquery.h"
 /*** File Variable ***/
-static STM32FXXX_I2C1 stm32fxxx_i2c1;
-static STM32FXXX_I2C2 stm32fxxx_i2c2;
-static STM32FXXX_I2C3 stm32fxxx_i2c3;
+static STM32FXXX_I2C1_Handler stm32fxxx_i2c1;
+static STM32FXXX_I2C2_Handler stm32fxxx_i2c2;
+static STM32FXXX_I2C3_Handler stm32fxxx_i2c3;
 /*** I2C Procedure & Function Definition ***/
 // COMMON
 void STM32FXXXI2c_Init(I2C_TypeDef* instance) {
 	// Initialize I2C peripheral
 	instance->CR1 |= I2C_CR1_SWRST;  // Software reset
 	instance->CR1 &= ~I2C_CR1_SWRST; // Release reset
-	instance->CR2 |= (I2C_SCL_CLOCK / 1000000) & I2C_CR2_FREQ; // Set SCL frequency
-	instance->CCR = (100000000 / (2 * I2C_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
+	instance->CR2 |= ((uint32_t)(I2C_SCL_CLOCK / 1000000)) & I2C_CR2_FREQ; // Set SCL frequency
+	instance->CCR = (query()->SystemClock() / (2 * I2C_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
 	instance->TRISE = (I2C_SCL_CLOCK / 1000000) + 1; // Set TRISE
 	instance->CR1 |= I2C_CR1_PE; // Enable I2C
 }
 // I2C1
 void STM32FXXXI2c1Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= (1 << RCC_APB1ENR_I2C1EN_Pos);}
-	else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_I2C1EN_Pos);}
+	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C1EN; }
+	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C1EN; }
 }
 void STM32FXXXI2c1EvNvic( uint8_t state ){
 	if(state){ set_bit_block(NVIC->ISER, 1, I2C1_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C1_EV_IRQn, 1); }
@@ -38,10 +38,10 @@ void STM32FXXXI2c1ErNvic( uint8_t state ){
 }
 /***/
 void STM32FXXXI2c1_Start(void) {
+	uint32_t time_out = 0;
 	I2C1->CR1 |= I2C_CR1_START; // Generate start condition
-	while (!(I2C1->SR1 & I2C_SR1_SB)); // Wait for start condition
+	for ( time_out = 1000; !(I2C1->SR1 & I2C_SR1_SB) && time_out; time_out-- ); // Wait for start condition
 }
-
 void STM32FXXXI2c1_Connect(uint16_t address, uint8_t rw) {
 	if (rw) {
 		address |= 1; // Read
@@ -52,12 +52,10 @@ void STM32FXXXI2c1_Connect(uint16_t address, uint8_t rw) {
 	while (!(I2C1->SR1 & I2C_SR1_ADDR)); // Wait for address sent
 	(void)I2C1->SR2; // Clear ADDR flag
 }
-
 void STM32FXXXI2c1_Master_Write(uint8_t data) {
 	I2C1->DR = data; // Send data
 	while (!(I2C1->SR1 & I2C_SR1_TXE)); // Wait for transmit data register empty
 }
-
 uint8_t STM32FXXXI2c1_Master_Read(uint8_t ack_nack) {
 	if (ack_nack) {
 		I2C1->CR1 |= I2C_CR1_ACK; // Send ACK
@@ -67,19 +65,18 @@ uint8_t STM32FXXXI2c1_Master_Read(uint8_t ack_nack) {
 	while (!(I2C1->SR1 & I2C_SR1_RXNE)); // Wait for data received
 	return I2C1->DR; // Return received data
 }
-
 void STM32FXXXI2c1_Stop(void) {
+	uint32_t time_out = 0;
 	I2C1->CR1 |= I2C_CR1_STOP; // Generate stop condition
-	while (I2C1->CR1 & I2C_CR1_STOP); // Wait for stop condition to be generated
+	for ( time_out = 200; (I2C1->CR1 & I2C_CR1_STOP) && time_out; time_out-- ); // Wait for stop condition to be generated
 }
-
 uint8_t STM32FXXXI2c1_Status(void) {
 	return I2C1->SR1; // Return status register 1
 }
 // I2C2
 void STM32FXXXI2c2Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= (1 << RCC_APB1ENR_I2C2EN_Pos);}
-		else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_I2C2EN_Pos);}
+	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C2EN; }
+	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C2EN; }
 }
 void STM32FXXXI2c2EvNvic( uint8_t state ){
 	if(state){ set_bit_block(NVIC->ISER, 1, I2C2_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C2_EV_IRQn, 1); }
@@ -92,7 +89,6 @@ void STM32FXXXI2c2_Start(void) {
 	I2C2->CR1 |= I2C_CR1_START; // Generate start condition
 	while (!(I2C2->SR1 & I2C_SR1_SB)); // Wait for start condition
 }
-
 void STM32FXXXI2c2_Connect(uint16_t address, uint8_t rw) {
 	if (rw) {
 		address |= 1; // Read
@@ -103,12 +99,10 @@ void STM32FXXXI2c2_Connect(uint16_t address, uint8_t rw) {
 	while (!(I2C2->SR1 & I2C_SR1_ADDR)); // Wait for address sent
 	(void)I2C2->SR2; // Clear ADDR flag
 }
-
 void STM32FXXXI2c2_Master_Write(uint8_t data) {
 	I2C2->DR = data; // Send data
 	while (!(I2C2->SR1 & I2C_SR1_TXE)); // Wait for transmit data register empty
 }
-
 uint8_t STM32FXXXI2c2_Master_Read(uint8_t ack_nack) {
 	if (ack_nack) {
 		I2C2->CR1 |= I2C_CR1_ACK; // Send ACK
@@ -118,19 +112,18 @@ uint8_t STM32FXXXI2c2_Master_Read(uint8_t ack_nack) {
 	while (!(I2C2->SR1 & I2C_SR1_RXNE)); // Wait for data received
 	return I2C2->DR; // Return received data
 }
-
 void STM32FXXXI2c2_Stop(void) {
+	uint32_t time_out = 0;
 	I2C2->CR1 |= I2C_CR1_STOP; // Generate stop condition
-	while (I2C2->CR1 & I2C_CR1_STOP); // Wait for stop condition to be generated
+	for ( time_out = 200; (I2C2->CR1 & I2C_CR1_STOP) && time_out; time_out-- ); // Wait for stop condition to be generated
 }
-
 uint8_t STM32FXXXI2c2_Status(void) {
 	return I2C2->SR1; // Return status register 1
 }
 // I2C3
 void STM32FXXXI2c3Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= (1 << RCC_APB1ENR_I2C3EN_Pos);}
-	else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_I2C3EN_Pos);}
+	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C3EN; }
+	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C3EN; }
 }
 void STM32FXXXI2c3EvNvic( uint8_t state ){
 	if(state){ set_bit_block(NVIC->ISER, 1, I2C3_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C3_EV_IRQn, 1); }
@@ -171,8 +164,9 @@ uint8_t STM32FXXXI2c3_Master_Read(uint8_t ack_nack) {
 }
 
 void STM32FXXXI2c3_Stop(void) {
+	uint32_t time_out = 0;
 	I2C3->CR1 |= I2C_CR1_STOP; // Generate stop condition
-	while (I2C3->CR1 & I2C_CR1_STOP); // Wait for stop condition to be generated
+	for ( time_out = 200; (I2C3->CR1 & I2C_CR1_STOP) && time_out; time_out-- ); // Wait for stop condition to be generated
 }
 
 uint8_t STM32FXXXI2c3_Status(void) {
@@ -181,12 +175,15 @@ uint8_t STM32FXXXI2c3_Status(void) {
 
 /**************************************************************************************************/
 /*** I2C1 INIC Handler ***/
-STM32FXXX_I2C1* i2c1_enable(void)
+STM32FXXX_I2C1_Handler* i2c1_enable(void)
 {
 	/*** I2C1 Bit Mapping Link ***/
 	stm32fxxx_i2c1.instance = I2C1;
 	/*** I2C1 Init ***/
+	STM32FXXXI2c1Clock(1);  // Enable I2C1 clock
 	STM32FXXXI2c_Init(I2C1);
+	STM32FXXXI2c1EvNvic(0);  // Disable I2C1 event interrupt
+	STM32FXXXI2c1ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
 	stm32fxxx_i2c1.clock = STM32FXXXI2c1Clock;
 	stm32fxxx_i2c1.evnvic = STM32FXXXI2c1EvNvic;
@@ -200,14 +197,17 @@ STM32FXXX_I2C1* i2c1_enable(void)
 	stm32fxxx_i2c1.status = STM32FXXXI2c1_Status;
 	return &stm32fxxx_i2c1;
 }
-STM32FXXX_I2C1*  i2c1(void){ return (STM32FXXX_I2C1*) &stm32fxxx_i2c1; }
+STM32FXXX_I2C1_Handler*  i2c1(void){ return (STM32FXXX_I2C1_Handler*) &stm32fxxx_i2c1; }
 /*** I2C2 INIC Handler ***/
-STM32FXXX_I2C2* i2c2_enable(void)
+STM32FXXX_I2C2_Handler* i2c2_enable(void)
 {
 	/*** I2C2 Bit Mapping Link ***/
 	stm32fxxx_i2c2.instance = I2C2;
 	/*** I2C2 Init ***/
+	STM32FXXXI2c2Clock(1);  // Enable I2C1 clock
 	STM32FXXXI2c_Init(I2C2);
+	STM32FXXXI2c2EvNvic(0);  // Disable I2C1 event interrupt
+	STM32FXXXI2c2ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
 	stm32fxxx_i2c2.clock = STM32FXXXI2c2Clock;
 	stm32fxxx_i2c2.evnvic = STM32FXXXI2c2EvNvic;
@@ -221,14 +221,17 @@ STM32FXXX_I2C2* i2c2_enable(void)
 	stm32fxxx_i2c2.status = STM32FXXXI2c2_Status;
 	return &stm32fxxx_i2c2;
 }
-STM32FXXX_I2C2*  i2c2(void){ return (STM32FXXX_I2C2*) &stm32fxxx_i2c2; }
+STM32FXXX_I2C2_Handler*  i2c2(void){ return (STM32FXXX_I2C2_Handler*) &stm32fxxx_i2c2; }
 /*** I2C3 INIC Handler ***/
-STM32FXXX_I2C3* i2c3_enable(void)
+STM32FXXX_I2C3_Handler* i2c3_enable(void)
 {
 	/*** I2C3 Bit Mapping Link ***/
 	stm32fxxx_i2c3.instance = I2C3;
 	/*** I2C3 Init ***/
+	STM32FXXXI2c3Clock(1);  // Enable I2C1 clock
 	STM32FXXXI2c_Init(I2C3);
+	STM32FXXXI2c3EvNvic(0);  // Disable I2C1 event interrupt
+	STM32FXXXI2c3ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
 	stm32fxxx_i2c3.clock = STM32FXXXI2c3Clock;
 	stm32fxxx_i2c3.evnvic = STM32FXXXI2c3EvNvic;
@@ -242,7 +245,7 @@ STM32FXXX_I2C3* i2c3_enable(void)
 	stm32fxxx_i2c3.status = STM32FXXXI2c3_Status;
 	return &stm32fxxx_i2c3;
 }
-STM32FXXX_I2C3*  i2c3(void){ return (STM32FXXX_I2C3*) &stm32fxxx_i2c3; }
+STM32FXXX_I2C3_Handler*  i2c3(void){ return (STM32FXXX_I2C3_Handler*) &stm32fxxx_i2c3; }
 
 /*** EOF ***/
 

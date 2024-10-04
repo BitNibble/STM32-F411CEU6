@@ -14,7 +14,7 @@ Comment:
 #include "stm32fxxxinstance.h"
 /******/
 #define I2C_SCL_CLOCK 100000UL
-#define i2C_ACK 1
+#define I2C_ACK 1
 #define I2C_NACK 0
 /*** I2C 1..3 Handler TypeDef ***/
 // I2C -> I2C1,2,3
@@ -33,14 +33,14 @@ typedef struct
 	uint8_t (*master_read)(uint8_t ack_nack);
 	void (*stop)(void);
 	uint8_t (*status)(void);
-}STM32FXXX_I2C1, STM32FXXX_I2C2, STM32FXXX_I2C3;
+}STM32FXXX_I2C1_Handler, STM32FXXX_I2C2_Handler, STM32FXXX_I2C3_Handler;
 /*** I2C Procedure and Function Declarations ***/
-STM32FXXX_I2C1* i2c1_enable(void);
-STM32FXXX_I2C1* i2c1(void);
-STM32FXXX_I2C2* i2c2_enable(void);
-STM32FXXX_I2C2* i2c2(void);
-STM32FXXX_I2C3* i2c3_enable(void);
-STM32FXXX_I2C3* i2c3(void);
+STM32FXXX_I2C1_Handler* i2c1_enable(void);
+STM32FXXX_I2C1_Handler* i2c1(void);
+STM32FXXX_I2C2_Handler* i2c2_enable(void);
+STM32FXXX_I2C2_Handler* i2c2(void);
+STM32FXXX_I2C3_Handler* i2c3_enable(void);
+STM32FXXX_I2C3_Handler* i2c3(void);
 /*** I2C ***/
 // I2C1
 void STM32FXXXI2c1Clock( uint8_t state );
