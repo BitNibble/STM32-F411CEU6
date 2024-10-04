@@ -33,6 +33,7 @@
 "./lib/src/stm32fxxxdma.o"
 "./lib/src/stm32fxxxflash.o"
 "./lib/src/stm32fxxxgpio.o"
+"./lib/src/stm32fxxxi2c.o"
 "./lib/src/stm32fxxxinstance.o"
 "./lib/src/stm32fxxxmapping.o"
 "./lib/src/stm32fxxxnvic.o"
