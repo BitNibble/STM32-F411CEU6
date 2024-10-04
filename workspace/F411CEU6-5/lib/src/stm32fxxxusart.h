@@ -21,18 +21,21 @@ typedef struct
 	/*** Other ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
-	void (*parameter)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+	void (*wordlength)(uint8_t wordlength);
+	void (*stopbits)(double stopbits);
+	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
 }STM32FXXX_USART1, STM32FXXX_USART2, STM32FXXX_USART3, STM32FXXX_USART6;
 // USART -> UART4,5
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	USART_TypeDef* instance;
 	/*** Other ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
-	void (*parameter)( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
+	void (*wordlength)(uint8_t wordlength);
+	void (*stopbits)(double stopbits);
+	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
 }STM32FXXX_UART4, STM32FXXX_UART5;
 
 STM32FXXX_USART1* usart1_enable(void);
@@ -55,28 +58,21 @@ STM32FXXX_USART6*  usart6(void);
 /*** USART1 Header ***/
 void STM32FXXXUsart1Clock( uint8_t state );
 void STM32FXXXUsart1Nvic( uint8_t state );
-void STM32FXXXUsart1Inic( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
-void STM32FXXXUsart1Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** USART2 Header ***/
 void STM32FXXXUsart2Clock( uint8_t state );
 void STM32FXXXUsart2Nvic( uint8_t state );
-void STM32FXXXUsart2Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** USART3 Header ***/
 void STM32FXXXUsart3Clock( uint8_t state );
 void STM32FXXXUsart3Nvic( uint8_t state );
-void STM32FXXXUsart3Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** UART4 Header ***/
 void STM32FXXXUart4Clock( uint8_t state );
 void STM32FXXXUart4Nvic( uint8_t state );
-void STM32FXXXUart4Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** UART5 Header ***/
 void STM32FXXXUart5Clock( uint8_t state );
 void STM32FXXXUart5Nvic( uint8_t state );
-void STM32FXXXUart5Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** USART6 Header ***/
 void STM32FXXXUsart6Clock( uint8_t state );
 void STM32FXXXUsart6Nvic( uint8_t state );
-void STM32FXXXUsart6Parameter( uint8_t wordlength, uint8_t samplingmode, double stopbits, uint32_t baudrate );
 /*** General USART Function Prototypes ***/
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
 void Usart_StopBits( USART_TypeDef* usart, double stopbits );

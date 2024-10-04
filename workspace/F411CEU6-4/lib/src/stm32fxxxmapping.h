@@ -16,30 +16,33 @@ Comment:
 	#define _STM32FXXXMAPPING_H_
 /*** Module Library ***/
 // May comment out modules not being used
-#include "stm32fxxxflash.h"
-#include "stm32fxxxcrc.h"
-#include "stm32fxxxpwr.h"
-#include "stm32fxxxrcc.h"
-#include "stm32fxxxnvic.h"
 #include "stm32fxxxsram.h"
-#include "stm32fxxxgpio.h"
-#include "stm32fxxxsyscfg.h"
-#include "stm32fxxxdma.h"
+#include "stm32fxxxnvic.h"
 #include "stm32fxxxadc1.h"
 #include "stm32fxxxadc2.h"
 #include "stm32fxxxadc3.h"
+#include "stm32fxxxcrc.h"
+#include "stm32fxxxdma.h"
+#include "stm32fxxxflash.h"
+#include "stm32fxxxgpio.h"
+#include "stm32fxxxsyscfg.h"
+#include "stm32fxxxpwr.h"
+#include "stm32fxxxrcc.h"
 #include "stm32fxxxrtc.h"
-#include "stm32fxxxusart.h"
 #include "stm32fxxxtim1and8.h"
 #include "stm32fxxxtim2to5.h"
 #include "stm32fxxxtim6and7.h"
 #include "stm32fxxxtim9to14.h"
+#include "stm32fxxxusart.h"
 /***** Libraries *****/
 #include "armquery.h"
 #include "armsystick.h"
 /***************** STM32FXXX TypeDef *****************/
 typedef struct
 {
+	#if defined(_STM32FXXXSRAM_H_)
+		STM32FXXX_SRAM* sram;
+	#endif
 	#if defined(_STM32FXXXNVIC_H_)
 		STM32FXXX_NVIC* nvic;
 	#endif
@@ -55,9 +58,13 @@ typedef struct
 	#if defined(_STM32FXXXCRC_H_)
 		STM32FXXX_CRC* crc;
 	#endif
+	#if defined(_STM32FXXXDBGMCU_H_)
+	#endif
 	#if defined(_STM32FXXXDMA_H_)
 		STM32FXXX_DMA1* dma1;
 		STM32FXXX_DMA2* dma2;
+	#endif
+	#if defined(_STM32FXXXEXTI_H_)
 	#endif
 	#if defined(_STM32FXXXFLASH_H_)
 		STM32FXXX_FLASH* flash;
@@ -75,6 +82,10 @@ typedef struct
 	#if defined(_STM32FXXXSYSCFG_H_)
 		STM32FXXX_SYSCFG* syscfg;
 	#endif
+	#if defined(_STM32FXXXI2C_H_)
+	#endif
+	#if defined(_STM32FXXXIWDG_H_)
+	#endif
 	#if defined(_STM32FXXXPWR_H_)
 		STM32FXXX_PWR* pwr;
 	#endif
@@ -84,8 +95,9 @@ typedef struct
 	#if defined(_STM32FXXXRTC_H_)
 		STM32FXXX_RTC* rtc;
 	#endif
-	#if defined(_STM32FXXXSRAM_H_)
-		STM32FXXX_SRAM* sram;
+	#if defined(_STM32FXXXSDIO_H_)
+	#endif
+	#if defined(_STM32FXXXSPI_H_)
 	#endif
 	#if defined(_STM32FXXXTIM1AND8_H_)
 		STM32FXXX_TIM1* tim1;
@@ -116,6 +128,10 @@ typedef struct
 		STM32FXXX_UART4* uart4;
 		STM32FXXX_UART5* uart5;
 		STM32FXXX_USART6* usart6;
+	#endif
+	#if defined(_STM32FXXXWWDG_H_)
+	#endif
+	#if defined(_STM32FXXXUSB_H_)
 	#endif
 }STM32FXXX;
 
