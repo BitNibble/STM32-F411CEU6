@@ -205,7 +205,6 @@ void STM32FXXXGpioGafr(uint8_t pin, uint8_t data)
 	    GPIOG->AFR[index] |= ( data << Pos );
 	}
 }
-#endif
 
 /*** GPIOH ***/
 void STM32FXXXGpioHclock(uint8_t enable)
@@ -230,7 +229,7 @@ void STM32FXXXGpioHafr(uint8_t pin, uint8_t data)
 	    GPIOH->AFR[index] |= ( data << Pos );
 	}
 }
-
+#endif
 /*** Initialization Procedures & Function Definitions ***/
 void gpioa_enable(void)
 {
@@ -314,10 +313,8 @@ STM32FXXX_GPIOE* gpioe(void) { return &stm32fxxx_gpioe; }
 
 void gpiof_enable(void)
 {
-	/*** Enable Clock ***/
-	STM32FXXXGpioFclock(ON);
-    /*** GPIOA TypeDef ***/
 	#ifdef STM32F446xx
+		STM32FXXXGpioFclock(ON);
     	stm32fxxx_gpiof.instance = GPIOF;
 	#endif
     /******************/
@@ -332,10 +329,8 @@ STM32FXXX_GPIOF* gpiof(void) { return &stm32fxxx_gpiof; }
 
 void gpiog_enable(void)
 {
-	/*** Enable Clock ***/
-	STM32FXXXGpioGclock(ON);
-    /*** GPIOA TypeDef ***/
 	#ifdef STM32F446xx
+		STM32FXXXGpioGclock(ON);
     	stm32fxxx_gpiog.instance = GPIOG;
 	#endif
     /******************/
@@ -350,10 +345,10 @@ STM32FXXX_GPIOG* gpiog(void) { return &stm32fxxx_gpiog; }
 
 void gpioh_enable(void)
 {
-	/*** Enable Clock ***/
-	STM32FXXXGpioHclock(ON);
-    /*** GPIOA TypeDef ***/
-    stm32fxxx_gpioh.instance = GPIOH;
+	#ifdef STM32F446xx
+		STM32FXXXGpioHclock(ON);
+    	stm32fxxx_gpioh.instance = GPIOH;
+	#endif
     /******************/
     stm32fxxx_gpioh.afr = STM32FXXXGpioHafr;
     /*** GPIOH RCC Clock Enable ***/

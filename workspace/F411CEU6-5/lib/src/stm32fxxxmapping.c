@@ -121,11 +121,11 @@ static void initialize_gpio(void) {
 		#ifdef STM32F446xx
         	stm32fxxx.gpiof_enable = gpiof_enable;
         	stm32fxxx.gpiog_enable = gpiog_enable;
+        	stm32fxxx.gpioh_enable = gpioh_enable;
         	stm32fxxx.gpiof = gpiof();
         	stm32fxxx.gpiog = gpiog();
+        	stm32fxxx.gpioh = gpioh();
 		#endif
-        stm32fxxx.gpioh_enable = gpioh_enable;
-        stm32fxxx.gpioh = gpioh();
     #endif
 }
 // SYSCFG
