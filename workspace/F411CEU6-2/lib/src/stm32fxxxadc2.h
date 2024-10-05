@@ -25,7 +25,7 @@ typedef struct
 }STM32FXXX_ADC2;
 
 // INIC
-STM32FXXX_ADC2* adc2_enable(void);
+void adc2_enable(void);
 STM32FXXX_ADC2* adc2(void);
 
 /***** ADC2 Procedure & Function Header ******/

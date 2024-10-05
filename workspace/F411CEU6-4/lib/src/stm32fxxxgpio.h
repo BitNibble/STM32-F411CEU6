@@ -28,28 +28,28 @@ typedef struct
  STM32FXXX_GPIOD, STM32FXXX_GPIOE, STM32FXXX_GPIOF, \
  STM32FXXX_GPIOG, STM32FXXX_GPIOH;
 // INIC
-STM32FXXX_GPIOA* gpioa_enable(void);
+void gpioa_enable(void);
 STM32FXXX_GPIOA* gpioa(void);
 
-STM32FXXX_GPIOB* gpiob_enable(void);
+void gpiob_enable(void);
 STM32FXXX_GPIOB* gpiob(void);
 
-STM32FXXX_GPIOC* gpioc_enable(void);
+void gpioc_enable(void);
 STM32FXXX_GPIOC* gpioc(void);
 
-STM32FXXX_GPIOD* gpiod_enable(void);
+void gpiod_enable(void);
 STM32FXXX_GPIOD* gpiod(void);
 
-STM32FXXX_GPIOE* gpioe_enable(void);
+void gpioe_enable(void);
 STM32FXXX_GPIOE* gpioe(void);
 
-STM32FXXX_GPIOF* gpiof_enable(void);
+void gpiof_enable(void);
 STM32FXXX_GPIOF* gpiof(void);
 
-STM32FXXX_GPIOG* gpiog_enable(void);
+void gpiog_enable(void);
 STM32FXXX_GPIOG* gpiog(void);
 
-STM32FXXX_GPIOH* gpioh_enable(void);
+void gpioh_enable(void);
 STM32FXXX_GPIOH* gpioh(void);
 
 /***** GPIO Procedure & Funtion Header ******/

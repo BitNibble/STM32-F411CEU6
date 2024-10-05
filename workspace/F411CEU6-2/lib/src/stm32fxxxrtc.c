@@ -76,7 +76,7 @@ void rtc_lenable(unsigned int lclock);
 static void set_rtc_clock_source(uint8_t clock_source);
 void rtc_lselect(uint8_t lclock);
 /*** RTC Procedure & Function Definition ***/
-STM32FXXX_RTC* rtc_enable(void)
+void rtc_enable(void)
 {
 	stm32fxxx_rtc.instance = RTC;
 	/***/
@@ -106,7 +106,7 @@ STM32FXXX_RTC* rtc_enable(void)
 	stm32fxxx_rtc.nvic = STM32FXXXConfigureRtcInterrupt;
 	stm32fxxx_rtc.inic = STM32FXXXRtcInic;
 
-	return &stm32fxxx_rtc;
+	//return &stm32fxxx_rtc;
 }
 
 STM32FXXX_RTC* rtc(void){ return (STM32FXXX_RTC*) &stm32fxxx_rtc; }

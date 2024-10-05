@@ -11,6 +11,8 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxpwr.h"
 
+#define ON 1
+#define OFF 0
 /*** File Variable ***/
 static STM32FXXXPWR_cr stm32fxxx_pwr_cr;
 static STM32FXXXPWR_csr stm32fxxx_pwr_csr;
@@ -190,15 +192,16 @@ STM32FXXXPWR_csr* stm32fxxx_pwr_csr_inic(void)
 	return &stm32fxxx_pwr_csr;
 }
 /*** INIC Procedure & Function Definition ***/
-STM32FXXX_PWR* pwr_enable(void)
+void pwr_enable(void)
 {
+	STM32FXXXPWR_clock(ON);
 	stm32fxxx_pwr.instance = PWR;
 	/*** PWR Bit Mapping Link ***/
 	stm32fxxx_pwr.cr = stm32fxxx_pwr_cr_inic();
 	stm32fxxx_pwr.csr = stm32fxxx_pwr_csr_inic();
 	/*** Other ***/
 	stm32fxxx_pwr.clock = STM32FXXXPWR_clock;
-	return &stm32fxxx_pwr;
+	//return &stm32fxxx_pwr;
 }
 
 STM32FXXX_PWR* pwr(void){ return (STM32FXXX_PWR*) &stm32fxxx_pwr; }

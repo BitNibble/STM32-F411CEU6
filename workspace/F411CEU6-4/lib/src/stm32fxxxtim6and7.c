@@ -11,8 +11,9 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxtim6and7.h"
 
+#define ON 1
+#define OFF 0
 /*** File Variable ***/
-
 static STM32FXXX_TIM6 stm32fxxx_tim6;
 static STM32FXXX_TIM7 stm32fxxx_tim7;
 #ifdef STM32F446xx
@@ -40,10 +41,10 @@ void STM32FXXXTim7Nvic(uint8_t bool)
 }
 #endif
 /*** TIM6 INIC Procedure & Function Definition ***/
-STM32FXXX_TIM6* tim6_enable(void)
+void tim6_enable(void)
 {
-	/*** TIM6 Bit Mapping Link ***/
 	#ifdef STM32F446xx
+			STM32FXXXTim6Clock(ON);
 			stm32fxxx_tim6.instance = TIM6;
 	#else
 			stm32fxxx_tim6.instance = NULL;
@@ -53,14 +54,14 @@ STM32FXXX_TIM6* tim6_enable(void)
 	// NVIC
 	stm32fxxx_tim6.nvic = STM32FXXXTim6Nvic;
 
-	return &stm32fxxx_tim6;
+	//return &stm32fxxx_tim6;
 }
 STM32FXXX_TIM6* tim6(void){ return (STM32FXXX_TIM6*) &stm32fxxx_tim6; }
 /*** TIM7 INIC Procedure & Function Definition ***/
-STM32FXXX_TIM7* tim7_enable(void)
+void tim7_enable(void)
 {
-	/*** TIM7 Bit Mapping Link ***/
 	#ifdef STM32F446xx
+		STM32FXXXTim7Clock(ON);
 		stm32fxxx_tim7.instance = TIM7;
 	#else
 		stm32fxxx_tim7.instance = NULL;
@@ -70,7 +71,7 @@ STM32FXXX_TIM7* tim7_enable(void)
 	// NVIC
 	stm32fxxx_tim7.nvic = STM32FXXXTim7Nvic;
 
-	return &stm32fxxx_tim7;
+	//return &stm32fxxx_tim7;
 }
 STM32FXXX_TIM7* tim7(void) { return (STM32FXXX_TIM7*) &stm32fxxx_tim7; }
 

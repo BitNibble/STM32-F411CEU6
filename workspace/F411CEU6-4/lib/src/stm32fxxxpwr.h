@@ -63,7 +63,7 @@ typedef struct
 	void (*clock)(uint8_t state);
 }STM32FXXX_PWR;
 
-STM32FXXX_PWR* pwr_enable(void);
+void pwr_enable(void);
 STM32FXXX_PWR* pwr(void);
 
 /*** PWR Bit Mapping Header ***/

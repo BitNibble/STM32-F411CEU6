@@ -104,7 +104,7 @@ typedef struct
 	void (*nvic)(uint8_t state);
 }STM32FXXX_FLASH;
 
-STM32FXXX_FLASH* flash_enable(void);
+void flash_enable(void);
 STM32FXXX_FLASH* flash(void);
 
 /*** Procedure & Function Header ***/

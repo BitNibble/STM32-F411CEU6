@@ -35,13 +35,13 @@ typedef struct
 /***********************/
 /*** INIC TIM 2 to 5 ***/
 /***********************/
-STM32FXXX_TIM2* tim2_enable(void);
+void tim2_enable(void);
 STM32FXXX_TIM2* tim2(void);
-STM32FXXX_TIM3* tim3_enable(void);
+void tim3_enable(void);
 STM32FXXX_TIM3* tim3(void);
-STM32FXXX_TIM4* tim4_enable(void);
+void tim4_enable(void);
 STM32FXXX_TIM4* tim4(void);
-STM32FXXX_TIM5* tim5_enable(void);
+void tim5_enable(void);
 STM32FXXX_TIM5* tim5(void);
 /****************************************/
 /*** TIM2 Procedure & Function Header ***/

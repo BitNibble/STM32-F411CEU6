@@ -40,10 +40,10 @@ void STM32FXXXSramAccess(void)
 /*** SRAM Bit Mapping Definition ***/
 
 /*** INIC Procedure & Function Definition ***/
-STM32FXXX_SRAM* sram_enable(void)
+void sram_enable(void)
 {
 	stm32fxxx_sram.access = STM32FXXXSramAccess;
-	return &stm32fxxx_sram;
+	//return &stm32fxxx_sram;
 }
 
 STM32FXXX_SRAM* sram(void){ return (STM32FXXX_SRAM*) &stm32fxxx_sram; }

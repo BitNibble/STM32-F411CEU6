@@ -20,7 +20,7 @@ typedef struct
 	void (*access)(void);
 }STM32FXXX_SRAM;
 
-STM32FXXX_SRAM* sram_enable(void);
+void sram_enable(void);
 STM32FXXX_SRAM* sram(void);
 
 /***** SRAM Procedure & Function Header ******/

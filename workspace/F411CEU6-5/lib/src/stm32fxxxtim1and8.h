@@ -26,9 +26,9 @@ typedef struct
 /*******************/
 /*** INIC 1 and 8 ***/
 /*******************/
-STM32FXXX_TIM1* tim1_enable(void);
+void tim1_enable(void);
 STM32FXXX_TIM1* tim1(void);
-STM32FXXX_TIM8* tim8_enable(void);
+void tim8_enable(void);
 STM32FXXX_TIM8* tim8(void);
 /****************************************/
 /*** TIM1 Procedure & Function Header ***/

@@ -16,24 +16,31 @@ static STM32FXXX_I2C2_Handler stm32fxxx_i2c2;
 static STM32FXXX_I2C3_Handler stm32fxxx_i2c3;
 /*** I2C Procedure & Function Definition ***/
 // COMMON
-void STM32FXXXI2c_Init(I2C_TypeDef* instance) {
-	// Initialize I2C peripheral
-	instance->CR1 |= I2C_CR1_SWRST;  // Software reset
-	instance->CR1 &= ~I2C_CR1_SWRST; // Release reset
-	instance->CR2 |= ((uint32_t)(I2C_SCL_CLOCK / 1000000)) & I2C_CR2_FREQ; // Set SCL frequency
-	instance->CCR = (query()->pclk1() / (2 * I2C_SCL_CLOCK)) & I2C_CCR_CCR; // Set CCR
-	instance->TRISE = (I2C_SCL_CLOCK / 1000000) + 1; // Set TRISE
-	instance->CR1 |= I2C_CR1_PE; // Enable I2C
+void STM32FXXXI2c_SclClock(I2C_TypeDef* instance, uint32_t sclclock) {
+    // Software reset
+    instance->CR1 |= I2C_CR1_SWRST;  // Set SWRST bit
+    instance->CR1 &= ~I2C_CR1_SWRST; // Clear SWRST bit to release the reset
+    // Set SCL frequency
+    uint32_t pclk1 = query()->pclk1(); // Get APB1 clock frequency in Hz
+    uint32_t freq = pclk1 / 1000000; // Frequency in MHz
+    instance->CR2 &= ~I2C_CR2_FREQ; // Clear the FREQ bits
+    instance->CR2 |= (freq & I2C_CR2_FREQ); // Set the FREQ field in CR2
+    // Set CCR for the clock control register
+    uint32_t ccr_value = pclk1 / (2 * sclclock); // Calculate CCR value
+    instance->CCR = (ccr_value & I2C_CCR_CCR); // Set CCR, ensure it fits in the register
+    // Set TRISE (maximum rise time in ns)
+    instance->TRISE = (sclclock / 1000000) + 1; // TRISE calculation
+    // Enable I2C peripheral
+    instance->CR1 |= I2C_CR1_PE; // Set PE bit to enable I2C
 }
 // I2C1
-void STM32FXXXI2c1Clock( uint8_t state ){
+void STM32FXXXI2c1Clock( uint8_t state ) {
     if(state){
         set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN);
     } else {
         clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN);
     }
 }
-
 void STM32FXXXI2c1EvNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C1_EV_IRQn, 1);
@@ -41,8 +48,7 @@ void STM32FXXXI2c1EvNvic( uint8_t state ){
         set_bit_block(NVIC->ICER, 1, I2C1_EV_IRQn, 0);
     }
 }
-
-void STM32FXXXI2c1ErNvic( uint8_t state ){
+void STM32FXXXI2c1ErNvic( uint8_t state ) {
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C1_ER_IRQn, 1);
     } else {
@@ -94,7 +100,6 @@ void STM32FXXXI2c2Clock( uint8_t state ){
         clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C2EN);
     }
 }
-
 void STM32FXXXI2c2EvNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C2_EV_IRQn, 1);
@@ -102,7 +107,6 @@ void STM32FXXXI2c2EvNvic( uint8_t state ){
         set_bit_block(NVIC->ICER, 1, I2C2_EV_IRQn, 0);
     }
 }
-
 void STM32FXXXI2c2ErNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C2_ER_IRQn, 1);
@@ -154,7 +158,6 @@ void STM32FXXXI2c3Clock( uint8_t state ){
         clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C3EN);
     }
 }
-
 void STM32FXXXI2c3EvNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C3_EV_IRQn, 1);
@@ -162,7 +165,6 @@ void STM32FXXXI2c3EvNvic( uint8_t state ){
         set_bit_block(NVIC->ICER, 1, I2C3_EV_IRQn, 0);
     }
 }
-
 void STM32FXXXI2c3ErNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C3_ER_IRQn, 1);
@@ -208,13 +210,13 @@ uint8_t STM32FXXXI2c3_Status(void) {
 }
 /**************************************************************************************************/
 /*** I2C1 INIC Handler ***/
-STM32FXXX_I2C1_Handler* i2c1_enable(void)
+void i2c1_enable(uint32_t sclclock)
 {
+	STM32FXXXI2c1Clock(1);  // Enable I2C1 clock
 	/*** I2C1 Bit Mapping Link ***/
 	stm32fxxx_i2c1.instance = I2C1;
 	/*** I2C1 Init ***/
-	STM32FXXXI2c1Clock(1);  // Enable I2C1 clock
-	STM32FXXXI2c_Init(I2C1);
+	STM32FXXXI2c_SclClock(I2C1, sclclock);
 	STM32FXXXI2c1EvNvic(0);  // Disable I2C1 event interrupt
 	STM32FXXXI2c1ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
@@ -228,17 +230,17 @@ STM32FXXX_I2C1_Handler* i2c1_enable(void)
 	stm32fxxx_i2c1.master_read = STM32FXXXI2c1_Master_Read;
 	stm32fxxx_i2c1.stop = STM32FXXXI2c1_Stop;
 	stm32fxxx_i2c1.status = STM32FXXXI2c1_Status;
-	return &stm32fxxx_i2c1;
+	//return &stm32fxxx_i2c1;
 }
 STM32FXXX_I2C1_Handler*  i2c1(void){ return (STM32FXXX_I2C1_Handler*) &stm32fxxx_i2c1; }
 /*** I2C2 INIC Handler ***/
-STM32FXXX_I2C2_Handler* i2c2_enable(void)
+void i2c2_enable(uint32_t sclclock)
 {
+	STM32FXXXI2c2Clock(1);  // Enable I2C1 clock
 	/*** I2C2 Bit Mapping Link ***/
 	stm32fxxx_i2c2.instance = I2C2;
 	/*** I2C2 Init ***/
-	STM32FXXXI2c2Clock(1);  // Enable I2C1 clock
-	STM32FXXXI2c_Init(I2C2);
+	STM32FXXXI2c_SclClock(I2C2, sclclock);
 	STM32FXXXI2c2EvNvic(0);  // Disable I2C1 event interrupt
 	STM32FXXXI2c2ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
@@ -252,17 +254,17 @@ STM32FXXX_I2C2_Handler* i2c2_enable(void)
 	stm32fxxx_i2c2.master_read = STM32FXXXI2c2_Master_Read;
 	stm32fxxx_i2c2.stop = STM32FXXXI2c2_Stop;
 	stm32fxxx_i2c2.status = STM32FXXXI2c2_Status;
-	return &stm32fxxx_i2c2;
+	//return &stm32fxxx_i2c2;
 }
 STM32FXXX_I2C2_Handler*  i2c2(void){ return (STM32FXXX_I2C2_Handler*) &stm32fxxx_i2c2; }
 /*** I2C3 INIC Handler ***/
-STM32FXXX_I2C3_Handler* i2c3_enable(void)
+void i2c3_enable(uint32_t sclclock)
 {
+	STM32FXXXI2c3Clock(1);  // Enable I2C1 clock
 	/*** I2C3 Bit Mapping Link ***/
 	stm32fxxx_i2c3.instance = I2C3;
 	/*** I2C3 Init ***/
-	STM32FXXXI2c3Clock(1);  // Enable I2C1 clock
-	STM32FXXXI2c_Init(I2C3);
+	STM32FXXXI2c_SclClock(I2C3, sclclock);
 	STM32FXXXI2c3EvNvic(0);  // Disable I2C1 event interrupt
 	STM32FXXXI2c3ErNvic(0);  // Disable I2C1 error interrupt
 	/*** Clock and Interrupt ***/
@@ -276,7 +278,7 @@ STM32FXXX_I2C3_Handler* i2c3_enable(void)
 	stm32fxxx_i2c3.master_read = STM32FXXXI2c3_Master_Read;
 	stm32fxxx_i2c3.stop = STM32FXXXI2c3_Stop;
 	stm32fxxx_i2c3.status = STM32FXXXI2c3_Status;
-	return &stm32fxxx_i2c3;
+	//return &stm32fxxx_i2c3;
 }
 STM32FXXX_I2C3_Handler*  i2c3(void){ return (STM32FXXX_I2C3_Handler*) &stm32fxxx_i2c3; }
 

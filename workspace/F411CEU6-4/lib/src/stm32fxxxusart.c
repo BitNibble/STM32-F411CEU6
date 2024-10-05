@@ -357,8 +357,9 @@ void Usart6_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
     USART6->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
 }
 /*** USART1 INIC Procedure & Function Definition ***/
-STM32FXXX_USART1* usart1_enable(void)
+void usart1_enable(void)
 {
+	STM32FXXXUsart1Clock( ON );
 	/*** USART1 Bit Mapping Link ***/
 	stm32fxxx_usart1.instance = USART1;
 	// Other
@@ -367,14 +368,15 @@ STM32FXXX_USART1* usart1_enable(void)
 	stm32fxxx_usart1.wordlength = Usart1_WordLength;
 	stm32fxxx_usart1.stopbits = Usart1_StopBits;
 	stm32fxxx_usart1.samplingmode = Usart1_SamplingMode;
-	return &stm32fxxx_usart1;
+	//return &stm32fxxx_usart1;
 }
 
 STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
 
 /*** USART2 INIC Procedure & Function Definition ***/
-STM32FXXX_USART2* usart2_enable(void)
+void usart2_enable(void)
 {
+	STM32FXXXUsart2Clock( ON );
 	/*** USART2 Bit Mapping Link ***/
 	stm32fxxx_usart2.instance = USART2;
 	// Other
@@ -383,15 +385,16 @@ STM32FXXX_USART2* usart2_enable(void)
 	stm32fxxx_usart2.wordlength = Usart2_WordLength;
 	stm32fxxx_usart2.stopbits = Usart2_StopBits;
 	stm32fxxx_usart2.samplingmode = Usart2_SamplingMode;
-	return &stm32fxxx_usart2;
+	//return &stm32fxxx_usart2;
 }
 
 STM32FXXX_USART2*  usart2(void){ return (STM32FXXX_USART2*) &stm32fxxx_usart2; }
 
 #ifdef STM32F446xx
 /*** USART3 INIC Procedure & Function Definition ***/
-STM32FXXX_USART3* usart3_enable(void)
+void usart3_enable(void)
 {
+	STM32FXXXUsart3Clock( ON );
 	/*** USART3 Bit Mapping Link ***/
 	#ifdef STM32F446xx
 		stm32fxxx_usart3.instance = USART3;
@@ -404,14 +407,15 @@ STM32FXXX_USART3* usart3_enable(void)
 	stm32fxxx_usart3.wordlength = Usart3_WordLength;
 	stm32fxxx_usart3.stopbits = Usart3_StopBits;
 	stm32fxxx_usart3.samplingmode = Usart3_SamplingMode;
-	return &stm32fxxx_usart3;
+	//return &stm32fxxx_usart3;
 }
 
 STM32FXXX_USART3*  usart3(void){ return (STM32FXXX_USART3*) &stm32fxxx_usart3; }
 
 /*** UART4 INIC Procedure & Function Definition ***/
-STM32FXXX_UART4* uart4_enable(void)
+void uart4_enable(void)
 {
+	STM32FXXXUsart4Clock( ON );
 	/*** UART4 Bit Mapping Link ***/
 	#ifdef STM32F446xx
 		stm32fxxx_uart4.instance = UART4;
@@ -424,14 +428,15 @@ STM32FXXX_UART4* uart4_enable(void)
 	stm32fxxx_uart4.wordlength = Usart4_WordLength;
 	stm32fxxx_uart4.stopbits = Usart4_StopBits;
 	stm32fxxx_uart4.samplingmode = Usart4_SamplingMode;
-	return &stm32fxxx_uart4;
+	//return &stm32fxxx_uart4;
 }
 
 STM32FXXX_UART4*  uart4(void){ return (STM32FXXX_UART4*) &stm32fxxx_uart4; }
 
 /*** UART5 INIC Procedure & Function Definition ***/
-STM32FXXX_UART5* uart5_enable(void)
+void uart5_enable(void)
 {
+	STM32FXXXUsart5Clock( ON );
 	/*** UART5 Bit Mapping Link ***/
 	#ifdef STM32F446xx
 		stm32fxxx_uart5.instance = UART5;
@@ -444,7 +449,7 @@ STM32FXXX_UART5* uart5_enable(void)
 	stm32fxxx_uart5.wordlength = Usart5_WordLength;
 	stm32fxxx_uart5.stopbits = Usart5_StopBits;
 	stm32fxxx_uart5.samplingmode = Usart5_SamplingMode;
-	return &stm32fxxx_uart5;
+	//return &stm32fxxx_uart5;
 }
 
 STM32FXXX_UART5*  uart5(void){ return (STM32FXXX_UART5*) &stm32fxxx_uart5; }
@@ -452,8 +457,9 @@ STM32FXXX_UART5*  uart5(void){ return (STM32FXXX_UART5*) &stm32fxxx_uart5; }
 #endif
 
 /*** USART6 INIC Procedure & Function Definition ***/
-STM32FXXX_USART6* usart6_enable(void)
+void usart6_enable(void)
 {
+	STM32FXXXUsart6Clock( ON );
 	/*** USART6 Bit Mapping Link ***/
 	stm32fxxx_usart6.instance = USART6;
 	// Other
@@ -462,7 +468,7 @@ STM32FXXX_USART6* usart6_enable(void)
 	stm32fxxx_usart6.wordlength = Usart6_WordLength;
 	stm32fxxx_usart6.stopbits = Usart6_StopBits;
 	stm32fxxx_usart6.samplingmode = Usart6_SamplingMode;
-	return &stm32fxxx_usart6;
+	//return &stm32fxxx_usart6;
 }
 
 STM32FXXX_USART6*  usart6(void){ return (STM32FXXX_USART6*) &stm32fxxx_usart6; }

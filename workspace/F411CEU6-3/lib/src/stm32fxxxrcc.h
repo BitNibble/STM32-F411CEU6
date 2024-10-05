@@ -49,7 +49,7 @@ typedef struct
 	void (*nvic)(uint8_t state);
 }STM32FXXX_RCC;
 
-STM32FXXX_RCC* rcc_enable(void);
+void rcc_enable(void);
 STM32FXXX_RCC* rcc(void);
 
 /*** Procedure & Function Header ***/

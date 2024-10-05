@@ -34,17 +34,17 @@ typedef struct
 /************************/
 /*** INIC TIM 9 to 14 ***/
 /************************/
-STM32FXXX_TIM9* tim9_enable(void);
+void tim9_enable(void);
 STM32FXXX_TIM9* tim9(void);
-STM32FXXX_TIM10* tim10_enable(void);
+void tim10_enable(void);
 STM32FXXX_TIM10* tim10(void);
-STM32FXXX_TIM11* tim11_enable(void);
+void tim11_enable(void);
 STM32FXXX_TIM11* tim11(void);
-STM32FXXX_TIM12* tim12_enable(void);
+void tim12_enable(void);
 STM32FXXX_TIM12* tim12(void);
-STM32FXXX_TIM13* tim13_enable(void);
+void tim13_enable(void);
 STM32FXXX_TIM13* tim13(void);
-STM32FXXX_TIM14* tim14_enable(void);
+void tim14_enable(void);
 STM32FXXX_TIM14* tim14(void);
 /****************************************/
 /*** TIM9 Procedure & Function Header ***/

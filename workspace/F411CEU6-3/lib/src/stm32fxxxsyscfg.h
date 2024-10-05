@@ -86,7 +86,7 @@ typedef struct
 /*************************************/
 /************ INIC SYSCFG ************/
 /*************************************/
-STM32FXXX_SYSCFG* syscfg_enable(void);
+void syscfg_enable(void);
 STM32FXXX_SYSCFG* syscfg(void);
 /***********************************************/
 /********* Procedure & Function Header *********/

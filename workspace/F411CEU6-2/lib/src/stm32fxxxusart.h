@@ -38,22 +38,22 @@ typedef struct
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
 }STM32FXXX_UART4, STM32FXXX_UART5;
 
-STM32FXXX_USART1* usart1_enable(void);
+void usart1_enable(void);
 STM32FXXX_USART1*  usart1(void);
 
-STM32FXXX_USART2* usart2_enable(void);
+void usart2_enable(void);
 STM32FXXX_USART2*  usart2(void);
 
-STM32FXXX_USART3* usart3_enable(void);
+void usart3_enable(void);
 STM32FXXX_USART3*  usart3(void);
 
-STM32FXXX_UART4* uart4_enable(void);
+void uart4_enable(void);
 STM32FXXX_UART4*  uart4(void);
 
-STM32FXXX_UART5* uart5_enable(void);
+void uart5_enable(void);
 STM32FXXX_UART5*  uart5(void);
 
-STM32FXXX_USART6* usart6_enable(void);
+void usart6_enable(void);
 STM32FXXX_USART6*  usart6(void);
 /*** USART1 Header ***/
 void STM32FXXXUsart1Clock( uint8_t state );

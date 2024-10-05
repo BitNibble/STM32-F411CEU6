@@ -13,6 +13,8 @@ Comment:
 #include "stm32fxxxnvic.h"
 #include "stm32fxxxrcc.h"
 
+#define ON 1
+#define OFF 0
 /*** File Variables ***/
 static STM32FXXX_TIM1 stm32fxxx_tim1;
 static STM32FXXX_TIM8 stm32fxxx_tim8;
@@ -31,39 +33,39 @@ void STM32FXXXTim1Clock(uint8_t state)
 }
 void STM32FXXXTim1Nvic(uint8_t value)
 { // 24, 25, 26, 27
-	STM32FXXX_NVIC* nvic = nvic_enable();
+	nvic_enable();
 	switch(value){
 		case 0b1000:
 			//set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);
-			nvic->set_enable(TIM1_BRK_TIM9_IRQn);
+			nvic()->set_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b0100:
 			//set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);
-			nvic->set_enable(TIM1_UP_TIM10_IRQn);
+			nvic()->set_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b0010:
 			//set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
-			nvic->set_enable(TIM1_TRG_COM_TIM11_IRQn);
+			nvic()->set_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b0001:
 			//set_bit_block(NVIC->ISER, 1, TIM1_CC_IRQn, 1);
-			nvic->set_enable(TIM1_CC_IRQn);
+			nvic()->set_enable(TIM1_CC_IRQn);
 		break;
 		case 0b11000:
 			//set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);
-			nvic->clear_enable(TIM1_BRK_TIM9_IRQn);
+			nvic()->clear_enable(TIM1_BRK_TIM9_IRQn);
 		break;
 		case 0b10100:
 			//set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);
-			nvic->clear_enable(TIM1_UP_TIM10_IRQn);
+			nvic()->clear_enable(TIM1_UP_TIM10_IRQn);
 		break;
 		case 0b10010:
 			//set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);
-			nvic->clear_enable(TIM1_TRG_COM_TIM11_IRQn);
+			nvic()->clear_enable(TIM1_TRG_COM_TIM11_IRQn);
 		break;
 		case 0b10001:
 			//set_bit_block(NVIC->ICER, 1, TIM1_CC_IRQn, 1);
-			nvic->clear_enable(TIM1_CC_IRQn);
+			nvic()->clear_enable(TIM1_CC_IRQn);
 		break;
 	default:
 	break;
@@ -112,8 +114,9 @@ void STM32FXXXTim8Nvic(uint8_t value)
 #endif
 
 /*** TIM1 INIC Procedure & Function Definition ***/
-STM32FXXX_TIM1* tim1_enable(void)
+void tim1_enable(void)
 {
+	STM32FXXXTim1Clock(ON);
 	/*** TIM1 Bit Field ***/
 	stm32fxxx_tim1.instance = TIM1;
 	// CLOCK
@@ -121,16 +124,16 @@ STM32FXXX_TIM1* tim1_enable(void)
 	// NVIC
 	stm32fxxx_tim1.nvic = STM32FXXXTim1Nvic;
 
-	return &stm32fxxx_tim1;
+	//return &stm32fxxx_tim1;
 }
 
 STM32FXXX_TIM1* tim1(void){ return (STM32FXXX_TIM1*) &stm32fxxx_tim1;}
 
 /*** TIM8 INIC Procedure & Function Definition ***/
-STM32FXXX_TIM8* tim8_enable(void)
+void tim8_enable(void)
 {
-	/*** TIM8 Bit Field ***/
 	#ifdef STM32F446xx
+		STM32FXXXTim8Clock(ON);
 		stm32fxxx_tim8.instance = TIM8;
 	#else
 		stm32fxxx_tim8.instance = NULL;
@@ -140,7 +143,7 @@ STM32FXXX_TIM8* tim8_enable(void)
 	// NVIC
 	stm32fxxx_tim8.nvic = STM32FXXXTim8Nvic;
 
-	return &stm32fxxx_tim8;
+	//return &stm32fxxx_tim8;
 }
 
 STM32FXXX_TIM8* tim8(void){ return (STM32FXXX_TIM8*) &stm32fxxx_tim8; }
