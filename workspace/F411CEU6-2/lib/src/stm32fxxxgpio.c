@@ -27,14 +27,14 @@ Comment:
 /****************************************/
 
 /*** File Variables ***/
-static STM32FXXX_GPIOA stm32fxxx_gpioa;
-static STM32FXXX_GPIOB stm32fxxx_gpiob;
-static STM32FXXX_GPIOC stm32fxxx_gpioc;
-static STM32FXXX_GPIOD stm32fxxx_gpiod;
-static STM32FXXX_GPIOE stm32fxxx_gpioe;
-static STM32FXXX_GPIOF stm32fxxx_gpiof;
-static STM32FXXX_GPIOG stm32fxxx_gpiog;
-static STM32FXXX_GPIOH stm32fxxx_gpioh;
+static STM32FXXX_GPIOA stm32fxxx_gpioa = {0};
+static STM32FXXX_GPIOB stm32fxxx_gpiob = {0};
+static STM32FXXX_GPIOC stm32fxxx_gpioc = {0};
+static STM32FXXX_GPIOD stm32fxxx_gpiod = {0};
+static STM32FXXX_GPIOE stm32fxxx_gpioe = {0};
+static STM32FXXX_GPIOF stm32fxxx_gpiof = {0};
+static STM32FXXX_GPIOG stm32fxxx_gpiog = {0};
+static STM32FXXX_GPIOH stm32fxxx_gpioh = {0};
 
 /*** GPIO Procedure & Function Definition ***/
 /*** GPIOA ***/
@@ -319,8 +319,6 @@ void gpiof_enable(void)
     /*** GPIOA TypeDef ***/
 	#ifdef STM32F446xx
     	stm32fxxx_gpiof.instance = GPIOF;
-	#else
-    	stm32fxxx_gpiof.instance = NULL;
 	#endif
     /******************/
     stm32fxxx_gpiof.afr = STM32FXXXGpioFafr;
@@ -339,8 +337,6 @@ void gpiog_enable(void)
     /*** GPIOA TypeDef ***/
 	#ifdef STM32F446xx
     	stm32fxxx_gpiog.instance = GPIOG;
-	#else
-    	stm32fxxx_gpiog.instance = NULL;
 	#endif
     /******************/
     stm32fxxx_gpiog.afr = STM32FXXXGpioGafr;

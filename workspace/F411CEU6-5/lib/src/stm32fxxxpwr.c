@@ -16,7 +16,7 @@ Comment:
 /*** File Variable ***/
 static STM32FXXXPWR_cr stm32fxxx_pwr_cr;
 static STM32FXXXPWR_csr stm32fxxx_pwr_csr;
-static STM32FXXX_PWR stm32fxxx_pwr;
+static STM32FXXX_PWR stm32fxxx_pwr = {0};
 
 /*** File Procedure & Function Header ***/
 STM32FXXXPWR_cr* stm32fxxx_pwr_cr_inic(void);

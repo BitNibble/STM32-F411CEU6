@@ -17,7 +17,7 @@ Comment:
 
 /*** File Variables ***/
 // ADC1
-static STM32FXXX_ADC1 stm32fxxx_adc1;
+static STM32FXXX_ADC1 stm32fxxx_adc1 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC1 ***/
 void STM32FXXXAdc1Clock(uint8_t state)

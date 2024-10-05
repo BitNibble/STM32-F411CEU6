@@ -16,7 +16,7 @@ Comment:
 /*** File Variables ***/
 //#ifdef STM32F446xx
 // ADC2
-static STM32FXXX_ADC2 stm32fxxx_adc2;
+static STM32FXXX_ADC2 stm32fxxx_adc2 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC2 ***/
 #ifdef STM32F446xx
@@ -38,9 +38,6 @@ void adc2_enable(void)
 		/*** ADC2 TypeDef ***/
 		stm32fxxx_adc2.instance = ADC2;
 		stm32fxxx_adc2.common_instance = ADC123_COMMON;
-	#else
-		stm32fxxx_adc2.instance = NULL;
-		stm32fxxx_adc2.common_instance = NULL;
 	#endif
 	// Other
 	stm32fxxx_adc2.clock = STM32FXXXAdc2Clock;

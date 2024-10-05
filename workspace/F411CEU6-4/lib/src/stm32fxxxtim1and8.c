@@ -16,8 +16,8 @@ Comment:
 #define ON 1
 #define OFF 0
 /*** File Variables ***/
-static STM32FXXX_TIM1 stm32fxxx_tim1;
-static STM32FXXX_TIM8 stm32fxxx_tim8;
+static STM32FXXX_TIM1 stm32fxxx_tim1 = {0};
+static STM32FXXX_TIM8 stm32fxxx_tim8 = {0};
 
 /************/
 /*** TIM1 ***/
@@ -135,8 +135,6 @@ void tim8_enable(void)
 	#ifdef STM32F446xx
 		STM32FXXXTim8Clock(ON);
 		stm32fxxx_tim8.instance = TIM8;
-	#else
-		stm32fxxx_tim8.instance = NULL;
 	#endif
 	// CLOCK
 	stm32fxxx_tim8.clock = STM32FXXXTim8Clock;

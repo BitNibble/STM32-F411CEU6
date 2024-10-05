@@ -14,14 +14,14 @@ Comment:
 #include <math.h>
 
 /*** File Variable ***/
-static STM32FXXX_USART1 stm32fxxx_usart1;
-static STM32FXXX_USART2 stm32fxxx_usart2;
+static STM32FXXX_USART1 stm32fxxx_usart1 = {0};
+static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
 #ifdef STM32F446xx
-	static STM32FXXX_USART3 stm32fxxx_usart3;
-	static STM32FXXX_UART4 stm32fxxx_uart4;
-	static STM32FXXX_UART5 stm32fxxx_uart5;
+	static STM32FXXX_USART3 stm32fxxx_usart3 = {0};
+	static STM32FXXX_UART4 stm32fxxx_uart4 = {0};
+	static STM32FXXX_UART5 stm32fxxx_uart5 = {0};
 #endif
-static STM32FXXX_USART6 stm32fxxx_usart6;
+static STM32FXXX_USART6 stm32fxxx_usart6 = {0};
 /*** USART Procedure & Function Definition ***/
 void Usart3_WordLength(uint8_t wordlength);
 void Usart3_StopBits(double stopbits);

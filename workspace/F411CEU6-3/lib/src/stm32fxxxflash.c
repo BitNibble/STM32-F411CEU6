@@ -16,7 +16,7 @@ static STM32FXXXFLASH_acr stm32fxxx_flash_acr;
 static STM32FXXXFLASH_sr stm32fxxx_flash_sr;
 static STM32FXXXFLASH_cr stm32fxxx_flash_cr;
 static STM32FXXXFLASH_optcr stm32fxxx_flash_optcr;
-static STM32FXXX_FLASH stm32fxxx_flash;
+static STM32FXXX_FLASH stm32fxxx_flash = {0};
 
 /*** File Procedure & Function Header ***/
 STM32FXXXFLASH_acr* stm32fxxx_flash_acr_inic(void);

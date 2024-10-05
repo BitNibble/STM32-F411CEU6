@@ -15,7 +15,7 @@ Comment:
 
 /****************************************/
 
-static STM32FXXX_Query stm32fxxx_query;
+static STM32FXXX_Query stm32fxxx_query = {0};
 static STM32FXXXSYSTEM_prescaler stm32fxxx_System_prescaler;
 static STM32FXXXPLL_prescaler stm32fxxx_Pll_prescaler;
 

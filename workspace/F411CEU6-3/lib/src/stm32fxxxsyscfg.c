@@ -22,7 +22,7 @@ static SYSCFG_exticr3 exticr3;
 static SYSCFG_exticr4 exticr4;
 static SYSCFG_cmpcr cmpcr;
 static SYSCFG_cfgr cfgr;
-static STM32FXXX_SYSCFG stm32fxxx_syscfg;
+static STM32FXXX_SYSCFG stm32fxxx_syscfg = {0};
 
 /****************************************/
 /*** File Procedure & Function Header ***/

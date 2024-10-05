@@ -12,7 +12,7 @@ Comment:
 #include "stm32fxxxsram.h"
 
 /*** File Variable ***/
-static STM32FXXX_SRAM stm32fxxx_sram;
+static STM32FXXX_SRAM stm32fxxx_sram = {0};
 
 static uint32_t sram_time_out;
 

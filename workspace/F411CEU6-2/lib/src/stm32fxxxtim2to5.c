@@ -14,10 +14,10 @@ Comment:
 #define ON 1
 #define OFF 0
 /*** File Variables ***/
-static STM32FXXX_TIM2 stm32fxxx_tim2;
-static STM32FXXX_TIM3 stm32fxxx_tim3;
-static STM32FXXX_TIM4 stm32fxxx_tim4;
-static STM32FXXX_TIM5 stm32fxxx_tim5;
+static STM32FXXX_TIM2 stm32fxxx_tim2 = {0};
+static STM32FXXX_TIM3 stm32fxxx_tim3 = {0};
+static STM32FXXX_TIM4 stm32fxxx_tim4 = {0};
+static STM32FXXX_TIM5 stm32fxxx_tim5 = {0};
 /*** TIMER Procedure & Function Definition ***/
 /************/
 /*** TIM2 ***/

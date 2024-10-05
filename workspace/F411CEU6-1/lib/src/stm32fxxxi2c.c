@@ -11,9 +11,9 @@ Comment:
 #include "stm32fxxxi2c.h"
 #include "armquery.h"
 /*** File Variable ***/
-static STM32FXXX_I2C1_Handler stm32fxxx_i2c1;
-static STM32FXXX_I2C2_Handler stm32fxxx_i2c2;
-static STM32FXXX_I2C3_Handler stm32fxxx_i2c3;
+static STM32FXXX_I2C1_Handler stm32fxxx_i2c1 = {0};
+static STM32FXXX_I2C2_Handler stm32fxxx_i2c2 = {0};
+static STM32FXXX_I2C3_Handler stm32fxxx_i2c3 = {0};
 /*** I2C Procedure & Function Definition ***/
 // COMMON
 void STM32FXXXI2c_SclClock(I2C_TypeDef* instance, uint32_t sclclock) {

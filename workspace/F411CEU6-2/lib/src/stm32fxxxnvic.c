@@ -12,7 +12,7 @@ Comment:
 #include "stm32fxxxnvic.h"
 
 /*** File Variable ***/
-static STM32FXXX_NVIC stm32fxxx_nvic;
+static STM32FXXX_NVIC stm32fxxx_nvic = {0};
 
 /*** NVIC Procedure & Function Definition ***/
 void STM32FXXXNVIC_set_enable( uint8_t IRQn )

@@ -15,7 +15,7 @@ Comment:
 #define OFF 0
 /*** File Variables ***/
 // ADC3
-static STM32FXXX_ADC3 stm32fxxx_adc3;
+static STM32FXXX_ADC3 stm32fxxx_adc3 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC3 ***/
 #ifdef STM32F446xx
@@ -37,9 +37,6 @@ void adc3_enable(void)
 		/*** ADC3 TypeDef ***/
 		stm32fxxx_adc3.instance = ADC3;
 		stm32fxxx_adc3.common_instance = ADC123_COMMON;
-	#else
-		stm32fxxx_adc3.instance = NULL;
-		stm32fxxx_adc3.common_instance = NULL;
 	#endif
 	// Other
 	stm32fxxx_adc3.clock = STM32FXXXAdc3Clock;

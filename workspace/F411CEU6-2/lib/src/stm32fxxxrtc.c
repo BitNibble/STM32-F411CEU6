@@ -54,7 +54,7 @@ Comment:
 #define RTCSEL_LSE    0x01 // LSE oscillator clock
 #define RTCSEL_HSE    0x03 // HSE oscillator clock
 
-static STM32FXXX_RTC stm32fxxx_rtc;
+static STM32FXXX_RTC stm32fxxx_rtc = {0};
 static uint32_t rtc_time_out;
 
 /*** File Procedure & Function Header ***/
