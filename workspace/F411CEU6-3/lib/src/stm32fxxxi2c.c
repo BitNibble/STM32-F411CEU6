@@ -27,14 +27,27 @@ void STM32FXXXI2c_Init(I2C_TypeDef* instance) {
 }
 // I2C1
 void STM32FXXXI2c1Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C1EN; }
-	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C1EN; }
+    if(state){
+        set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN);
+    } else {
+        clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN);
+    }
 }
+
 void STM32FXXXI2c1EvNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C1_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C1_EV_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C1_EV_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C1_EV_IRQn, 0);
+    }
 }
+
 void STM32FXXXI2c1ErNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C1_ER_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C1_ER_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C1_ER_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C1_ER_IRQn, 0);
+    }
 }
 /***/
 void STM32FXXXI2c1_Start(void) {
@@ -75,14 +88,27 @@ uint8_t STM32FXXXI2c1_Status(void) {
 }
 // I2C2
 void STM32FXXXI2c2Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C2EN; }
-	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C2EN; }
+    if(state){
+        set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C2EN);
+    } else {
+        clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C2EN);
+    }
 }
+
 void STM32FXXXI2c2EvNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C2_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C2_EV_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C2_EV_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C2_EV_IRQn, 0);
+    }
 }
+
 void STM32FXXXI2c2ErNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C2_ER_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C2_ER_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C2_ER_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C2_ER_IRQn, 0);
+    }
 }
 /***/
 void STM32FXXXI2c2_Start(void) {
@@ -122,14 +148,27 @@ uint8_t STM32FXXXI2c2_Status(void) {
 }
 // I2C3
 void STM32FXXXI2c3Clock( uint8_t state ){
-	if(state){ RCC->APB1ENR |= RCC_APB1ENR_I2C3EN; }
-	else{ RCC->APB1ENR &= ~RCC_APB1ENR_I2C3EN; }
+    if(state){
+        set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C3EN);
+    } else {
+        clear_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C3EN);
+    }
 }
+
 void STM32FXXXI2c3EvNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C3_EV_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C3_EV_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C3_EV_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C3_EV_IRQn, 0);
+    }
 }
+
 void STM32FXXXI2c3ErNvic( uint8_t state ){
-	if(state){ set_bit_block(NVIC->ISER, 1, I2C3_ER_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, I2C3_ER_IRQn, 1); }
+    if(state){
+        set_bit_block(NVIC->ISER, 1, I2C3_ER_IRQn, 1);
+    } else {
+        set_bit_block(NVIC->ICER, 1, I2C3_ER_IRQn, 0);
+    }
 }
 /***/
 void STM32FXXXI2c3_Start(void) {
