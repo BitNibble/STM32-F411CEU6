@@ -12,6 +12,7 @@ Comment:
 #include <stdarg.h>
 
 /****************************************/
+#define TWO 2
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
 #define WORD_BITS 16
@@ -154,7 +155,7 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 /*** Clock ***/
 uint16_t gethpre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 4, 4);
+	uint32_t value = get_reg_block(RCC->CFGR, 4, RCC_CFGR_HPRE_Pos);
 	switch(value)
 	{
 		case 0b1000:
@@ -189,7 +190,7 @@ uint16_t gethpre(void)
 }
 uint8_t gethppre1(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, 10);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_PPRE1_Pos);
 	switch(value)
 	{
 		case 0b100:
@@ -212,7 +213,7 @@ uint8_t gethppre1(void)
 }
 uint8_t gethppre2(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, 13);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_PPRE2_Pos);
 	switch(value)
 	{
 		case 0b100:
@@ -235,11 +236,11 @@ uint8_t gethppre2(void)
 }
 uint8_t getrtcpre(void)
 {
-	return get_reg_block(RCC->CFGR, 5, 16);
+	return get_reg_block(RCC->CFGR, 5, RCC_CFGR_RTCPRE_Pos);
 }
 uint8_t gethmco1pre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, 24);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_MCO1PRE_Pos);
 	switch(value)
 	{
 		case 0b100:
@@ -262,7 +263,7 @@ uint8_t gethmco1pre(void)
 }
 uint8_t gethmco2pre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, 27);
+	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_MCO2PRE_Pos);
 	switch(value)
 	{
 		case 0b100:
@@ -285,15 +286,15 @@ uint8_t gethmco2pre(void)
 }
 uint8_t getpllm(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 6, 0);
+	return get_reg_block(RCC->PLLCFGR, 6, RCC_PLLCFGR_PLLM_Pos);
 }
 uint16_t getplln(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 9, 6);
+	return get_reg_block(RCC->PLLCFGR, 9, RCC_PLLCFGR_PLLN_Pos);
 }
 uint8_t getpllp(void)
 {
-	uint32_t value = get_reg_block(RCC->PLLCFGR, 2, 16);
+	uint32_t value = get_reg_block(RCC->PLLCFGR, 2, RCC_PLLCFGR_PLLP_Pos);
 	switch(value)
 	{
 		case 0b00:
@@ -315,16 +316,16 @@ uint8_t getpllp(void)
 }
 uint8_t getpllq(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 4, 24);
+	return get_reg_block(RCC->PLLCFGR, 4, RCC_PLLCFGR_PLLQ_Pos);
 }
 uint8_t getpllr(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 3, 28);
+	return get_reg_block(RCC->PLLCFGR, 3, RCC_PLLCFGR_PLLR_Pos);
 }
 uint32_t getpllsourceclk(void)
 {
 	uint32_t source;
-	if( get_reg_block(RCC->PLLCFGR, 1, 22) ) source = HSE_OSC; else source = HSI_RC;
+	if( get_reg_block(RCC->PLLCFGR, 1, RCC_PLLCFGR_PLLSRC_Pos) ) source = HSE_OSC; else source = HSI_RC;
 	return source;
 }
 uint32_t getpllclk(void)
@@ -337,7 +338,7 @@ uint32_t getpllclk(void)
 }
 uint32_t getsysclk(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 2, 2);
+	uint32_t value = get_reg_block(RCC->CFGR, 2, RCC_CFGR_SWS_Pos);
 	switch(value) // SWS[2]: System clock switch status
 	{
 		case 0:
