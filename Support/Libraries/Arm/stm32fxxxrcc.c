@@ -16,7 +16,7 @@ Comment:
 static STM32FXXXRCCPLL stm32fxxx_rcc_pll;
 static STM32FXXXRCCPLLI2S stm32fxxx_rcc_plli2s;
 static STM32FXXXRCCPLLSAI stm32fxxx_rcc_pllsai;
-static STM32FXXX_RCC stm32fxxx_rcc;
+static STM32FXXX_RCC stm32fxxx_rcc = {0};
 
 /*** File Procedure & Function Header ***/
 /*** Extended ***/
@@ -381,7 +381,7 @@ STM32FXXXRCCPLLSAI* stm32fxxx_rcc_pllsai_inic(void)
 	return &stm32fxxx_rcc_pllsai;
 }
 /*** INIC Procedure & Function Definition ***/
-STM32FXXX_RCC* rcc_enable(void)
+void rcc_enable(void)
 {
 	/*** RCC Bit Mapping Link ***/
 	stm32fxxx_rcc.instance = RCC;
@@ -398,7 +398,7 @@ STM32FXXX_RCC* rcc_enable(void)
 	stm32fxxx_rcc.lselect = STM32FXXXRccLSelect;
 	/*** Nvic ***/
 	stm32fxxx_rcc.nvic = STM32FXXXRCC_nvic;
-	return &stm32fxxx_rcc;
+	//return &stm32fxxx_rcc;
 }
 
 STM32FXXX_RCC* rcc(void){ return &stm32fxxx_rcc; };

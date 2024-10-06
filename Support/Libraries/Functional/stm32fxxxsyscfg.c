@@ -11,6 +11,8 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxsyscfg.h"
 
+#define ON 1
+#define OFF 0
 /*** File Variables ***/
 static SYSCFG_memrmp memrmp;
 static SYSCFG_pmc pmc;
@@ -20,7 +22,7 @@ static SYSCFG_exticr3 exticr3;
 static SYSCFG_exticr4 exticr4;
 static SYSCFG_cmpcr cmpcr;
 static SYSCFG_cfgr cfgr;
-static STM32FXXX_SYSCFG stm32fxxx_syscfg;
+static STM32FXXX_SYSCFG stm32fxxx_syscfg = {0};
 
 /****************************************/
 /*** File Procedure & Function Header ***/
@@ -232,8 +234,9 @@ SYSCFG_cfgr* SYSCFG_cfgr_inic(void)
 /************************************************/
 /**** SYSCFG Procedure & Function Definition ****/
 /************************************************/
-STM32FXXX_SYSCFG* syscfg_enable(void)
+void syscfg_enable(void)
 {
+	SYSCFG_Clock(ON);
 	stm32fxxx_syscfg.instance = SYSCFG;
 	/*** LINK ***/
 	stm32fxxx_syscfg.memrmp = SYSCFG_memrmp_inic();
@@ -246,7 +249,7 @@ STM32FXXX_SYSCFG* syscfg_enable(void)
 	stm32fxxx_syscfg.cfgr = SYSCFG_cfgr_inic();
 	/*** Oyher ***/
 	stm32fxxx_syscfg.clock = SYSCFG_Clock;
-	return &stm32fxxx_syscfg;
+	//return &stm32fxxx_syscfg;
 }
 
 STM32FXXX_SYSCFG* syscfg(void){ return (STM32FXXX_SYSCFG*) &stm32fxxx_syscfg; }

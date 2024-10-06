@@ -11,6 +11,8 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxdma.h"
 
+#define ON 1
+#define OFF 0
 /*** File Variables ***/
 // DMA1
 static STM32FXXXDMA_sr stm32fxxx_dma1_sr;
@@ -31,7 +33,7 @@ static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma1_stream5_fcr;
 static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma1_stream6_fcr;
 static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma1_stream7_fcr;
 static STM32FXXXDMA_func stm32fxxx_dma1_func;
-static STM32FXXX_DMA1 stm32fxxx_dma1;
+static STM32FXXX_DMA1 stm32fxxx_dma1  = {0};
 // DMA2
 static STM32FXXXDMA_sr stm32fxxx_dma2_sr;
 static STM32FXXXDMA_STREAM_cr stm32fxxx_dma2_stream0_cr;
@@ -51,7 +53,7 @@ static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma2_stream5_fcr;
 static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma2_stream6_fcr;
 static STM32FXXXDMA_STREAM_fcr stm32fxxx_dma2_stream7_fcr;
 static STM32FXXXDMA_func stm32fxxx_dma2_func;
-static STM32FXXX_DMA2 stm32fxxx_dma2;
+static STM32FXXX_DMA2 stm32fxxx_dma2 = {0};
 
 static uint32_t time_out;
 
@@ -1732,8 +1734,9 @@ STM32FXXXDMA_func* stm32fxxx_dma1_func_inic(void)
 /****************************************************/
 /**** DMA1 INIC Procedure & Function Definition *****/
 /****************************************************/
-STM32FXXX_DMA1* dma1_enable(void)
+void dma1_enable(void)
 {
+	STM32FXXXDma1Clock(ON);
 	stm32fxxx_dma1.instance = DMA1;
 	/*** DMA1 Bit Mapping Link ***/
 	stm32fxxx_dma1.sr = stm32fxxx_dma1_sr_inic();
@@ -1804,7 +1807,7 @@ STM32FXXX_DMA1* dma1_enable(void)
 	/*** Other ***/
 	stm32fxxx_dma1.func = stm32fxxx_dma1_func_inic();
 	stm32fxxx_dma1.clock = STM32FXXXDma1Clock;
-	return &stm32fxxx_dma1;
+	//return &stm32fxxx_dma1;
 }
 
 STM32FXXX_DMA1* dma1(void){ return &stm32fxxx_dma1; }
@@ -3370,9 +3373,9 @@ STM32FXXXDMA_func* stm32fxxx_dma2_func_inic(void)
 /****************************************************/
 /**** DMA2 INIC Procedure & Function Definition *****/
 /****************************************************/
-STM32FXXX_DMA2* dma2_enable(void)
+void dma2_enable(void)
 {
-
+	STM32FXXXDma2Clock(ON);
 	stm32fxxx_dma2.instance = DMA2;
 	/*** DMA2 Bit Mapping Link ***/
 	stm32fxxx_dma2.sr = stm32fxxx_dma2_sr_inic();
@@ -3443,7 +3446,7 @@ STM32FXXX_DMA2* dma2_enable(void)
 	/*** Other ***/
 	stm32fxxx_dma2.func = stm32fxxx_dma2_func_inic();
 	stm32fxxx_dma2.clock = STM32FXXXDma2Clock;
-	return &stm32fxxx_dma2;
+	//return &stm32fxxx_dma2;
 }
 
 STM32FXXX_DMA2* dma2(void){ return &stm32fxxx_dma2; }

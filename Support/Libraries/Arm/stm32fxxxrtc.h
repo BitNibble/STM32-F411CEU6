@@ -66,7 +66,7 @@ typedef struct
 /***/
 
 /*** Global ***/
-STM32FXXX_RTC* rtc_enable(void);
+void rtc_enable(void);
 STM32FXXX_RTC* rtc(void);
 
 /*** RTC Procedure & Function Header ***/

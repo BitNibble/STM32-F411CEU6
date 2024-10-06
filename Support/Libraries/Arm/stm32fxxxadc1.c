@@ -17,7 +17,7 @@ Comment:
 
 /*** File Variables ***/
 // ADC1
-static STM32FXXX_ADC1 stm32fxxx_adc1;
+static STM32FXXX_ADC1 stm32fxxx_adc1 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC1 ***/
 void STM32FXXXAdc1Clock(uint8_t state)
@@ -31,15 +31,17 @@ void STM32FXXXAdc1Nvic(uint8_t state)
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 /*** ADC1 INIC Procedure & Function Definition ***/
-STM32FXXX_ADC1* adc1_enable(void)
+void adc1_enable(void)
 {
-	/*** ADC1 Bit Mapping Link ***/
+	/*** ADC1 Clock ***/
+	STM32FXXXAdc1Clock(ON);
+	/*** ADC1 TypeDef ***/
 	stm32fxxx_adc1.instance = ADC1;
 	stm32fxxx_adc1.common_instance = ADC1_COMMON;
 	/*** Other ***/
 	stm32fxxx_adc1.clock = STM32FXXXAdc1Clock;
 	stm32fxxx_adc1.nvic = STM32FXXXAdc1Nvic;
-	return &stm32fxxx_adc1;
+	//return &stm32fxxx_adc1;
 }
 
 STM32FXXX_ADC1* adc1(void){ return (STM32FXXX_ADC1*) &stm32fxxx_adc1; }
@@ -49,7 +51,7 @@ void ADC_TemperatureSetup(void) {
     uint8_t countdown;
 
     // Enable ADC1 clock
-    set_reg_Msk(&RCC->APB2ENR, RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON);
+    STM32FXXXAdc1Clock(ON);
 
     // Configure ADC1 parameters
     ADC1->CR1 = 0; // Clear control register

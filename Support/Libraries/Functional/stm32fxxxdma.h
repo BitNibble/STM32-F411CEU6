@@ -91,10 +91,10 @@ typedef struct
 }STM32FXXX_DMA, STM32FXXX_DMA1, STM32FXXX_DMA2;
 /*************************************/
 /*************************************/
-STM32FXXX_DMA1* dma1_enable(void);
+void dma1_enable(void);
 STM32FXXX_DMA1* dma1(void);
 
-STM32FXXX_DMA2* dma2_enable(void);
+void dma2_enable(void);
 STM32FXXX_DMA2* dma2(void);
 /***** DMA Procedure & Function Header ******/
 /*** DMA ***/

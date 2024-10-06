@@ -16,7 +16,7 @@ static STM32FXXXFLASH_acr stm32fxxx_flash_acr;
 static STM32FXXXFLASH_sr stm32fxxx_flash_sr;
 static STM32FXXXFLASH_cr stm32fxxx_flash_cr;
 static STM32FXXXFLASH_optcr stm32fxxx_flash_optcr;
-static STM32FXXX_FLASH stm32fxxx_flash;
+static STM32FXXX_FLASH stm32fxxx_flash = {0};
 
 /*** File Procedure & Function Header ***/
 STM32FXXXFLASH_acr* stm32fxxx_flash_acr_inic(void);
@@ -270,7 +270,7 @@ STM32FXXXFLASH_optcr* stm32fxxx_flash_optcr_inic(void)
 	return &stm32fxxx_flash_optcr;
 }
 /*** INIC Procedure & Function Definition ***/
-STM32FXXX_FLASH* flash_enable(void)
+void flash_enable(void)
 {
 	/*** FLASH Bit Mapping Link ***/
 	stm32fxxx_flash.acr = stm32fxxx_flash_acr_inic();
@@ -281,7 +281,7 @@ STM32FXXX_FLASH* flash_enable(void)
 	stm32fxxx_flash.optkeyr = STM32FXXXFLASH_optkeyr_optkey;
 	stm32fxxx_flash.nvic = STM32FXXXFLASH_nvic;
 
-	return &stm32fxxx_flash;
+	//return &stm32fxxx_flash;
 }
 
 STM32FXXX_FLASH* flash(void){ return (STM32FXXX_FLASH*) &stm32fxxx_flash; }

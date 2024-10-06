@@ -26,7 +26,7 @@ typedef struct
 	void (*clock)(uint8_t state);
 }STM32FXXX_CRC;
 
-STM32FXXX_CRC* crc_enable(void);
+void crc_enable(void);
 STM32FXXX_CRC* crc(void);
 
 /***** CRC Procedure & Function Header ******/
