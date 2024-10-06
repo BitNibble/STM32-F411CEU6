@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _74HC595_H_
 	#define _74HC595_H_
+
 /*** File Library ***/
 #include <inttypes.h>
 /*** Global Constant & Macro ***/

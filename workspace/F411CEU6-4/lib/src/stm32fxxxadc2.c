@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc2.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variables ***/
 //#ifdef STM32F446xx
 // ADC2

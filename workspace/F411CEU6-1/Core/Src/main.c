@@ -35,7 +35,12 @@ note:
 setup stm32f411ceu6 to work with adapted stm32f446re private libraries.
 ********************************************************************************/
 #include "main.h"
-#include "stm32fxxxmapping.h"
+
+#include "stm32fxxxrcc.h"
+#include "stm32fxxxrtc.h"
+#include "armsystick.h"
+#include "stm32fxxxgpio.h"
+
 #include "armlcd.h"
 #include "armfunction.h"
 
@@ -43,46 +48,49 @@ char str[33];
 
 int main(void)
 {
-  STM32FXXX_enable();
+	rcc_start();
+	systick_start();
+	rtc_enable();
+	gpiob_enable();
+	gpioc_enable();
 
-  rtc()->inic(1);
+	rtc()->inic(1);
 
-  char vecT[8]; // for calendar
+	char vecT[8]; // for calendar
 
-  RCC->AHB1ENR |= (RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN);
+	RCC->AHB1ENR |= (RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN);
 
-  ARMLCD0_enable(GPIOB);
-  FUNC_enable();
+	ARMLCD0_enable(GPIOB);
+	FUNC_enable();
 
-  GPIOC->MODER |= GPIO_MODER_MODER13_0;
+	GPIOC->MODER |= GPIO_MODER_MODER13_0;
 
-  while (1)
-  {
-	  lcd0()->gotoxy(0,0);
-	  lcd0()->string_size("Welcome",7);
-	  lcd0()->gotoxy(1,0);
-	  lcd0()->string_size(func()->ftoa((double)33/654,8),20);
+	while (1){
+		lcd0()->gotoxy(0,0);
+		lcd0()->string_size("Welcome",7);
+		lcd0()->gotoxy(1,0);
+		lcd0()->string_size(func()->ftoa((double)33/654,8),20);
 
-	  lcd0()->gotoxy(2,0);
-	  //lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->i32toa(count5),6); lcd0()->string_size(func()->i32toa(count6),6);
-	  //lcd0()->string_size(func()->print_binary(16,tim1()->cr1->reg),17);
-	  rtc()->tr2vec(vecT);
-	  func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
-	  lcd0()->string_size(str,20);
+		lcd0()->gotoxy(2,0);
+		//lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->i32toa(count5),6); lcd0()->string_size(func()->i32toa(count6),6);
+		//lcd0()->string_size(func()->print_binary(16,tim1()->cr1->reg),17);
+		rtc()->tr2vec(vecT);
+		func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
+		lcd0()->string_size(str,20);
 
-	  _delay_ms(1000);
-	  GPIOC->ODR |= GPIO_ODR_ODR_13;
-	  _delay_ms(1000);
-	  GPIOC->ODR &= ~GPIO_ODR_ODR_13;
-  }
+		_delay_ms(1000);
+		GPIOC->ODR |= GPIO_ODR_ODR_13;
+		_delay_ms(1000);
+		GPIOC->ODR &= ~GPIO_ODR_ODR_13;
+	}
 }
 
 void Error_Handler(void)
 {
-  __disable_irq();
-  while (1)
-  {
-  }
+	__disable_irq();
+	while (1)
+	{
+	}
 }
 #ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)

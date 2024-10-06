@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXFLASH_H_
 	#define _STM32FXXXFLASH_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** Macros ***/

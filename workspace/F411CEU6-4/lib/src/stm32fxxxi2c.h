@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXI2C_H_
 	#define _STM32FXXXI2C_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /******/

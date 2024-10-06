@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxcrc.h"
 
-#define ON 1
-#define OFF 0
 /***File Variable ***/
 static STM32FXXX_CRC stm32fxxx_crc = {0};
 

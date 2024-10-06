@@ -10,7 +10,6 @@ Comment:
 *******************************************************************************/
 /*** File Library ***/
 #include <stm32fxxxrcc.h>
-#include "armquery.h"
 
 /*** File Variables ***/
 static STM32FXXXRCCPLL stm32fxxx_rcc_pll;
@@ -383,6 +382,7 @@ STM32FXXXRCCPLLSAI* stm32fxxx_rcc_pllsai_inic(void)
 /*** INIC Procedure & Function Definition ***/
 void rcc_enable(void)
 {
+	rcc_start();
 	/*** RCC Bit Mapping Link ***/
 	stm32fxxx_rcc.instance = RCC;
 	stm32fxxx_rcc.prescaler = STM32FXXXPrescaler;

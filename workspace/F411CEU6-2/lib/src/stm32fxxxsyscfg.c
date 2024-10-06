@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxsyscfg.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variables ***/
 static SYSCFG_memrmp memrmp;
 static SYSCFG_pmc pmc;

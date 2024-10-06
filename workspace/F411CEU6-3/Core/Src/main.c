@@ -32,7 +32,11 @@ note:
 test bit access
 ********************************************************************************/
 #include "main.h"
-#include "stm32fxxxmapping.h"
+
+#include "stm32fxxxrcc.h"
+#include "armsystick.h"
+#include "stm32fxxxgpio.h"
+
 #include "armlcd.h"
 #include "armfunction.h"
 
@@ -41,9 +45,9 @@ char time[12];
 
 int main(void)
 {
-	STM32FXXX_enable();
-
-	rtc()->inic(1); // 0 - LSI, 1 - LSE, 2 - LSECLK
+	rcc_start();
+	systick_start();
+	gpiob_enable();
 
 	ARMLCD0_enable(GPIOB);
 	FUNC_enable();
@@ -56,18 +60,12 @@ int main(void)
 /*******************************************************************************/
 /*******************************************************************************/
 
-
-
-
-
-/*******************************************************************************/
-/*******************************************************************************/
 void Error_Handler(void)
 {
-  __disable_irq();
-  while (1)
-  {
-  }
+	__disable_irq();
+	while (1)
+	{
+	}
 }
 #ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)

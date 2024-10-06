@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXCRC_H_
 	#define _STM32FXXXCRC_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** CRC TypeDef ***/

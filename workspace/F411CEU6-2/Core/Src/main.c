@@ -27,7 +27,13 @@ timer testing. At 25Mhz and STM32FXXXPrescaler(1, 1, 1, 0);
 - Callback function for timer 1 CC
 ********************************************************************************/
 #include "main.h"
-#include "stm32fxxxmapping.h"
+
+#include "stm32fxxxrcc.h"
+#include "stm32fxxxrtc.h"
+#include "armsystick.h"
+#include "stm32fxxxgpio.h"
+#include "stm32fxxxtim1and8.h"
+
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
@@ -74,134 +80,140 @@ void tim1_cc2_callback(void){
 
 int main(void)
 {
-  STM32FXXX_enable();
-  //rtc()->inic(1); // 1 - LSE 0 - LSI
+	rcc_start();
+	systick_start();
+	rtc_enable();
+	gpioa_enable();
+	gpiob_enable();
+	gpioc_enable();
+	tim1_enable();
 
-  PA = EXPLODE_enable();
+	rtc()->inic(1);
 
-  gpiob()->clock(on); // lcd and i2c
-  gpioc()->clock(on); // gpioc13
-  gpioa()->clock(on); // timer 1 pwm af channel 1 and K0 button
+	PA = EXPLODE_enable();
 
-  i2c.Instance = (I2C_TypeDef*) i2c1_instance();
+	gpiob()->clock(ON); // lcd and i2c
+	gpioc()->clock(ON); // gpioc13
+	gpioa()->clock(ON); // timer 1 pwm af channel 1 and K0 button
 
-  //setup i2c io
-  //rcc()->instance->apb1enr.par.i2c1en = 1;
-  set_reg_Msk(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN_Msk, RCC_APB1ENR_I2C1EN_Pos, 1);
-  //PB5 I2C1_SMBA
-  //gpiob()->instance->afr.par.pin_6 = 4; // PB6 AF4 (I2C1..3) I2C1_SCL
-  //gpiob()->instance->afr.par.pin_7 = 4; // PB7 AF4 (I2C1..3) I2C1_SDA
-  //gpiob()->instance->moder.par.pin_6 = 1;
-  //gpiob()->instance->moder.par.pin_7 = 1;
-  //gpiob()->instance->pupdr.par.pin_6 = 1;
-  //gpiob()->instance->pupdr.par.pin_7 = 1;
+	i2c.Instance  = I2C1;
 
-  //setup i2c parameters
-  //i2c1_instance()->cr2.par.freq = query()->pclk1 / 1000000;
-  //i2c1_instance()->trise.par.trise = (query()->pclk1 / 1000000) + 1;
-  i2c.Init.ClockSpeed = 100000;
-  i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  i2c.Init.OwnAddress1 = 'A';
-  i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  i2c.Init.OwnAddress2 = 'A';
-  i2c.Init.GeneralCallMode = I2C_GENERALCALL_ENABLE;
-  i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	//setup i2c io
+	//rcc()->instance->apb1enr.par.i2c1en = 1;
+	set_reg_Msk(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN_Msk, RCC_APB1ENR_I2C1EN_Pos, 1);
+	//PB5 I2C1_SMBA
+	//gpiob()->instance->afr.par.pin_6 = 4; // PB6 AF4 (I2C1..3) I2C1_SCL
+	//gpiob()->instance->afr.par.pin_7 = 4; // PB7 AF4 (I2C1..3) I2C1_SDA
+	//gpiob()->instance->moder.par.pin_6 = 1;
+	//gpiob()->instance->moder.par.pin_7 = 1;
+	//gpiob()->instance->pupdr.par.pin_6 = 1;
+	//gpiob()->instance->pupdr.par.pin_7 = 1;
 
-  //Initialise parameters
-  if (HAL_I2C_Init(&i2c) != HAL_OK)
-  {
-	  Error_Handler();
-  }
+	//setup i2c parameters
+	//i2c1_instance()->cr2.par.freq = query()->pclk1 / 1000000;
+	//i2c1_instance()->trise.par.trise = (query()->pclk1 / 1000000) + 1;
+	i2c.Init.ClockSpeed = 100000;
+	i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
+	i2c.Init.OwnAddress1 = 'A';
+	i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	i2c.Init.OwnAddress2 = 'A';
+	i2c.Init.GeneralCallMode = I2C_GENERALCALL_ENABLE;
+	i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 
-  ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
-  FUNC_enable();
+	//Initialise parameters
+	if (HAL_I2C_Init(&i2c) != HAL_OK)
+	{
+		Error_Handler();
+	}
 
-  //gpioc()->instance->moder.par.pin_1 = 1;
-  set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODE13_Msk, GPIO_MODER_MODE13_Pos, 1);
+	ARMLCD0_enable((GPIO_TypeDef*)gpiob()->instance);
+	FUNC_enable();
 
-  stm()->tim1->nvic(1);
-  //stm()->tim1->nvic(17);
-  stm()->tim1->clock(on);
+	//gpioc()->instance->moder.par.pin_1 = 1;
+	set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODE13_Msk, GPIO_MODER_MODE13_Pos, 1);
 
-  set_reg_Msk(&GPIOA->AFR[0], GPIO_AFRL_AFSEL7_Msk, GPIO_AFRL_AFSEL7_Pos, 1); // pin 7 af tim1ch1n
-  set_reg_Msk(&GPIOA->AFR[1], GPIO_AFRH_AFSEL8_Msk, GPIO_AFRH_AFSEL8_Pos, 1); // pin 8 af tim1ch1
-  set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE7_Msk, GPIO_MODER_MODE7_Pos, 2); // AF enable
-  set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE8_Msk, GPIO_MODER_MODE8_Pos, 2); // AF enable
+	tim1()->nvic(1);
+	//stm()->tim1->nvic(17);
+	tim1()->clock(ON);
 
-  set_reg_Msk(&TIM1->CCMR1, TIM_CCMR1_OC1M_Msk, TIM_CCMR1_OC1M_Pos, 6);
-  set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1NE_Msk, TIM_CCER_CC1NE_Pos, 1);
-  set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1E_Msk, TIM_CCER_CC1E_Pos, 1);
-  set_reg_Msk(&TIM1->BDTR, TIM_BDTR_MOE_Msk, TIM_BDTR_MOE_Pos, 1);
-  TIM1->ARR = 0xFFFF;
-  // Compare
-  TIM1->CCR1 = 1000;
-  TIM1->CCR2 = 60000;
-  // pre-scaler
-  TIM1->PSC = 1;
-  // interrupt
-  set_reg_Msk(&TIM1->DIER, TIM_DIER_CC1IE_Msk, TIM_DIER_CC1IE_Pos, 1);
-  set_reg_Msk(&TIM1->DIER, TIM_DIER_CC2IE_Msk, TIM_DIER_CC2IE_Pos, 1);
-  // other
-  //tim1()->instance->dier.tim1and8_par.comie = 1;
-  //tim1()->instance->dier.tim1and8_par.tie = 0;
-  //tim1()->instance->dier.tim1and8_par.bie = 0;
-  //
-  //tim1()->instance->dier.tim1and8_par.ude = 1;
-  //tim1()->instance->dier.tim1and8_par.cc1de = 1;
+	set_reg_Msk(&GPIOA->AFR[0], GPIO_AFRL_AFSEL7_Msk, GPIO_AFRL_AFSEL7_Pos, 1); // pin 7 af tim1ch1n
+	set_reg_Msk(&GPIOA->AFR[1], GPIO_AFRH_AFSEL8_Msk, GPIO_AFRH_AFSEL8_Pos, 1); // pin 8 af tim1ch1
+	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE7_Msk, GPIO_MODER_MODE7_Pos, 2); // AF enable
+	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE8_Msk, GPIO_MODER_MODE8_Pos, 2); // AF enable
 
-  // Enable (Start/Stop)
-  set_reg_Msk(&TIM1->CR1, TIM_CR1_ARPE_Msk, TIM_CR1_ARPE_Pos, 1);
-  set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, 1);
+	set_reg_Msk(&TIM1->CCMR1, TIM_CCMR1_OC1M_Msk, TIM_CCMR1_OC1M_Pos, 6);
+	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1NE_Msk, TIM_CCER_CC1NE_Pos, 1);
+	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1E_Msk, TIM_CCER_CC1E_Pos, 1);
+	set_reg_Msk(&TIM1->BDTR, TIM_BDTR_MOE_Msk, TIM_BDTR_MOE_Pos, 1);
+	TIM1->ARR = 0xFFFF;
+	// Compare
+	TIM1->CCR1 = 1000;
+	TIM1->CCR2 = 60000;
+	// pre-scaler
+	TIM1->PSC = 1;
+	// interrupt
+	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC1IE_Msk, TIM_DIER_CC1IE_Pos, 1);
+	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC2IE_Msk, TIM_DIER_CC2IE_Pos, 1);
+	// other
+	//tim1()->instance->dier.tim1and8_par.comie = 1;
+	//tim1()->instance->dier.tim1and8_par.tie = 0;
+	//tim1()->instance->dier.tim1and8_par.bie = 0;
+	//
+	//tim1()->instance->dier.tim1and8_par.ude = 1;
+	//tim1()->instance->dier.tim1and8_par.cc1de = 1;
 
-  char vecT[8]; // for calendar
-  //char vecD[8]; // for calendar
-  //rtc()->Year(24);
-  //rtc()->Month(1);
-  //rtc()->Day(1);
-  //rtc()->Hour(12);
-  //rtc()->Minute(0);
-  //rtc()->Second(0);
-  cdir = 1;
+	// Enable (Start/Stop)
+	set_reg_Msk(&TIM1->CR1, TIM_CR1_ARPE_Msk, TIM_CR1_ARPE_Pos, 1);
+	set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, 1);
 
-  //HAL_I2C_Master_Transmit( &i2c, devaddr, pdata, size, timeout );
+	char vecT[8]; // for calendar
+	//char vecD[8]; // for calendar
+	//rtc()->Year(24);
+	//rtc()->Month(1);
+	//rtc()->Day(1);
+	//rtc()->Hour(12);
+	//rtc()->Minute(0);
+	//rtc()->Second(0);
+	cdir = 1;
 
-  //stm()->rtc->BckWrite(2,45);
+	//HAL_I2C_Master_Transmit( &i2c, devaddr, pdata, size, timeout );
 
-  while (1)
-  {
-	  /*** preamble ***/
-	  PA.update(&PA.par, GPIOA->IDR);
-	  /******/
+	//stm()->rtc->BckWrite(2,45);
 
-	  lcd0()->gotoxy(0,0);
-	  lcd0()->string_size(func()->ui32toa(TIM1->ARR),6); lcd0()->string_size(func()->ui32toa(TIM1->CCR1),6); lcd0()->string_size(func()->ui32toa(TIM1->CCR2),6);
+	while (1){
+		/*** preamble ***/
+		PA.update(&PA.par, GPIOA->IDR);
+		/******/
 
-	  //lcd0()->gotoxy(1,0);
-	  //lcd0()->string_size(func()->ui32toa(count1),6); lcd0()->string_size(func()->i32toa(count2),6); lcd0()->string_size(func()->i32toa(count3),6);
+		lcd0()->gotoxy(0,0);
+		lcd0()->string_size(func()->ui32toa(TIM1->ARR),6); lcd0()->string_size(func()->ui32toa(TIM1->CCR1),6); lcd0()->string_size(func()->ui32toa(TIM1->CCR2),6);
 
-	  lcd0()->gotoxy(2,0);
-	  //lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->i32toa(count5),6); lcd0()->string_size(func()->i32toa(count6),6);
-	  //lcd0()->string_size(func()->print_binary(16,tim1()->cr1->reg),17);
-	  rtc()->tr2vec(vecT);
-	  func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
-	  lcd0()->string_size(str,14);
+		//lcd0()->gotoxy(1,0);
+		//lcd0()->string_size(func()->ui32toa(count1),6); lcd0()->string_size(func()->i32toa(count2),6); lcd0()->string_size(func()->i32toa(count3),6);
 
-	  lcd0()->gotoxy(3,0);
-	  //lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->ui32toa(count5),6); lcd0()->string_size(func()->ui32toa(count7),6);
-	  //lcd0()->string_size(func()->print_v2("pclk1: %d", query()->pclk1()),14);
-	  lcd0()->string(func()->i32toa(stm()->rtc->BckRead(2)));
+		lcd0()->gotoxy(2,0);
+		//lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->i32toa(count5),6); lcd0()->string_size(func()->i32toa(count6),6);
+		//lcd0()->string_size(func()->print_binary(16,tim1()->cr1->reg),17);
+		rtc()->tr2vec(vecT);
+		func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
+		lcd0()->string_size(str,14);
 
-  }
+		lcd0()->gotoxy(3,0);
+		//lcd0()->string_size(func()->ui32toa(count4),6); lcd0()->string_size(func()->ui32toa(count5),6); lcd0()->string_size(func()->ui32toa(count7),6);
+		//lcd0()->string_size(func()->print_v2("pclk1: %d", query()->pclk1()),14);
+		lcd0()->string(func()->i32toa(rtc()->BckRead(2)));
+
+	}
 }
 /*** END MAIN ***/
 
 void Error_Handler(void)
 {
-  __disable_irq();
-  while (1)
-  {
-  }
+	__disable_irq();
+	while (1)
+	{
+	}
 }
 #ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)

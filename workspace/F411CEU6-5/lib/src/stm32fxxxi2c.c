@@ -9,7 +9,7 @@ Comment:
 
 *******************************************************************************/
 #include "stm32fxxxi2c.h"
-#include "armquery.h"
+
 /*** File Variable ***/
 static STM32FXXX_I2C1_Handler stm32fxxx_i2c1 = {0};
 static STM32FXXX_I2C2_Handler stm32fxxx_i2c2 = {0};
@@ -21,7 +21,7 @@ void STM32FXXXI2c_SclClock(I2C_TypeDef* instance, uint32_t sclclock) {
     instance->CR1 |= I2C_CR1_SWRST;  // Set SWRST bit
     instance->CR1 &= ~I2C_CR1_SWRST; // Clear SWRST bit to release the reset
     // Set SCL frequency
-    uint32_t pclk1 = query()->pclk1(); // Get APB1 clock frequency in Hz
+    uint32_t pclk1 = getpclk1(); // Get APB1 clock frequency in Hz
     uint32_t freq = pclk1 / 1000000; // Frequency in MHz
     instance->CR2 &= ~I2C_CR2_FREQ; // Clear the FREQ bits
     instance->CR2 |= (freq & I2C_CR2_FREQ); // Set the FREQ field in CR2

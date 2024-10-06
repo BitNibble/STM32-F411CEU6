@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc3.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variables ***/
 // ADC3
 static STM32FXXX_ADC3 stm32fxxx_adc3 = {0};

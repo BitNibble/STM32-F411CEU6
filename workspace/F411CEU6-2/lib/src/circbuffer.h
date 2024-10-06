@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _CIRCBUFFER_H_
 	#define _CIRCBUFFER_H_
+
 /*** Library ***/
 #include <inttypes.h>
 /*** Define & Macro ***/

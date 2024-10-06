@@ -12,6 +12,7 @@ Comment:
 ************************************************************************/
 #ifndef _ARMFUNCTION_H_
 	#define _ARMFUNCTION_H_
+
 /*** Global Library ***/
 #include <inttypes.h>
 #include "armlcd.h"

@@ -11,9 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxrtc.h"
 
-#define ON 1
-#define OFF 0
-
 #define RTC_CLOCK_ENABLE_BIT 15
 #define MAX_BACKUP_REGISTERS 80
 #define BACKUP_REGISTER_BITS 8

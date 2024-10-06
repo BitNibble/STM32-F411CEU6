@@ -21,7 +21,11 @@ GPIO PB8 - D6
 GPIO PB9 - D7
 ********************************************************************************/
 #include "main.h"
-#include "stm32fxxxmapping.h"
+
+#include "stm32fxxxrcc.h"
+#include "armsystick.h"
+#include "stm32fxxxgpio.h"
+
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
@@ -33,18 +37,20 @@ EXPLODE PA;
 
 int main(void)
 {
-    STM32FXXX_enable();
+	rcc_start();
+	systick_start();
+	gpioa_enable(); // inputs k0 gpioa0
+	gpiob_enable(); // lcd0
+	gpioc_enable(); // gpioc13
+
     PA = EXPLODE_enable();
 
     uint8_t Menu = 6;
     uint8_t count_0 = 0;
     int number = 0;
 
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // lcd0
     ARMLCD0_enable(GPIOB);
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN; // gpioc13
     set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN; // inputs gpioa0
     set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODER0, GPIO_MODER_MODER0_Pos, 0);
     set_reg_Msk(&GPIOA->PUPDR, GPIO_PUPDR_PUPD0, GPIO_PUPDR_PUPD0_Pos, 1);
 

@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxpwr.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variable ***/
 static STM32FXXXPWR_cr stm32fxxx_pwr_cr;
 static STM32FXXXPWR_csr stm32fxxx_pwr_csr;

@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxtim2to5.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variables ***/
 static STM32FXXX_TIM2 stm32fxxx_tim2 = {0};
 static STM32FXXX_TIM3 stm32fxxx_tim3 = {0};

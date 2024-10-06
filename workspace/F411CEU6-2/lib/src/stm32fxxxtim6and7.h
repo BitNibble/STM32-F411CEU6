@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXTIM6AND7_H_
 	#define _STM32FXXXTIM6AND7_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** TIMER TypeDef***/

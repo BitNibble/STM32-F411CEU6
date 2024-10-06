@@ -10,7 +10,6 @@ Comment:
 *******************************************************************************/
 #include "armsystick.h"
 #include "stm32fxxxinstance.h"
-#include "armquery.h"
 /******/
 #define SYSTICK_ENABLE (1 << 0)
 #define SYSTICK_TICKINT (1 << 1)

@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXPWR_H_
 	#define _STM32FXXXPWR_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** PWR Bit Mapping TypeDef ***/

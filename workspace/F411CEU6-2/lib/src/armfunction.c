@@ -12,7 +12,6 @@ Comment:
 *************************************************************************/
 /*** File Library ***/
 #include "armfunction.h"
-#include "armquery.h"
 #include "armsystick.h"
 #include <stdio.h>
 #include <stdint.h>

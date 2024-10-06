@@ -13,8 +13,6 @@ Comment:
 #include "stm32fxxxnvic.h"
 #include "stm32fxxxrcc.h"
 
-#define ON 1
-#define OFF 0
 /*** File Variables ***/
 static STM32FXXX_TIM1 stm32fxxx_tim1 = {0};
 static STM32FXXX_TIM8 stm32fxxx_tim8 = {0};

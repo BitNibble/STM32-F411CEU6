@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXADC1_H_
 	#define _STM32FXXXADC1_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** ADC TypeDef ***/

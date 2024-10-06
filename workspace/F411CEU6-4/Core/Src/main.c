@@ -21,7 +21,13 @@ GPIO PB8 - D6
 GPIO PB9 - D7
 ********************************************************************************/
 #include "main.h"
-#include "stm32fxxxmapping.h"
+/******/
+#include "stm32fxxxrcc.h"
+#include "armsystick.h"
+#include "stm32fxxxgpio.h"
+#include "stm32fxxxrtc.h"
+#include "stm32fxxxadc1.h"
+/******/
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
@@ -38,15 +44,17 @@ char str[32];
 
 int main(void)
 {
-    STM32FXXX_enable();
+	rcc_start();
+	systick_start();
+
     HAL_Init();
     enable_fpu();
 
-    stm()->rtc_enable();
+    rtc_enable();
     adc1_enable();
-    stm()->gpioa_enable(); // button k0 gpioa0
-    stm()->gpiob_enable(); // lcd0
-    stm()->gpioc_enable(); // gpioc13
+    gpioa_enable(); // button k0 gpioa0
+    gpiob_enable(); // lcd0
+    gpioc_enable(); // gpioc13
 
     rtc()->inic(1);
     PA = EXPLODE_enable();
@@ -60,7 +68,7 @@ int main(void)
     uint16_t adc_value = 0;
     const char unit = (char)0xDF;
 
-    ARMLCD0_enable(stm()->gpiob->instance);
+    ARMLCD0_enable(gpiob()->instance);
 
     set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
 
@@ -72,17 +80,17 @@ int main(void)
 
     char vecD[8]; // for calendar date
     char vecT[8]; // for calendar time
-    PA.update(&PA.par, stm()->gpioa->instance->IDR);
+    PA.update(&PA.par, gpioa()->instance->IDR);
 
     while (1)  // Infinite loop
     {
-        PA.update(&PA.par, gpioa_instance()->IDR);
+        PA.update(&PA.par, gpioa()->instance->IDR);
 
         switch (Menu) {
         case 0:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Hour", 12);
-            gpioc_instance()->BSRR = GPIO_BSRR_BR13;
+            gpioc()->instance->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -107,7 +115,7 @@ int main(void)
         case 1:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Minute", 12);
-            stm()->gpioc->instance->BSRR = GPIO_BSRR_BS13;
+            gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {

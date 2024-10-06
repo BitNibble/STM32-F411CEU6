@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _STM32FXXXUSART_H_
 	#define _STM32FXXXUSART_H_
+
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** USART 1..6 Handler TypeDef ***/

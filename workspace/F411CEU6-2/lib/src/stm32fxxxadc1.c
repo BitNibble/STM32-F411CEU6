@@ -11,8 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc1.h"
 
-#define ON 1
-#define OFF 0
 #define ADC_STAB_DELAY 15
 
 /*** File Variables ***/

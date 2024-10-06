@@ -10,6 +10,7 @@ Comment:
 ************************************************************************/
 #ifndef _EXPLODE_H_
 	#define _EXPLODE_H_
+
 /*** Global Library ***/
 #include <inttypes.h>
 /*** Global Constant & Macro ***/

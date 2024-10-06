@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 #ifndef _BUFFER_H_
 	#define _BUFFER_H_
+
 /*** File Library ***/
 #include <inttypes.h>
 /*** File Constant & Macro ***/

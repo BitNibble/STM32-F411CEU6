@@ -10,7 +10,6 @@ Comment:
 *******************************************************************************/
 /*** File Library ***/
 #include "stm32fxxxusart.h"
-#include "armquery.h"
 #include <math.h>
 
 /*** File Variable ***/
