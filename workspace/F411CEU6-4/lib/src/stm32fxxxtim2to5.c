@@ -22,7 +22,7 @@ static STM32FXXX_TIM5 stm32fxxx_tim5 = {0};
 /************/
 void STM32FXXXTim2Clock(uint8_t state)
 {
-	if(state){RCC->APB1ENR |= (1 << 0);}else{RCC->APB1ENR &= ~(1 << 0);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM2EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM2EN_Pos);}
 }
 void STM32FXXXTim2Nvic(uint8_t state)
 { // 28
@@ -33,7 +33,7 @@ void STM32FXXXTim2Nvic(uint8_t state)
 /************/
 void STM32FXXXTim3Clock(uint8_t state)
 {
-	if(state){RCC->APB1ENR |= (1 << 1);}else{RCC->APB1ENR &= ~(1 << 1);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM3EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM3EN_Pos);}
 }
 void STM32FXXXTim3Nvic(uint8_t state)
 { // 29
@@ -44,7 +44,7 @@ void STM32FXXXTim3Nvic(uint8_t state)
 /************/
 void STM32FXXXTim4Clock(uint8_t state)
 {
-	if(state){RCC->APB1ENR |= (1 << 2);}else{RCC->APB1ENR &= ~(1 << 2);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM4EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM4EN_Pos);}
 }
 void STM32FXXXTim4Nvic(uint8_t state)
 { // 30
@@ -55,7 +55,7 @@ void STM32FXXXTim4Nvic(uint8_t state)
 /************/
 void STM32FXXXTim5Clock(uint8_t state)
 {
-	if(state){RCC->APB1ENR |= (1 << 3);}else{RCC->APB1ENR &= ~(1 << 3);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM5EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM5EN_Pos);}
 }
 void STM32FXXXTim5Nvic(uint8_t state)
 { // 50

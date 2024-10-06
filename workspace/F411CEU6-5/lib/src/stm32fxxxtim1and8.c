@@ -75,7 +75,7 @@ void STM32FXXXTim1Nvic(uint8_t value)
 /************/
 void STM32FXXXTim8Clock(uint8_t state)
 {
-	if(state){RCC->APB2ENR |= (1 << 1);}else{RCC->APB2ENR &= ~(1 << 1);}
+	if(state){RCC->APB2ENR |= (1 << RCC_APB2ENR_TIM8EN_Pos);}else{RCC->APB2ENR &= ~(1 << RCC_APB2ENR_TIM8EN_Pos);}
 }
 void STM32FXXXTim8Nvic(uint8_t value)
 { // 43, 44, 45, 46

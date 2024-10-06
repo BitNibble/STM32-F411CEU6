@@ -19,11 +19,11 @@ static STM32FXXX_ADC3 stm32fxxx_adc3 = {0};
 #ifdef STM32F446xx
 void STM32FXXXAdc3Clock(uint8_t state)
 {
-	if(bool){ rcc_instance()->apb2enr.par.adc3en = 1; }else{ rcc_instance()->apb2enr.par.adc3en = 0; }
+	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_ADC3EN); }else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_ADC3EN); }
 }
 void STM32FXXXAdc3Nvic(uint8_t state)
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 #endif
 /*** ADC3 INIC Procedure & Function Definition ***/

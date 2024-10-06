@@ -38,7 +38,7 @@ void STM32FXXXCRC_reset(void)
 }
 void STM32FXXXCRC_clock(uint8_t state)
 {
-	if(state){ RCC->AHB1ENR |= (1 << 12); } else{ RCC->AHB1ENR &= ~(1 << 12); }
+	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_CRCEN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_CRCEN_Pos); }
 }
 /*** INIC Procedure & Function Definition ***/
 void crc_enable(void)

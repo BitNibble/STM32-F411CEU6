@@ -41,9 +41,9 @@ static STM32FXXX_GPIOH stm32fxxx_gpioh = {0};
 void STM32FXXXGpioAclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 0);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOAEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 0);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOAEN_Pos);
     }
 }
 
@@ -65,9 +65,9 @@ void STM32FXXXGpioAafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioBclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 1);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOBEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 1);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOBEN_Pos);
     }
 }
 
@@ -89,9 +89,9 @@ void STM32FXXXGpioBafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioCclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 2);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOCEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 2);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOCEN_Pos);
     }
 }
 
@@ -113,9 +113,9 @@ void STM32FXXXGpioCafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioDclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 3);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIODEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 3);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIODEN_Pos);
     }
 }
 
@@ -137,9 +137,9 @@ void STM32FXXXGpioDafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioEclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 4);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOEEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 4);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOEEN_Pos);
     }
 }
 
@@ -162,9 +162,9 @@ void STM32FXXXGpioEafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioFclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 5);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOFEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 5);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOFEN_Pos);
     }
 }
 
@@ -186,9 +186,9 @@ void STM32FXXXGpioFafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioGclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 6);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOGEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 6);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOGEN_Pos);
     }
 }
 
@@ -210,9 +210,9 @@ void STM32FXXXGpioGafr(uint8_t pin, uint8_t data)
 void STM32FXXXGpioHclock(uint8_t enable)
 {
     if (enable) {
-        RCC->AHB1ENR |= (1 << 7);
+        RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOHEN_Pos);
     } else {
-        RCC->AHB1ENR &= ~(1 << 7);
+        RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOHEN_Pos);
     }
 }
 

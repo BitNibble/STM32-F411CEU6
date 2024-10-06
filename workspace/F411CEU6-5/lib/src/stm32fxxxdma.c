@@ -164,11 +164,11 @@ STM32FXXXDMA_func* stm32fxxx_dma2_func_inic(void);
 /*******************************************/
 void STM32FXXXDma1Clock(uint8_t state)
 {
-	if(state){ RCC->AHB1ENR |= (1 << 21); } else{ RCC->AHB1ENR &= ~(1 << 21); }
+	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_DMA1EN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_DMA1EN_Pos); }
 }
 void STM32FXXXDma2Clock(uint8_t state)
 {
-	if(state){ RCC->AHB1ENR |= (1 << 22); } else{ RCC->AHB1ENR &= ~(1 << 22); }
+	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_DMA2EN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_DMA2EN_Pos); }
 }
 /********************************************/
 /************* DMA1 Bit Mapping *************/

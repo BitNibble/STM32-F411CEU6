@@ -18,24 +18,24 @@ static STM32FXXX_TIM7 stm32fxxx_tim7 = {0};
 /************/
 /*** TIM6 ***/
 /************/
-void STM32FXXXTim6Clock(uint8_t bool)
+void STM32FXXXTim6Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 4);}else{RCC->APB1ENR &= ~(1 << 4);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM6EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM6EN_Pos);}
 }
-void STM32FXXXTim6Nvic(uint8_t bool)
+void STM32FXXXTim6Nvic(uint8_t state)
 { // 54
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM6_DAC_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM6_DAC_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM6_DAC_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM6_DAC_IRQn, 1);}
 }
 /************/
 /*** TIM7 ***/
 /************/
-void STM32FXXXTim7Clock(uint8_t bool)
+void STM32FXXXTim7Clock(uint8_t state)
 {
-	if(bool){RCC->APB1ENR |= (1 << 5);}else{RCC->APB1ENR &= ~(1 << 5);}
+	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM7EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM7EN_Pos);}
 }
-void STM32FXXXTim7Nvic(uint8_t bool)
+void STM32FXXXTim7Nvic(uint8_t state)
 { // 55
-	if(bool){set_bit_block(NVIC->ISER, 1, TIM7_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM7_IRQn, 1);}
+	if(state){set_bit_block(NVIC->ISER, 1, TIM7_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM7_IRQn, 1);}
 }
 #endif
 /*** TIM6 INIC Procedure & Function Definition ***/

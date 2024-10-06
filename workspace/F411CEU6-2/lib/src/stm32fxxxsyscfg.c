@@ -156,7 +156,7 @@ void SYSCFG_cfgr_fmpi2c1_scl(uint8_t state)
 /*** Other ***/
 void SYSCFG_Clock(uint8_t state)
 {
-	if(state){ RCC->AHB2ENR |= (1 << 14); } else{ RCC->AHB2ENR &= ~(1 << 14); }
+	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_SYSCFGEN_Pos); } else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SYSCFGEN_Pos); }
 
 }
 /***********************************************/

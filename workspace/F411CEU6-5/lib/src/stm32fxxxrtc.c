@@ -11,41 +11,18 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxrtc.h"
 
-#define RTC_CLOCK_ENABLE_BIT 15
+#define BYTE_BITS 8
 #define MAX_BACKUP_REGISTERS 80
-#define BACKUP_REGISTER_BITS 8
-#define HOUR_MASK 0x003F0000
-#define HOUR_TENS_SHIFT 20
-#define HOUR_UNITS_SHIFT 16
 #define MAX_HOUR 23
-#define MINUTE_MASK 0x00007F00
-#define MINUTE_TENS_SHIFT 12
-#define MINUTE_UNITS_SHIFT 8
 #define MAX_MINUTE 59
-#define SECOND_MASK 0x0000007F
-#define SECOND_TENS_SHIFT 4
-#define SECOND_UNITS_SHIFT 0
 #define MAX_SECOND 59
-#define YEAR_MASK 0x00FF0000
-#define YEAR_TENS_SHIFT 20
-#define YEAR_UNITS_SHIFT 16
 #define MAX_YEAR 99
-#define MONTH_MASK 0x00001F00
-#define MONTH_TENS_SHIFT 12
-#define MONTH_UNITS_SHIFT 8
 #define MAX_MONTH 12
 #define MIN_MONTH 1
-#define WEEKDAY_MASK 0x0000E000
-#define WEEKDAY_SHIFT 13
 #define MAX_WEEKDAY 7
 #define MIN_WEEKDAY 1
-#define DAY_MASK 0x0000003F
-#define DAY_TENS_SHIFT 4
-#define DAY_UNITS_SHIFT 0
 #define MAX_DAY 31
 #define MIN_DAY 1
-#define RTC_INIT_BIT (1 << 7)
-#define RTC_INITF_BIT (1 << 6)
 #define RTC_INIT_TIMEOUT 100
 #define RTCSEL_LSI    0x02 // LSI oscillator clock
 #define RTCSEL_LSE    0x01 // LSE oscillator clock
@@ -113,9 +90,9 @@ void STM32FXXXConfigureRtcClock(uint8_t isEnabled) {
     STM32FXXXRtcWriteEnable();
 
     if (isEnabled) {
-        RCC->BDCR |= (1 << RTC_CLOCK_ENABLE_BIT);  // Enable RTC clock
+        RCC->BDCR |= (1 << RCC_BDCR_RTCEN_Pos);  // Enable RTC clock
     } else {
-        RCC->BDCR &= ~(1 << RTC_CLOCK_ENABLE_BIT); // Disable RTC clock
+        RCC->BDCR &= ~(1 << RCC_BDCR_RTCEN_Pos); // Disable RTC clock
     }
 
     STM32FXXXRtcWriteDisable();
@@ -156,7 +133,7 @@ void STM32FXXXRtcInic(uint8_t clock)
 	//STM32FXXXRtcRegUnlock();
 	//STM32FXXXRtcRegWrite(&RTC->TR, 0x130000);
 	//STM32FXXXRtcRegWrite(&RTC->DR, 0x215124);
-	//RTC->CR &= (uint32_t) ~(1 << 5); // BYPSHAD: Disable Bypass the shadow registers
+	//RTC->CR &= (uint32_t) ~(1 << RTC_CR_BYPSHAD_Pos); // BYPSHAD: Disable Bypass the shadow registers
 	//STM32FXXXRtcWriteDisable();
 }
 
@@ -172,7 +149,7 @@ void STM32FXXXRtcBckWrite(uint8_t registerIndex, uint8_t data) {
     STM32FXXXRtcWriteEnable();
 
     // Write data to the specified backup register
-    set_bit_block(&RTC->BKP0R, BACKUP_REGISTER_BITS, (registerIndex * BACKUP_REGISTER_BITS), data);
+    set_bit_block(&RTC->BKP0R, BYTE_BITS, (registerIndex * BYTE_BITS), data);
 
     STM32FXXXRtcWriteDisable();
 }
@@ -182,7 +159,7 @@ uint8_t STM32FXXXRtcBckRead(uint8_t registerIndex) {
 
     // Validate the register index
     if (registerIndex < MAX_BACKUP_REGISTERS) {
-        value = get_bit_block(&RTC->BKP0R, BACKUP_REGISTER_BITS, (registerIndex * BACKUP_REGISTER_BITS));
+        value = get_bit_block(&RTC->BKP0R, BYTE_BITS, (registerIndex * BYTE_BITS));
     }
 
     return value;  // Returns 0 if the index is out of bounds
@@ -212,10 +189,10 @@ void STM32FXXXRtcHour(uint8_t hour) {
     Time = RTC->TR;
 
     // Clear current hour bits (ht and hu)
-    Time &= ~HOUR_MASK;
+    Time &= ~(RTC_TSTR_HT | RTC_TSTR_HU);
 
     // Set new hour bits (hu and ht)
-    Time |= (uint32_t)((u << HOUR_UNITS_SHIFT) | (t << HOUR_TENS_SHIFT));
+    Time |= (uint32_t)((u << RTC_TSTR_HU_Pos) | (t << RTC_TSTR_HT_Pos));
 
     // Write back to the Time register
     STM32FXXXRtcSetTr(Time);
@@ -248,10 +225,10 @@ void STM32FXXXRtcMinute(uint8_t minute) {
     Time = RTC->TR;
 
     // Clear current minute bits (mnt and mnu)
-    Time &= ~MINUTE_MASK;
+    Time &= ~(RTC_TSTR_MNT | RTC_TSTR_MNU);
 
     // Set new minute bits (mnu and mnt)
-    Time |= (uint32_t)((u << MINUTE_UNITS_SHIFT) | (t << MINUTE_TENS_SHIFT));
+    Time |= (uint32_t)((u << RTC_TSTR_MNU_Pos) | (t << RTC_TSTR_MNT_Pos));
 
     // Write back to the Time register
     STM32FXXXRtcSetTr(Time);
@@ -284,10 +261,10 @@ void STM32FXXXRtcSecond(uint8_t second) {
     Time = RTC->TR;
 
     // Clear current second bits (st and su)
-    Time &= ~SECOND_MASK;
+    Time &= ~(RTC_TSTR_ST | RTC_TSTR_SU);
 
     // Set new second bits (su and st)
-    Time |= (uint32_t)((u << SECOND_UNITS_SHIFT) | (t << SECOND_TENS_SHIFT));
+    Time |= (uint32_t)((u << RTC_TSTR_SU_Pos) | (t << RTC_TSTR_ST_Pos));
 
     // Write back to the Time register
     STM32FXXXRtcSetTr(Time);
@@ -320,10 +297,10 @@ void STM32FXXXRtcYear(uint8_t year) {
     Date = RTC->DR;
 
     // Clear current year bits (YT and YU)
-    Date &= ~YEAR_MASK;
+    Date &= ~(RTC_DR_YT | RTC_DR_YU);
 
     // Set new year bits (YU and YT)
-    Date |= (uint32_t)((u << YEAR_UNITS_SHIFT) | (t << YEAR_TENS_SHIFT));
+    Date |= (uint32_t)((u << RTC_DR_YU_Pos) | (t << RTC_DR_YT_Pos));
 
     // Write back to the Date register
     STM32FXXXRtcSetDr(Date);
@@ -356,10 +333,10 @@ void STM32FXXXRtcMonth(uint8_t month) {
     Date = RTC->DR;
 
     // Clear current month bits (MT and MU)
-    Date &= ~MONTH_MASK;
+    Date &= ~(RTC_TSDR_MT | RTC_TSDR_MU);
 
     // Set new month bits (MU and MT)
-    Date |= (uint32_t)((u << MONTH_UNITS_SHIFT) | (t << MONTH_TENS_SHIFT));
+    Date |= (uint32_t)((u << RTC_TSDR_MU_Pos) | (t << RTC_TSDR_MT_Pos));
 
     // Write back to the Date register
     STM32FXXXRtcSetDr(Date);
@@ -391,10 +368,10 @@ void STM32FXXXRtcWeekDay(uint8_t weekday) {
     Date = RTC->DR;
 
     // Clear current weekday bits (WDU)
-    Date &= ~WEEKDAY_MASK;
+    Date &= ~RTC_TSDR_WDU;
 
     // Set new weekday bits (WDU)
-    Date |= (uint32_t)(u << WEEKDAY_SHIFT);
+    Date |= (uint32_t)(u << RTC_TSDR_WDU_Pos);
 
     // Write back to the Date register
     STM32FXXXRtcSetDr(Date);
@@ -427,10 +404,10 @@ void STM32FXXXRtcDay(uint8_t day) {
     Date = RTC->DR;
 
     // Clear current day bits (DT and DU)
-    Date &= ~DAY_MASK;
+    Date &= ~(RTC_TSDR_DT | RTC_TSDR_DU);
 
     // Set new day bits (DU and DT)
-    Date |= (uint32_t)((u << DAY_UNITS_SHIFT) | (t << DAY_TENS_SHIFT));
+    Date |= (uint32_t)((u << RTC_TSDR_DU_Pos) | (t << RTC_TSDR_DT_Pos));
 
     // Write back to the Date register
     STM32FXXXRtcSetDr(Date);
@@ -441,60 +418,60 @@ void STM32FXXXRtcDay(uint8_t day) {
 
 void STM32FXXXRtcdr2vec(char* rtc_vect)
 {
-	if(RTC->ISR & (1 << 5)){ // RSF: Registers synchronisation flag
+	if(RTC->ISR & (1 << RTC_ISR_RSF_Pos)){ // RSF: Registers synchronisation flag
 		uint32_t dr = RTC->DR;
 		// YT
-		rtc_vect[0] = (uint8_t) (dr >> 20) & 0x0F;
+		rtc_vect[0] = (uint8_t) (dr >> RTC_DR_YT_Pos) & 0x0F;
 		rtc_vect[0] = rtc_bcd2dec(rtc_vect[0]);
 		// YU
-		rtc_vect[1] = (uint8_t) (dr >> 16) & 0x0F;
+		rtc_vect[1] = (uint8_t) (dr >> RTC_DR_YU_Pos) & 0x0F;
 		rtc_vect[1] = rtc_bcd2dec(rtc_vect[1]);
 		// WDU
-		rtc_vect[2] = (uint8_t) (dr >> 13) & 0x07;
+		rtc_vect[2] = (uint8_t) (dr >> RTC_DR_WDU_Pos) & 0x07;
 		rtc_vect[2] = rtc_bcd2dec(rtc_vect[2]);
 		// MT
-		rtc_vect[3] = (uint8_t) (dr >> 12) & 0x01;
+		rtc_vect[3] = (uint8_t) (dr >> RTC_DR_MT_Pos) & 0x01;
 		rtc_vect[3] = rtc_bcd2dec(rtc_vect[3]);
 		// MU
-		rtc_vect[4] = (uint8_t) (dr >> 8) & 0x0F;
+		rtc_vect[4] = (uint8_t) (dr >> RTC_DR_MU_Pos) & 0x0F;
 		rtc_vect[4] = rtc_bcd2dec(rtc_vect[4]);
 		// DT
-		rtc_vect[5] = (uint8_t) (dr >> 4) & 0x03;
+		rtc_vect[5] = (uint8_t) (dr >> RTC_DR_DT_Pos) & 0x03;
 		rtc_vect[5] = rtc_bcd2dec(rtc_vect[5]);
 		// DU
-		rtc_vect[6] = (uint8_t) dr & 0x0F;
+		rtc_vect[6] = (uint8_t) dr & RTC_DR_DU;
 		rtc_vect[6] = rtc_bcd2dec(rtc_vect[6]);
 		// Store Value
 		// Clear Registers synchronisation flag
-		RTC->ISR &= (uint32_t) ~(1 << 5);
+		RTC->ISR &= (uint32_t) ~(1 << RTC_ISR_RSF_Pos);
 	}
 }
 
 void STM32FXXXRtctr2vec(char* rtc_vect)
 {
-	if(RTC->ISR & (1 << 5)){ // RSF: Registers synchronisation flag
+	if(RTC->ISR & (1 << RTC_ISR_RSF_Pos)){ // RSF: Registers synchronisation flag
 		uint32_t tr = RTC->TR;
 		// ht
-		rtc_vect[0] = (uint8_t) (tr >> 20) & 0x03;
+		rtc_vect[0] = (uint8_t) (tr >> RTC_TR_HT_Pos) & 0x03;
 		rtc_vect[0] = rtc_bcd2dec(rtc_vect[0]);
 		// hu
-		rtc_vect[1] = (uint8_t) (tr >> 16) & 0x0F;
+		rtc_vect[1] = (uint8_t) (tr >> RTC_TR_HU_Pos) & 0x0F;
 		rtc_vect[1] = rtc_bcd2dec(rtc_vect[1]);
 		// mnt
-		rtc_vect[2] = (uint8_t) (tr >> 12) & 0x07;
+		rtc_vect[2] = (uint8_t) (tr >> RTC_TR_MNT_Pos) & 0x07;
 		rtc_vect[2] = rtc_bcd2dec(rtc_vect[2]);
 		// mnu
-		rtc_vect[3] = (uint8_t) (tr >> 8) & 0x0F;
+		rtc_vect[3] = (uint8_t) (tr >> RTC_TR_MNU_Pos) & 0x0F;
 		rtc_vect[3] = rtc_bcd2dec(rtc_vect[3]);
 		// st
-		rtc_vect[4] = (uint8_t) (tr >> 4) & 0x07;
+		rtc_vect[4] = (uint8_t) (tr >> RTC_TR_ST_Pos) & 0x07;
 		rtc_vect[4] = rtc_bcd2dec(rtc_vect[4]);
 		// su
-		rtc_vect[5] = (uint8_t) tr & 0x0F;
+		rtc_vect[5] = (uint8_t) tr & RTC_TR_SU;
 		rtc_vect[5] = rtc_bcd2dec(rtc_vect[5]);
 		// Store value
 		// Clear Registers synchronisation flag
-		RTC->ISR &= (uint32_t) ~(1 << 5);
+		RTC->ISR &= (uint32_t) ~(1 << RTC_ISR_RSF_Pos);
 	}
 }
 
@@ -544,22 +521,22 @@ uint8_t STM32FXXXRtc_get_Second(void){
 /*** AUX Procedure & Function Definition ***/
 void STM32FXXXPwrClock(uint8_t state)
 {
-	set_reg_block(&RCC->APB1ENR, 1, 28, state); // Power interface clock enable
+	set_reg_block(&RCC->APB1ENR, 1, RCC_APB1ENR_PWREN_Pos, state); // Power interface clock enable
 }
 void STM32FXXXBckSramClock(uint8_t state)
 {
 	#ifdef STM32F446xx
-		set_reg_block(&RCC->AHB1ENR, 1, 18, state); // Backup SRAM interface clock enable
+		set_reg_block(&RCC->AHB1ENR, 1, RCC_AHB1ENR_BKPSRAMEN_Pos, state); // Backup SRAM interface clock enable
 	#endif
-	set_reg_block(&RCC->AHB1LPENR, 1, 16, state); // Backup SRAM interface clock enable
+	set_reg_block(&RCC->AHB1LPENR, 1, RCC_AHB1LPENR_SRAM1LPEN_Pos, state); // Backup SRAM interface clock enable
 }
 void STM32FXXXRtcWriteEnable(void)
 {
-	PWR->CR |= (1 << 8); // Disable protection
+	PWR->CR |= (1 << PWR_CR_DBP_Pos); // Disable protection
 }
 void STM32FXXXRtcWriteDisable(void)
 {
-	PWR->CR &= (uint32_t) ~(1 << 8); // Enable protection
+	PWR->CR &= (uint32_t) ~(1 << PWR_CR_DBP_Pos); // Enable protection
 }
 void STM32FXXXRtcRegUnlock(void)
 {
@@ -574,18 +551,18 @@ void STM32FXXXRtcRegWrite(volatile uint32_t* rtc_reg, uint32_t value) {
     }
 
     // Set the INIT bit to enter initialization mode
-    RTC->ISR |= RTC_INIT_BIT; // INIT
+    RTC->ISR |= (1 << RTC_ISR_INIT_Pos); // INIT
 
     // Wait for the INITF flag to be set, indicating that the RTC is ready
     uint32_t rtc_time_out = RTC_INIT_TIMEOUT;
-    while (!(RTC->ISR & RTC_INITF_BIT) && rtc_time_out) {
+    while (!(RTC->ISR & (1 << RTC_ISR_INITF_Pos)) && rtc_time_out) {
         rtc_time_out--;
     }
 
     // Check for timeout
     if (!rtc_time_out) {
         // Optionally handle timeout error (e.g., return, assert, or log)
-        RTC->ISR &= ~RTC_INIT_BIT; // Clear INIT bit
+        RTC->ISR &= ~(1 << RTC_ISR_INIT_Pos); // Clear INIT bit
         return;
     }
 
@@ -593,15 +570,15 @@ void STM32FXXXRtcRegWrite(volatile uint32_t* rtc_reg, uint32_t value) {
     *rtc_reg = value;
 
     // Clear the INIT bit to exit initialization mode
-    RTC->ISR &= ~RTC_INIT_BIT;
+    RTC->ISR &= ~(1 << RTC_ISR_INIT_Pos);
 }
 void STM32FXXXRtcStopRead(void)
 {
-	RTC->ISR &= ~(1 << 5);
+	RTC->ISR &= ~(1 << RTC_ISR_RSF_Pos);
 }
 void STM32FXXXRtcWaitRead(void)
 { // Wait Data Ready
-	for(rtc_time_out = 300; !(RTC->ISR & (1 << 5)) && rtc_time_out; rtc_time_out--);
+	for(rtc_time_out = 300; !(RTC->ISR & (1 << RTC_ISR_RSF_Pos)) && rtc_time_out; rtc_time_out--);
 }
 //RTC
 void STM32FXXXRtcSetTr(uint32_t value)

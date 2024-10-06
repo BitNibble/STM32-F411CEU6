@@ -145,8 +145,8 @@ uint8_t STM32FXXXPWR_csr_wuf(void)
 /*** Other ***/
 void STM32FXXXPWR_clock(uint8_t state)
 {
-	if(state){ RCC->APB1ENR |= (1 << 28); }
-	else{ RCC->APB1ENR &= ~(1 << 28); }
+	if(state){ RCC->APB1ENR |= (1 << RCC_APB1ENR_PWREN_Pos); }
+	else{ RCC->APB1ENR &= ~(1 << RCC_APB1ENR_PWREN_Pos); }
 }
 /*** Auxiliar ***/
 STM32FXXXPWR_cr* stm32fxxx_pwr_cr_inic(void)

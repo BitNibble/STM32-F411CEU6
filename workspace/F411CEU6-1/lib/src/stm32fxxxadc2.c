@@ -20,11 +20,11 @@ static STM32FXXX_ADC2 stm32fxxx_adc2 = {0};
 #ifdef STM32F446xx
 void STM32FXXXAdc2Clock(uint8_t state)
 {
-	if(bool){ rcc_instance()->apb2enr.par.adc2en = 1; }else{ rcc_instance()->apb2enr.par.adc2en = 0; }
+	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_ADC2EN); }else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_ADC2EN); }
 }
 void STM32FXXXAdc2Nvic(uint8_t state)
 {
-	if(bool){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 #endif
 /*** ADC2 INIC Procedure & Function Definition ***/
