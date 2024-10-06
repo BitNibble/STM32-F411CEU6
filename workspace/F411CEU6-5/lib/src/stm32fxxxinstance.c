@@ -12,6 +12,7 @@ Comment:
 #include <stdarg.h>
 
 /****************************************/
+#define ONE 1
 #define TWO 2
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
@@ -318,10 +319,12 @@ uint8_t getpllq(void)
 {
 	return get_reg_block(RCC->PLLCFGR, 4, RCC_PLLCFGR_PLLQ_Pos);
 }
-uint8_t getpllr(void)
-{
-	return get_reg_block(RCC->PLLCFGR, 3, RCC_PLLCFGR_PLLR_Pos);
-}
+#ifdef STM32F446xx
+	uint8_t getpllr(void)
+	{
+		return get_reg_block(RCC->PLLCFGR, 3, RCC_PLLCFGR_PLLR_Pos);
+	}
+#endif
 uint32_t getpllsourceclk(void)
 {
 	uint32_t source;
