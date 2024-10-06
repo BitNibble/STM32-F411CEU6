@@ -379,7 +379,7 @@ uint32_t getpclk2(void){
 	return freq/gethppre2();
 }
 /*** FPU ***/
-void enable_fpu(void) {
+void fpu_enable(void) {
     // Set the CP10 and CP11 bits to enable access to the FPU
     uint32_t cpacr = SCB->CPACR; // Accessing the CPACR register
     cpacr |= (0xF << 20); // Set bits 20-23 to enable FPU for all modes

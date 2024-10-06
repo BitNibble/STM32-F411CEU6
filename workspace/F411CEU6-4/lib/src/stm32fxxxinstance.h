@@ -145,7 +145,7 @@ uint8_t getpllp(void);
 uint8_t getpllq(void);
 uint8_t getpllr(void);
 /*** FPU ***/
-void enable_fpu(void);
+void fpu_enable(void);
 
 /***
 

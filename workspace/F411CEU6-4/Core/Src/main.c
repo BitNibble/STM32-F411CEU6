@@ -48,9 +48,9 @@ int main(void)
 {
 	rcc_start();
 	systick_start();
+	fpu_enable();
 
     HAL_Init();
-    enable_fpu();
 
     rtc_enable();
     adc1_enable();
