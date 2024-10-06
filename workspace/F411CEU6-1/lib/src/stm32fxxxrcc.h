@@ -41,7 +41,6 @@ typedef struct
 	STM32FXXXRCCPLLI2S* plli2s;
 	STM32FXXXRCCPLLSAI* pllsai;
 	/*** Other ***/
-	void (*inic)(void);
 	void (*henable)(uint8_t hclock);
 	void (*hselect)(uint8_t sysclk);
 	void (*lenable)(uint8_t lclock);

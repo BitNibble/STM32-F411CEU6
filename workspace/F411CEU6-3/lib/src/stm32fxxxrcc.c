@@ -391,7 +391,6 @@ void rcc_enable(void)
 	stm32fxxx_rcc.plli2s = stm32fxxx_rcc_plli2s_inic();
 	stm32fxxx_rcc.pllsai = stm32fxxx_rcc_pllsai_inic();
 	/*** Other ***/
-	stm32fxxx_rcc.inic = rcc_start;
 	stm32fxxx_rcc.henable = STM32FXXXRccHEnable;
 	stm32fxxx_rcc.hselect = STM32FXXXRccHSelect;
 	stm32fxxx_rcc.lenable = STM32FXXXRccLEnable;
