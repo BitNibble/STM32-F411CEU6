@@ -71,21 +71,21 @@ void delayAsmMicroseconds(unsigned int us) {
 /******/
 void _delay_us(uint32_t us)
 {
+	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 	SysTick->LOAD = get_systick_us( );
 	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < us; );
-	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
 void _delay_10us(uint32_t dez_us)
 {
+	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 	SysTick->LOAD = get_systick_10us( );
 	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < dez_us; );
-	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
 void _delay_ms(uint32_t ms)
 {
+	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 	SysTick->LOAD = get_systick_ms( );
 	for( DelayCounter_0 = 0, SysTick->CTRL |= SYSTICK_ENABLE; DelayCounter_0 < ms; );
-	SysTick->CTRL &= (uint32_t) ~SYSTICK_ENABLE;
 }
 /******/
 void systick_start(void)
@@ -95,6 +95,7 @@ void systick_start(void)
 	SysTick->LOAD = 0x00FFFFFF;
 	SysTick->VAL = 0UL;
 	SysTick->CTRL |= (SYSTICK_TICKINT | SYSTICK_CLKSOURCE);
+	SysTick->CTRL |= SYSTICK_ENABLE;
 }
 /**** Interrupt Handler ****/
 void SysTick_Handler(void)

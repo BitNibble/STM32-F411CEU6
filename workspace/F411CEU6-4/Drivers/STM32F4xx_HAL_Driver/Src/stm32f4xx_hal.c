@@ -398,8 +398,6 @@ __weak void HAL_Delay(uint32_t Delay)
     wait += (uint32_t)(uwTickFreq);
   }
 
-  SysTick->CTRL |= (1 << 0);
-
   while((HAL_GetTick() - tickstart) < wait)
   {
   }
