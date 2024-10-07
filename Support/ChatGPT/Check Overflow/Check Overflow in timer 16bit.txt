@@ -1,0 +1,60 @@
+#include "stm32f4xx.h" // Include your STM32F4 header file
+#include <stdint.h>
+#include <stdbool.h>
+
+typedef struct {
+    uint32_t prescaler;
+    uint32_t autoReloadValue;
+} TimerConfig;
+
+bool CalculateTimerParameters(uint32_t desiredTime_ms, uint32_t baseTimerClock_Hz, TimerConfig *config) {
+    config->prescaler = 0; // Start with no prescaler
+    uint32_t currentTimerClock_Hz = baseTimerClock_Hz;
+
+    while (true) {
+        // Calculate the timer period in seconds
+        float desiredTime_s = desiredTime_ms / 1000.0f;
+
+        // Calculate the auto-reload value (ARR)
+        config->autoReloadValue = (uint32_t)(currentTimerClock_Hz * desiredTime_s) - 1;
+
+        // Check for overflow (assuming a 16-bit timer)
+        const uint32_t maxARR = 0xFFFF;
+
+        if (config->autoReloadValue <= maxARR) {
+            // No overflow, exit loop
+            break;
+        }
+
+        // Adjust prescaler (divide timer clock frequency by 2)
+        config->prescaler++;
+        currentTimerClock_Hz = baseTimerClock_Hz / (config->prescaler + 1);
+        
+        // Optional: Add a check to prevent an infinite loop if too many iterations occur
+        if (config->prescaler > 15) { // Limit prescaler to avoid excessive loops
+            return false; // Indicate failure
+        }
+    }
+
+    return true; // Successful calculation
+}
+
+int main(void) {
+    TimerConfig timerConfig;
+
+    // Base timer clock of 84 MHz, desired time of 5000 ms
+    if (CalculateTimerParameters(5000, 84000000, &timerConfig)) {
+        // Configure your timer with the obtained parameters
+        TIM_HandleTypeDef htim;
+        htim.Instance = TIMx; // Replace with your timer instance
+        htim.Init.Prescaler = timerConfig.prescaler;
+        htim.Init.Period = timerConfig.autoReloadValue;
+        // ... additional timer initialization code
+
+        HAL_TIM_Base_Init(&htim);
+        
+        // Start your timer, etc.
+    } else {
+        // Handle failure to find suitable parameters
+    }
+}
