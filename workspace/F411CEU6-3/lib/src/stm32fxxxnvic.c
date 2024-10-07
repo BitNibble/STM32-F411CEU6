@@ -51,9 +51,9 @@ void STM32FXXXNVIC_trigger(uint32_t IRQn)
 }
 void STM32FXXXNvic(uint8_t irq_num, uint8_t state) {
     if (state) {
-        set_bit_block(NVIC->ISER, 1, irq_num, 1);
+        set_bit_block(NVIC->ISER, 1, irq_num, ON);
     } else {
-        set_bit_block(NVIC->ICER, 1, irq_num, 0);
+        set_bit_block(NVIC->ICER, 1, irq_num, OFF);
     }
 }
 /*** INIC Procedure & Function Definition ***/

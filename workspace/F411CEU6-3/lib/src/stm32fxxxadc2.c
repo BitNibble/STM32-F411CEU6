@@ -20,7 +20,7 @@ static STM32FXXX_ADC2 stm32fxxx_adc2 = {0};
 #ifdef STM32F446xx
 void STM32FXXXAdc2Clock(uint8_t state)
 {
-	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_ADC2EN); }else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_ADC2EN); }
+	if(state){ RCC->APB2ENR |= RCC_APB2ENR_ADC2EN; }else{ RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN; }
 }
 void STM32FXXXAdc2Nvic(uint8_t state)
 {

@@ -24,9 +24,9 @@ void STM32FXXXTim1Clock(uint8_t state)
 {
 	//if(state){RCC->APB2ENR |= (1 << 0);}else{RCC->APB2ENR &= ~(1 << 0);}
 	if(state){
-		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 1);
+		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, ON);
 	}else{
-		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, 0);
+		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, OFF);
 	}
 }
 void STM32FXXXTim1Nvic(uint8_t value)
