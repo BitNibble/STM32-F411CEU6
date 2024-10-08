@@ -1,25 +1,10 @@
-/********************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * Author: Sergio Santos
-  * <sergio.salazar.santos@gmail.com>
-  * License: GNU General Public License
-  * Hardware: STM32
-  * Date: 28052023
-  * Comment:
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-********************************************************************************/
-/****** Comment
+/******************************************************************************
+Author: Sergio Santos
+<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
+Hardware: STM32
+Date: 28052023
+	Comment:
 LCD
 	PB3 - RS
 	PB4 - RW
@@ -28,8 +13,6 @@ LCD
 	PB7 - D5
 	PB8 - D6
 	PB9 - D7
-note:
-test bit access
 ********************************************************************************/
 #include "main.h"
 

@@ -1,14 +1,11 @@
-/********************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * Author: Sergio Santos
-  * <sergio.salazar.santos@gmail.com>
-  * License: GNU General Public License
-  * Hardware: STM32F4x1 mini_F4x1 Ver. V20 SN: 202005 DevEBox
-  * Board Site: mcudev.taobao.com
-  * Date: 28022024
-  * Comment
+/**********************************************************************
+Author: Sergio Santos
+<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
+Hardware: STM32F4x1 mini_F4x1 Ver. V20 SN: 202005 DevEBox
+Board Site: mcudev.taobao.com
+Date: 28022024
+	Comment:
 LCD
 	PB3 - RS
 	PB4 - RW
@@ -19,13 +16,7 @@ LCD
 	PB9 - D7
 LED Blinking
 	PC13 - LED blink
-note:
-timer testing. At 25Mhz and STM32FXXXPrescaler(1, 1, 1, 0);
-- uie is always enabled wonder why the option exists.
-- dimmer
-- testing race conditions
-- Callback function for timer 1 CC
-********************************************************************************/
+***********************************************************************/
 #include "main.h"
 
 #include "stm32fxxxrcc.h"
@@ -66,8 +57,6 @@ void tim1_cc1_callback(void){
 	//count8=tim1()->cnt->par.w0;
 	GPIOC->BSRR = GPIO_BSRR_BR13;
 }
-/**/
-/**/
 void tim1_cc2_callback(void){
 	//count3++;
 	TIM1->CCR1 += (cdir * 295);

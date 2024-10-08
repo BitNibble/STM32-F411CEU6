@@ -1,26 +1,11 @@
-/********************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * Author: Sergio Santos
-  * <sergio.salazar.santos@gmail.com>
-  * License: GNU General Public License
-  * Hardware: STM32F4x1 mini_F4x1 Ver. V20 SN: 202005 DevEBox
-  * Board Site: mcudev.taobao.com
-  * Date: 22022024
-  * Comment:
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-********************************************************************************/
-/****** Comment
+/**************************************************************************
+Author: Sergio Santos
+<sergio.salazar.santos@gmail.com>
+License: GNU General Public License
+Hardware: STM32F4x1 mini_F4x1 Ver. V20 SN: 202005 DevEBox
+Board Site: mcudev.taobao.com
+Date: 22022024
+	Comment:
 LCD
 	PB3 - RS
 	PB4 - RW
@@ -31,9 +16,7 @@ LCD
 	PB9 - D7
 LED Blinking
 	PB13 - LED blink
-note:
-setup stm32f411ceu6 to work with adapted stm32f446re private libraries.
-********************************************************************************/
+***************************************************************************/
 #include "main.h"
 
 #include "stm32fxxxrcc.h"
@@ -83,10 +66,6 @@ int main(void)
 		func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
 		lcd0()->string_size(str,20);
 
-		//_delay_ms(1000);
-		//GPIOC->ODR |= GPIO_ODR_ODR_13;
-		//_delay_ms(1000);
-		//GPIOC->ODR &= ~GPIO_ODR_ODR_13;
 	}
 }
 

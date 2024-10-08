@@ -56,4 +56,5 @@
 "./lib/src/stm32fxxxtim6and7.o"
 "./lib/src/stm32fxxxtim9to14.o"
 "./lib/src/stm32fxxxusart.o"
+"./lib/src/timer_irq.o"
 "./lib/src/znpid.o"

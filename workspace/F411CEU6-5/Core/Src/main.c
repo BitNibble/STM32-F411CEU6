@@ -1,4 +1,4 @@
-/********************************************************************************
+/****************************************************************************
 Title:
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -6,7 +6,7 @@ License: GNU General Public License
 File: main.c 22/09/2024
 Software: STM32CubeIDE v1.16.0 Build: 21983_20240628_1741 (UTC)
 Hardware: STM32F411CEU6 by DevBox
-
+	Comment:
 	Button K0:
 GPIO PA0 - Button
 	LED D2:
@@ -19,7 +19,7 @@ GPIO PB6 - D4
 GPIO PB7 - D5
 GPIO PB8 - D6
 GPIO PB9 - D7
-********************************************************************************/
+*****************************************************************************/
 #include "main.h"
 
 #include "stm32fxxxrcc.h"
