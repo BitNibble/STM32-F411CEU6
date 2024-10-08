@@ -60,7 +60,7 @@ typedef struct
 	/*** Bit Mapping ***/
 	STM32FXXXPWR_cr* cr;
 	STM32FXXXPWR_csr* csr;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 }STM32FXXX_PWR;
 

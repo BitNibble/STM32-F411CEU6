@@ -86,7 +86,7 @@ typedef struct
 	STM32FXXXDMAStreamx* stream[8];
 	/*** Bit Mapping ***/
 	STM32FXXXDMA_sr* sr;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 	STM32FXXXDMA_func* func;
 }STM32FXXX_DMA, STM32FXXX_DMA1, STM32FXXX_DMA2;

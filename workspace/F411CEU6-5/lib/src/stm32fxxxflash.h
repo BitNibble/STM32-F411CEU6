@@ -101,7 +101,7 @@ typedef struct
 	STM32FXXXFLASH_optcr* optcr;
 	void (*keyr)(uint32_t);
 	void (*optkeyr)(uint32_t);
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*nvic)(uint8_t state);
 }STM32FXXX_FLASH;
 

@@ -23,7 +23,7 @@ typedef struct
 	void (*idr)(uint8_t value);
 	uint8_t (*get_idr)(void);
 	void (*reset)(void);
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 }STM32FXXX_CRC;
 

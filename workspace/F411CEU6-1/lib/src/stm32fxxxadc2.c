@@ -26,6 +26,8 @@ void STM32FXXXAdc2Nvic(uint8_t state)
 {
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
+void STM32FXXXAdc2start(void){ set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON); };
+void STM32FXXXAdc2stop(void){ set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF); };
 #endif
 /*** ADC2 INIC Procedure & Function Definition ***/
 void adc2_enable(void)
@@ -37,7 +39,7 @@ void adc2_enable(void)
 		stm32fxxx_adc2.instance = ADC2;
 		stm32fxxx_adc2.common_instance = ADC123_COMMON;
 	#endif
-	// Other
+	// Clock and Nvic
 	stm32fxxx_adc2.clock = STM32FXXXAdc2Clock;
 	stm32fxxx_adc2.nvic = STM32FXXXAdc2Nvic;
 	//return &stm32fxxx_adc2;

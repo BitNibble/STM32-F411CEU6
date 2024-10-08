@@ -69,6 +69,8 @@ void STM32FXXXTim1Nvic(uint8_t value)
 	break;
 	}
 }
+void STM32FXXXTim1start(void){};
+void STM32FXXXTim1stop(void){};
 #ifdef STM32F446xx
 /************/
 /*** TIM8 ***/
@@ -108,6 +110,8 @@ void STM32FXXXTim8Nvic(uint8_t value)
 	break;
 	}
 }
+void STM32FXXXTim8start(void){};
+void STM32FXXXTim8stop(void){};
 
 #endif
 

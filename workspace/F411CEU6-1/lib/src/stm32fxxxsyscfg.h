@@ -81,7 +81,7 @@ typedef struct
 	SYSCFG_exticr4* exticr4;
 	SYSCFG_cmpcr* cmpcr;
 	SYSCFG_cfgr* cfgr;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 }STM32FXXX_SYSCFG;
 /*************************************/

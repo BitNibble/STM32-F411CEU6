@@ -19,7 +19,7 @@ typedef struct
 {
 	/*** BitField Mapping ***/
 	GPIO_TypeDef* instance;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*afr)(uint8_t pin, uint8_t data);
 	/*************/
 	void (*clock)( uint8_t state );

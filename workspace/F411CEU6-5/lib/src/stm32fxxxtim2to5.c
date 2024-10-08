@@ -28,6 +28,8 @@ void STM32FXXXTim2Nvic(uint8_t state)
 { // 28
 	if(state){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
+void STM32FXXXTim2start(void){};
+void STM32FXXXTim2stop(void){};
 /************/
 /*** TIM3 ***/
 /************/
@@ -39,6 +41,8 @@ void STM32FXXXTim3Nvic(uint8_t state)
 { // 29
 	if(state){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
+void STM32FXXXTim3start(void){};
+void STM32FXXXTim3stop(void){};
 /************/
 /*** TIM4 ***/
 /************/
@@ -50,6 +54,8 @@ void STM32FXXXTim4Nvic(uint8_t state)
 { // 30
 	if(state){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
+void STM32FXXXTim4start(void){};
+void STM32FXXXTim4stop(void){};
 /************/
 /*** TIM5 ***/
 /************/
@@ -61,6 +67,8 @@ void STM32FXXXTim5Nvic(uint8_t state)
 { // 50
 	if(state){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
+void STM32FXXXTim5start(void){};
+void STM32FXXXTim5stop(void){};
 /*** TIM2 INIC Procedure & Function Definition ***/
 void tim2_enable(void)
 {

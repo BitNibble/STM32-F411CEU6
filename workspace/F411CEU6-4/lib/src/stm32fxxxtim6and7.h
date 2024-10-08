@@ -19,9 +19,12 @@ typedef struct
 {
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
+	/*** Other ***/
+	void (*start)(void);
+	void (*stop)(void);
 }STM32FXXX_TIM6, STM32FXXX_TIM7;
 /************************/
 /*** INIC TIM 6 AND 7 ***/

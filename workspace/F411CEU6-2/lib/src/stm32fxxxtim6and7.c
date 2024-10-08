@@ -26,6 +26,8 @@ void STM32FXXXTim6Nvic(uint8_t state)
 { // 54
 	if(state){set_bit_block(NVIC->ISER, 1, TIM6_DAC_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM6_DAC_IRQn, 1);}
 }
+void STM32FXXXTim6start(void){};
+void STM32FXXXTim6stop(void){};
 /************/
 /*** TIM7 ***/
 /************/
@@ -37,6 +39,8 @@ void STM32FXXXTim7Nvic(uint8_t state)
 { // 55
 	if(state){set_bit_block(NVIC->ISER, 1, TIM7_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM7_IRQn, 1);}
 }
+void STM32FXXXTim7start(void){};
+void STM32FXXXTim7stop(void){};
 #endif
 /*** TIM6 INIC Procedure & Function Definition ***/
 void tim6_enable(void)

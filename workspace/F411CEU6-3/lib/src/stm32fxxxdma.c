@@ -1802,7 +1802,7 @@ void dma1_enable(void)
 	stm32fxxx_dma1.stream[7]->par = stm32fxxx_dma1_stream7_par;
 	stm32fxxx_dma1.stream[7]->m0a = stm32fxxx_dma1_stream7_m0a;
 	stm32fxxx_dma1.stream[7]->m1a = stm32fxxx_dma1_stream7_m1a;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_dma1.func = stm32fxxx_dma1_func_inic();
 	stm32fxxx_dma1.clock = STM32FXXXDma1Clock;
 	//return &stm32fxxx_dma1;
@@ -3441,7 +3441,7 @@ void dma2_enable(void)
 	stm32fxxx_dma2.stream[7]->par = stm32fxxx_dma2_stream7_par;
 	stm32fxxx_dma2.stream[7]->m0a = stm32fxxx_dma2_stream7_m0a;
 	stm32fxxx_dma2.stream[7]->m1a = stm32fxxx_dma2_stream7_m1a;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_dma2.func = stm32fxxx_dma2_func_inic();
 	stm32fxxx_dma2.clock = STM32FXXXDma2Clock;
 	//return &stm32fxxx_dma2;

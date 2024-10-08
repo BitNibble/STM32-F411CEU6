@@ -30,6 +30,8 @@ void STM32FXXXTim9Nvic(uint8_t state)
 { // 24
 	if(state){set_bit_block(NVIC->ISER, 1, TIM1_BRK_TIM9_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM1_BRK_TIM9_IRQn, 1);}
 }
+void STM32FXXXTim9start(void){};
+void STM32FXXXTim9stop(void){};
 /*************/
 /*** TIM10 ***/
 /*************/
@@ -41,6 +43,8 @@ void STM32FXXXTim10Nvic(uint8_t state)
 { // 25
 	if(state){set_bit_block(NVIC->ISER, 1, TIM1_UP_TIM10_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_UP_TIM10_IRQn, 1);}
 }
+void STM32FXXXTim10start(void){};
+void STM32FXXXTim10stop(void){};
 /*************/
 /*** TIM11 ***/
 /*************/
@@ -52,6 +56,8 @@ void STM32FXXXTim11Nvic(uint8_t state)
 { // 26
 	if(state){set_bit_block(NVIC->ISER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM1_TRG_COM_TIM11_IRQn, 1);}
 }
+void STM32FXXXTim11start(void){};
+void STM32FXXXTim11stop(void){};
 #ifdef STM32F446xx
 /*************/
 /*** TIM12 ***/
@@ -64,6 +70,8 @@ void STM32FXXXTim12Nvic(uint8_t state)
 { // 43
 	if(state){set_bit_block(NVIC->ISER, 1, TIM8_BRK_TIM12_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_BRK_TIM12_IRQn, 1);}
 }
+void STM32FXXXTim12start(void){};
+void STM32FXXXTim12stop(void){};
 /*************/
 /*** TIM13 ***/
 /*************/
@@ -79,6 +87,8 @@ void STM32FXXXTim13Nvic(uint8_t state)
 { // 44
 	if(state){set_bit_block(NVIC->ISER, 1, TIM8_UP_TIM13_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_UP_TIM13_IRQn, 1);}
 }
+void STM32FXXXTim13start(void){};
+void STM32FXXXTim13stop(void){};
 /*************/
 /*** TIM14 ***/
 /*************/
@@ -90,6 +100,8 @@ void STM32FXXXTim14Nvic(uint8_t state)
 { // 45
 	if(state){set_bit_block(NVIC->ISER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}else{set_bit_block(NVIC->ICER, 1, TIM8_TRG_COM_TIM14_IRQn, 1);}
 }
+void STM32FXXXTim14start(void){};
+void STM32FXXXTim14stop(void){};
 #endif
 /*** TIM9 Procedure & Function Definition ***/
 void tim9_enable(void)

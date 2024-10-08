@@ -73,7 +73,7 @@ void rtc_enable(void)
 	stm32fxxx_rtc.BckWrite = STM32FXXXRtcBckWrite;
 	stm32fxxx_rtc.BckRead = STM32FXXXRtcBckRead;
 	stm32fxxx_rtc.get_ss = rtc_get_ss;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
 	stm32fxxx_rtc.bck_sram_clock = STM32FXXXBckSramClock;
 	stm32fxxx_rtc.clock = STM32FXXXConfigureRtcClock;

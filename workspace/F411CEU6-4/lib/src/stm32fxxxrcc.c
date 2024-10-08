@@ -397,7 +397,7 @@ void rcc_enable(void)
 	stm32fxxx_rcc.hselect = STM32FXXXRccHSelect;
 	stm32fxxx_rcc.lenable = STM32FXXXRccLEnable;
 	stm32fxxx_rcc.lselect = STM32FXXXRccLSelect;
-	/*** Nvic ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_rcc.nvic = STM32FXXXRCC_nvic;
 	//return &stm32fxxx_rcc;
 }

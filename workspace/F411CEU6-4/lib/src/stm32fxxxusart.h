@@ -19,12 +19,15 @@ typedef struct
 {
 	/*** Bit Mapping ***/
 	USART_TypeDef* instance;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
+	/*** Other ***/
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
+	void (*start)(void);
+	void (*stop)(void);
 }STM32FXXX_USART1, STM32FXXX_USART2, STM32FXXX_USART3, STM32FXXX_USART6;
 // USART -> UART4,5
 typedef struct

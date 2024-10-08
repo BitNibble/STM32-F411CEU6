@@ -197,7 +197,7 @@ void pwr_enable(void)
 	/*** PWR Bit Mapping Link ***/
 	stm32fxxx_pwr.cr = stm32fxxx_pwr_cr_inic();
 	stm32fxxx_pwr.csr = stm32fxxx_pwr_csr_inic();
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_pwr.clock = STM32FXXXPWR_clock;
 	//return &stm32fxxx_pwr;
 }

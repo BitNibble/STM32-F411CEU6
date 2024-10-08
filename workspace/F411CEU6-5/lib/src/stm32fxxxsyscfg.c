@@ -245,7 +245,7 @@ void syscfg_enable(void)
 	stm32fxxx_syscfg.exticr4 = SYSCFG_exticr4_inic();
 	stm32fxxx_syscfg.cmpcr = SYSCFG_cmpcr_inic();
 	stm32fxxx_syscfg.cfgr = SYSCFG_cfgr_inic();
-	/*** Oyher ***/
+	/*** Clock and Nvic ***/
 	stm32fxxx_syscfg.clock = SYSCFG_Clock;
 	//return &stm32fxxx_syscfg;
 }
