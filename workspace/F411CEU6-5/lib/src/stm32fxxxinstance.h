@@ -146,6 +146,8 @@ uint8_t getpllq(void);
 uint8_t getpllr(void);
 /*** FPU ***/
 void fpu_enable(void);
+/*** ADC ***/
+float CalculateTemperature(uint16_t adc_value);
 
 /***
 

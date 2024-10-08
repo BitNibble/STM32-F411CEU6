@@ -11,8 +11,9 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc2.h"
 
+#define ADC_STAB_DELAY 15
+#define END_OF_CONVERSION_TIME_OUT 100
 /*** File Variables ***/
-//#ifdef STM32F446xx
 // ADC2
 static STM32FXXX_ADC2 stm32fxxx_adc2 = {0};
 /*** File Procedure & Function Header ***/
@@ -26,8 +27,12 @@ void STM32FXXXAdc2Nvic(uint8_t state)
 {
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
-void STM32FXXXAdc2start(void){ set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON); };
-void STM32FXXXAdc2stop(void){ set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF); };
+void STM32FXXXAdc2start(void){
+	set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
+}
+void STM32FXXXAdc2stop(void){
+	set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF);
+}
 #endif
 /*** ADC2 INIC Procedure & Function Definition ***/
 void adc2_enable(void)
@@ -39,9 +44,12 @@ void adc2_enable(void)
 		stm32fxxx_adc2.instance = ADC2;
 		stm32fxxx_adc2.common_instance = ADC123_COMMON;
 	#endif
-	// Clock and Nvic
+	/*** Clock and Nvic ***/
 	stm32fxxx_adc2.clock = STM32FXXXAdc2Clock;
 	stm32fxxx_adc2.nvic = STM32FXXXAdc2Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
+
 	//return &stm32fxxx_adc2;
 }
 

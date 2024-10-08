@@ -385,6 +385,17 @@ void fpu_enable(void) {
     cpacr |= (0xF << 20); // Set bits 20-23 to enable FPU for all modes
     SCB->CPACR = cpacr; // Write back to CPACR
 }
+/*** ADC ***/
+float CalculateTemperature(uint16_t adc_value) {
+    const float V_25 = 0.76f;  // Voltage at 25°C (in volts)
+    const float Avg_slope = 0.0025f;  // Average slope (in volts/°C)
+    const float V_ref = 3.3f;  // Reference voltage, typically 3.0V or 3.3V
+
+    float V_sense = ((float)adc_value / 4096) * V_ref;
+    float temperature = ((V_sense - V_25) / Avg_slope) + 25.0f;
+
+    return temperature;
+}
 
 /***
 TypeDef -> Instance -> Handler

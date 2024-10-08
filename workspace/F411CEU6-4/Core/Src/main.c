@@ -78,7 +78,7 @@ int main(void)
     set_reg_Msk(&GPIOA->PUPDR, GPIO_PUPDR_PUPD0, GPIO_PUPDR_PUPD0_Pos, 1);
 
     FUNC_enable();
-    ADC_TemperatureSetup();
+    adc1()->temperaturesetup();
 
     char vecD[8]; // for calendar date
     char vecT[8]; // for calendar time
@@ -272,7 +272,7 @@ int main(void)
                 count_1 = ADC_DELAY;
                 if (n_sample) {
                     n_sample--;
-                    adc_value += ADC_ReadTemperature();
+                    adc_value += adc1()->readtemperature();
                 } else {
                     n_sample = ADC_SAMPLE;
                     adc_value /= ADC_SAMPLE;  // Ensure proper averaging

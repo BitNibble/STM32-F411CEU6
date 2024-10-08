@@ -23,23 +23,19 @@ typedef struct
 	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
+	/*** Procedures ***/
+	void (*startconversion)(void);
+	void (*waitendofconversion)(void);
 	/*** Other ***/
 	void (*start)(void);
 	void (*stop)(void);
+	void (*temperaturesetup)(void);
+	uint16_t (*readtemperature)(void);
 }STM32FXXX_ADC1;
 
 // INIC
 void adc1_enable(void);
 STM32FXXX_ADC1* adc1(void);
-
-/***** ADC1 Procedure & Function Header ******/
-void STM32FXXXAdc1Clock(uint8_t state);
-void STM32FXXXAdc1Nvic(uint8_t state);
-
-/****** MISCELLANEOUS ******/
-void ADC_TemperatureSetup(void);
-uint16_t ADC_ReadTemperature(void);
-float CalculateTemperature(uint16_t adc_value);
 
 #endif
 
