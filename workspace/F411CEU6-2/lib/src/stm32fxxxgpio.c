@@ -237,11 +237,11 @@ void gpioa_enable(void)
 	STM32FXXXGpioAclock(ON);
     /*** GPIOA TypeDef ***/
 	stm32fxxx_gpioa.instance = GPIOA;
-    /******************/
-    stm32fxxx_gpioa.afr = STM32FXXXGpioAafr;
     /*** GPIOA RCC Clock Enable ***/
     stm32fxxx_gpioa.clock = STM32FXXXGpioAclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpioa.afr = STM32FXXXGpioAafr;
     //return &stm32fxxx_gpioa;
 }
 
@@ -253,11 +253,11 @@ void gpiob_enable(void)
 	STM32FXXXGpioBclock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpiob.instance = GPIOB;
-    /******************/
-    stm32fxxx_gpiob.afr = STM32FXXXGpioBafr;
     /*** GPIOB RCC Clock Enable ***/
     stm32fxxx_gpiob.clock = STM32FXXXGpioBclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpiob.afr = STM32FXXXGpioBafr;
     //return &stm32fxxx_gpiob;
 }
 
@@ -269,11 +269,11 @@ void gpioc_enable(void)
 	STM32FXXXGpioCclock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpioc.instance = GPIOC;
-    /******************/
-    stm32fxxx_gpioc.afr = STM32FXXXGpioCafr;
     /*** GPIOC RCC Clock Enable ***/
     stm32fxxx_gpioc.clock = STM32FXXXGpioCclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpioc.afr = STM32FXXXGpioCafr;
     //return &stm32fxxx_gpioc;
 }
 
@@ -285,11 +285,11 @@ void gpiod_enable(void)
 	STM32FXXXGpioDclock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpiod.instance = GPIOD;
-    /******************/
-    stm32fxxx_gpiod.afr = STM32FXXXGpioDafr;
     /*** GPIOD RCC Clock Enable ***/
     stm32fxxx_gpiod.clock = STM32FXXXGpioDclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpiod.afr = STM32FXXXGpioDafr;
     //return &stm32fxxx_gpiod;
 }
 
@@ -301,11 +301,11 @@ void gpioe_enable(void)
 	STM32FXXXGpioEclock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpioe.instance = GPIOE;
-    /******************/
-    stm32fxxx_gpioe.afr = STM32FXXXGpioEafr;
     /*** GPIOE RCC Clock Enable ***/
     stm32fxxx_gpioe.clock = STM32FXXXGpioEclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpioe.afr = STM32FXXXGpioEafr;
     //return &stm32fxxx_gpioe;
 }
 
@@ -317,11 +317,11 @@ void gpiof_enable(void)
 		STM32FXXXGpioFclock(ON);
     	stm32fxxx_gpiof.instance = GPIOF;
 	#endif
-    /******************/
-    stm32fxxx_gpiof.afr = STM32FXXXGpioFafr;
     /*** GPIOF RCC Clock Enable ***/
     stm32fxxx_gpiof.clock = STM32FXXXGpioFclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpiof.afr = STM32FXXXGpioFafr;
     //return &stm32fxxx_gpiof;
 }
 
@@ -333,11 +333,11 @@ void gpiog_enable(void)
 		STM32FXXXGpioGclock(ON);
     	stm32fxxx_gpiog.instance = GPIOG;
 	#endif
-    /******************/
-    stm32fxxx_gpiog.afr = STM32FXXXGpioGafr;
     /*** GPIOG RCC Clock Enable ***/
     stm32fxxx_gpiog.clock = STM32FXXXGpioGclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpiog.afr = STM32FXXXGpioGafr;
     //return &stm32fxxx_gpiog;
 }
 
@@ -349,11 +349,11 @@ void gpioh_enable(void)
 		STM32FXXXGpioHclock(ON);
     	stm32fxxx_gpioh.instance = GPIOH;
 	#endif
-    /******************/
-    stm32fxxx_gpioh.afr = STM32FXXXGpioHafr;
     /*** GPIOH RCC Clock Enable ***/
     stm32fxxx_gpioh.clock = STM32FXXXGpioHclock;
-    /*** Other ***/
+	/*** Procedures ***/
+	/*** Other ***/
+    stm32fxxx_gpioh.afr = STM32FXXXGpioHafr;
     //return &stm32fxxx_gpioh;
 }
 

@@ -79,6 +79,8 @@ void tim2_enable(void)
 	stm32fxxx_tim2.clock = STM32FXXXTim2Clock;
 	// NVIC
 	stm32fxxx_tim2.nvic = STM32FXXXTim2Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim2;
 }
@@ -95,6 +97,8 @@ void tim3_enable(void)
 	stm32fxxx_tim3.clock = STM32FXXXTim3Clock;
 	// NVIC
 	stm32fxxx_tim3.nvic = STM32FXXXTim3Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim3;
 }
@@ -111,6 +115,8 @@ void tim4_enable(void)
 	stm32fxxx_tim4.clock = STM32FXXXTim4Clock;
 	// NVIC
 	stm32fxxx_tim4.nvic = STM32FXXXTim4Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim4;
 }
@@ -127,6 +133,8 @@ void tim5_enable(void)
 	stm32fxxx_tim5.clock = STM32FXXXTim5Clock;
 	// NVIC
 	stm32fxxx_tim5.nvic = STM32FXXXTim5Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim5;
 }

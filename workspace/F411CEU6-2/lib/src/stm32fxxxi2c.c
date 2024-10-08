@@ -223,6 +223,7 @@ void i2c1_enable(uint32_t sclclock)
 	stm32fxxx_i2c1.clock = STM32FXXXI2c1Clock;
 	stm32fxxx_i2c1.evnvic = STM32FXXXI2c1EvNvic;
 	stm32fxxx_i2c1.ernvic = STM32FXXXI2c1ErNvic;
+	/*** Procedures ***/
 	/*** Other ***/
 	stm32fxxx_i2c1.start = STM32FXXXI2c1_Start;
 	stm32fxxx_i2c1.connect = STM32FXXXI2c1_Connect;
@@ -247,6 +248,7 @@ void i2c2_enable(uint32_t sclclock)
 	stm32fxxx_i2c2.clock = STM32FXXXI2c2Clock;
 	stm32fxxx_i2c2.evnvic = STM32FXXXI2c2EvNvic;
 	stm32fxxx_i2c2.ernvic = STM32FXXXI2c2ErNvic;
+	/*** Procedures ***/
 	/*** Other ***/
 	stm32fxxx_i2c2.start = STM32FXXXI2c2_Start;
 	stm32fxxx_i2c2.connect = STM32FXXXI2c2_Connect;
@@ -271,6 +273,7 @@ void i2c3_enable(uint32_t sclclock)
 	stm32fxxx_i2c3.clock = STM32FXXXI2c3Clock;
 	stm32fxxx_i2c3.evnvic = STM32FXXXI2c3EvNvic;
 	stm32fxxx_i2c3.ernvic = STM32FXXXI2c3ErNvic;
+	/*** Procedures ***/
 	/*** Other ***/
 	stm32fxxx_i2c3.start = STM32FXXXI2c3_Start;
 	stm32fxxx_i2c3.connect = STM32FXXXI2c3_Connect;

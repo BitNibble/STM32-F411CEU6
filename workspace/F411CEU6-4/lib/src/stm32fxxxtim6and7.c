@@ -53,6 +53,8 @@ void tim6_enable(void)
 	stm32fxxx_tim6.clock = STM32FXXXTim6Clock;
 	// NVIC
 	stm32fxxx_tim6.nvic = STM32FXXXTim6Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim6;
 }
@@ -68,6 +70,8 @@ void tim7_enable(void)
 	stm32fxxx_tim7.clock = STM32FXXXTim7Clock;
 	// NVIC
 	stm32fxxx_tim7.nvic = STM32FXXXTim7Nvic;
+	/*** Procedures ***/
+	/*** Other ***/
 
 	//return &stm32fxxx_tim7;
 }
