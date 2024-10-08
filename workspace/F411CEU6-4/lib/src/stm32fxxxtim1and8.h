@@ -13,6 +13,7 @@ Comment:
 
 /*** Library ***/
 #include "stm32fxxxinstance.h"
+#include "timer_irq.h"
 /*************************/
 /*** TIMER1and8 TypeDef***/
 /*************************/
@@ -34,21 +35,6 @@ void tim1_enable(void);
 STM32FXXX_TIM1* tim1(void);
 void tim8_enable(void);
 STM32FXXX_TIM8* tim8(void);
-/*** INTERRUPT TIM1 CALLBACK HEADER ***/
-void tim1_b_callback(void)__attribute__((weak));
-void tim1_u_callback(void)__attribute__((weak));
-void tim1_t_callback(void)__attribute__((weak));
-void tim1_cc1_callback(void)__attribute__((weak));
-void tim1_cc2_callback(void)__attribute__((weak));
-/*** INTERRUPT HEADER ***/
-void TIM1_BRK_TIM9_IRQHandler(void);
-void TIM1_UP_TIM10_IRQHandler(void);
-void TIM1_TRG_COM_TIM11_IRQHandler(void);
-void TIM1_CC_IRQHandler(void);
-void TIM8_BRK_TIM12_IRQHandler(void);
-void TIM8_UP_TIM13_IRQHandler(void);
-void TIM8_TRG_COM_TIM14_IRQHandler(void);
-void TIM8_CC_IRQHandler(void);
 
 #endif
 

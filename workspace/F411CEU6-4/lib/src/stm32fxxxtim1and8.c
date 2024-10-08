@@ -183,53 +183,6 @@ void tim8_enable(void)
 
 STM32FXXX_TIM8* tim8(void){ return (STM32FXXX_TIM8*) &stm32fxxx_tim8; }
 
-/*** TIM1 IRQ Request ***/
-void TIM1_BRK_TIM9_IRQHandler(void) {
-    if (TIM1->SR & TIM_SR_BIF) { // Check if the break interrupt flag is set
-        // Handle break interrupt
-    	tim1_b_callback();
-        TIM1->SR &= ~TIM_SR_BIF; // Clear the interrupt flag
-    }
-    if (TIM9->SR & TIM_SR_UIF) { // Check if the update interrupt flag is set
-        // Handle update interrupt
-        TIM9->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
-    }
-}
-void TIM1_UP_TIM10_IRQHandler(void) {
-    if (TIM1->SR & TIM_SR_UIF) { // Check if the update interrupt flag is set for TIM1
-        // Handle Timer 1 update event
-    	tim1_u_callback();
-        TIM1->SR &= ~TIM_SR_UIF; // Clear the update interrupt flag
-    }
-    if (TIM10->SR & TIM_SR_UIF) { // Check if the update interrupt flag is set for TIM10
-        // Handle Timer 10 update event
-        TIM10->SR &= ~TIM_SR_UIF; // Clear the update interrupt flag
-    }
-}
-void TIM1_TRG_COM_TIM11_IRQHandler(void) {
-    if (TIM1->SR & TIM_SR_TIF) { // Check if the trigger interrupt flag is set for TIM1
-        // Handle Timer 1 trigger event
-    	tim1_t_callback();
-        TIM1->SR &= ~TIM_SR_TIF; // Clear the trigger interrupt flag
-    }
-    if (TIM11->SR & TIM_SR_UIF) { // Check if the update interrupt flag is set for TIM11
-        // Handle Timer 11 update event
-        TIM11->SR &= ~TIM_SR_UIF; // Clear the update interrupt flag
-    }
-}
-void TIM1_CC_IRQHandler(void) {
-	if (TIM1->SR & TIM_SR_CC1IF) { // Check if capture/compare interrupt flag for channel 1 is set
-		// Handle capture/compare event for channel 1
-		tim1_cc1_callback();
-		TIM1->SR &= ~TIM_SR_CC1IF; // Clear the interrupt flag for channel 1
-	}
-	if (TIM1->SR & TIM_SR_CC2IF) { // Check if capture/compare interrupt flag for channel 2 is set
-		// Handle capture/compare event for channel 2
-		tim1_cc2_callback();
-		TIM1->SR &= ~TIM_SR_CC2IF; // Clear the interrupt flag for channel 2
-	}
-}
-
 /*** EOF ***/
 
 /******
