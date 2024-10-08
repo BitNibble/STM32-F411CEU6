@@ -40,6 +40,7 @@ setup stm32f411ceu6 to work with adapted stm32f446re private libraries.
 #include "stm32fxxxrtc.h"
 #include "armsystick.h"
 #include "stm32fxxxgpio.h"
+#include "stm32fxxxtim1and8.h"
 
 #include "armlcd.h"
 #include "armfunction.h"
@@ -48,22 +49,26 @@ char str[33];
 
 int main(void)
 {
-	rcc_start();
-	systick_start();
-	rtc_enable();
-	gpiob_enable();
-	gpioc_enable();
+	rcc_start(); // Clock Configuration
+	systick_start(); // Delays
+	rtc_enable(); // Real Time Clock
+	gpiob_enable(); // LCD display 4x20
+	gpioc_enable(); // Gpioc13
+	tim1_enable(); // Blink led at uie (4)
 
 	rtc()->inic(1);
 
 	char vecT[8]; // for calendar
 
-	RCC->AHB1ENR |= (RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN);
-
-	ARMLCD0_enable(GPIOB);
+	ARMLCD0_enable(gpiob()->instance);
 	FUNC_enable();
 
 	GPIOC->MODER |= GPIO_MODER_MODER13_0;
+
+	tim1()->instance->ARR = 0xFFFF;
+	tim1()->instance->PSC = 300;
+	tim1()->nvic(4);
+	tim1()->start();
 
 	while (1){
 		lcd0()->gotoxy(0,0);
@@ -78,12 +83,14 @@ int main(void)
 		func()->format_string(str,32,"hora: %d%d:%d%d:%d%d", vecT[0],vecT[1],vecT[2],vecT[3],vecT[4],vecT[5]);
 		lcd0()->string_size(str,20);
 
-		_delay_ms(1000);
-		GPIOC->ODR |= GPIO_ODR_ODR_13;
-		_delay_ms(1000);
-		GPIOC->ODR &= ~GPIO_ODR_ODR_13;
+		//_delay_ms(1000);
+		//GPIOC->ODR |= GPIO_ODR_ODR_13;
+		//_delay_ms(1000);
+		//GPIOC->ODR &= ~GPIO_ODR_ODR_13;
 	}
 }
+
+void tim1_u_callback(void){ gpioc()->instance->ODR ^= GPIO_ODR_ODR_13; }
 
 void Error_Handler(void)
 {

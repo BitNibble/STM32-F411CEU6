@@ -314,7 +314,7 @@ int main(void)
         lcd0()->string_size(str, 10);
 
         lcd0()->gotoxy(2, 11);
-                lcd0()->string_size((char*)WeekDay_String(vecD[2]), 7);
+        lcd0()->string_size((char*)WeekDay_String(vecD[2]), 7);
 
         lcd0()->gotoxy(3, 11);
         func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);

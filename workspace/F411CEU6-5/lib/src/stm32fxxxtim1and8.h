@@ -34,24 +34,12 @@ void tim1_enable(void);
 STM32FXXX_TIM1* tim1(void);
 void tim8_enable(void);
 STM32FXXX_TIM8* tim8(void);
-/****************************************/
-/*** TIM1 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim1Clock(uint8_t state);
-void STM32FXXXTim1Nvic(uint8_t value);
-/****************************************/
-/*** TIM8 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim8Clock(uint8_t state);
-void STM32FXXXTim8Nvic(uint8_t value);
-/****************************************/
-/*** INTERRUPT TIM1 CC CALLBACK HEADER ***/
+/*** INTERRUPT TIM1 CALLBACK HEADER ***/
+void tim1_b_callback(void)__attribute__((weak));
 void tim1_u_callback(void)__attribute__((weak));
+void tim1_t_callback(void)__attribute__((weak));
 void tim1_cc1_callback(void)__attribute__((weak));
 void tim1_cc2_callback(void)__attribute__((weak));
-void tim1_t_callback(void)__attribute__((weak));
-void tim1_com_callback(void)__attribute__((weak));
-void tim1_b_callback(void)__attribute__((weak));
 /*** INTERRUPT HEADER ***/
 void TIM1_BRK_TIM9_IRQHandler(void);
 void TIM1_UP_TIM10_IRQHandler(void);
