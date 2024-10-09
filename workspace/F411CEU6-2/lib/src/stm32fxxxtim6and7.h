@@ -13,6 +13,7 @@ Comment:
 
 /*** Library ***/
 #include "stm32fxxxinstance.h"
+#include "timer_irq.h"
 /*** TIMER TypeDef***/
 // ( 6 and 7 ) TIM 
 typedef struct

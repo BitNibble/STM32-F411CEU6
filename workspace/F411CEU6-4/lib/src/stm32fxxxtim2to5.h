@@ -13,6 +13,7 @@ Comment:
 
 /*** Library ***/
 #include "stm32fxxxinstance.h"
+#include "timer_irq.h"
 /*** TIMER 2 to 5 TypeDef ***/
 // ( 2 and 5 ) TIM
 typedef struct
@@ -29,12 +30,14 @@ typedef struct
 // ( 3 and 4 ) TIM
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	TIM_TypeDef* instance;
-	/*** Other ***/
+	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t state);
+	/*** Other ***/
+	void (*start)(void);
+	void (*stop)(void);
 }STM32FXXX_TIM3, STM32FXXX_TIM4;
 /***********************/
 /*** INIC TIM 2 to 5 ***/

@@ -28,8 +28,8 @@ void STM32FXXXTim2Nvic(uint8_t state)
 { // 28
 	if(state){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
-void STM32FXXXTim2start(void){};
-void STM32FXXXTim2stop(void){};
+void STM32FXXXTim2start(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void STM32FXXXTim2stop(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM3 ***/
 /************/
@@ -41,8 +41,8 @@ void STM32FXXXTim3Nvic(uint8_t state)
 { // 29
 	if(state){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
-void STM32FXXXTim3start(void){};
-void STM32FXXXTim3stop(void){};
+void STM32FXXXTim3start(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void STM32FXXXTim3stop(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM4 ***/
 /************/
@@ -54,8 +54,8 @@ void STM32FXXXTim4Nvic(uint8_t state)
 { // 30
 	if(state){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
-void STM32FXXXTim4start(void){};
-void STM32FXXXTim4stop(void){};
+void STM32FXXXTim4start(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void STM32FXXXTim4stop(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM5 ***/
 /************/
@@ -67,8 +67,8 @@ void STM32FXXXTim5Nvic(uint8_t state)
 { // 50
 	if(state){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
-void STM32FXXXTim5start(void){};
-void STM32FXXXTim5stop(void){};
+void STM32FXXXTim5start(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void STM32FXXXTim5stop(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /*** TIM2 INIC Procedure & Function Definition ***/
 void tim2_enable(void)
 {
@@ -81,7 +81,8 @@ void tim2_enable(void)
 	stm32fxxx_tim2.nvic = STM32FXXXTim2Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-
+	stm32fxxx_tim2.start = STM32FXXXTim2start;
+	stm32fxxx_tim2.stop = STM32FXXXTim2stop;
 	//return &stm32fxxx_tim2;
 }
 
@@ -99,7 +100,8 @@ void tim3_enable(void)
 	stm32fxxx_tim3.nvic = STM32FXXXTim3Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-
+	stm32fxxx_tim3.start = STM32FXXXTim3start;
+	stm32fxxx_tim3.stop = STM32FXXXTim3stop;
 	//return &stm32fxxx_tim3;
 }
 
@@ -117,7 +119,8 @@ void tim4_enable(void)
 	stm32fxxx_tim4.nvic = STM32FXXXTim4Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-
+	stm32fxxx_tim4.start = STM32FXXXTim4start;
+	stm32fxxx_tim4.stop = STM32FXXXTim4stop;
 	//return &stm32fxxx_tim4;
 }
 
@@ -135,7 +138,8 @@ void tim5_enable(void)
 	stm32fxxx_tim5.nvic = STM32FXXXTim5Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-
+	stm32fxxx_tim5.start = STM32FXXXTim5start;
+	stm32fxxx_tim5.stop = STM32FXXXTim5stop;
 	//return &stm32fxxx_tim5;
 }
 
