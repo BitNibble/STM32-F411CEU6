@@ -50,53 +50,6 @@ void tim4_enable(void);
 STM32FXXX_TIM4* tim4(void);
 void tim5_enable(void);
 STM32FXXX_TIM5* tim5(void);
-/****************************************/
-/*** TIM2 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim2Clock(uint8_t state);
-void STM32FXXXTim2Nvic(uint8_t state);
-/****************************************/
-/*** TIM3 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim3Clock(uint8_t state);
-void STM32FXXXTim3Nvic(uint8_t state);
-/****************************************/
-/*** TIM4 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim4Clock(uint8_t state);
-void STM32FXXXTim4Nvic(uint8_t state);
-/****************************************/
-/*** TIM5 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim5Clock(uint8_t state);
-void STM32FXXXTim5Nvic(uint8_t state);
-/*** TIM5 Bit Mapping Header ***/
-// CNT
-void STM32FXXXTim5_cnt(uint32_t value);
-uint32_t STM32FXXXTim5_get_cnt(void);
-// PSC
-void STM32FXXXTim5_psc(uint16_t value);
-// ARR
-void STM32FXXXTim5_arr(uint32_t value);
-// CCR1
-void STM32FXXXTim5_ccr1(uint32_t value);
-// CCR2
-void STM32FXXXTim5_ccr2(uint32_t value);
-// CCR3
-void STM32FXXXTim5_ccr3(uint32_t value);
-// CCR4
-void STM32FXXXTim5_ccr4(uint32_t value);
-// DMAR
-void STM32FXXXTim5_dmab(uint16_t value);
-uint16_t STM32FXXXTim5_get_dmab(void);
-// OR
-void STM32FXXXTim5_ti4_rmp(uint8_t value);
-
-/*** INTERRUPT HEADER ***/
-void TIM2_IRQHandler(void);
-void TIM3_IRQHandler(void);
-void TIM4_IRQHandler(void);
-void TIM5_IRQHandler(void);
 
 #endif
 

@@ -34,19 +34,6 @@ void tim6_enable(void);
 STM32FXXX_TIM6* tim6(void);
 void tim7_enable(void);
 STM32FXXX_TIM7* tim7(void);
-/****************************************/
-/*** TIM6 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim6Clock(uint8_t state);
-void STM32FXXXTim6Nvic(uint8_t state);
-/****************************************/
-/*** TIM7 Procedure & Function Header ***/
-/****************************************/
-void STM32FXXXTim7Clock(uint8_t state);
-void STM32FXXXTim7Nvic(uint8_t state);
-/*** INTERRUPT HEADER ***/
-void TIM6_DAC_IRQHandler(void);
-void TIM7_IRQHandler(void);
 
 #endif
 

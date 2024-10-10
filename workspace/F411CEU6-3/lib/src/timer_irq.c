@@ -270,6 +270,8 @@ void TIM8_BRK_IRQHandler(void) {
     }
 }
 
+void TIM8_BRK_TIM12_IRQHandler(void) {}
+
 void TIM8_UP_IRQHandler(void) {
     if (TIM8->SR & TIM_SR_UIF) {
         tim8_u_callback();
@@ -277,12 +279,16 @@ void TIM8_UP_IRQHandler(void) {
     }
 }
 
+void TIM8_UP_TIM13_IRQHandler(void) {}
+
 void TIM8_TRG_COM_IRQHandler(void) {
     if (TIM8->SR & TIM_SR_TIF) {
         tim8_t_callback();
         TIM8->SR &= ~TIM_SR_TIF;
     }
 }
+
+void TIM8_TRG_COM_TIM14_IRQHandler(void);
 
 void TIM8_CC_IRQHandler(void) {
     if (TIM8->SR & TIM_SR_CC1IF) {

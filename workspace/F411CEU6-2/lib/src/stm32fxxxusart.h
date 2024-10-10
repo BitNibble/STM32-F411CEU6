@@ -81,13 +81,6 @@ void STM32FXXXUsart6Nvic( uint8_t state );
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
 void Usart_StopBits( USART_TypeDef* usart, double stopbits );
 void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
-/*** INTERRUPT HEADER ***/
-void USART1_IRQHandler(void);
-void USART2_IRQHandler(void);
-void USART3_IRQHandler(void);
-void UART4_IRQHandler(void);
-void UART5_IRQHandler(void);
-void USART6_IRQHandler(void);
 
 #endif
 /*** EOF ***/
