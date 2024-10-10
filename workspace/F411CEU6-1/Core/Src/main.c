@@ -49,7 +49,7 @@ int main(void)
 	GPIOC->MODER |= GPIO_MODER_MODER13_0;
 
 	tim1()->instance->ARR = 0xFFFF;
-	tim1()->instance->PSC = 300;
+	tim1()->instance->PSC = 100;
 	tim1()->nvic(4);
 	tim1()->start();
 
