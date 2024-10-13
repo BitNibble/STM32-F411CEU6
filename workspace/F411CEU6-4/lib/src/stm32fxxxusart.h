@@ -40,6 +40,8 @@ typedef struct
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
+	void (*start)(void);
+	void (*stop)(void);
 }STM32FXXX_UART4, STM32FXXX_UART5;
 
 void usart1_enable(void);
