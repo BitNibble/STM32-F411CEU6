@@ -21,6 +21,15 @@ static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
 	static STM32FXXX_UART5 stm32fxxx_uart5 = {0};
 #endif
 static STM32FXXX_USART6 stm32fxxx_usart6 = {0};
+/******/
+// Buffer for received data
+#define RX_BUFFER_SIZE 128
+#define TX_BUFFER_SIZE 128
+uint8_t rx_buffer[RX_BUFFER_SIZE];
+volatile uint16_t rx_index = 0;
+#define TX_BUFFER_SIZE 128
+uint8_t tx_buffer[TX_BUFFER_SIZE];
+volatile uint16_t tx_index = 0;
 /*** USART Procedure & Function Definition ***/
 void Usart3_WordLength(uint8_t wordlength);
 void Usart3_StopBits(double stopbits);
@@ -537,6 +546,88 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
     uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
     usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
     usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
+}
+
+/*** Interrupt handler for USART1 ***/
+void USART1_IRQHandler(void) {
+    // Check if the RXNE (Receive Not Empty) flag is set
+    if (USART1->SR & USART_SR_RXNE) {
+        uint8_t received_byte = USART1->DR;
+        // Handle received data
+        if (rx_index < RX_BUFFER_SIZE) {
+            rx_buffer[rx_index++] = received_byte;
+        }
+    }
+
+    // Check if the TXE (Transmit Data Register Empty) flag is set
+    if (USART1->SR & USART_SR_TXE) {
+        // Transmit the next byte if available
+        USART1->DR = tx_buffer[tx_index++];
+
+        // Disable TXE interrupt if no more data to transmit
+        if (tx_index >= TX_BUFFER_SIZE) {
+            USART1->CR1 &= ~USART_CR1_TXEIE;
+        }
+    }
+
+    // Check if the TC (Transmission Complete) flag is set
+    if (USART1->SR & USART_SR_TC) {
+        // Transmission complete, clear TC flag
+        USART1->SR &= ~USART_SR_TC;
+        // Optionally disable TC interrupt if no further action is needed
+        USART1->CR1 &= ~USART_CR1_TCIE;
+    }
+
+    // Check for IDLE line detection
+    if (USART1->SR & USART_SR_IDLE) {
+        // Clear IDLE flag by reading SR and DR
+        volatile uint8_t dummy = USART1->DR;
+        (void)dummy;  // Prevent unused variable warning
+        // Handle idle condition (e.g., mark end of transmission)
+    }
+
+    // Check for CTS flag (if hardware flow control is enabled)
+    if (USART1->SR & USART_SR_CTS) {
+        // Clear CTS flag by reading SR
+        volatile uint8_t dummy = USART1->SR;
+        (void)dummy;
+        // Handle CTS change (e.g., pause/resume transmission)
+    }
+
+    // Check for LIN Break Detection (if LIN mode is enabled)
+    if (USART1->SR & USART_SR_LBD) {
+        // Clear LBD flag by writing a 0
+        USART1->SR &= ~USART_SR_LBD;
+        // Handle LIN break detection (e.g., reset communication)
+    }
+
+    // Error handling (Overrun, Noise, Framing, Parity)
+    if (USART1->SR & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
+        if (USART1->SR & USART_SR_ORE) {
+            // Overrun error: Clear ORE by reading DR
+            volatile uint8_t dummy = USART1->DR;
+            (void)dummy;
+            // Handle overrun error (e.g., discard data)
+        }
+        if (USART1->SR & USART_SR_NE) {
+            // Noise error: Handle noise (e.g., log or recover from error)
+        }
+        if (USART1->SR & USART_SR_FE) {
+            // Framing error: Handle framing issues (e.g., re-sync communication)
+        }
+        if (USART1->SR & USART_SR_PE) {
+            // Parity error: Handle parity mismatch (e.g., request retransmission)
+        }
+
+        // Optionally reset USART or take corrective action based on error type
+    }
+
+    // Wakeup from STOP mode (if enabled and used)
+    //if (USART1->SR & USART_SR_WU) {
+        // Clear wakeup flag by writing a 0
+        //USART1->SR &= ~USART_SR_WU;
+        // Handle wakeup event (e.g., resume communication)
+    //}
 }
 
 /*** EOF ***/
