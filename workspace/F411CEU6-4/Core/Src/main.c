@@ -137,6 +137,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 2; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('B');
                 }
             } else {
                 count_0 = 0;
@@ -162,6 +163,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 3; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('C');
                 }
             } else {
                 count_0 = 0;
@@ -187,6 +189,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 4; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('D');
                 }
             } else {
                 count_0 = 0;
@@ -212,6 +215,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 5; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('E');
                 }
             } else {
                 count_0 = 0;
@@ -237,6 +241,7 @@ int main(void)
                        count_0++;
                        if (count_0 > JMP_menu_repeat) {
                            Menu = 6; count_0 = 0; skip_0 = 0;
+                           usart1()->send_char('F');
                        }
                    } else {
                        count_0 = 0;
@@ -262,6 +267,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 7; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('G');
                 }
             } else {
                 count_0 = 0;
@@ -303,6 +309,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 0; count_0 = 0; skip_0 = 0;
+                    usart1()->send_char('H');
                 }
             } else {
                 count_0 = 0;
