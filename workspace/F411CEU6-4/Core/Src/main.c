@@ -329,32 +329,28 @@ int main(void)
 void setup_usart1(void){
 	usart1_enable();
 	// Enable GPIOA and USART1 clocks
-	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;  // Enable GPIOA clock
-	//RCC->APB2ENR |= RCC_APB2ENR_USART1EN; // Enable USART1 clock
-	usart1()->clock(ON);
+	//gpioa()->clock(ON);
+	usart1()->clock(ON); // Enable USART1 clock
 
 	// Set PA9 and PA10 to alternate function mode
-	GPIOA->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10); // Clear MODER bits for PA9, PA10
-	GPIOA->MODER |= (GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1); // Set to alternate function mode
+	gpioa()->instance->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10); // Clear MODER bits for PA9, PA10
+	gpioa()->instance->MODER |= (GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1); // Set to alternate function mode
 
 	// Set alternate function type to AF7 (USART1) for PA9 and PA10
-	GPIOA->AFR[1] &= ~((0xF << (1 * 4)) | (0xF << (2 * 4))); // Clear AFRH bits for PA9, PA10
-	GPIOA->AFR[1] |= (7 << (1 * 4)) | (7 << (2 * 4)); // Set AF7 for PA9 and PA10
+	gpioa()->afr(9,0); gpioa()->afr(10,0); // Clear AFRH bits for PA9, PA10
+	gpioa()->afr(9,7); gpioa()->afr(10,7); // Set AF7 for PA9 and PA10
 
 	// Set PA9 as push-pull output, high speed
-	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR9 | GPIO_OSPEEDER_OSPEEDR10; // High speed for PA9, PA10
-	GPIOA->OTYPER &= ~(GPIO_OTYPER_OT9 | GPIO_OTYPER_OT10); // Set to push-pull
-	GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR9 | GPIO_PUPDR_PUPDR10); // No pull-up, no pull-down
+	gpioa()->instance->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR9 | GPIO_OSPEEDER_OSPEEDR10; // High speed for PA9, PA10
+	gpioa()->instance->OTYPER &= ~(GPIO_OTYPER_OT9 | GPIO_OTYPER_OT10); // Set to push-pull
+	gpioa()->instance->PUPDR &= ~(GPIO_PUPDR_PUPDR9 | GPIO_PUPDR_PUPDR10); // No pull-up, no pull-down
 
-	// Set USART1 baud rate (assuming 16 MHz clock, 9600 baud rate)
-	//USART1->BRR = (16E6 / 9600);
+	// Set USART1 baud rate
 	usart1()->samplingmode(0,9600);
 
 	// Enable USART1, TX, RX
-	//USART1->CR1 |= USART_CR1_TE | USART_CR1_RE; // Enable transmitter and receiver
-	usart1()->tx_enable(); usart1()->rx_enable();
-	//USART1->CR1 |= USART_CR1_UE;                // Enable USART1
-	usart1()->start();
+	usart1()->tx_enable(); usart1()->rx_enable(); // Enable transmitter and receiver
+	usart1()->start(); // Enable USART1
 
 
 }
