@@ -58,7 +58,6 @@ void Usart1_WordLength(uint8_t wordlength) {
     }
     // If wordlength is 8 or any other value, do nothing (remains 8-bit)
 }
-
 void Usart1_StopBits(double stopbits) {
     // Reset stop bits configuration
 	USART1->CR2 &= (uint32_t) ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
@@ -73,7 +72,6 @@ void Usart1_StopBits(double stopbits) {
     	USART1->CR2 |= USART_CR2_STOP_1; // Set bit 13
     }
 }
-
 void Usart1_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
 {
     uint8_t sampling = 16; // Default to 16
@@ -93,6 +91,10 @@ void Usart1_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
     USART1->BRR |= (uint32_t) fraction; // Set DIV_Fraction
     USART1->BRR |= ((uint32_t) intpart << USART_BRR_DIV_Mantissa_Pos); // Set DIV_Mantissa[11:0]
 }
+void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
+void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
+void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
+void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
 void USART1_SendChar(char c) {
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
     USART1->DR = c;                       // Send the character
@@ -392,8 +394,12 @@ void usart1_enable(void)
 	stm32fxxx_usart1.wordlength = Usart1_WordLength;
 	stm32fxxx_usart1.stopbits = Usart1_StopBits;
 	stm32fxxx_usart1.samplingmode = Usart1_SamplingMode;
-	stm32fxxx_usart1.sendchar = USART1_SendChar;
-	stm32fxxx_usart1.receivechar = USART1_ReceiveChar;
+	stm32fxxx_usart1.tx_enable = USART1_TxEnable;
+	stm32fxxx_usart1.tx_disable = USART1_TxDisable;
+	stm32fxxx_usart1.rx_enable = USART1_RxEnable;
+	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
+	stm32fxxx_usart1.send_char = USART1_SendChar;
+	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
 	//return &stm32fxxx_usart1;
@@ -413,8 +419,12 @@ void usart2_enable(void)
 	stm32fxxx_usart2.wordlength = Usart2_WordLength;
 	stm32fxxx_usart2.stopbits = Usart2_StopBits;
 	stm32fxxx_usart2.samplingmode = Usart2_SamplingMode;
-	stm32fxxx_usart2.sendchar = NULL;
-	stm32fxxx_usart2.receivechar = NULL;
+	stm32fxxx_usart2.tx_enable = NULL;
+	stm32fxxx_usart2.tx_disable = NULL;
+	stm32fxxx_usart2.rx_enable = NULL;
+	stm32fxxx_usart2.rx_disable = NULL;
+	stm32fxxx_usart2.send_char = NULL;
+	stm32fxxx_usart2.receive_char = NULL;
 	stm32fxxx_usart2.start = USART2_start;
 	stm32fxxx_usart2.stop = USART2_stop;
 	//return &stm32fxxx_usart2;
@@ -439,8 +449,12 @@ void usart3_enable(void)
 	stm32fxxx_usart3.wordlength = Usart3_WordLength;
 	stm32fxxx_usart3.stopbits = Usart3_StopBits;
 	stm32fxxx_usart3.samplingmode = Usart3_SamplingMode;
-	stm32fxxx_usart3.sendchar = NULL;
-	stm32fxxx_usart3.receivechar = NULL;
+	stm32fxxx_usart3.tx_enable = NULL;
+	stm32fxxx_usart3.tx_disable = NULL;
+	stm32fxxx_usart3.rx_enable = NULL;
+	stm32fxxx_usart3.rx_disable = NULL;
+	stm32fxxx_usart3.send_char = NULL;
+	stm32fxxx_usart3.receive_char = NULL;
 	stm32fxxx_usart3.start = USART3_start;
 	stm32fxxx_usart3.stop = USART3_stop;
 	//return &stm32fxxx_usart3;
@@ -464,8 +478,12 @@ void uart4_enable(void)
 	stm32fxxx_uart4.wordlength = Usart4_WordLength;
 	stm32fxxx_uart4.stopbits = Usart4_StopBits;
 	stm32fxxx_uart4.samplingmode = Usart4_SamplingMode;
-	stm32fxxx_usart4.sendchar = NULL;
-	stm32fxxx_usart4.receivechar = NULL;
+	stm32fxxx_uart4.tx_enable = NULL;
+	stm32fxxx_uart4.tx_disable = NULL;
+	stm32fxxx_uart4.rx_enable = NULL;
+	stm32fxxx_uart4.rx_disable = NULL;
+	stm32fxxx_uart4.send_char = NULL;
+	stm32fxxx_uart4.receive_char = NULL;
 	stm32fxxx_uart4.start = USART4_start;
 	stm32fxxx_uart4.stop = USART4_stop;
 
@@ -490,8 +508,12 @@ void uart5_enable(void)
 	stm32fxxx_uart5.wordlength = Usart5_WordLength;
 	stm32fxxx_uart5.stopbits = Usart5_StopBits;
 	stm32fxxx_uart5.samplingmode = Usart5_SamplingMode;
-	stm32fxxx_usart5.sendchar = NULL;
-	stm32fxxx_usart5.receivechar = NULL;
+	stm32fxxx_uart5.tx_enable = NULL;
+	stm32fxxx_uart5.tx_disable = NULL;
+	stm32fxxx_uart5.rx_enable = NULL;
+	stm32fxxx_uart5.rx_disable = NULL;
+	stm32fxxx_uart5.send_char = NULL;
+	stm32fxxx_uart5.receive_char = NULL;
 	stm32fxxx_uart5.start = USART5_start;
 	stm32fxxx_uart5.stop = USART5_stop;
 	//return &stm32fxxx_uart5;
@@ -513,8 +535,12 @@ void usart6_enable(void)
 	stm32fxxx_usart6.wordlength = Usart6_WordLength;
 	stm32fxxx_usart6.stopbits = Usart6_StopBits;
 	stm32fxxx_usart6.samplingmode = Usart6_SamplingMode;
-	stm32fxxx_usart6.sendchar = NULL;
-	stm32fxxx_usart6.receivechar = NULL;
+	stm32fxxx_usart6.tx_enable = NULL;
+	stm32fxxx_usart6.tx_disable = NULL;
+	stm32fxxx_usart6.rx_enable = NULL;
+	stm32fxxx_usart6.rx_disable = NULL;
+	stm32fxxx_usart6.send_char = NULL;
+	stm32fxxx_usart6.receive_char = NULL;
 	stm32fxxx_usart6.start = USART6_start;
 	stm32fxxx_usart6.stop = USART6_stop;
 	//return &stm32fxxx_usart6;

@@ -43,7 +43,7 @@ EXPLODE PA;
 char ADC_msg[32];
 char str[32];
 
-void setupusart(void);
+void setup_usart1(void);
 
 int main(void)
 {
@@ -59,7 +59,7 @@ int main(void)
     gpiob_enable(); // lcd0
     gpioc_enable(); // gpioc13
 
-    setupusart();
+    setup_usart1();
 
     rtc()->inic(1);
     PA = EXPLODE_enable();
@@ -111,7 +111,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 1; count_0 = 0; skip_0 = 0;
-                    usart1()->sendchar('A');
+                    usart1()->send_char('A');
                 }
             } else {
                 count_0 = 0;
@@ -326,7 +326,7 @@ int main(void)
     }
 }
 
-void setupusart(void){
+void setup_usart1(void){
 	usart1_enable();
 	// Enable GPIOA and USART1 clocks
 	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;  // Enable GPIOA clock
@@ -351,7 +351,8 @@ void setupusart(void){
 	usart1()->samplingmode(0,9600);
 
 	// Enable USART1, TX, RX
-	USART1->CR1 |= USART_CR1_TE | USART_CR1_RE; // Enable transmitter and receiver
+	//USART1->CR1 |= USART_CR1_TE | USART_CR1_RE; // Enable transmitter and receiver
+	usart1()->tx_enable(); usart1()->rx_enable();
 	//USART1->CR1 |= USART_CR1_UE;                // Enable USART1
 	usart1()->start();
 
