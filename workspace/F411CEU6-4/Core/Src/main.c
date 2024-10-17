@@ -27,6 +27,7 @@ GPIO PB9 - D7
 #include "stm32fxxxgpio.h"
 #include "stm32fxxxrtc.h"
 #include "stm32fxxxadc1.h"
+#include "stm32fxxxusart.h"
 /******/
 #include "armlcd.h"
 #include "armfunction.h"
@@ -42,6 +43,8 @@ EXPLODE PA;
 char ADC_msg[32];
 char str[32];
 
+void setupusart(void);
+
 int main(void)
 {
 	rcc_start();
@@ -55,6 +58,8 @@ int main(void)
     gpioa_enable(); // button k0 gpioa0
     gpiob_enable(); // lcd0
     gpioc_enable(); // gpioc13
+
+    setupusart();
 
     rtc()->inic(1);
     PA = EXPLODE_enable();
@@ -106,6 +111,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 1; count_0 = 0; skip_0 = 0;
+                    usart1()->sendchar('A');
                 }
             } else {
                 count_0 = 0;
@@ -318,6 +324,38 @@ int main(void)
         func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);
         lcd0()->string_size(str, 8);
     }
+}
+
+void setupusart(void){
+	usart1_enable();
+	// Enable GPIOA and USART1 clocks
+	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;  // Enable GPIOA clock
+	//RCC->APB2ENR |= RCC_APB2ENR_USART1EN; // Enable USART1 clock
+	usart1()->clock(ON);
+
+	// Set PA9 and PA10 to alternate function mode
+	GPIOA->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10); // Clear MODER bits for PA9, PA10
+	GPIOA->MODER |= (GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1); // Set to alternate function mode
+
+	// Set alternate function type to AF7 (USART1) for PA9 and PA10
+	GPIOA->AFR[1] &= ~((0xF << (1 * 4)) | (0xF << (2 * 4))); // Clear AFRH bits for PA9, PA10
+	GPIOA->AFR[1] |= (7 << (1 * 4)) | (7 << (2 * 4)); // Set AF7 for PA9 and PA10
+
+	// Set PA9 as push-pull output, high speed
+	GPIOA->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR9 | GPIO_OSPEEDER_OSPEEDR10; // High speed for PA9, PA10
+	GPIOA->OTYPER &= ~(GPIO_OTYPER_OT9 | GPIO_OTYPER_OT10); // Set to push-pull
+	GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR9 | GPIO_PUPDR_PUPDR10); // No pull-up, no pull-down
+
+	// Set USART1 baud rate (assuming 16 MHz clock, 9600 baud rate)
+	//USART1->BRR = (16E6 / 9600);
+	usart1()->samplingmode(0,9600);
+
+	// Enable USART1, TX, RX
+	USART1->CR1 |= USART_CR1_TE | USART_CR1_RE; // Enable transmitter and receiver
+	//USART1->CR1 |= USART_CR1_UE;                // Enable USART1
+	usart1()->start();
+
+
 }
 
 void Error_Handler(void)

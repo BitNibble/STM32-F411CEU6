@@ -26,6 +26,8 @@ typedef struct
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
+	void (*sendchar)(char c);
+	char (*receivechar)(void);
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_USART1, STM32FXXX_USART2, STM32FXXX_USART3, STM32FXXX_USART6;
@@ -40,6 +42,8 @@ typedef struct
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
+	void (*sendchar)(char c);
+	char (*receivechar)(void);
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_UART4, STM32FXXX_UART5;
