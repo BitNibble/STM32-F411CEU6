@@ -22,13 +22,10 @@ static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
 #endif
 static STM32FXXX_USART6 stm32fxxx_usart6 = {0};
 /******/
-// Buffer for received data
-#define RX_BUFFER_SIZE 128
-#define TX_BUFFER_SIZE 128
-uint8_t rx_buffer[RX_BUFFER_SIZE];
+// Buffer for received and transmit data
+uint8_t rx_buffer[RX_BUFFER_SIZE + 1];
 volatile uint16_t rx_index = 0;
-#define TX_BUFFER_SIZE 128
-uint8_t tx_buffer[TX_BUFFER_SIZE];
+uint8_t tx_buffer[TX_BUFFER_SIZE + 1];
 volatile uint16_t tx_index = 0;
 /*** USART Procedure & Function Definition ***/
 void Usart3_WordLength(uint8_t wordlength);
@@ -402,6 +399,9 @@ void usart1_enable(void)
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
+	// Inic
+	tx_buffer[TX_BUFFER_SIZE] = '\0';
+	rx_buffer[RX_BUFFER_SIZE] = '\0';
 	//return &stm32fxxx_usart1;
 }
 

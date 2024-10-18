@@ -13,6 +13,9 @@ Comment:
 
 /*** Library ***/
 #include "stm32fxxxinstance.h"
+/*** Define and Macros ***/
+#define RX_BUFFER_SIZE 128
+#define TX_BUFFER_SIZE 128
 /*** USART 1..6 Handler TypeDef ***/
 // USART -> USART1,2,3,6
 typedef struct
@@ -73,30 +76,14 @@ STM32FXXX_UART5*  uart5(void);
 
 void usart6_enable(void);
 STM32FXXX_USART6*  usart6(void);
-/*** USART1 Header ***/
-void STM32FXXXUsart1Clock( uint8_t state );
-void STM32FXXXUsart1Nvic( uint8_t state );
-/*** USART2 Header ***/
-void STM32FXXXUsart2Clock( uint8_t state );
-void STM32FXXXUsart2Nvic( uint8_t state );
-/*** USART3 Header ***/
-void STM32FXXXUsart3Clock( uint8_t state );
-void STM32FXXXUsart3Nvic( uint8_t state );
-/*** UART4 Header ***/
-void STM32FXXXUart4Clock( uint8_t state );
-void STM32FXXXUart4Nvic( uint8_t state );
-/*** UART5 Header ***/
-void STM32FXXXUart5Clock( uint8_t state );
-void STM32FXXXUart5Nvic( uint8_t state );
-/*** USART6 Header ***/
-void STM32FXXXUsart6Clock( uint8_t state );
-void STM32FXXXUsart6Nvic( uint8_t state );
+
 /*** General USART Function Prototypes ***/
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
 void Usart_StopBits( USART_TypeDef* usart, double stopbits );
 void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
 
 #endif
+
 /*** EOF ***/
 
 /******
