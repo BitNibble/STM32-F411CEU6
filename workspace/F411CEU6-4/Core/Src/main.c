@@ -340,8 +340,7 @@ void setup_usart1(void){
 	usart1()->clock(ON); // Enable USART1 clock
 
 	// Set PA9 and PA10 to alternate function mode
-	gpioa()->instance->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10); // Clear MODER bits for PA9, PA10
-	gpioa()->instance->MODER |= (GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1); // Set to alternate function mode
+	gpioa()->moder(9,MODE_AF); gpioa()->moder(10,MODE_AF);
 
 	// Set alternate function type to AF7 (USART1) for PA9 and PA10
 	gpioa()->afr(9,7); gpioa()->afr(10,7); // Set AF7 for PA9 and PA10

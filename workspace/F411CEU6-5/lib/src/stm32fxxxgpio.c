@@ -32,10 +32,11 @@ static STM32FXXX_GPIOB stm32fxxx_gpiob = {0};
 static STM32FXXX_GPIOC stm32fxxx_gpioc = {0};
 static STM32FXXX_GPIOD stm32fxxx_gpiod = {0};
 static STM32FXXX_GPIOE stm32fxxx_gpioe = {0};
-static STM32FXXX_GPIOF stm32fxxx_gpiof = {0};
-static STM32FXXX_GPIOG stm32fxxx_gpiog = {0};
-static STM32FXXX_GPIOH stm32fxxx_gpioh = {0};
-
+#ifdef STM32F446xx
+	static STM32FXXX_GPIOF stm32fxxx_gpiof = {0};
+	static STM32FXXX_GPIOG stm32fxxx_gpiog = {0};
+	static STM32FXXX_GPIOH stm32fxxx_gpioh = {0};
+#endif
 /*** GPIO Procedure & Function Definition ***/
 /*** GPIOA ***/
 void STM32FXXXGpioAclock(uint8_t enable)
@@ -46,18 +47,29 @@ void STM32FXXXGpioAclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOAEN_Pos);
     }
 }
+void STM32FXXXGpioAmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
-void STM32FXXXGpioAafr(uint8_t pin, uint8_t data)
+	mode &= MASK;
+	if(pin < 16){
+		GPIOA->MODER &= ~(MASK << Pos);
+		GPIOA->MODER |= (mode << Pos);
+	}
+}
+void STM32FXXXGpioAafr(uint8_t pin, uint8_t af)
 {
     const uint8_t BLOCK_SIZE = NIBBLE_BITS;
     const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
     const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
     const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
 
-    data &= MASK;
+    af &= MASK;
     if(index < TWO){
     	GPIOA->AFR[index] &= ~( MASK << Pos );
-    	GPIOA->AFR[index] |= ( data << Pos );
+    	GPIOA->AFR[index] |= ( af << Pos );
     }
 }
 
@@ -70,7 +82,18 @@ void STM32FXXXGpioBclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOBEN_Pos);
     }
 }
+void STM32FXXXGpioBmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOB->MODER &= ~(MASK << Pos);
+		GPIOB->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioBafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -94,7 +117,18 @@ void STM32FXXXGpioCclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOCEN_Pos);
     }
 }
+void STM32FXXXGpioCmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOC->MODER &= ~(MASK << Pos);
+		GPIOC->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioCafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -118,7 +152,18 @@ void STM32FXXXGpioDclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIODEN_Pos);
     }
 }
+void STM32FXXXGpioDmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOD->MODER &= ~(MASK << Pos);
+		GPIOD->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioDafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -142,7 +187,18 @@ void STM32FXXXGpioEclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOEEN_Pos);
     }
 }
+void STM32FXXXGpioEmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOE->MODER &= ~(MASK << Pos);
+		GPIOE->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioEafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -167,7 +223,18 @@ void STM32FXXXGpioFclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOFEN_Pos);
     }
 }
+void STM32FXXXGpioFmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOF->MODER &= ~(MASK << Pos);
+		GPIOF->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioFafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -191,7 +258,18 @@ void STM32FXXXGpioGclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOGEN_Pos);
     }
 }
+void STM32FXXXGpioGmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOG->MODER &= ~(MASK << Pos);
+		GPIOG->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioGafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -215,7 +293,18 @@ void STM32FXXXGpioHclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOHEN_Pos);
     }
 }
+void STM32FXXXGpioHmoder( uint8_t pin, uint8_t mode )
+{
+	const uint8_t BLOCK_SIZE = TWO;
+	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
+	const uint8_t Pos = pin * BLOCK_SIZE;
 
+	mode &= MASK;
+	if(pin < 16){
+		GPIOH->MODER &= ~(MASK << Pos);
+		GPIOH->MODER |= (mode << Pos);
+	}
+}
 void STM32FXXXGpioHafr(uint8_t pin, uint8_t data)
 {
 	const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -241,6 +330,7 @@ void gpioa_enable(void)
     stm32fxxx_gpioa.clock = STM32FXXXGpioAclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpioa.moder = STM32FXXXGpioAmoder;
     stm32fxxx_gpioa.afr = STM32FXXXGpioAafr;
     //return &stm32fxxx_gpioa;
 }
@@ -257,6 +347,7 @@ void gpiob_enable(void)
     stm32fxxx_gpiob.clock = STM32FXXXGpioBclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpiob.moder = STM32FXXXGpioBmoder;
     stm32fxxx_gpiob.afr = STM32FXXXGpioBafr;
     //return &stm32fxxx_gpiob;
 }
@@ -273,6 +364,7 @@ void gpioc_enable(void)
     stm32fxxx_gpioc.clock = STM32FXXXGpioCclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpioc.moder = STM32FXXXGpioCmoder;
     stm32fxxx_gpioc.afr = STM32FXXXGpioCafr;
     //return &stm32fxxx_gpioc;
 }
@@ -289,6 +381,7 @@ void gpiod_enable(void)
     stm32fxxx_gpiod.clock = STM32FXXXGpioDclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpiod.moder = STM32FXXXGpioDmoder;
     stm32fxxx_gpiod.afr = STM32FXXXGpioDafr;
     //return &stm32fxxx_gpiod;
 }
@@ -305,22 +398,23 @@ void gpioe_enable(void)
     stm32fxxx_gpioe.clock = STM32FXXXGpioEclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpioe.moder = STM32FXXXGpioEmoder;
     stm32fxxx_gpioe.afr = STM32FXXXGpioEafr;
     //return &stm32fxxx_gpioe;
 }
 
 STM32FXXX_GPIOE* gpioe(void) { return &stm32fxxx_gpioe; }
 
+#ifdef STM32F446xx
 void gpiof_enable(void)
 {
-	#ifdef STM32F446xx
-		STM32FXXXGpioFclock(ON);
-    	stm32fxxx_gpiof.instance = GPIOF;
-	#endif
+	STM32FXXXGpioFclock(ON);
+    stm32fxxx_gpiof.instance = GPIOF;
     /*** GPIOF RCC Clock Enable ***/
     stm32fxxx_gpiof.clock = STM32FXXXGpioFclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpiof.moder = STM32FXXXGpioFmoder;
     stm32fxxx_gpiof.afr = STM32FXXXGpioFafr;
     //return &stm32fxxx_gpiof;
 }
@@ -329,14 +423,13 @@ STM32FXXX_GPIOF* gpiof(void) { return &stm32fxxx_gpiof; }
 
 void gpiog_enable(void)
 {
-	#ifdef STM32F446xx
-		STM32FXXXGpioGclock(ON);
-    	stm32fxxx_gpiog.instance = GPIOG;
-	#endif
+	STM32FXXXGpioGclock(ON);
+    stm32fxxx_gpiog.instance = GPIOG;
     /*** GPIOG RCC Clock Enable ***/
     stm32fxxx_gpiog.clock = STM32FXXXGpioGclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpiog.moder = STM32FXXXGpioGmoder;
     stm32fxxx_gpiog.afr = STM32FXXXGpioGafr;
     //return &stm32fxxx_gpiog;
 }
@@ -345,19 +438,20 @@ STM32FXXX_GPIOG* gpiog(void) { return &stm32fxxx_gpiog; }
 
 void gpioh_enable(void)
 {
-	#ifdef STM32F446xx
-		STM32FXXXGpioHclock(ON);
-    	stm32fxxx_gpioh.instance = GPIOH;
-	#endif
+	STM32FXXXGpioHclock(ON);
+    stm32fxxx_gpioh.instance = GPIOH;
     /*** GPIOH RCC Clock Enable ***/
     stm32fxxx_gpioh.clock = STM32FXXXGpioHclock;
 	/*** Procedures ***/
 	/*** Other ***/
+    stm32fxxx_gpioh.moder = STM32FXXXGpioHmoder;
     stm32fxxx_gpioh.afr = STM32FXXXGpioHafr;
     //return &stm32fxxx_gpioh;
 }
 
 STM32FXXX_GPIOH* gpioh(void) { return &stm32fxxx_gpioh; }
+
+#endif
 
 /*
  * More Interested in finding the best work flow, then coding itself. Because that will become redundant after

@@ -14,13 +14,21 @@ Comment:
 
 /*** File Library ***/
 #include "stm32fxxxinstance.h"
+/*** Define and Macro ***/
+#if !defined (MODE_INPUT) || !defined (MODE_OUTPUT) || !defined (MODE_AF) || !defined (MODE_ANALOG)
+	#define MODE_INPUT 0x0UL
+	#define MODE_OUTPUT 0x1UL
+	#define MODE_AF 0x2UL
+	#define MODE_ANALOG 0x3UL
+#endif
 /*** GPIO -> GPIO ***/
 typedef struct
 {
 	/*** BitField Mapping ***/
 	GPIO_TypeDef* instance;
 	/*** Clock and Nvic ***/
-	void (*afr)(uint8_t pin, uint8_t data);
+	void (*moder)(uint8_t pin, uint8_t mode);
+	void (*afr)(uint8_t pin, uint8_t af);
 	/*************/
 	void (*clock)( uint8_t state );
 	/*************/
@@ -29,47 +37,14 @@ typedef struct
  STM32FXXX_GPIOD, STM32FXXX_GPIOE, STM32FXXX_GPIOF, \
  STM32FXXX_GPIOG, STM32FXXX_GPIOH;
 // INIC
-void gpioa_enable(void);
-STM32FXXX_GPIOA* gpioa(void);
-
-void gpiob_enable(void);
-STM32FXXX_GPIOB* gpiob(void);
-
-void gpioc_enable(void);
-STM32FXXX_GPIOC* gpioc(void);
-
-void gpiod_enable(void);
-STM32FXXX_GPIOD* gpiod(void);
-
-void gpioe_enable(void);
-STM32FXXX_GPIOE* gpioe(void);
-
-void gpiof_enable(void);
-STM32FXXX_GPIOF* gpiof(void);
-
-void gpiog_enable(void);
-STM32FXXX_GPIOG* gpiog(void);
-
-void gpioh_enable(void);
-STM32FXXX_GPIOH* gpioh(void);
-
-/***** GPIO Procedure & Funtion Header ******/
-void STM32FXXXGpioAclock( uint8_t state );
-void STM32FXXXGpioAafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioBclock( uint8_t state );
-void STM32FXXXGpioBafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioCclock( uint8_t state );
-void STM32FXXXGpioCafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioDclock( uint8_t state );
-void STM32FXXXGpioDafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioEclock( uint8_t state );
-void STM32FXXXGpioEafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioFclock( uint8_t state );
-void STM32FXXXGpioFafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioGclock( uint8_t state );
-void STM32FXXXGpioGafr( uint8_t pin, uint8_t data );
-void STM32FXXXGpioHclock( uint8_t state );
-void STM32FXXXGpioHafr( uint8_t pin, uint8_t data );
+void gpioa_enable(void); STM32FXXX_GPIOA* gpioa(void);
+void gpiob_enable(void); STM32FXXX_GPIOB* gpiob(void);
+void gpioc_enable(void); STM32FXXX_GPIOC* gpioc(void);
+void gpiod_enable(void); STM32FXXX_GPIOD* gpiod(void);
+void gpioe_enable(void); STM32FXXX_GPIOE* gpioe(void);
+void gpiof_enable(void); STM32FXXX_GPIOF* gpiof(void);
+void gpiog_enable(void); STM32FXXX_GPIOG* gpiog(void);
+void gpioh_enable(void); STM32FXXX_GPIOH* gpioh(void);
 
 #endif
 
