@@ -111,15 +111,16 @@ void clear_reg(volatile uint32_t* reg, uint32_t hbits);
 uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
 void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
 void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins );
-void set_pin( GPIO_TypeDef* reg, uint8_t pin );
-void clear_pin( GPIO_TypeDef* reg, uint8_t pin );
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n);
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
+// IO
+void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins );
+void set_pin( GPIO_TypeDef* reg, uint8_t pin );
+void clear_pin( GPIO_TypeDef* reg, uint8_t pin );
 
 /****** MISCELLANEOUS ******/
 /*** Clock ***/

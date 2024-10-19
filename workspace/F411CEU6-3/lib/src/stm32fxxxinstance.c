@@ -46,22 +46,6 @@ inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint3
 	if(Pos > H_BIT){ Pos = L_BIT; }
 	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
 }
-inline void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
-{
-	reg->BSRR = (uint32_t)hpins;
-}
-inline void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins )
-{
-	reg->BSRR = (uint32_t)(hpins << WORD_BITS);
-}
-inline void set_pin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (1 << pin);
-}
-inline void clear_pin( GPIO_TypeDef* reg, uint8_t pin )
-{
-	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
-}
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
 	if(size_block > N_BITS){ size_block = N_BITS; }
@@ -117,6 +101,24 @@ void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 	*(reg + n ) &= ~(mask << bit_n);
 	*(reg + n ) |= (data << bit_n);
 }
+// IO
+inline void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
+{
+	reg->BSRR = (uint32_t)hpins;
+}
+inline void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins )
+{
+	reg->BSRR = (uint32_t)(hpins << WORD_BITS);
+}
+inline void set_pin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (1 << pin);
+}
+inline void clear_pin( GPIO_TypeDef* reg, uint8_t pin )
+{
+	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
+}
+// UNUSED
 void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
 	uint8_t i;
