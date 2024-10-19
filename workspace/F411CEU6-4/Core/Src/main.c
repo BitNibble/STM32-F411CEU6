@@ -344,7 +344,6 @@ void setup_usart1(void){
 	gpioa()->instance->MODER |= (GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1); // Set to alternate function mode
 
 	// Set alternate function type to AF7 (USART1) for PA9 and PA10
-	gpioa()->afr(9,0); gpioa()->afr(10,0); // Clear AFRH bits for PA9, PA10
 	gpioa()->afr(9,7); gpioa()->afr(10,7); // Set AF7 for PA9 and PA10
 
 	// Set PA9 as push-pull output, high speed

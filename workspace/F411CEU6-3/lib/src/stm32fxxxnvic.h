@@ -31,16 +31,6 @@ typedef struct
 void nvic_enable(void);
 STM32FXXX_NVIC* nvic(void);
 
-/*** NVIC Bit Mapping Header ***/
-// NVIC
-void STM32FXXXNVIC_set_enable( uint8_t IRQn );
-void STM32FXXXNVIC_clear_enable( uint8_t IRQn );
-void STM32FXXXNVIC_set_pending( uint8_t IRQn );
-void STM32FXXXNVIC_clear_pending( uint8_t IRQn );
-uint8_t STM32FXXXNVIC_active( uint8_t IRQn );
-void STM32FXXXNVIC_priority(uint32_t IRQn, uint32_t priority);
-void STM32FXXXNVIC_trigger(uint32_t IRQn);
-
 #endif
 
 /*** EOF ***/
