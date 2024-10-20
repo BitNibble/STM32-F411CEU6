@@ -10,6 +10,7 @@ Comment:
 *******************************************************************************/
 /*** File Library ***/
 #include "stm32fxxxusart.h"
+#include <string.h>
 #include <math.h>
 
 /*** File Variable ***/
@@ -95,12 +96,20 @@ void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
 void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
 void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
 void USART1_SendChar(char c) {
+	USART1->CR1 &= ~USART_CR1_TXEIE;
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
     USART1->DR = c;                       // Send the character
 }
 char USART1_ReceiveChar(void) {
+	USART1->CR1 &= ~USART_CR1_RXNEIE;
     while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
     return (char)USART1->DR;               // Return the received character
+}
+void USART1_SendString(const char *str) {
+    // Copy the string into the transmit buffer
+    strcpy((char *)tx_buffer, str); // Ensure tx_buffer is big enough
+    // Enable the TXE interrupt to start sending data
+    USART1->CR1 |= USART_CR1_TXEIE;
 }
 void USART1_start(void) { USART1->CR1 |= USART_CR1_UE; }
 void USART1_stop(void) { USART1->CR1 &= ~USART_CR1_UE; }
@@ -399,6 +408,9 @@ void usart1_enable(void)
 	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
 	stm32fxxx_usart1.send_char = USART1_SendChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
+	stm32fxxx_usart1.tx_buff = (char*)tx_buffer;
+	stm32fxxx_usart1.rx_buff = (char*)rx_buffer;
+	stm32fxxx_usart1.send_string = USART1_SendString;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
 	// Inic
@@ -599,12 +611,12 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
 /*** Interrupt handler for USART1 ***/
 void USART1_IRQHandler(void) {
 
-	if(get_reg_block(USART1->CR1,ONE,USART_CR1_RXNEIE_Pos)) {
+	if(USART1->CR1 & USART_CR1_RXNEIE) {
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if (USART1->SR & USART_SR_RXNE) {
 			uint8_t received_byte = USART1->DR;
 			// Handle received data
-			if (received_byte) {
+			if (received_byte && received_byte != '\r' && received_byte != '\n') {
 				if (rx_index < RX_BUFFER_SIZE) {
 					rx_buffer[rx_index++] = received_byte;
 				}
@@ -615,7 +627,7 @@ void USART1_IRQHandler(void) {
 		}
 	}
 
-	if(get_reg_block(USART1->CR1,ONE,USART_CR1_TXEIE_Pos)) {
+	if(USART1->CR1 & USART_CR1_TXEIE) {
 		// Check if the TXE (Transmit Data Register Empty) flag is set
 		if (USART1->SR & USART_SR_TXE) {
 			if(tx_buffer[tx_index]) {
@@ -630,6 +642,8 @@ void USART1_IRQHandler(void) {
 				}
 			}else{
 				USART1->DR = ZERO;
+				tx_index = ZERO;
+				tx_buffer[tx_index] = ZERO;
 				USART1->CR1 &= ~USART_CR1_TXEIE;
 			}
 		}

@@ -33,6 +33,7 @@ GPIO PB9 - D7
 #include "armfunction.h"
 #include "explode.h"
 #include <stdio.h>
+#include <string.h>
 
 #define JMP_menu 120
 #define JMP_menu_repeat 5
@@ -60,6 +61,7 @@ int main(void)
     gpioc_enable(); // gpioc13
 
     setup_usart1();
+    //strcpy(usart1()->tx_buff, "Ola Mundo");
 
     rtc()->inic(1);
     PA = EXPLODE_enable();
@@ -90,6 +92,9 @@ int main(void)
     while (1)  // Infinite loop
     {
         PA.update(&PA.par, gpioa()->instance->IDR);
+
+        lcd0()->gotoxy(1, 0);
+        lcd0()->string_size(usart1()->rx_buff,20);
 
         switch (Menu) {
         case 0:
@@ -309,7 +314,10 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 0; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('H');
+                    //usart1()->send_char('H');
+                    //strcpy(usart1()->tx_buff, "Ola Mundo\r\n");
+                    //USART1->CR1 |= USART_CR1_TXEIE;
+                    usart1()->send_string("Ola Mundo\r\n");
                 }
             } else {
                 count_0 = 0;
@@ -352,6 +360,11 @@ void setup_usart1(void){
 
 	// Set USART1 baud rate
 	usart1()->samplingmode(0,9600);
+
+	// Interrupt handler setup
+	set_reg_block(&usart1()->instance->CR1,ONE,USART_CR1_TXEIE_Pos,ONE);
+	set_reg_block(&usart1()->instance->CR1,ONE,USART_CR1_RXNEIE_Pos,ONE);
+	usart1()->nvic(ON);
 
 	// Enable USART1, TX, RX
 	usart1()->tx_enable(); usart1()->rx_enable(); // Enable transmitter and receiver

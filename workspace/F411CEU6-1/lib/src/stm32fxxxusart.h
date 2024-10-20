@@ -35,6 +35,9 @@ typedef struct
 	void (*rx_disable)(void);
 	void (*send_char)(char c);
 	char (*receive_char)(void);
+	char* tx_buff;
+	char* rx_buff;
+	void (*send_string)(const char *str);
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_USART1, STM32FXXX_USART2, STM32FXXX_USART3, STM32FXXX_USART6;
@@ -55,6 +58,9 @@ typedef struct
 	void (*rx_disable)(void);
 	void (*send_char)(char c);
 	char (*receive_char)(void);
+	char* tx_buff;
+	char* rx_buff;
+	void (*send_string)(const char *str);
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_UART4, STM32FXXX_UART5;
