@@ -34,8 +34,7 @@ typedef struct
 }STM32FXXX_ADC1;
 
 // INIC
-void adc1_enable(void);
-STM32FXXX_ADC1* adc1(void);
+void adc1_enable(void); STM32FXXX_ADC1* adc1(void);
 
 #endif
 

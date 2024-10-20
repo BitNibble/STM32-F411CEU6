@@ -84,50 +84,9 @@ typedef struct
 	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 }STM32FXXX_SYSCFG;
-/*************************************/
-/************ INIC SYSCFG ************/
-/*************************************/
-void syscfg_enable(void);
-STM32FXXX_SYSCFG* syscfg(void);
-/***********************************************/
-/********* Procedure & Function Header *********/
-/***********************************************/
-void SYSCFG_Clock(uint8_t state);
-// memrmp
-void SYSCFG_memrmp_swp_fmc(uint8_t value);
-void SYSCFG_memrmp_mem_mode(uint8_t value);
-// pmc
-void SYSCFG_pmc_adcxdc2(uint8_t value);
-void SYSCFG_pmc_adc1dc2(uint8_t state);
-void SYSCFG_pmc_adc2dc2(uint8_t state);
-void SYSCFG_pmc_adc3dc2(uint8_t state);
-// exticr1
-void SYSCFG_exticr1_exti3(uint8_t value);
-void SYSCFG_exticr1_exti2(uint8_t value);
-void SYSCFG_exticr1_exti1(uint8_t value);
-void SYSCFG_exticr1_exti0(uint8_t value);
-// exticr2
-void SYSCFG_exticr2_exti7(uint8_t value);
-void SYSCFG_exticr2_exti6(uint8_t value);
-void SYSCFG_exticr2_exti5(uint8_t value);
-void SYSCFG_exticr2_exti4(uint8_t value);
-// exticr3
-void SYSCFG_exticr3_exti11(uint8_t value);
-void SYSCFG_exticr3_exti10(uint8_t value);
-void SYSCFG_exticr3_exti9(uint8_t value);
-void SYSCFG_exticr3_exti8(uint8_t value);
-// exticr4
-void SYSCFG_exticr4_exti15(uint8_t value);
-void SYSCFG_exticr4_exti14(uint8_t value);
-void SYSCFG_exticr4_exti13(uint8_t value);
-void SYSCFG_exticr4_exti12(uint8_t value);
-// cmpcr
-uint8_t SYSCFG_cmpcr_ready(void);
-void SYSCFG_cmpcr_cmp_pd(uint8_t state);
-// cfgr
-void SYSCFG_cfgr_fmpi2c1_sda(uint8_t state);
-void SYSCFG_cfgr_fmpi2c1_scl(uint8_t state);
-/***********************************************/
+
+void syscfg_enable(void); STM32FXXX_SYSCFG* syscfg(void);
+
 /*** INTERRUPT HEADER ***/
 void PVD_IRQHandler(void);
 void TAMP_STAMP_IRQHandler(void);

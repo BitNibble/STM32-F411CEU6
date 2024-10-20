@@ -14,11 +14,11 @@ Comment:
 #define ADC_STAB_DELAY 15
 #define END_OF_CONVERSION_TIME_OUT 100
 /*** File Variables ***/
+#ifdef STM32F446xx
 // ADC3
 static STM32FXXX_ADC3 stm32fxxx_adc3 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC3 ***/
-#ifdef STM32F446xx
 void STM32FXXXAdc3Clock(uint8_t state) {
 	if(state){ RCC->APB2ENR |= RCC_APB2ENR_ADC3EN; }else{ RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN; }
 }
@@ -31,17 +31,14 @@ void STM32FXXXAdc3start(void) {
 void STM32FXXXAdc3stop(void) {
 	set_reg_Msk(&ADC3->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF);
 }
-#endif
 /*** ADC3 INIC Procedure & Function Definition ***/
 void adc3_enable(void)
 {
-	#ifdef STM32F446xx
-		/*** ADC3 Clock ***/
-		STM32FXXXAdc3Clock(ON);
-		/*** ADC3 TypeDef ***/
-		stm32fxxx_adc3.instance = ADC3;
-		stm32fxxx_adc3.common_instance = ADC123_COMMON;
-	#endif
+	/*** ADC3 Clock ***/
+	STM32FXXXAdc3Clock(ON);
+	/*** ADC3 TypeDef ***/
+	stm32fxxx_adc3.instance = ADC3;
+	stm32fxxx_adc3.common_instance = ADC123_COMMON;
 	/*** Clock and Nvic ***/
 	stm32fxxx_adc3.clock = STM32FXXXAdc3Clock;
 	stm32fxxx_adc3.nvic = STM32FXXXAdc3Nvic;
@@ -52,6 +49,8 @@ void adc3_enable(void)
 }
 
 STM32FXXX_ADC3* adc3(void){ return (STM32FXXX_ADC3*) &stm32fxxx_adc3; }
+
+#endif
 
 /******
 1º Sequence

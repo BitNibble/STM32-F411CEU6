@@ -29,12 +29,7 @@ typedef struct
 }STM32FXXX_ADC3;
 
 // INIC
-void adc3_enable(void);
-STM32FXXX_ADC3* adc3(void);
-
-/***** ADC3 Procedure & Function Header ******/
-void STM32FXXXAdc3Clock(uint8_t state);
-void STM32FXXXAdc3Nvic(uint8_t state);
+void adc3_enable(void); STM32FXXX_ADC3* adc3(void);
 
 #endif
 

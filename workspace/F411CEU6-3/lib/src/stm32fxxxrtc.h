@@ -64,35 +64,10 @@ typedef struct
 	void (*inic)(uint8_t clock);
 	void (*nvic)(uint8_t config);
 }STM32FXXX_RTC;
-/***/
 
 /*** Global ***/
-void rtc_enable(void);
-STM32FXXX_RTC* rtc(void);
+void rtc_enable(void); STM32FXXX_RTC* rtc(void);
 
-/*** RTC Procedure & Function Header ***/
-void STM32FXXXConfigureRtcClock(uint8_t isEnabled);
-void STM32FXXXConfigureRtcInterrupt(uint8_t config);
-void STM32FXXXRtcInic(uint8_t clock);
-void STM32FXXXRtcBckWrite(uint8_t registerIndex, uint8_t data);
-uint8_t STM32FXXXRtcBckRead(uint8_t registerIndex);
-uint8_t STM32FXXXRtc_get_Year(void);
-uint8_t STM32FXXXRtc_get_Month(void);
-uint8_t STM32FXXXRtc_get_WeekDay(void);
-uint8_t STM32FXXXRtc_get_Day(void);
-uint8_t STM32FXXXRtc_get_Hour(void);
-uint8_t STM32FXXXRtc_get_Minute(void);
-uint8_t STM32FXXXRtc_get_Second(void);
-void STM32FXXXRtcHour(uint8_t hour);
-void STM32FXXXRtcMinute(uint8_t minute);
-void STM32FXXXRtcSecond(uint8_t second);
-void STM32FXXXRtcDay(uint8_t day);
-void STM32FXXXRtcYear(uint8_t year);
-void STM32FXXXRtcMonth(uint8_t month);
-void STM32FXXXRtcWeekDay(uint8_t weekday);
-void STM32FXXXRtcdr2vec(char* rtc_vect);
-void STM32FXXXRtctr2vec(char* rtc_vect);
-/*** General RTC Function Prototypes ***/
 const char* WeekDay_String(uint8_t weekday_n);
 
 /*** INTERRUPT ***/

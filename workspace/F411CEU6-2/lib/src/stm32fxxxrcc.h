@@ -49,24 +49,9 @@ typedef struct
 	void (*nvic)(uint8_t state);
 }STM32FXXX_RCC;
 
-void rcc_enable(void);
-STM32FXXX_RCC* rcc(void);
+void rcc_enable(void); STM32FXXX_RCC* rcc(void);
 
-/*** Procedure & Function Header ***/
-void STM32FXXXRCC_nvic(uint8_t state);
-/*** RCC Procedure & Function Header ***/
-// PLL
-void STM32FXXXPLLDivision(uint8_t pllm, uint16_t plln, uint8_t pllp, uint8_t pllq);
-void STM32FXXXRccPLLCLKEnable(void);
-void STM32FXXXRccPLLI2SEnable(void);
-void STM32FXXXRccPLLSAIEnable(void);
-// RCC
 void rcc_start(void);
-void STM32FXXXRccHEnable(uint8_t hclock);
-void STM32FXXXRccHSelect(uint8_t hclock);
-void STM32FXXXRccLEnable(uint8_t lclock);
-void STM32FXXXRccLSelect(uint8_t lclock);
-void STM32FXXXPrescaler(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre);
 
 /*** INTERRUPT HEADER ***/
 void RCC_IRQHandler(void);

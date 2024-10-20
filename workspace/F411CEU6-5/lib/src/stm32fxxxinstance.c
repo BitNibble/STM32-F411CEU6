@@ -380,6 +380,10 @@ uint32_t getpclk2(void){
 	uint32_t freq = getsysclk()/gethpre();
 	return freq/gethppre2();
 }
+/*** NULL Check ***/
+int isPtrNull(void* ptr) {
+    return (ptr == NULL) ? 1 : 0; // Returns 1 if NULL, 0 otherwise
+}
 /*** FPU ***/
 void fpu_enable(void) {
     // Set the CP10 and CP11 bits to enable access to the FPU

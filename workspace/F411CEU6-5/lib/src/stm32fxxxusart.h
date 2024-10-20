@@ -59,23 +59,12 @@ typedef struct
 	void (*stop)(void);
 }STM32FXXX_UART4, STM32FXXX_UART5;
 
-void usart1_enable(void);
-STM32FXXX_USART1*  usart1(void);
-
-void usart2_enable(void);
-STM32FXXX_USART2*  usart2(void);
-
-void usart3_enable(void);
-STM32FXXX_USART3*  usart3(void);
-
-void uart4_enable(void);
-STM32FXXX_UART4*  uart4(void);
-
-void uart5_enable(void);
-STM32FXXX_UART5*  uart5(void);
-
-void usart6_enable(void);
-STM32FXXX_USART6*  usart6(void);
+void usart1_enable(void); STM32FXXX_USART1*  usart1(void);
+void usart2_enable(void); STM32FXXX_USART2*  usart2(void);
+void usart3_enable(void); STM32FXXX_USART3*  usart3(void);
+void uart4_enable(void); STM32FXXX_UART4*  uart4(void);
+void uart5_enable(void); STM32FXXX_UART5*  uart5(void);
+void usart6_enable(void); STM32FXXX_USART6*  usart6(void);
 
 /*** General USART Function Prototypes ***/
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );

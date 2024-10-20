@@ -146,6 +146,8 @@ uint16_t getplln(void);
 uint8_t getpllp(void);
 uint8_t getpllq(void);
 uint8_t getpllr(void);
+/*** NULL Check ***/
+int isPtrNull(void* ptr);
 /*** FPU ***/
 void fpu_enable(void);
 /*** ADC ***/

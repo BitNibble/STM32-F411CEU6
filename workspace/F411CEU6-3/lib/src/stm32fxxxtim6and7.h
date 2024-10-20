@@ -27,13 +27,9 @@ typedef struct
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_TIM6, STM32FXXX_TIM7;
-/************************/
-/*** INIC TIM 6 AND 7 ***/
-/***********************/
-void tim6_enable(void);
-STM32FXXX_TIM6* tim6(void);
-void tim7_enable(void);
-STM32FXXX_TIM7* tim7(void);
+
+void tim6_enable(void); STM32FXXX_TIM6* tim6(void);
+void tim7_enable(void); STM32FXXX_TIM7* tim7(void);
 
 #endif
 

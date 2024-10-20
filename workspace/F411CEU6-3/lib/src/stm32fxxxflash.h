@@ -93,7 +93,6 @@ typedef struct
 /*** FLASH TypeDef ***/
 typedef struct
 {
-
 	/*** Bit Mapping ***/
 	STM32FXXXFLASH_acr* acr;
 	STM32FXXXFLASH_sr* sr;
@@ -105,61 +104,7 @@ typedef struct
 	void (*nvic)(uint8_t state);
 }STM32FXXX_FLASH;
 
-void flash_enable(void);
-STM32FXXX_FLASH* flash(void);
-
-/*** Procedure & Function Header ***/
-void STM32FXXXFLASH_nvic(uint8_t state);
-/*** FLASH Bit Mapping Header ***/
-// ACR
-void STM32FXXXFLASH_acr_dcrst(uint8_t state);
-void STM32FXXXFLASH_acr_icrst(uint8_t state);
-void STM32FXXXFLASH_acr_dcen(uint8_t state);
-void STM32FXXXFLASH_acr_icen(uint8_t state);
-void STM32FXXXFLASH_acr_prften(uint8_t state);
-void STM32FXXXFLASH_acr_latency(uint8_t value);
-// SR
-uint8_t STM32FXXXFLASH_sr_bsy(void);
-uint8_t STM32FXXXFLASH_sr_rderr(void);
-void STM32FXXXFLASH_sr_clear_rderr(void);
-uint8_t STM32FXXXFLASH_sr_pgserr(void);
-void STM32FXXXFLASH_sr_clear_pgserr(void);
-uint8_t STM32FXXXFLASH_sr_pgperr(void);
-void STM32FXXXFLASH_sr_clear_pgperr(void);
-uint8_t STM32FXXXFLASH_sr_pgaerr(void);
-void STM32FXXXFLASH_sr_clear_pgaerr(void);
-uint8_t STM32FXXXFLASH_sr_wrperr(void);
-void STM32FXXXFLASH_sr_clear_wrperr(void);
-uint8_t STM32FXXXFLASH_sr_operr(void);
-void STM32FXXXFLASH_sr_clear_operr(void);
-uint8_t STM32FXXXFLASH_sr_eop(void);
-void STM32FXXXFLASH_sr_clear_eop(void);
-// CR
-void STM32FXXXFLASH_cr_lock(void);
-void STM32FXXXFLASH_cr_errie(uint8_t state);
-void STM32FXXXFLASH_cr_eopie(uint8_t state);
-void STM32FXXXFLASH_cr_strt(void);
-void STM32FXXXFLASH_cr_psize(uint8_t value);
-void STM32FXXXFLASH_cr_snb(uint8_t value);
-void STM32FXXXFLASH_cr_mer(uint8_t state);
-void STM32FXXXFLASH_cr_ser(uint8_t state);
-void STM32FXXXFLASH_cr_pg(uint8_t state);
-// OPTCR
-void STM32FXXXFLASH_optcr_sprmod(uint8_t state);
-void STM32FXXXFLASH_optcr_n_wrp(uint8_t value);
-uint8_t STM32FXXXFLASH_optcr_get_n_wrp(void);
-void STM32FXXXFLASH_optcr_rdp(uint8_t value);
-uint8_t STM32FXXXFLASH_optcr_get_rdp(void);
-void STM32FXXXFLASH_optcr_nrst_stdby(uint8_t state);
-void STM32FXXXFLASH_optcr_nrst_stop(uint8_t state);
-void STM32FXXXFLASH_optcr_wdg_sw(uint8_t state);
-void STM32FXXXFLASH_optcr_bor_lev(uint8_t value);
-void STM32FXXXFLASH_optcr_optstrt(uint8_t state);
-void STM32FXXXFLASH_optcr_optlock(uint8_t state);
-// KEYR
-void STM32FXXXFLASH_keyr_key(uint32_t value);
-// OPTKEYR
-void STM32FXXXFLASH_optkeyr_optkey(uint32_t value);
+void flash_enable(void); STM32FXXX_FLASH* flash(void);
 
 /*** INTERRRUPT HEADER ***/
 void FLASH_IRQHandler(void);

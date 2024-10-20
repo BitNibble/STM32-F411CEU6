@@ -28,13 +28,9 @@ typedef struct
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_TIM1, STM32FXXX_TIM8;
-/*******************/
-/*** INIC 1 and 8 ***/
-/*******************/
-void tim1_enable(void);
-STM32FXXX_TIM1* tim1(void);
-void tim8_enable(void);
-STM32FXXX_TIM8* tim8(void);
+
+void tim1_enable(void); STM32FXXX_TIM1* tim1(void);
+void tim8_enable(void); STM32FXXX_TIM8* tim8(void);
 
 #endif
 

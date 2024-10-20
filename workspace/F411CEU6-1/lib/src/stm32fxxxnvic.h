@@ -28,8 +28,7 @@ typedef struct
 	/*** Other ***/
 }STM32FXXX_NVIC;
 
-void nvic_enable(void);
-STM32FXXX_NVIC* nvic(void);
+void nvic_enable(void); STM32FXXX_NVIC* nvic(void);
 
 #endif
 

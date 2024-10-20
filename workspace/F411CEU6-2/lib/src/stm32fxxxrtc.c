@@ -49,41 +49,6 @@ char rtc_dec2bcd(char num);
 void rtc_lenable(unsigned int lclock);
 static void set_rtc_clock_source(uint8_t clock_source);
 void rtc_lselect(uint8_t lclock);
-/*** RTC Procedure & Function Definition ***/
-void rtc_enable(void)
-{
-	stm32fxxx_rtc.instance = RTC;
-	/***/
-	stm32fxxx_rtc.get_Year = STM32FXXXRtc_get_Year;
-	stm32fxxx_rtc.get_Month = STM32FXXXRtc_get_Month;
-	stm32fxxx_rtc.get_WeekDay = STM32FXXXRtc_get_WeekDay;
-	stm32fxxx_rtc.get_Day = STM32FXXXRtc_get_Day;
-	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
-	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
-	stm32fxxx_rtc.get_Second = STM32FXXXRtc_get_Second;
-	stm32fxxx_rtc.Day = STM32FXXXRtcDay;
-	stm32fxxx_rtc.Month = STM32FXXXRtcMonth;
-	stm32fxxx_rtc.WeekDay = STM32FXXXRtcWeekDay;
-	stm32fxxx_rtc.Year = STM32FXXXRtcYear;
-	stm32fxxx_rtc.Hour = STM32FXXXRtcHour;
-	stm32fxxx_rtc.Minute = STM32FXXXRtcMinute;
-	stm32fxxx_rtc.Second = STM32FXXXRtcSecond;
-	stm32fxxx_rtc.dr2vec = STM32FXXXRtcdr2vec;
-	stm32fxxx_rtc.tr2vec = STM32FXXXRtctr2vec;
-	stm32fxxx_rtc.BckWrite = STM32FXXXRtcBckWrite;
-	stm32fxxx_rtc.BckRead = STM32FXXXRtcBckRead;
-	stm32fxxx_rtc.get_ss = rtc_get_ss;
-	/*** Clock and Nvic ***/
-	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
-	stm32fxxx_rtc.bck_sram_clock = STM32FXXXBckSramClock;
-	stm32fxxx_rtc.clock = STM32FXXXConfigureRtcClock;
-	stm32fxxx_rtc.nvic = STM32FXXXConfigureRtcInterrupt;
-	stm32fxxx_rtc.inic = STM32FXXXRtcInic;
-
-	//return &stm32fxxx_rtc;
-}
-
-STM32FXXX_RTC* rtc(void){ return (STM32FXXX_RTC*) &stm32fxxx_rtc; }
 
 /*** Procedure & Function Definition ***/
 void STM32FXXXConfigureRtcClock(uint8_t isEnabled) {
@@ -678,6 +643,43 @@ void rtc_lselect(uint8_t lclock) {
             break;
     }
 }
+
+/*** RTC Procedure & Function Definition ***/
+void rtc_enable(void)
+{
+	stm32fxxx_rtc.instance = RTC;
+	/***/
+	stm32fxxx_rtc.get_Year = STM32FXXXRtc_get_Year;
+	stm32fxxx_rtc.get_Month = STM32FXXXRtc_get_Month;
+	stm32fxxx_rtc.get_WeekDay = STM32FXXXRtc_get_WeekDay;
+	stm32fxxx_rtc.get_Day = STM32FXXXRtc_get_Day;
+	stm32fxxx_rtc.get_Hour = STM32FXXXRtc_get_Hour;
+	stm32fxxx_rtc.get_Minute = STM32FXXXRtc_get_Minute;
+	stm32fxxx_rtc.get_Second = STM32FXXXRtc_get_Second;
+	stm32fxxx_rtc.Day = STM32FXXXRtcDay;
+	stm32fxxx_rtc.Month = STM32FXXXRtcMonth;
+	stm32fxxx_rtc.WeekDay = STM32FXXXRtcWeekDay;
+	stm32fxxx_rtc.Year = STM32FXXXRtcYear;
+	stm32fxxx_rtc.Hour = STM32FXXXRtcHour;
+	stm32fxxx_rtc.Minute = STM32FXXXRtcMinute;
+	stm32fxxx_rtc.Second = STM32FXXXRtcSecond;
+	stm32fxxx_rtc.dr2vec = STM32FXXXRtcdr2vec;
+	stm32fxxx_rtc.tr2vec = STM32FXXXRtctr2vec;
+	stm32fxxx_rtc.BckWrite = STM32FXXXRtcBckWrite;
+	stm32fxxx_rtc.BckRead = STM32FXXXRtcBckRead;
+	stm32fxxx_rtc.get_ss = rtc_get_ss;
+	/*** Clock and Nvic ***/
+	stm32fxxx_rtc.pwr_clock = STM32FXXXPwrClock;
+	stm32fxxx_rtc.bck_sram_clock = STM32FXXXBckSramClock;
+	stm32fxxx_rtc.clock = STM32FXXXConfigureRtcClock;
+	stm32fxxx_rtc.nvic = STM32FXXXConfigureRtcInterrupt;
+	stm32fxxx_rtc.inic = STM32FXXXRtcInic;
+
+	//return &stm32fxxx_rtc;
+}
+
+STM32FXXX_RTC* rtc(void){ return (STM32FXXX_RTC*) &stm32fxxx_rtc; }
+
 /*** General RTC Function Definitions ***/
 const char* WeekDay_String(uint8_t weekday_n) {
     // Array of weekday strings, indexed from 0 to 7 for convenience

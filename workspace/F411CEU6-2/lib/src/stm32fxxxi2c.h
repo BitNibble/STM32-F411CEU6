@@ -35,26 +35,11 @@ typedef struct
 	void (*stop)(void);
 	uint8_t (*status)(void);
 }STM32FXXX_I2C1_Handler, STM32FXXX_I2C2_Handler, STM32FXXX_I2C3_Handler;
+
 /*** I2C Procedure and Function Declarations ***/
-void i2c1_enable(uint32_t sclclock);
-STM32FXXX_I2C1_Handler* i2c1(void);
-void i2c2_enable(uint32_t sclclock);
-STM32FXXX_I2C2_Handler* i2c2(void);
-void i2c3_enable(uint32_t sclclock);
-STM32FXXX_I2C3_Handler* i2c3(void);
-/*** I2C ***/
-// I2C1
-void STM32FXXXI2c1Clock( uint8_t state );
-void STM32FXXXI2c1EvNvic( uint8_t state );
-void STM32FXXXI2c1ErNvic( uint8_t state );
-// I2C2
-void STM32FXXXI2c2Clock( uint8_t state );
-void STM32FXXXI2c2EvNvic( uint8_t state );
-void STM32FXXXI2c2ErNvic( uint8_t state );
-// I2C3
-void STM32FXXXI2c3Clock( uint8_t state );
-void STM32FXXXI2c3EvNvic( uint8_t state );
-void STM32FXXXI2c3ErNvic( uint8_t state );
+void i2c1_enable(uint32_t sclclock); STM32FXXX_I2C1_Handler* i2c1(void);
+void i2c2_enable(uint32_t sclclock); STM32FXXX_I2C2_Handler* i2c2(void);
+void i2c3_enable(uint32_t sclclock); STM32FXXX_I2C3_Handler* i2c3(void);
 
 #endif
 

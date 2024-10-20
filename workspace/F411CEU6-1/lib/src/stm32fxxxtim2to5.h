@@ -39,17 +39,11 @@ typedef struct
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_TIM3, STM32FXXX_TIM4;
-/***********************/
-/*** INIC TIM 2 to 5 ***/
-/***********************/
-void tim2_enable(void);
-STM32FXXX_TIM2* tim2(void);
-void tim3_enable(void);
-STM32FXXX_TIM3* tim3(void);
-void tim4_enable(void);
-STM32FXXX_TIM4* tim4(void);
-void tim5_enable(void);
-STM32FXXX_TIM5* tim5(void);
+
+void tim2_enable(void); STM32FXXX_TIM2* tim2(void);
+void tim3_enable(void); STM32FXXX_TIM3* tim3(void);
+void tim4_enable(void); STM32FXXX_TIM4* tim4(void);
+void tim5_enable(void); STM32FXXX_TIM5* tim5(void);
 
 #endif
 
