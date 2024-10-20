@@ -29,6 +29,7 @@ GPIO PB9 - D7
 #include "stm32fxxxadc1.h"
 #include "stm32fxxxusart.h"
 /******/
+#include "BT_Commands.h"
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
@@ -116,7 +117,8 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 1; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('A');
+                    //usart1()->send_char('A');
+                    usart1()->send_string(BT_AT_GetName());
                 }
             } else {
                 count_0 = 0;
@@ -142,7 +144,8 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 2; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('B');
+                    //usart1()->send_char('B');
+                    usart1()->send_string(BT_AT_GetVersion());
                 }
             } else {
                 count_0 = 0;
@@ -168,7 +171,8 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 3; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('C');
+                    //usart1()->send_char('C');
+                    usart1()->send_string(BT_AT_GetPin());
                 }
             } else {
                 count_0 = 0;
@@ -194,7 +198,8 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 4; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('D');
+                    //usart1()->send_char('D');
+                    usart1()->send_string(BT_AT_GetRole());
                 }
             } else {
                 count_0 = 0;
@@ -220,7 +225,8 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 5; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('E');
+                    //usart1()->send_char('E');
+                    usart1()->send_string(BT_AT_GetUART());
                 }
             } else {
                 count_0 = 0;
@@ -246,7 +252,8 @@ int main(void)
                        count_0++;
                        if (count_0 > JMP_menu_repeat) {
                            Menu = 6; count_0 = 0; skip_0 = 0;
-                           usart1()->send_char('F');
+                           //usart1()->send_char('F');
+                           usart1()->send_string(BT_AT_Test());
                        }
                    } else {
                        count_0 = 0;
@@ -272,7 +279,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 7; count_0 = 0; skip_0 = 0;
-                    usart1()->send_char('G');
+                    //usart1()->send_char('G');
                 }
             } else {
                 count_0 = 0;
@@ -317,7 +324,10 @@ int main(void)
                     //usart1()->send_char('H');
                     //strcpy(usart1()->tx_buff, "Ola Mundo\r\n");
                     //USART1->CR1 |= USART_CR1_TXEIE;
-                    usart1()->send_string("Ola Mundo\r\n");
+                    //usart1()->send_string(BT_AT_SetUART(9600, 1, 0));
+                    usart1()->send_string(BT_AT_Test());
+                    //usart1()->send_string(BT_AT_GetName());
+                    //usart1()->send_string(BT_AT_GetVersion());
                 }
             } else {
                 count_0 = 0;
@@ -359,7 +369,7 @@ void setup_usart1(void){
 	gpioa()->instance->PUPDR &= ~(GPIO_PUPDR_PUPDR9 | GPIO_PUPDR_PUPDR10); // No pull-up, no pull-down
 
 	// Set USART1 baud rate
-	usart1()->samplingmode(0,9600);
+	usart1()->samplingmode(0,38400);
 
 	// Interrupt handler setup
 	set_reg_block(&usart1()->instance->CR1,ONE,USART_CR1_TXEIE_Pos,ONE);

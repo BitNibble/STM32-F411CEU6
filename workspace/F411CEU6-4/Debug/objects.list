@@ -30,6 +30,7 @@
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_i2c.o"
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_tim.o"
 "./lib/src/74hc595.o"
+"./lib/src/BT_Commands.o"
 "./lib/src/armfunction.o"
 "./lib/src/armlcd.o"
 "./lib/src/armsystick.o"

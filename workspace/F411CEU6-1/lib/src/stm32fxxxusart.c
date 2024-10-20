@@ -13,6 +13,8 @@ Comment:
 #include <string.h>
 #include <math.h>
 
+/*** Define and Macro ***/
+//#define UART_NULL
 /*** File Variable ***/
 static STM32FXXX_USART1 stm32fxxx_usart1 = {0};
 static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
@@ -616,7 +618,8 @@ void USART1_IRQHandler(void) {
 		if (USART1->SR & USART_SR_RXNE) {
 			uint8_t received_byte = USART1->DR;
 			// Handle received data
-			if (received_byte && received_byte != '\r' && received_byte != '\n') {
+			//if (received_byte && received_byte != '\r' && received_byte != '\n') {
+			if (received_byte && received_byte != '\n') {
 				if (rx_index < RX_BUFFER_SIZE) {
 					rx_buffer[rx_index++] = received_byte;
 				}
@@ -641,7 +644,9 @@ void USART1_IRQHandler(void) {
 					tx_buffer[tx_index] = ZERO;
 				}
 			}else{
-				USART1->DR = ZERO;
+				#ifdef UART_NULL
+					USART1->DR = 0;
+				#endif
 				tx_index = ZERO;
 				tx_buffer[tx_index] = ZERO;
 				USART1->CR1 &= ~USART_CR1_TXEIE;
