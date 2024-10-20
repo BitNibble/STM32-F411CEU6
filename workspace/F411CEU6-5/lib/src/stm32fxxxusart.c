@@ -22,10 +22,12 @@ static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
 #endif
 static STM32FXXX_USART6 stm32fxxx_usart6 = {0};
 /******/
+#define RX_BUFFER_LIM (RX_BUFFER_SIZE + 1)
+#define TX_BUFFER_LIM (TX_BUFFER_SIZE + 1)
 // Buffer for received and transmit data
-uint8_t rx_buffer[RX_BUFFER_SIZE + 1];
+uint8_t rx_buffer[RX_BUFFER_LIM];
 volatile uint16_t rx_index = 0;
-uint8_t tx_buffer[TX_BUFFER_SIZE + 1];
+uint8_t tx_buffer[TX_BUFFER_LIM];
 volatile uint16_t tx_index = 0;
 /*** USART Procedure & Function Definition ***/
 void Usart3_WordLength(uint8_t wordlength);
@@ -400,8 +402,8 @@ void usart1_enable(void)
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
 	// Inic
-	tx_buffer[TX_BUFFER_SIZE] = '\0';
-	rx_buffer[RX_BUFFER_SIZE] = '\0';
+	tx_buffer[TX_BUFFER_LIM] = ZERO;
+	rx_buffer[RX_BUFFER_LIM] = ZERO;
 	//return &stm32fxxx_usart1;
 }
 
@@ -596,25 +598,42 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
 
 /*** Interrupt handler for USART1 ***/
 void USART1_IRQHandler(void) {
-    // Check if the RXNE (Receive Not Empty) flag is set
-    if (USART1->SR & USART_SR_RXNE) {
-        uint8_t received_byte = USART1->DR;
-        // Handle received data
-        if (rx_index < RX_BUFFER_SIZE) {
-            rx_buffer[rx_index++] = received_byte;
-        }
-    }
 
-    // Check if the TXE (Transmit Data Register Empty) flag is set
-    if (USART1->SR & USART_SR_TXE) {
-        // Transmit the next byte if available
-        USART1->DR = tx_buffer[tx_index++];
+	if(get_reg_block(USART1->CR1,ONE,USART_CR1_RXNEIE_Pos)) {
+		// Check if the RXNE (Receive Not Empty) flag is set
+		if (USART1->SR & USART_SR_RXNE) {
+			uint8_t received_byte = USART1->DR;
+			// Handle received data
+			if (received_byte) {
+				if (rx_index < RX_BUFFER_SIZE) {
+					rx_buffer[rx_index++] = received_byte;
+				}
+			}else {
+				rx_buffer[rx_index] = ZERO;
+				rx_index = ZERO;
+			}
+		}
+	}
 
-        // Disable TXE interrupt if no more data to transmit
-        if (tx_index >= TX_BUFFER_SIZE) {
-            USART1->CR1 &= ~USART_CR1_TXEIE;
-        }
-    }
+	if(get_reg_block(USART1->CR1,ONE,USART_CR1_TXEIE_Pos)) {
+		// Check if the TXE (Transmit Data Register Empty) flag is set
+		if (USART1->SR & USART_SR_TXE) {
+			if(tx_buffer[tx_index]) {
+				// Disable TXE interrupt if no more data to transmit
+				if (tx_index < TX_BUFFER_SIZE) {
+					// Transmit the next byte if available
+					USART1->DR = tx_buffer[tx_index++];
+				}else {
+					USART1->CR1 &= ~USART_CR1_TXEIE;
+					tx_index = ZERO;
+					tx_buffer[tx_index] = ZERO;
+				}
+			}else{
+				USART1->DR = ZERO;
+				USART1->CR1 &= ~USART_CR1_TXEIE;
+			}
+		}
+	}
 
     // Check if the TC (Transmission Complete) flag is set
     if (USART1->SR & USART_SR_TC) {

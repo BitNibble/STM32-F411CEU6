@@ -33,7 +33,9 @@ Comment:
 	#define HSE_RTC 4000000UL
 #endif
 #define ON 1
+#define ONE 1
 #define OFF 0
+#define ZERO 0
 /*******   0 -> HSI    1->HSE   *********/
 #define H_Clock_Source 1
 /****************************************/
