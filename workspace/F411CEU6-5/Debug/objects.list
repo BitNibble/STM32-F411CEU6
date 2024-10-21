@@ -21,6 +21,7 @@
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o"
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.o"
 "./lib/src/74hc595.o"
+"./lib/src/BT_Commands.o"
 "./lib/src/armfunction.o"
 "./lib/src/armlcd.o"
 "./lib/src/armsystick.o"

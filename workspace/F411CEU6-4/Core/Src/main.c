@@ -65,7 +65,6 @@ int main(void)
     gpioc_enable(); // gpioc13
 
     setup_usart1();
-    //strcpy(usart1()->tx_buff, "Ola Mundo");
 
     rtc()->inic(1);
     PA = EXPLODE_enable();
@@ -361,8 +360,8 @@ void setup_usart1(void){
 	usart1()->samplingmode(0,38400);
 
 	// Interrupt handler setup
-	set_reg_block(&usart1()->instance->CR1,ONE,USART_CR1_TXEIE_Pos,ONE);
-	set_reg_block(&usart1()->instance->CR1,ONE,USART_CR1_RXNEIE_Pos,ONE);
+	usart1()->instance->CR1 |= USART_CR1_TXEIE;
+	usart1()->instance->CR1 |= USART_CR1_RXNEIE;
 	usart1()->nvic(ON);
 
 	// Enable USART1, TX, RX
