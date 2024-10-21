@@ -40,11 +40,14 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
+#define BUFF_SIZE 21
 
 EXPLODE PA;
 char ADC_msg[32];
 char str[32];
 
+char oneshot[BUFF_SIZE];
+char received[BUFF_SIZE];
 void setup_usart1(void);
 
 int main(void)
@@ -90,18 +93,20 @@ int main(void)
     char vecT[8]; // for calendar time
     PA.update(&PA.par, gpioa()->instance->IDR);
 
+    gpioc()->instance->BSRR = GPIO_BSRR_BS13;
+
     while (1)  // Infinite loop
     {
         PA.update(&PA.par, gpioa()->instance->IDR);
 
         lcd0()->gotoxy(1, 0);
-        lcd0()->string_size(usart1()->rx_buff,20);
+        usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
+        lcd0()->string_size(received, 20);
 
         switch (Menu) {
         case 0:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Hour", 12);
-            gpioc()->instance->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -117,8 +122,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 1; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('A');
-                    usart1()->send_string(BT_AT_GetName());
+                    usart1()->transmit_string(BT_AT_GetName());
                 }
             } else {
                 count_0 = 0;
@@ -128,7 +132,6 @@ int main(void)
         case 1:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Minute", 12);
-            gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -144,8 +147,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 2; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('B');
-                    usart1()->send_string(BT_AT_GetVersion());
+                    usart1()->transmit_string(BT_AT_GetVersion());
                 }
             } else {
                 count_0 = 0;
@@ -155,7 +157,6 @@ int main(void)
         case 2:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Second", 12);
-            GPIOC->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -171,8 +172,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 3; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('C');
-                    usart1()->send_string(BT_AT_GetPin());
+                    usart1()->transmit_string(BT_AT_GetPin());
                 }
             } else {
                 count_0 = 0;
@@ -182,7 +182,6 @@ int main(void)
         case 3:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Year", 12);
-            GPIOC->BSRR = GPIO_BSRR_BS13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -198,8 +197,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 4; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('D');
-                    usart1()->send_string(BT_AT_GetRole());
+                    usart1()->transmit_string(BT_AT_GetRole());
                 }
             } else {
                 count_0 = 0;
@@ -209,7 +207,6 @@ int main(void)
         case 4:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Month", 12);
-            GPIOC->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -225,8 +222,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 5; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('E');
-                    usart1()->send_string(BT_AT_GetUART());
+                    usart1()->transmit_string(BT_AT_GetUART());
                 }
             } else {
                 count_0 = 0;
@@ -234,36 +230,33 @@ int main(void)
             break;
 
         case 5:
-                   lcd0()->gotoxy(0, 0);
-                   lcd0()->string_size("Set WeekDay", 12);
-                   GPIOC->BSRR = GPIO_BSRR_BS13;
+        	lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Set WeekDay", 12);
 
-                   if (PA.par.LH & 1) {
-                       if (skip_0 > 0) {
-                           incr_0 = rtc()->get_WeekDay();
-                           incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
-                           rtc()->WeekDay(incr_0);
-                       }
-                       skip_0++;
-                   }
+            if (PA.par.LH & 1) {
+            	if (skip_0 > 0) {
+            		incr_0 = rtc()->get_WeekDay();
+                    incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
+                    rtc()->WeekDay(incr_0);
+                }
+                skip_0++;
+            }
 
-                   if (PA.par.LL & 1) {
-                       _delay_ms(JMP_menu);
-                       count_0++;
-                       if (count_0 > JMP_menu_repeat) {
-                           Menu = 6; count_0 = 0; skip_0 = 0;
-                           //usart1()->send_char('F');
-                           usart1()->send_string(BT_AT_Test());
-                       }
-                   } else {
-                       count_0 = 0;
-                   }
-                   break;
+            if (PA.par.LL & 1) {
+            	_delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > JMP_menu_repeat) {
+                	Menu = 6; count_0 = 0; skip_0 = 0;
+                    usart1()->transmit_string(BT_AT_Test());
+                }
+            } else {
+            	count_0 = 0;
+            }
+            break;
 
         case 6:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Day", 12);
-            GPIOC->BSRR = GPIO_BSRR_BR13;
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) {
@@ -279,7 +272,6 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 7; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('G');
                 }
             } else {
                 count_0 = 0;
@@ -304,7 +296,13 @@ int main(void)
                     adc_value = 0;  // Reset adc_value after use
                 }
             }
-            GPIOC->BSRR = GPIO_BSRR_BS13;
+
+            if(!strcmp(oneshot,"s01.")){
+            	gpioc()->instance->BSRR = GPIO_BSRR_BS13;
+            }
+            if(!strcmp(oneshot,"s00.")){
+            	gpioc()->instance->BSRR = GPIO_BSRR_BR13;
+            }
 
             if (PA.par.LH & 1) {
                 if (skip_0 < 1) {
@@ -314,20 +312,11 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                //_delay_ms(JMP_menu);
-                //delayAsmMicroseconds(JMP_menu * 1000);
-                //delayMicroseconds(JMP_menu * 600);
                 HAL_Delay(1000);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu = 0; count_0 = 0; skip_0 = 0;
-                    //usart1()->send_char('H');
-                    //strcpy(usart1()->tx_buff, "Ola Mundo\r\n");
-                    //USART1->CR1 |= USART_CR1_TXEIE;
-                    //usart1()->send_string(BT_AT_SetUART(9600, 1, 0));
-                    usart1()->send_string(BT_AT_Test());
-                    //usart1()->send_string(BT_AT_GetName());
-                    //usart1()->send_string(BT_AT_GetVersion());
+                    usart1()->transmit_string(BT_AT_Test());
                 }
             } else {
                 count_0 = 0;

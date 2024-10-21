@@ -15,6 +15,7 @@ Comment:
 // Options: __STM32F446xx_H    __STM32F411xE_H
 #include "stm32f4xx.h"
 #include <stddef.h>
+#include <stdint.h>
 #include <inttypes.h>
 /*** File Constant & Macro ***/
 #ifndef HSI_RC

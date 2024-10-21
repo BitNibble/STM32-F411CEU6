@@ -15,33 +15,31 @@ Comment:
 
 /*** Define and Macro ***/
 //#define UART_NULL
-/*** File Variable ***/
-static STM32FXXX_USART1 stm32fxxx_usart1 = {0};
-static STM32FXXX_USART2 stm32fxxx_usart2 = {0};
-#ifdef STM32F446xx
-	static STM32FXXX_USART3 stm32fxxx_usart3 = {0};
-	static STM32FXXX_UART4 stm32fxxx_uart4 = {0};
-	static STM32FXXX_UART5 stm32fxxx_uart5 = {0};
+#ifndef ZERO
+	#define ZERO 0
 #endif
-static STM32FXXX_USART6 stm32fxxx_usart6 = {0};
+#ifndef ONE
+	#define ONE 1
+#endif
+/*** File Variable ***/
+static STM32FXXX_USART1 stm32fxxx_usart1 = {ZERO};
+static STM32FXXX_USART2 stm32fxxx_usart2 = {ZERO};
+#ifdef STM32F446xx
+	static STM32FXXX_USART3 stm32fxxx_usart3 = {ZERO};
+	static STM32FXXX_UART4 stm32fxxx_uart4 = {ZERO};
+	static STM32FXXX_UART5 stm32fxxx_uart5 = {ZERO};
+#endif
+static STM32FXXX_USART6 stm32fxxx_usart6 = {ZERO};
 /******/
-#define RX_BUFFER_LIM (RX_BUFFER_SIZE + 1)
-#define TX_BUFFER_LIM (TX_BUFFER_SIZE + 1)
+#define RX_BUFFER_LIM (RX_BUFFER_SIZE + ONE)
+#define TX_BUFFER_LIM (TX_BUFFER_SIZE + ONE)
 // Buffer for received and transmit data
 uint8_t rx_buffer[RX_BUFFER_LIM];
-volatile uint16_t rx_index = 0;
+volatile uint16_t rx_index = ZERO;
+static uint8_t usart1_flag = ZERO;
 uint8_t tx_buffer[TX_BUFFER_LIM];
-volatile uint16_t tx_index = 0;
+volatile uint16_t tx_index = ZERO;
 /*** USART Procedure & Function Definition ***/
-void Usart3_WordLength(uint8_t wordlength);
-void Usart3_StopBits(double stopbits);
-void Usart3_SamplingMode(uint8_t samplingmode, uint32_t baudrate);
-void Usart4_WordLength(uint8_t wordlength);
-void Usart4_StopBits(double stopbits);
-void Usart4_SamplingMode(uint8_t samplingmode, uint32_t baudrate);
-void Usart5_WordLength(uint8_t wordlength);
-void Usart5_StopBits(double stopbits);
-void Usart5_SamplingMode(uint8_t samplingmode, uint32_t baudrate);
 /*** USART1 ***/
 void STM32FXXXUsart1Clock( uint8_t state )
 {
@@ -49,7 +47,7 @@ void STM32FXXXUsart1Clock( uint8_t state )
 }
 void STM32FXXXUsart1Nvic( uint8_t state )
 {
-	if(state){ set_bit_block(NVIC->ISER, 1, USART1_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART1_IRQn, 1); }
+	if(state){ set_bit_block(NVIC->ISER, ONE, USART1_IRQn, 1); }else{ set_bit_block(NVIC->ICER, ONE, USART1_IRQn, 1); }
 }
 void Usart1_WordLength(uint8_t wordlength) {
     // Clear the M bit to reset word length
@@ -97,7 +95,7 @@ void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
 void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
 void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
 void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
-void USART1_SendChar(char c) {
+void USART1_TransmitChar(char c) {
 	USART1->CR1 &= ~USART_CR1_TXEIE;
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
     USART1->DR = c;                       // Send the character
@@ -107,11 +105,36 @@ char USART1_ReceiveChar(void) {
     while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
     return (char)USART1->DR;               // Return the received character
 }
-void USART1_SendString(const char *str) {
+void USART1_RxFlush(void) {
+	rx_index = ZERO;
+	rx_buffer[ZERO] = ZERO;
+}
+void USART1_TransmitString(const char *str) {
+	tx_index = ZERO;
     // Copy the string into the transmit buffer
-    strcpy((char *)tx_buffer, str); // Ensure tx_buffer is big enough
+    strncpy((char *)tx_buffer, str, TX_BUFFER_SIZE); // Ensure tx_buffer is big enough
     // Enable the TXE interrupt to start sending data
     USART1->CR1 |= USART_CR1_TXEIE;
+}
+void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
+	oneshot[size - ONE] = ZERO; rx[size - ONE] = ZERO;
+	char *ptr = (char*)rx_buffer;
+	const size_t ptr_length = strlen((char*)ptr);
+	const size_t endl_length = strlen(endl);
+	const int32_t diff_length = ptr_length - endl_length;
+	int32_t check;
+	if(usart1_flag){ *oneshot = ZERO; usart1_flag = ZERO; }
+	if( diff_length >= 0 ){
+		check = strcmp((char*)ptr + diff_length, endl);
+		if( !check ) {
+			strncpy(oneshot, (const char*)ptr, size - ONE);
+			oneshot[diff_length] = ZERO;
+			strncpy(rx, (const char*)ptr, size - ONE);
+			rx[diff_length] = ZERO;
+			usart1_flag = 0xFF;
+			USART1_RxFlush( );
+		}
+	}
 }
 void USART1_start(void) { USART1->CR1 |= USART_CR1_UE; }
 void USART1_stop(void) { USART1->CR1 &= ~USART_CR1_UE; }
@@ -408,16 +431,16 @@ void usart1_enable(void)
 	stm32fxxx_usart1.tx_disable = USART1_TxDisable;
 	stm32fxxx_usart1.rx_enable = USART1_RxEnable;
 	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
-	stm32fxxx_usart1.send_char = USART1_SendChar;
+	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
-	stm32fxxx_usart1.tx_buff = (char*)tx_buffer;
-	stm32fxxx_usart1.rx_buff = (char*)rx_buffer;
-	stm32fxxx_usart1.send_string = USART1_SendString;
+	stm32fxxx_usart1.rx_flush = USART1_RxFlush;
+	stm32fxxx_usart1.transmit_string = USART1_TransmitString;
+	stm32fxxx_usart1.receive_string = USART1_ReceiveString;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
 	// Inic
-	tx_buffer[TX_BUFFER_LIM] = ZERO;
-	rx_buffer[RX_BUFFER_LIM] = ZERO;
+	tx_buffer[TX_BUFFER_SIZE] = ZERO;
+	rx_buffer[RX_BUFFER_SIZE] = ZERO;
 	//return &stm32fxxx_usart1;
 }
 
@@ -439,7 +462,7 @@ void usart2_enable(void)
 	stm32fxxx_usart2.tx_disable = NULL;
 	stm32fxxx_usart2.rx_enable = NULL;
 	stm32fxxx_usart2.rx_disable = NULL;
-	stm32fxxx_usart2.send_char = NULL;
+	stm32fxxx_usart2.transmit_char = NULL;
 	stm32fxxx_usart2.receive_char = NULL;
 	stm32fxxx_usart2.start = USART2_start;
 	stm32fxxx_usart2.stop = USART2_stop;
@@ -468,7 +491,7 @@ void usart3_enable(void)
 	stm32fxxx_usart3.tx_enable = NULL;
 	stm32fxxx_usart3.tx_disable = NULL;
 	stm32fxxx_usart3.rx_enable = NULL;
-	stm32fxxx_usart3.rx_disable = NULL;
+	stm32fxxx_usart3.transmit_disable = NULL;
 	stm32fxxx_usart3.send_char = NULL;
 	stm32fxxx_usart3.receive_char = NULL;
 	stm32fxxx_usart3.start = USART3_start;
@@ -498,7 +521,7 @@ void uart4_enable(void)
 	stm32fxxx_uart4.tx_disable = NULL;
 	stm32fxxx_uart4.rx_enable = NULL;
 	stm32fxxx_uart4.rx_disable = NULL;
-	stm32fxxx_uart4.send_char = NULL;
+	stm32fxxx_uart4.transmit_char = NULL;
 	stm32fxxx_uart4.receive_char = NULL;
 	stm32fxxx_uart4.start = USART4_start;
 	stm32fxxx_uart4.stop = USART4_stop;
@@ -528,7 +551,7 @@ void uart5_enable(void)
 	stm32fxxx_uart5.tx_disable = NULL;
 	stm32fxxx_uart5.rx_enable = NULL;
 	stm32fxxx_uart5.rx_disable = NULL;
-	stm32fxxx_uart5.send_char = NULL;
+	stm32fxxx_uart5.transmit_char = NULL;
 	stm32fxxx_uart5.receive_char = NULL;
 	stm32fxxx_uart5.start = USART5_start;
 	stm32fxxx_uart5.stop = USART5_stop;
@@ -555,7 +578,7 @@ void usart6_enable(void)
 	stm32fxxx_usart6.tx_disable = NULL;
 	stm32fxxx_usart6.rx_enable = NULL;
 	stm32fxxx_usart6.rx_disable = NULL;
-	stm32fxxx_usart6.send_char = NULL;
+	stm32fxxx_usart6.transmit_char = NULL;
 	stm32fxxx_usart6.receive_char = NULL;
 	stm32fxxx_usart6.start = USART6_start;
 	stm32fxxx_usart6.stop = USART6_stop;
@@ -617,15 +640,9 @@ void USART1_IRQHandler(void) {
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if (USART1->SR & USART_SR_RXNE) {
 			uint8_t received_byte = USART1->DR;
-			// Handle received data
-			//if (received_byte && received_byte != '\r' && received_byte != '\n') {
-			if (received_byte && received_byte != '\n') {
-				if (rx_index < RX_BUFFER_SIZE) {
-					rx_buffer[rx_index++] = received_byte;
-				}
-			}else {
+			if (rx_index < RX_BUFFER_SIZE) {
+				rx_buffer[rx_index++] = received_byte;
 				rx_buffer[rx_index] = ZERO;
-				rx_index = ZERO;
 			}
 		}
 	}
@@ -634,21 +651,8 @@ void USART1_IRQHandler(void) {
 		// Check if the TXE (Transmit Data Register Empty) flag is set
 		if (USART1->SR & USART_SR_TXE) {
 			if(tx_buffer[tx_index]) {
-				// Disable TXE interrupt if no more data to transmit
-				if (tx_index < TX_BUFFER_SIZE) {
-					// Transmit the next byte if available
-					USART1->DR = tx_buffer[tx_index++];
-				}else {
-					USART1->CR1 &= ~USART_CR1_TXEIE;
-					tx_index = ZERO;
-					tx_buffer[tx_index] = ZERO;
-				}
+				USART1->DR = tx_buffer[tx_index++];
 			}else{
-				#ifdef UART_NULL
-					USART1->DR = 0;
-				#endif
-				tx_index = ZERO;
-				tx_buffer[tx_index] = ZERO;
 				USART1->CR1 &= ~USART_CR1_TXEIE;
 			}
 		}
