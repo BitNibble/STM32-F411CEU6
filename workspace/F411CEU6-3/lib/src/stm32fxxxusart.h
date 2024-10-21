@@ -40,7 +40,7 @@ typedef struct
 	void (*receive_string)(char* oneshot, char* rx, size_t size, const char* endl);
 	void (*start)(void);
 	void (*stop)(void);
-}STM32FXXX_USART2, STM32FXXX_USART3, STM32FXXX_USART6;
+}STM32FXXX_USART3;
 // USART -> UART4,5
 typedef struct
 {
@@ -65,11 +65,9 @@ typedef struct
 	void (*stop)(void);
 }STM32FXXX_UART4, STM32FXXX_UART5;
 
-void usart2_enable(void); STM32FXXX_USART2*  usart2(void);
 void usart3_enable(void); STM32FXXX_USART3*  usart3(void);
 void uart4_enable(void); STM32FXXX_UART4*  uart4(void);
 void uart5_enable(void); STM32FXXX_UART5*  uart5(void);
-void usart6_enable(void); STM32FXXX_USART6*  usart6(void);
 
 #endif
 

@@ -22,13 +22,11 @@ Comment:
 	#define ONE 1
 #endif
 /*** File Variable ***/
-static STM32FXXX_USART2 stm32fxxx_usart2 = {ZERO};
 #ifdef STM32F446xx
 	static STM32FXXX_USART3 stm32fxxx_usart3 = {ZERO};
 	static STM32FXXX_UART4 stm32fxxx_uart4 = {ZERO};
 	static STM32FXXX_UART5 stm32fxxx_uart5 = {ZERO};
 #endif
-static STM32FXXX_USART6 stm32fxxx_usart6 = {ZERO};
 /******/
 #define RX_BUFFER_LIM (RX_BUFFER_SIZE + ONE)
 #define TX_BUFFER_LIM (TX_BUFFER_SIZE + ONE)
@@ -38,61 +36,6 @@ volatile uint16_t rx_index = ZERO;
 uint8_t tx_buffer[TX_BUFFER_LIM];
 volatile uint16_t tx_index = ZERO;
 /*** USART Procedure & Function Definition ***/
-/*** USART2 ***/
-void STM32FXXXUsart2Clock( uint8_t state )
-{
-	if(state){ RCC->APB1ENR |= (1 << RCC_APB1ENR_USART2EN_Pos); }else{ RCC->APB1ENR &= ~(1 << RCC_APB1ENR_USART2EN_Pos); }
-}
-void STM32FXXXUsart2Nvic( uint8_t state )
-{
-	if(state){ set_bit_block(NVIC->ISER, 1, USART2_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART2_IRQn, 1); }
-}
-void Usart2_WordLength(uint8_t wordlength) {
-    // Clear the M bit to reset word length
-	USART2->CR1 &= ~(1 << USART_CR1_M_Pos);
-
-    if (wordlength == 9) {
-    	USART2->CR1 |= (1 << USART_CR1_M_Pos); // Set M bit for 9-bit word length
-    }
-    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
-}
-
-void Usart2_StopBits(double stopbits) {
-    // Reset stop bits configuration
-	USART2->CR2 &= (uint32_t) ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
-
-    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
-    	USART2->CR2 |= USART_CR2_STOP_0; // Set bit 12
-    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
-        // No additional bits set (already cleared)
-    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
-    	USART2->CR2 |= (USART_CR2_STOP_1 | USART_CR2_STOP_0); // Set both bits
-    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
-    	USART2->CR2 |= USART_CR2_STOP_1; // Set bit 13
-    }
-}
-
-void Usart2_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
-{
-    uint8_t sampling = 16; // Default to 16
-    if (samplingmode == 8) {
-        sampling = 8;
-        USART2->CR1 |= (1 << USART_CR1_OVER8_Pos); // Set OVER8 for 8 times oversampling
-    } else {
-    	USART2->CR1 &= ~(1 << USART_CR1_OVER8_Pos); // Clear OVER8 for 16 times oversampling
-    }
-
-    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
-    double fracpart, intpart;
-    fracpart = modf(value, &intpart);
-
-    USART2->BRR = 0; // Reset BRR
-    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
-    USART2->BRR |= (uint32_t) fraction; // Set DIV_Fraction
-    USART2->BRR |= ((uint32_t) intpart << USART_BRR_DIV_Mantissa_Pos); // Set DIV_Mantissa[11:0]
-}
-void USART2_start(void) { USART2->CR1 |= USART_CR1_UE; }
-void USART2_stop(void) { USART2->CR1 &= ~USART_CR1_UE; }
 #ifdef STM32F446xx
 /*** USART3 ***/
 void STM32FXXXUsart3Clock( uint8_t state )
@@ -262,84 +205,6 @@ void Usart5_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
 void UART5_start(void) { USART5->CR1 |= USART_CR1_UE; }
 void UART5_stop(void) { USART5->CR1 &= ~USART_CR1_UE; }
 #endif
-/*** USART6 ***/
-void STM32FXXXUsart6Clock( uint8_t state )
-{
-	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_USART6EN_Pos); }else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_USART6EN_Pos); }
-}
-void STM32FXXXUsart6Nvic( uint8_t state )
-{
-	if(state){ set_bit_block(NVIC->ISER, 1, USART6_IRQn, 1); }else{ set_bit_block(NVIC->ICER, 1, USART6_IRQn, 1); }
-}
-void Usart6_WordLength(uint8_t wordlength) {
-    // Clear the M bit to reset word length
-	USART6->CR1 &= ~(1 << USART_CR1_M_Pos);
-
-    if (wordlength == 9) {
-    	USART6->CR1 |= (1 << USART_CR1_M_Pos); // Set M bit for 9-bit word length
-    }
-    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
-}
-void Usart6_StopBits(double stopbits) {
-    // Reset stop bits configuration
-	USART6->CR2 &= (uint32_t) ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
-
-    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
-    	USART6->CR2 |= USART_CR2_STOP_0; // Set bit 12
-    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
-        // No additional bits set (already cleared)
-    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
-    	USART6->CR2 |= (USART_CR2_STOP_1 | USART_CR2_STOP_0); // Set both bits
-    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
-    	USART6->CR2 |= USART_CR2_STOP_1; // Set bit 13
-    }
-}
-void Usart6_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
-{
-    uint8_t sampling = 16; // Default to 16
-    if (samplingmode == 8) {
-        sampling = 8;
-        USART6->CR1 |= (1 << USART_CR1_OVER8_Pos); // Set OVER8 for 8 times oversampling
-    } else {
-    	USART6->CR1 &= ~(1 << USART_CR1_OVER8_Pos); // Clear OVER8 for 16 times oversampling
-    }
-
-    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
-    double fracpart, intpart;
-    fracpart = modf(value, &intpart);
-
-    USART6->BRR = 0; // Reset BRR
-    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
-    USART6->BRR |= (uint32_t) fraction; // Set DIV_Fraction
-    USART6->BRR |= ((uint32_t) intpart << USART_BRR_DIV_Mantissa_Pos); // Set DIV_Mantissa[11:0]
-}
-void USART6_start(void) { USART6->CR1 |= USART_CR1_UE; }
-void USART6_stop(void) { USART6->CR1 &= ~USART_CR1_UE; }
-
-/*** USART2 INIC Procedure & Function Definition ***/
-void usart2_enable(void)
-{
-	STM32FXXXUsart2Clock( ON );
-	/*** USART2 Bit Mapping Link ***/
-	stm32fxxx_usart2.instance = USART2;
-	// Other
-	stm32fxxx_usart2.clock = STM32FXXXUsart2Clock;
-	stm32fxxx_usart2.nvic = STM32FXXXUsart2Nvic;
-	stm32fxxx_usart2.wordlength = Usart2_WordLength;
-	stm32fxxx_usart2.stopbits = Usart2_StopBits;
-	stm32fxxx_usart2.samplingmode = Usart2_SamplingMode;
-	stm32fxxx_usart2.tx_enable = NULL;
-	stm32fxxx_usart2.tx_disable = NULL;
-	stm32fxxx_usart2.rx_enable = NULL;
-	stm32fxxx_usart2.rx_disable = NULL;
-	stm32fxxx_usart2.transmit_char = NULL;
-	stm32fxxx_usart2.receive_char = NULL;
-	stm32fxxx_usart2.start = USART2_start;
-	stm32fxxx_usart2.stop = USART2_stop;
-	//return &stm32fxxx_usart2;
-}
-
-STM32FXXX_USART2*  usart2(void){ return (STM32FXXX_USART2*) &stm32fxxx_usart2; }
 
 #ifdef STM32F446xx
 /*** USART3 INIC Procedure & Function Definition ***/
@@ -431,31 +296,6 @@ void uart5_enable(void)
 STM32FXXX_UART5*  uart5(void){ return (STM32FXXX_UART5*) &stm32fxxx_uart5; }
 
 #endif
-
-/*** USART6 INIC Procedure & Function Definition ***/
-void usart6_enable(void)
-{
-	STM32FXXXUsart6Clock( ON );
-	/*** USART6 Bit Mapping Link ***/
-	stm32fxxx_usart6.instance = USART6;
-	// Other
-	stm32fxxx_usart6.clock = STM32FXXXUsart6Clock;
-	stm32fxxx_usart6.nvic = STM32FXXXUsart6Nvic;
-	stm32fxxx_usart6.wordlength = Usart6_WordLength;
-	stm32fxxx_usart6.stopbits = Usart6_StopBits;
-	stm32fxxx_usart6.samplingmode = Usart6_SamplingMode;
-	stm32fxxx_usart6.tx_enable = NULL;
-	stm32fxxx_usart6.tx_disable = NULL;
-	stm32fxxx_usart6.rx_enable = NULL;
-	stm32fxxx_usart6.rx_disable = NULL;
-	stm32fxxx_usart6.transmit_char = NULL;
-	stm32fxxx_usart6.receive_char = NULL;
-	stm32fxxx_usart6.start = USART6_start;
-	stm32fxxx_usart6.stop = USART6_stop;
-	//return &stm32fxxx_usart6;
-}
-
-STM32FXXX_USART6*  usart6(void){ return (STM32FXXX_USART6*) &stm32fxxx_usart6; }
 
 /*** EOF ***/
 
