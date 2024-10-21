@@ -22,7 +22,6 @@ Comment:
 	#define ONE 1
 #endif
 /*** File Variable ***/
-static STM32FXXX_USART1 stm32fxxx_usart1 = {ZERO};
 static STM32FXXX_USART2 stm32fxxx_usart2 = {ZERO};
 #ifdef STM32F446xx
 	static STM32FXXX_USART3 stm32fxxx_usart3 = {ZERO};
@@ -36,108 +35,9 @@ static STM32FXXX_USART6 stm32fxxx_usart6 = {ZERO};
 // Buffer for received and transmit data
 uint8_t rx_buffer[RX_BUFFER_LIM];
 volatile uint16_t rx_index = ZERO;
-static uint8_t usart1_flag = ZERO;
 uint8_t tx_buffer[TX_BUFFER_LIM];
 volatile uint16_t tx_index = ZERO;
 /*** USART Procedure & Function Definition ***/
-/*** USART1 ***/
-void STM32FXXXUsart1Clock( uint8_t state )
-{
-	if(state){ RCC->APB2ENR |= (1 << RCC_APB2ENR_USART1EN_Pos); }else{ RCC->APB2ENR &= ~(1 << RCC_APB2ENR_USART1EN_Pos); }
-}
-void STM32FXXXUsart1Nvic( uint8_t state )
-{
-	if(state){ set_bit_block(NVIC->ISER, ONE, USART1_IRQn, 1); }else{ set_bit_block(NVIC->ICER, ONE, USART1_IRQn, 1); }
-}
-void Usart1_WordLength(uint8_t wordlength) {
-    // Clear the M bit to reset word length
-	USART1->CR1 &= ~(1 << USART_CR1_M_Pos);
-
-    if (wordlength == 9) {
-    	USART1->CR1 |= (1 << USART_CR1_M_Pos); // Set M bit for 9-bit word length
-    }
-    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
-}
-void Usart1_StopBits(double stopbits) {
-    // Reset stop bits configuration
-	USART1->CR2 &= (uint32_t) ~(USART_CR2_STOP_1 | USART_CR2_STOP_0);
-
-    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
-    	USART1->CR2 |= USART_CR2_STOP_0; // Set bit 12
-    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
-        // No additional bits set (already cleared)
-    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
-    	USART1->CR2 |= (USART_CR2_STOP_1 | USART_CR2_STOP_0); // Set both bits
-    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
-    	USART1->CR2 |= USART_CR2_STOP_1; // Set bit 13
-    }
-}
-void Usart1_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
-{
-    uint8_t sampling = 16; // Default to 16
-    if (samplingmode == 8) {
-        sampling = 8;
-        USART1->CR1 |= (1 << USART_CR1_OVER8_Pos); // Set OVER8 for 8 times oversampling
-    } else {
-    	USART1->CR1 &= ~(1 << USART_CR1_OVER8_Pos); // Clear OVER8 for 16 times oversampling
-    }
-
-    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
-    double fracpart, intpart;
-    fracpart = modf(value, &intpart);
-
-    USART1->BRR = 0; // Reset BRR
-    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
-    USART1->BRR |= (uint32_t) fraction; // Set DIV_Fraction
-    USART1->BRR |= ((uint32_t) intpart << USART_BRR_DIV_Mantissa_Pos); // Set DIV_Mantissa[11:0]
-}
-void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
-void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
-void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
-void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
-void USART1_TransmitChar(char c) {
-	USART1->CR1 &= ~USART_CR1_TXEIE;
-    while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
-    USART1->DR = c;                       // Send the character
-}
-char USART1_ReceiveChar(void) {
-	USART1->CR1 &= ~USART_CR1_RXNEIE;
-    while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
-    return (char)USART1->DR;               // Return the received character
-}
-void USART1_RxFlush(void) {
-	rx_index = ZERO;
-	rx_buffer[ZERO] = ZERO;
-}
-void USART1_TransmitString(const char *str) {
-	tx_index = ZERO;
-    // Copy the string into the transmit buffer
-    strncpy((char *)tx_buffer, str, TX_BUFFER_SIZE); // Ensure tx_buffer is big enough
-    // Enable the TXE interrupt to start sending data
-    USART1->CR1 |= USART_CR1_TXEIE;
-}
-void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
-	oneshot[size - ONE] = ZERO; rx[size - ONE] = ZERO;
-	char *ptr = (char*)rx_buffer;
-	const size_t ptr_length = strlen((char*)ptr);
-	const size_t endl_length = strlen(endl);
-	const int32_t diff_length = ptr_length - endl_length;
-	int32_t check;
-	if(usart1_flag){ *oneshot = ZERO; usart1_flag = ZERO; }
-	if( diff_length >= 0 ){
-		check = strcmp((char*)ptr + diff_length, endl);
-		if( !check ) {
-			strncpy(oneshot, (const char*)ptr, size - ONE);
-			oneshot[diff_length] = ZERO;
-			strncpy(rx, (const char*)ptr, size - ONE);
-			rx[diff_length] = ZERO;
-			usart1_flag = 0xFF;
-			USART1_RxFlush( );
-		}
-	}
-}
-void USART1_start(void) { USART1->CR1 |= USART_CR1_UE; }
-void USART1_stop(void) { USART1->CR1 &= ~USART_CR1_UE; }
 /*** USART2 ***/
 void STM32FXXXUsart2Clock( uint8_t state )
 {
@@ -415,36 +315,6 @@ void Usart6_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
 }
 void USART6_start(void) { USART6->CR1 |= USART_CR1_UE; }
 void USART6_stop(void) { USART6->CR1 &= ~USART_CR1_UE; }
-/*** USART1 INIC Procedure & Function Definition ***/
-void usart1_enable(void)
-{
-	STM32FXXXUsart1Clock( ON );
-	/*** USART1 Bit Mapping Link ***/
-	stm32fxxx_usart1.instance = USART1;
-	// Other
-	stm32fxxx_usart1.clock = STM32FXXXUsart1Clock;
-	stm32fxxx_usart1.nvic = STM32FXXXUsart1Nvic;
-	stm32fxxx_usart1.wordlength = Usart1_WordLength;
-	stm32fxxx_usart1.stopbits = Usart1_StopBits;
-	stm32fxxx_usart1.samplingmode = Usart1_SamplingMode;
-	stm32fxxx_usart1.tx_enable = USART1_TxEnable;
-	stm32fxxx_usart1.tx_disable = USART1_TxDisable;
-	stm32fxxx_usart1.rx_enable = USART1_RxEnable;
-	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
-	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
-	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
-	stm32fxxx_usart1.rx_flush = USART1_RxFlush;
-	stm32fxxx_usart1.transmit_string = USART1_TransmitString;
-	stm32fxxx_usart1.receive_string = USART1_ReceiveString;
-	stm32fxxx_usart1.start = USART1_start;
-	stm32fxxx_usart1.stop = USART1_stop;
-	// Inic
-	tx_buffer[TX_BUFFER_SIZE] = ZERO;
-	rx_buffer[RX_BUFFER_SIZE] = ZERO;
-	//return &stm32fxxx_usart1;
-}
-
-STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
 
 /*** USART2 INIC Procedure & Function Definition ***/
 void usart2_enable(void)
@@ -586,137 +456,6 @@ void usart6_enable(void)
 }
 
 STM32FXXX_USART6*  usart6(void){ return (STM32FXXX_USART6*) &stm32fxxx_usart6; }
-
-/*** General USART Function Definitions ***/
-void Usart_WordLength(USART_TypeDef* usart, uint8_t wordlength) {
-    // Clear the M bit to reset word length
-    usart->CR1 &= ~(1 << 12);
-
-    if (wordlength == 9) {
-        usart->CR1 |= (1 << 12); // Set M bit for 9-bit word length
-    }
-    // If wordlength is 8 or any other value, do nothing (remains 8-bit)
-}
-
-void Usart_StopBits(USART_TypeDef* usart, double stopbits) {
-    // Reset stop bits configuration
-    usart->CR2 &= (uint32_t) ~((1 << 13) | (1 << 12));
-
-    if (fabs(stopbits - 0.5) < 0.00001) { // 0.5 Stop bits
-        usart->CR2 |= (1 << 12); // Set bit 12
-    } else if (fabs(stopbits - 1.0) < 0.00001) { // 1 Stop bit
-        // No additional bits set (already cleared)
-    } else if (fabs(stopbits - 1.5) < 0.00001) { // 1.5 Stop bits
-        usart->CR2 |= (1 << 13) | (1 << 12); // Set both bits
-    } else if (fabs(stopbits - 2.0) < 0.00001) { // 2 Stop bits
-        usart->CR2 |= (1 << 13); // Set bit 13
-    }
-}
-
-void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate)
-{
-    uint8_t sampling = 16; // Default to 16
-    if (samplingmode == 8) {
-        sampling = 8;
-        usart->CR1 |= (1 << 15); // Set OVER8 for 8 times oversampling
-    } else {
-        usart->CR1 &= ~(1 << 15); // Clear OVER8 for 16 times oversampling
-    }
-
-    double value = (double) getsysclk() / (gethpre() * sampling * baudrate);
-    double fracpart, intpart;
-    fracpart = modf(value, &intpart);
-
-    usart->BRR = 0; // Reset BRR
-    uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
-    usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
-    usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
-}
-
-/*** Interrupt handler for USART1 ***/
-void USART1_IRQHandler(void) {
-
-	if(USART1->CR1 & USART_CR1_RXNEIE) {
-		// Check if the RXNE (Receive Not Empty) flag is set
-		if (USART1->SR & USART_SR_RXNE) {
-			uint8_t received_byte = USART1->DR;
-			if (rx_index < RX_BUFFER_SIZE) {
-				rx_buffer[rx_index++] = received_byte;
-				rx_buffer[rx_index] = ZERO;
-			}
-		}
-	}
-
-	if(USART1->CR1 & USART_CR1_TXEIE) {
-		// Check if the TXE (Transmit Data Register Empty) flag is set
-		if (USART1->SR & USART_SR_TXE) {
-			if(tx_buffer[tx_index]) {
-				USART1->DR = tx_buffer[tx_index++];
-			}else{
-				USART1->CR1 &= ~USART_CR1_TXEIE;
-			}
-		}
-	}
-
-    // Check if the TC (Transmission Complete) flag is set
-    if (USART1->SR & USART_SR_TC) {
-        // Transmission complete, clear TC flag
-        USART1->SR &= ~USART_SR_TC;
-        // Optionally disable TC interrupt if no further action is needed
-        USART1->CR1 &= ~USART_CR1_TCIE;
-    }
-
-    // Check for IDLE line detection
-    if (USART1->SR & USART_SR_IDLE) {
-        // Clear IDLE flag by reading SR and DR
-        volatile uint8_t dummy = USART1->DR;
-        (void)dummy;  // Prevent unused variable warning
-        // Handle idle condition (e.g., mark end of transmission)
-    }
-
-    // Check for CTS flag (if hardware flow control is enabled)
-    if (USART1->SR & USART_SR_CTS) {
-        // Clear CTS flag by reading SR
-        volatile uint8_t dummy = USART1->SR;
-        (void)dummy;
-        // Handle CTS change (e.g., pause/resume transmission)
-    }
-
-    // Check for LIN Break Detection (if LIN mode is enabled)
-    if (USART1->SR & USART_SR_LBD) {
-        // Clear LBD flag by writing a 0
-        USART1->SR &= ~USART_SR_LBD;
-        // Handle LIN break detection (e.g., reset communication)
-    }
-
-    // Error handling (Overrun, Noise, Framing, Parity)
-    if (USART1->SR & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
-        if (USART1->SR & USART_SR_ORE) {
-            // Overrun error: Clear ORE by reading DR
-            volatile uint8_t dummy = USART1->DR;
-            (void)dummy;
-            // Handle overrun error (e.g., discard data)
-        }
-        if (USART1->SR & USART_SR_NE) {
-            // Noise error: Handle noise (e.g., log or recover from error)
-        }
-        if (USART1->SR & USART_SR_FE) {
-            // Framing error: Handle framing issues (e.g., re-sync communication)
-        }
-        if (USART1->SR & USART_SR_PE) {
-            // Parity error: Handle parity mismatch (e.g., request retransmission)
-        }
-
-        // Optionally reset USART or take corrective action based on error type
-    }
-
-    // Wakeup from STOP mode (if enabled and used)
-    //if (USART1->SR & USART_SR_WU) {
-        // Clear wakeup flag by writing a 0
-        //USART1->SR &= ~USART_SR_WU;
-        // Handle wakeup event (e.g., resume communication)
-    //}
-}
 
 /*** EOF ***/
 

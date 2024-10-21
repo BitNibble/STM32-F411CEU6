@@ -27,7 +27,7 @@ GPIO PB9 - D7
 #include "stm32fxxxgpio.h"
 #include "stm32fxxxrtc.h"
 #include "stm32fxxxadc1.h"
-#include "stm32fxxxusart.h"
+#include "stm32fxxxusart1.h"
 /******/
 #include "BT_Commands.h"
 #include "armlcd.h"

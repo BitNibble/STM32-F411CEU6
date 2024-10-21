@@ -155,7 +155,10 @@ int isPtrNull(void* ptr);
 void fpu_enable(void);
 /*** ADC ***/
 float CalculateTemperature(uint16_t adc_value);
-
+/*** General USART Function Prototypes ***/
+void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
+void Usart_StopBits( USART_TypeDef* usart, double stopbits );
+void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
 /***
 
 ***/
