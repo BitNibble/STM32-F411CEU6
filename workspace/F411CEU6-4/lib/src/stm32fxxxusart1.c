@@ -164,10 +164,12 @@ STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
 
 /*** Interrupt handler for USART1 ***/
 void USART1_IRQHandler(void) {
+	uint32_t sr = USART1->SR;
+	uint32_t cr1 = USART1->CR1;
 
-	if(USART1->CR1 & USART_CR1_RXNEIE) {
+	if(cr1 & USART_CR1_RXNEIE) {
 		// Check if the RXNE (Receive Not Empty) flag is set
-		if (USART1->SR & USART_SR_RXNE) {
+		if (sr & USART_SR_RXNE) {
 			uint8_t received_byte = USART1->DR;
 			if (usart1_rx_index < USART1_RX_BUFFER_SIZE) {
 				usart1_rx_buffer[usart1_rx_index++] = received_byte;
@@ -176,9 +178,9 @@ void USART1_IRQHandler(void) {
 		}
 	}
 
-	if(USART1->CR1 & USART_CR1_TXEIE) {
+	if(cr1 & USART_CR1_TXEIE) {
 		// Check if the TXE (Transmit Data Register Empty) flag is set
-		if (USART1->SR & USART_SR_TXE) {
+		if (sr & USART_SR_TXE) {
 			if(usart1_tx_buffer[usart1_tx_index]) {
 				USART1->DR = usart1_tx_buffer[usart1_tx_index++];
 			}else{
@@ -188,15 +190,16 @@ void USART1_IRQHandler(void) {
 	}
 
     // Check if the TC (Transmission Complete) flag is set
-    if (USART1->SR & USART_SR_TC) {
-        // Transmission complete, clear TC flag
-        USART1->SR &= ~USART_SR_TC;
+    if (sr & USART_SR_TC) {
+        // Transmission complete
+        (void)USART1->SR;  // Read SR to acknowledge
+        //USART1->DR = ZERO;    // Write to DR to clear TC flag
         // Optionally disable TC interrupt if no further action is needed
         USART1->CR1 &= ~USART_CR1_TCIE;
     }
 
     // Check for IDLE line detection
-    if (USART1->SR & USART_SR_IDLE) {
+    if (sr & USART_SR_IDLE) {
         // Clear IDLE flag by reading SR and DR
         volatile uint8_t dummy = USART1->DR;
         (void)dummy;  // Prevent unused variable warning
@@ -204,7 +207,7 @@ void USART1_IRQHandler(void) {
     }
 
     // Check for CTS flag (if hardware flow control is enabled)
-    if (USART1->SR & USART_SR_CTS) {
+    if (sr & USART_SR_CTS) {
         // Clear CTS flag by reading SR
         volatile uint8_t dummy = USART1->SR;
         (void)dummy;
@@ -212,27 +215,27 @@ void USART1_IRQHandler(void) {
     }
 
     // Check for LIN Break Detection (if LIN mode is enabled)
-    if (USART1->SR & USART_SR_LBD) {
+    if (sr & USART_SR_LBD) {
         // Clear LBD flag by writing a 0
         USART1->SR &= ~USART_SR_LBD;
         // Handle LIN break detection (e.g., reset communication)
     }
 
     // Error handling (Overrun, Noise, Framing, Parity)
-    if (USART1->SR & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
-        if (USART1->SR & USART_SR_ORE) {
+    if (sr & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
+        if (sr & USART_SR_ORE) {
             // Overrun error: Clear ORE by reading DR
             volatile uint8_t dummy = USART1->DR;
             (void)dummy;
             // Handle overrun error (e.g., discard data)
         }
-        if (USART1->SR & USART_SR_NE) {
+        if (sr & USART_SR_NE) {
             // Noise error: Handle noise (e.g., log or recover from error)
         }
-        if (USART1->SR & USART_SR_FE) {
+        if (sr & USART_SR_FE) {
             // Framing error: Handle framing issues (e.g., re-sync communication)
         }
-        if (USART1->SR & USART_SR_PE) {
+        if (sr & USART_SR_PE) {
             // Parity error: Handle parity mismatch (e.g., request retransmission)
         }
 
@@ -240,7 +243,7 @@ void USART1_IRQHandler(void) {
     }
 
     // Wakeup from STOP mode (if enabled and used)
-    //if (USART1->SR & USART_SR_WU) {
+    //if (sr & USART_SR_WU) {
         // Clear wakeup flag by writing a 0
         //USART1->SR &= ~USART_SR_WU;
         // Handle wakeup event (e.g., resume communication)
