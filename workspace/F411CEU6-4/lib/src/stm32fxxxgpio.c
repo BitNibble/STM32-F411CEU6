@@ -22,8 +22,12 @@ Comment:
 #define N_LIMBITS 33
 #define H_BIT 31
 #define L_BIT 0
-#define ON 1
-#define OFF 0
+#ifndef ON
+	#define ON 1
+#endif
+#ifndef OFF
+	#define OFF 0
+#endif
 /****************************************/
 
 /*** File Variables ***/
@@ -93,6 +97,21 @@ void STM32FXXXGpioBmoder( uint8_t pin, uint8_t mode )
 		GPIOB->MODER &= ~(MASK << Pos);
 		GPIOB->MODER |= (mode << Pos);
 	}
+}
+void STM32FXXXGpioBlck(uint16_t hpins){
+	GPIOB->LCKR = hpins;
+	for(uint8_t status = TWO; status; ) {
+		if(GPIOB->LCKR & (1 << WORD_BITS)) {
+			status = ZERO;
+		}else {
+			GPIOB->LCKR |= 1 << WORD_BITS;
+			GPIOB->LCKR &= ~(1 << WORD_BITS);
+			GPIOB->LCKR |= 1 << WORD_BITS;
+			(void)GPIOB->LCKR;
+			status--;
+		}
+	}
+
 }
 void STM32FXXXGpioBafr(uint8_t pin, uint8_t data)
 {
@@ -331,6 +350,7 @@ void gpioa_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpioa.moder = STM32FXXXGpioAmoder;
+    stm32fxxx_gpioa.lck = NULL;
     stm32fxxx_gpioa.afr = STM32FXXXGpioAafr;
     //return &stm32fxxx_gpioa;
 }
@@ -348,6 +368,7 @@ void gpiob_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpiob.moder = STM32FXXXGpioBmoder;
+    stm32fxxx_gpiob.lck = STM32FXXXGpioBlck;
     stm32fxxx_gpiob.afr = STM32FXXXGpioBafr;
     //return &stm32fxxx_gpiob;
 }
@@ -365,6 +386,7 @@ void gpioc_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpioc.moder = STM32FXXXGpioCmoder;
+    stm32fxxx_gpioc.lck = NULL;
     stm32fxxx_gpioc.afr = STM32FXXXGpioCafr;
     //return &stm32fxxx_gpioc;
 }
@@ -382,6 +404,7 @@ void gpiod_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpiod.moder = STM32FXXXGpioDmoder;
+    stm32fxxx_gpiod.lck = NULL;
     stm32fxxx_gpiod.afr = STM32FXXXGpioDafr;
     //return &stm32fxxx_gpiod;
 }
@@ -399,6 +422,7 @@ void gpioe_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpioe.moder = STM32FXXXGpioEmoder;
+    stm32fxxx_gpioe.lck = NULL;
     stm32fxxx_gpioe.afr = STM32FXXXGpioEafr;
     //return &stm32fxxx_gpioe;
 }
@@ -415,6 +439,7 @@ void gpiof_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpiof.moder = STM32FXXXGpioFmoder;
+    stm32fxxx_gpiof.lck = NULL;
     stm32fxxx_gpiof.afr = STM32FXXXGpioFafr;
     //return &stm32fxxx_gpiof;
 }
@@ -430,6 +455,7 @@ void gpiog_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpiog.moder = STM32FXXXGpioGmoder;
+    stm32fxxx_gpiog.lck = NULL;
     stm32fxxx_gpiog.afr = STM32FXXXGpioGafr;
     //return &stm32fxxx_gpiog;
 }
@@ -445,6 +471,7 @@ void gpioh_enable(void)
 	/*** Procedures ***/
 	/*** Other ***/
     stm32fxxx_gpioh.moder = STM32FXXXGpioHmoder;
+    stm32fxxx_gpioh.lck = NULL;
     stm32fxxx_gpioh.afr = STM32FXXXGpioHafr;
     //return &stm32fxxx_gpioh;
 }

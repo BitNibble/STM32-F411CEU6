@@ -10,10 +10,13 @@ Comment:
 *******************************************************************************/
 #include "stm32fxxxi2c.h"
 
+/*** Define and Macro ***/
+#define START_TIME_OUT 1000
 /*** File Variable ***/
 static STM32FXXX_I2C1_Handler stm32fxxx_i2c1 = {0};
 static STM32FXXX_I2C2_Handler stm32fxxx_i2c2 = {0};
 static STM32FXXX_I2C3_Handler stm32fxxx_i2c3 = {0};
+
 /*** I2C Procedure & Function Definition ***/
 // COMMON
 void STM32FXXXI2c_SclClock(I2C_TypeDef* instance, uint32_t sclclock) {
@@ -33,7 +36,7 @@ void STM32FXXXI2c_SclClock(I2C_TypeDef* instance, uint32_t sclclock) {
     // Enable I2C peripheral
     instance->CR1 |= I2C_CR1_PE; // Set PE bit to enable I2C
 }
-// I2C1
+/*** I2C1 ***/
 void STM32FXXXI2c1Clock( uint8_t state ) {
     if(state){
         set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN);
@@ -44,8 +47,10 @@ void STM32FXXXI2c1Clock( uint8_t state ) {
 void STM32FXXXI2c1EvNvic( uint8_t state ){
     if(state){
         set_bit_block(NVIC->ISER, 1, I2C1_EV_IRQn, 1);
+        //NVIC_EnableIRQ(I2C1_EV_IRQn);  // Direct NVIC API for enabling interrupts
     } else {
         set_bit_block(NVIC->ICER, 1, I2C1_EV_IRQn, 0);
+        //NVIC_DisableIRQ(I2C1_EV_IRQn);  // Direct NVIC API for disabling interrupts
     }
 }
 void STM32FXXXI2c1ErNvic( uint8_t state ) {
@@ -55,11 +60,11 @@ void STM32FXXXI2c1ErNvic( uint8_t state ) {
         set_bit_block(NVIC->ICER, 1, I2C1_ER_IRQn, 0);
     }
 }
-/***/
+/*** I2C1 RUN ***/
 void STM32FXXXI2c1_Start(void) {
 	uint32_t time_out = 0;
 	I2C1->CR1 |= I2C_CR1_START; // Generate start condition
-	for ( time_out = 1000; !(I2C1->SR1 & I2C_SR1_SB) && time_out; time_out-- ); // Wait for start condition
+	for ( time_out = START_TIME_OUT; !(I2C1->SR1 & I2C_SR1_SB) && time_out; time_out-- ); // Wait for start condition
 }
 void STM32FXXXI2c1_Connect(uint16_t address, uint8_t rw) {
 	if (rw) {
@@ -92,7 +97,7 @@ void STM32FXXXI2c1_Stop(void) {
 uint8_t STM32FXXXI2c1_Status(void) {
 	return I2C1->SR1; // Return status register 1
 }
-// I2C2
+/*** I2C2 ***/
 void STM32FXXXI2c2Clock( uint8_t state ){
     if(state){
         set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C2EN);
@@ -114,7 +119,7 @@ void STM32FXXXI2c2ErNvic( uint8_t state ){
         set_bit_block(NVIC->ICER, 1, I2C2_ER_IRQn, 0);
     }
 }
-/***/
+/*** I2C2 RUN ***/
 void STM32FXXXI2c2_Start(void) {
 	I2C2->CR1 |= I2C_CR1_START; // Generate start condition
 	while (!(I2C2->SR1 & I2C_SR1_SB)); // Wait for start condition
@@ -150,7 +155,7 @@ void STM32FXXXI2c2_Stop(void) {
 uint8_t STM32FXXXI2c2_Status(void) {
 	return I2C2->SR1; // Return status register 1
 }
-// I2C3
+/*** I2C3 ***/
 void STM32FXXXI2c3Clock( uint8_t state ){
     if(state){
         set_reg(&RCC->APB1ENR, RCC_APB1ENR_I2C3EN);
@@ -172,7 +177,7 @@ void STM32FXXXI2c3ErNvic( uint8_t state ){
         set_bit_block(NVIC->ICER, 1, I2C3_ER_IRQn, 0);
     }
 }
-/***/
+/*** I2C3 RUN ***/
 void STM32FXXXI2c3_Start(void) {
 	I2C3->CR1 |= I2C_CR1_START; // Generate start condition
 	while (!(I2C3->SR1 & I2C_SR1_SB)); // Wait for start condition
