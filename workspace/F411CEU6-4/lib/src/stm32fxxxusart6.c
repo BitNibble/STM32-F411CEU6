@@ -23,15 +23,14 @@ Comment:
 /*** File Variable ***/
 static STM32FXXX_USART6 stm32fxxx_usart6 = {ZERO};
 /******/
-#define USART6_RX_BUFFER_LIM (USART6_RX_BUFFER_SIZE + ONE)
-#define USART6_TX_BUFFER_LIM (USART6_TX_BUFFER_SIZE + ONE)
 // Buffer for received and transmit data
-uint8_t usart6_rx_buffer[USART6_RX_BUFFER_LIM];
+uint8_t usart6_rx_buffer[USART6_RX_BUFFER_SIZE];
 volatile uint16_t usart6_rx_index = ZERO;
 static uint8_t usart6_flag = ZERO;
-uint8_t usart6_tx_buffer[USART6_TX_BUFFER_LIM];
+uint8_t usart6_tx_buffer[USART6_TX_BUFFER_SIZE];
 volatile uint16_t usart6_tx_index = ZERO;
-
+const uint16_t usart6_rx_buffer_size = (USART6_RX_BUFFER_SIZE - ONE);
+const uint16_t usart6_tx_buffer_size = (USART6_TX_BUFFER_SIZE - ONE);
 /*** USART Procedure & Function Definition ***/
 /*** USART6 ***/
 void USART6_Clock( uint8_t state )
@@ -105,30 +104,33 @@ void USART6_RxFlush(void) {
 void USART6_TransmitString(const char *str) {
 	usart6_tx_index = ZERO;
     // Copy the string into the transmit buffer
-    strncpy((char *)usart6_tx_buffer, str, USART6_TX_BUFFER_SIZE); // Ensure tx_buffer is big enough
+    strncpy((char *)usart6_tx_buffer, str, usart6_tx_buffer_size); // Ensure tx_buffer is big enough
+    usart6_tx_buffer[usart6_tx_buffer_size] = ZERO;
     // Enable the TXE interrupt to start sending data
     USART6->CR1 |= USART_CR1_TXEIE;
 }
 void USART6_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
 	const uint32_t buff_size = size - ONE;
 	oneshot[buff_size] = ZERO; rx[buff_size] = ZERO;
+	if(usart6_flag) { *oneshot = ZERO; usart6_flag = ZERO; }
 	char *ptr = (char*)usart6_rx_buffer;
-	const size_t ptr_length = strlen((char*)ptr);
-	const size_t endl_length = strlen(endl);
-	const int32_t diff_length = ptr_length - endl_length;
-	int32_t check;
-	if(usart6_flag){ *oneshot = ZERO; usart6_flag = ZERO; }
-	if( diff_length >= 0 ){
-		check = strcmp((char*)ptr + diff_length, endl);
-		if( !check ) {
-			strncpy(oneshot, (const char*)ptr, buff_size);
-			oneshot[diff_length] = ZERO;
-			strncpy(rx, (const char*)ptr, buff_size);
-			rx[diff_length] = ZERO;
-			usart6_flag = 0xFF;
-			USART6_RxFlush( );
+	size_t ptr_length = strlen((char*)ptr);
+	if( ptr_length < usart6_rx_buffer_size ) {
+		size_t endl_length = strlen(endl);
+		int32_t diff_length = ptr_length - endl_length;
+		int32_t check;
+		if( diff_length >= ZERO ) {
+			check = strcmp((char*)ptr + diff_length, endl);
+			if( !check ) {
+				strncpy(oneshot, (const char*)ptr, buff_size);
+				oneshot[diff_length] = ZERO;
+				strncpy(rx, (const char*)ptr, buff_size);
+				rx[diff_length] = ZERO;
+				usart6_flag = 0xFF;
+				USART6_RxFlush( );
+			}
 		}
-	}
+	}else { USART6_RxFlush( ); }
 }
 void USART6_start(void) { USART6->CR1 |= USART_CR1_UE; }
 void USART6_stop(void) { USART6->CR1 &= ~USART_CR1_UE; }
@@ -157,8 +159,8 @@ void usart6_enable(void)
 	stm32fxxx_usart6.start = USART6_start;
 	stm32fxxx_usart6.stop = USART6_stop;
 	// Inic
-	usart6_tx_buffer[USART6_TX_BUFFER_SIZE] = ZERO;
-	usart6_rx_buffer[USART6_RX_BUFFER_SIZE] = ZERO;
+	usart6_tx_buffer[usart6_tx_buffer_size] = ZERO;
+	usart6_rx_buffer[usart6_rx_buffer_size] = ZERO;
 }
 
 STM32FXXX_USART6*  usart6(void){ return (STM32FXXX_USART6*) &stm32fxxx_usart6; }
@@ -172,7 +174,7 @@ void USART6_IRQHandler(void) {
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if (sr & USART_SR_RXNE) {
 			uint8_t received_byte = USART6->DR;
-			if (usart6_rx_index < USART6_RX_BUFFER_SIZE) {
+			if (usart6_rx_index < usart6_rx_buffer_size) {
 				usart6_rx_buffer[usart6_rx_index++] = received_byte;
 				usart6_rx_buffer[usart6_rx_index] = ZERO;
 			}
@@ -190,14 +192,16 @@ void USART6_IRQHandler(void) {
 		}
 	}
 
-    // Check if the TC (Transmission Complete) flag is set
-    if (sr & USART_SR_TC) {
-        // Transmission complete
-        (void)USART6->SR;  // Read SR to acknowledge
-        //USART6->DR = ZERO;    // Write to DR to clear TC flag
-        // Optionally disable TC interrupt if no further action is needed
-        USART6->CR1 &= ~USART_CR1_TCIE;
-    }
+	if(cr1 & USART_CR1_TCIE) {
+		// Check if the TC (Transmission Complete) flag is set
+		if (sr & USART_SR_TC) {
+			// Transmission complete
+			(void)USART6->SR;  // Read SR to acknowledge
+			USART6->DR = ZERO;    // Write to DR to clear TC flag
+			// Optionally disable TC interrupt if no further action is needed
+			USART6->CR1 &= ~USART_CR1_TCIE;
+		}
+	}
 
     // Check for IDLE line detection
     if (sr & USART_SR_IDLE) {
