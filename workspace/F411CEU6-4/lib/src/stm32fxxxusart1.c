@@ -105,6 +105,7 @@ void USART1_TransmitString(const char *str) {
 	usart1_tx_index = ZERO;
     // Copy the string into the transmit buffer
     strncpy((char *)usart1_tx_buffer, str, usart1_tx_buffer_size); // Ensure tx_buffer is big enough
+    usart1_tx_buffer[usart1_tx_buffer_size] = ZERO;
     // Enable the TXE interrupt to start sending data
     USART1->CR1 |= USART_CR1_TXEIE;
 }
@@ -191,14 +192,16 @@ void USART1_IRQHandler(void) {
 		}
 	}
 
-    // Check if the TC (Transmission Complete) flag is set
-    if (sr & USART_SR_TC) {
-        // Transmission complete
-        (void)USART1->SR;  // Read SR to acknowledge
-        //USART1->DR = ZERO;    // Write to DR to clear TC flag
-        // Optionally disable TC interrupt if no further action is needed
-        USART1->CR1 &= ~USART_CR1_TCIE;
-    }
+	if(cr1 & USART_CR1_TCIE) {
+		// Check if the TC (Transmission Complete) flag is set
+		if (sr & USART_SR_TC) {
+			// Transmission complete
+			(void)USART1->SR;  // Read SR to acknowledge
+			USART1->DR = ZERO;    // Write to DR to clear TC flag
+			// Optionally disable TC interrupt if no further action is needed
+			USART1->CR1 &= ~USART_CR1_TCIE;
+		}
+	}
 
     // Check for IDLE line detection
     if (sr & USART_SR_IDLE) {

@@ -296,13 +296,6 @@ int main(void)
                 }
             }
 
-            if(!strcmp(oneshot,"s01.")){
-            	gpioc()->instance->BSRR = GPIO_BSRR_BS13;
-            }
-            if(!strcmp(oneshot,"s00.")){
-            	gpioc()->instance->BSRR = GPIO_BSRR_BR13;
-            }
-
             if (PA.par.LH & 1) {
                 if (skip_0 < 1) {
                     // Handle button hold logic if necessary
@@ -336,6 +329,13 @@ int main(void)
         lcd0()->gotoxy(3, 11);
         func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);
         lcd0()->string_size(str, 8);
+
+        if(!strcmp(oneshot,"s01.")){
+        	gpioc()->instance->BSRR = GPIO_BSRR_BS13;
+        }
+         if(!strcmp(oneshot,"s00.")){
+         	gpioc()->instance->BSRR = GPIO_BSRR_BR13;
+        }
     }
 }
 

@@ -1,0 +1,123 @@
+void USART1_RxFlush(void) {
+	usart1_rx_index = ZERO;
+	usart1_rx_buffer[ZERO] = ZERO;
+}
+void USART1_TransmitString(const char *str) {
+	usart1_tx_index = ZERO;
+    // Copy the string into the transmit buffer
+    strncpy((char *)usart1_tx_buffer, str, usart1_tx_buffer_size); // Ensure tx_buffer is big enough
+    usart1_tx_buffer[usart1_tx_buffer_size] = ZERO;
+    // Enable the TXE interrupt to start sending data
+    USART1->CR1 |= USART_CR1_TXEIE;
+}
+void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
+	const uint32_t buff_size = size - ONE;
+	oneshot[buff_size] = ZERO; rx[buff_size] = ZERO;
+	if(usart1_flag) { *oneshot = ZERO; usart1_flag = ZERO; }
+	char *ptr = (char*)usart1_rx_buffer;
+	size_t ptr_length = strlen((char*)ptr);
+	if( ptr_length < usart1_rx_buffer_size ) {
+		size_t endl_length = strlen(endl);
+		int32_t diff_length = ptr_length - endl_length;
+		int32_t check;
+		if( diff_length >= ZERO ) {
+			check = strcmp((char*)ptr + diff_length, endl);
+			if( !check ) {
+				strncpy(oneshot, (const char*)ptr, buff_size);
+				oneshot[diff_length] = ZERO;
+				strncpy(rx, (const char*)ptr, buff_size);
+				rx[diff_length] = ZERO;
+				usart1_flag = 0xFF;
+				USART1_RxFlush( );
+			}
+		}
+	}else { USART1_RxFlush( ); }
+}
+
+/*** Interrupt handler for USART1 ***/
+void USART1_IRQHandler(void) {
+	uint32_t sr = USART1->SR;
+	uint32_t cr1 = USART1->CR1;
+
+	if(cr1 & USART_CR1_RXNEIE) {
+		// Check if the RXNE (Receive Not Empty) flag is set
+		if (sr & USART_SR_RXNE) {
+			uint8_t received_byte = USART1->DR;
+			if (usart1_rx_index < usart1_rx_buffer_size) {
+				usart1_rx_buffer[usart1_rx_index++] = received_byte;
+				usart1_rx_buffer[usart1_rx_index] = ZERO;
+			}
+		}
+	}
+
+	if(cr1 & USART_CR1_TXEIE) {
+		// Check if the TXE (Transmit Data Register Empty) flag is set
+		if (sr & USART_SR_TXE) {
+			if(usart1_tx_buffer[usart1_tx_index]) {
+				USART1->DR = usart1_tx_buffer[usart1_tx_index++];
+			}else{
+				USART1->CR1 &= ~USART_CR1_TXEIE;
+			}
+		}
+	}
+
+    // Check if the TC (Transmission Complete) flag is set
+    if (sr & USART_SR_TC) {
+        // Transmission complete
+        (void)USART1->SR;  // Read SR to acknowledge
+        //USART1->DR = ZERO;    // Write to DR to clear TC flag
+        // Optionally disable TC interrupt if no further action is needed
+        USART1->CR1 &= ~USART_CR1_TCIE;
+    }
+
+    // Check for IDLE line detection
+    if (sr & USART_SR_IDLE) {
+        // Clear IDLE flag by reading SR and DR
+        volatile uint8_t dummy = USART1->DR;
+        (void)dummy;  // Prevent unused variable warning
+        // Handle idle condition (e.g., mark end of transmission)
+    }
+
+    // Check for CTS flag (if hardware flow control is enabled)
+    if (sr & USART_SR_CTS) {
+        // Clear CTS flag by reading SR
+        volatile uint8_t dummy = USART1->SR;
+        (void)dummy;
+        // Handle CTS change (e.g., pause/resume transmission)
+    }
+
+    // Check for LIN Break Detection (if LIN mode is enabled)
+    if (sr & USART_SR_LBD) {
+        // Clear LBD flag by writing a 0
+        USART1->SR &= ~USART_SR_LBD;
+        // Handle LIN break detection (e.g., reset communication)
+    }
+
+    // Error handling (Overrun, Noise, Framing, Parity)
+    if (sr & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
+        if (sr & USART_SR_ORE) {
+            // Overrun error: Clear ORE by reading DR
+            volatile uint8_t dummy = USART1->DR;
+            (void)dummy;
+            // Handle overrun error (e.g., discard data)
+        }
+        if (sr & USART_SR_NE) {
+            // Noise error: Handle noise (e.g., log or recover from error)
+        }
+        if (sr & USART_SR_FE) {
+            // Framing error: Handle framing issues (e.g., re-sync communication)
+        }
+        if (sr & USART_SR_PE) {
+            // Parity error: Handle parity mismatch (e.g., request retransmission)
+        }
+
+        // Optionally reset USART or take corrective action based on error type
+    }
+
+    // Wakeup from STOP mode (if enabled and used)
+    //if (sr & USART_SR_WU) {
+        // Clear wakeup flag by writing a 0
+        //USART1->SR &= ~USART_SR_WU;
+        // Handle wakeup event (e.g., resume communication)
+    //}
+}
