@@ -110,7 +110,8 @@ void USART2_TransmitString(const char *str) {
     USART2->CR1 |= USART_CR1_TXEIE;
 }
 void USART2_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
-	oneshot[size - ONE] = ZERO; rx[size - ONE] = ZERO;
+	const uint32_t buff_size = size - ONE;
+	oneshot[buff_size] = ZERO; rx[buff_size] = ZERO;
 	char *ptr = (char*)usart2_rx_buffer;
 	const size_t ptr_length = strlen((char*)ptr);
 	const size_t endl_length = strlen(endl);
@@ -120,9 +121,9 @@ void USART2_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl
 	if( diff_length >= 0 ){
 		check = strcmp((char*)ptr + diff_length, endl);
 		if( !check ) {
-			strncpy(oneshot, (const char*)ptr, size - ONE);
+			strncpy(oneshot, (const char*)ptr, buff_size);
 			oneshot[diff_length] = ZERO;
-			strncpy(rx, (const char*)ptr, size - ONE);
+			strncpy(rx, (const char*)ptr, buff_size);
 			rx[diff_length] = ZERO;
 			usart2_flag = 0xFF;
 			USART2_RxFlush( );
