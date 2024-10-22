@@ -11,6 +11,7 @@ Comment:
 #include "BT_Commands.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 
 /*** USER ***/
@@ -52,8 +53,14 @@ const char* BT_AT_GetAddress(void) {
 // Function to get the command string to set the Bluetooth name
 const char* BT_AT_SetName(const char *name) {
 	static char command[50];
-	snprintf(command, sizeof(command), "AT+NAME%s\r\n", name);
-	return command;
+	const char* str = NULL;
+	uint8_t length = 0;
+	if (name == NULL) { length = 0; }else { length = strlen(name); }
+	if(length > 0 && length < 12){
+		snprintf(command, sizeof(command), "AT+NAME%s\r\n", name);
+		str = command;
+	}
+	return str;
 }
 
 // Function to get the command string for retrieving the Bluetooth name
@@ -62,17 +69,14 @@ const char* BT_AT_GetName(void) {
 }
 
 // Function to get the command string for setting the pairing password
-const char* BT_AT_SetPassword(const char *password) {
+const char* BT_AT_SetPin(uint32_t password) { // Six digits
+	const char* str = NULL;
 	static char command[50];
-	snprintf(command, sizeof(command), "AT+PSWD=%s\r\n", password);
-	return command;
-}
-
-// Function to get the command string for setting the pairing password
-const char* BT_AT_SetPin(const char *password) { // Six digits
-	static char command[50];
-	snprintf(command, sizeof(command), "AT+PIN%s\r\n", password);
-	return command;
+	if(password < 1000000) {
+		snprintf(command, sizeof(command), "AT+PIN%06lu\r\n", password);
+		str = command;
+	}
+	return str;
 }
 
 // Function to get the command string for retrieving the pairing password
@@ -88,9 +92,23 @@ const char* BT_AT_GetPin(void) {
 /*** 2. Role and Connection Functions ***/
 // Function to get the command string to set the Bluetooth role
 const char* BT_AT_SetRole(uint8_t role) {
-	static char command[20];
-	snprintf(command, sizeof(command), "AT+ROLE%d\r\n", role);
-	return command;
+	const char* str = NULL;
+	// Array of baud rate
+	const char* rolenum[] = {
+			"AT+ROLE0\r\n",		// 0
+			"AT+ROLE1\r\n",		// 1
+			"AT+ROLE2\r\n",		// 2
+			"AT+ROLE3\r\n",		// 3
+			"AT+ROLE4\r\n",		// 4
+			};
+	switch(role){
+		case 0: str = rolenum[0]; break;
+		case 1: str = rolenum[1]; break;
+		case 2: str = rolenum[2]; break;
+		case 3: str = rolenum[3]; break;
+		case 4: str = rolenum[4]; break;
+	}
+	return str;
 }
 
 // Function to get the command string for retrieving the Bluetooth role
@@ -244,6 +262,33 @@ const char* BT_AT_SetBaud57600(void) {
 // Function to get the command string for setting the baud rate to 115200
 const char* BT_AT_SetBaud115200(void) {
 	return "AT+BAUD8\r\n";
+}
+
+// Function to get the command string for setting the chosen baud
+const char* BT_AT_SetBaud(uint32_t baud) {
+	const char* str = NULL;
+	// Array of baud rate
+	const char* baudrate[] = {
+			"AT+BAUD1\r\n",		// 1200
+			"AT+BAUD2\r\n",		// 2400
+			"AT+BAUD3\r\n",		// 4800
+			"AT+BAUD4\r\n",		// 9600
+			"AT+BAUD5\r\n",		// 19200
+			"AT+BAUD6\r\n",		// 38400
+			"AT+BAUD7\r\n",		// 57600
+			"AT+BAUD8\r\n"		// 115200
+			};
+	switch(baud){
+		case 1200: str = baudrate[0]; break;
+		case 2400: str = baudrate[1]; break;
+		case 4800: str = baudrate[2]; break;
+		case 9600: str = baudrate[3]; break;
+		case 19200: str = baudrate[4]; break;
+		case 38400: str = baudrate[5]; break;
+		case 57600: str = baudrate[6]; break;
+		case 115200: str = baudrate[7]; break;
+	}
+	return str;
 }
 
 /*** EOF ***/

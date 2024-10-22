@@ -11,6 +11,7 @@ Comment:
 #ifndef _BT_COMMANDS_H_
 	#define _BT_COMMANDS_H_
 
+#include <stdint.h>
 #include <inttypes.h>
 
 /*** USER ***/
@@ -32,8 +33,6 @@ const char* BT_AT_GetAddress(void);
 const char* BT_AT_SetName(const char *name);
 // Function to get the command string for retrieving the Bluetooth name
 const char* BT_AT_GetName(void);
-// Function to get the command string for setting the pairing password
-const char* BT_AT_SetPassword(const char *password);
 // Function to get the command string for retrieving the pairing password
 const char* BT_AT_GetPassword(void);
 // Function to get the command string for retrieving the pairing password
@@ -98,6 +97,8 @@ const char* BT_AT_SetBaud38400(void);
 const char* BT_AT_SetBaud57600(void);
 // Function to get the command string for setting the baud rate to 115200
 const char* BT_AT_SetBaud115200(void);
+// Function to get the command string for setting the chosen baud
+const char* BT_AT_SetBaud(uint32_t baud);
 	
 #endif
 
