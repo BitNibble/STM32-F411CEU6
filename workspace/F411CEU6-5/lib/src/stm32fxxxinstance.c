@@ -34,20 +34,23 @@ inline void clear_reg(volatile uint32_t* reg, uint32_t hbits){
 }
 inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
 {
-	if(Pos > H_BIT){ Pos = L_BIT; reg = 0; }
-	else{ reg &= Msk; reg = (reg >> Pos); }
+	if(Msk & (1 << Pos)){
+		reg = (reg & Msk) >> Pos;
+	}
 	return reg;
 }
 inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
 {
 	uint32_t value = *reg;
-	if(Pos > H_BIT){ Pos = L_BIT; }
-	else{ data = (data << Pos); data &= Msk; value &= ~(Msk); value |= data; *reg = value; }
+	if(Msk & (1 << Pos)){
+		data = (data << Pos) & Msk; value &= ~(Msk); value |= data; *reg = value;
+	}
 }
 inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
 {
-	if(Pos > H_BIT){ Pos = L_BIT; }
-	else{ data = (data << Pos); data &= Msk; *reg &= ~(Msk); *reg |= data; }
+	if(Msk & (1 << Pos)){
+		data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
+	}
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
