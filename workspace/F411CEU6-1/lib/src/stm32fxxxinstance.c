@@ -1,4 +1,4 @@
-/************************************************************************
+/*****************************************
 	STM32FXXX INSTANCE
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -7,7 +7,7 @@ Hardware: STM32FXXX
 Update: 07/01/2024
 Comment:
 	
-************************************************************************/
+*****************************************/
 #include "stm32fxxxinstance.h"
 #include <stdarg.h>
 #include <math.h>
@@ -22,7 +22,7 @@ Comment:
 #define N_LIMBITS 33
 #define H_BIT 31
 #define L_BIT 0
-
+/****************************************/
 /*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
@@ -102,6 +102,7 @@ void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 	*(reg + n ) &= ~(mask << bit_n);
 	*(reg + n ) |= (data << bit_n);
 }
+/****************************************/
 // IO
 inline void set_hpins( GPIO_TypeDef* reg, uint16_t hpins )
 {
@@ -119,6 +120,7 @@ inline void clear_pin( GPIO_TypeDef* reg, uint8_t pin )
 {
 	reg->BSRR = (uint32_t)((1 << pin) << WORD_BITS);
 }
+/****************************************/
 // UNUSED
 void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
@@ -155,7 +157,7 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 	vec[index] |= ( data << ((block_n * size_block) - (index * n_bits)) );
 }
 
-/****** MISCELLANEOUS ******/
+/************ MISCELLANEOUS *************/
 /*** Clock ***/
 uint16_t gethpre(void)
 {
@@ -381,6 +383,7 @@ uint32_t getpclk2(void){
 	uint32_t freq = getsysclk()/gethpre();
 	return freq/gethppre2();
 }
+/****************************************/
 /*** NULL Check ***/
 int isPtrNull(void* ptr) {
     return (ptr == NULL) ? 1 : 0; // Returns 1 if NULL, 0 otherwise
@@ -446,6 +449,7 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
     usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
     usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
 }
+/****************************************/
 /***
 TypeDef -> Instance -> Handler
 ***/

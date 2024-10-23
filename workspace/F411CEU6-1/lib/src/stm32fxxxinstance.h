@@ -1,4 +1,4 @@
-/************************************************************************
+/***************************************************
 	STM32FXXX INSTANCE
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -6,17 +6,19 @@ License: GNU General Public License
 Hardware: STM32FXXX
 Update: 07/01/2024
 Comment:
-	
-************************************************************************/
+(root)		MAIN HEADER FILE!
+****************************************************/
 #pragma once
 
-/************ CMSIS BASE *************/
+/******************* CMSIS BASE ********************/
 // SELECTION OF CHIP (CMSIS Access to its libraries)
-// Options: __STM32F446xx_H    __STM32F411xE_H
+/*** Options: __STM32F446xx_H    __STM32F411xE_H ***/
 #include "stm32f4xx.h"
+/**************** START *****************/
 #include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
+/****************************************/
 /*** File Constant & Macro ***/
 #ifndef HSI_RC
 	#define HSI_RC 16000000UL
@@ -37,6 +39,7 @@ Comment:
 #define ONE 1
 #define OFF 0
 #define ZERO 0
+/****************************************/
 /*******   0 -> HSI    1->HSE   *********/
 #define H_Clock_Source 1
 /****************************************/
@@ -44,70 +47,44 @@ Comment:
 #define PLL_ON_OFF 0
 /****************************************/
 typedef union{
-	struct UN32nibble{
-		uint32_t n0:4;
-		uint32_t n1:4;
-		uint32_t n2:4;
-		uint32_t n3:4;
-		uint32_t n4:4;
-		uint32_t n5:4;
-		uint32_t n6:4;
-		uint32_t n7:4;
+	struct UN8bit{
+		uint8_t b0:1;
+		uint8_t b1:1;
+		uint8_t b2:1;
+		uint8_t b3:1;
+		uint8_t b4:1;
+		uint8_t b5:1;
+		uint8_t b6:1;
+		uint8_t b7:1;
+	}bit;
+	struct UN8nibble{
+		uint8_t n0:4;
+		uint8_t n1:4;
 	}nibble;
-	struct UN32byte{
+	uint8_t byte;
+}_UN8var;
+typedef union{
+	struct UN16byte{
 		uint8_t b0;
 		uint8_t b1;
-		uint8_t b2;
-		uint8_t b3;
 	}byte;
+	uint16_t word;
+}_UN16var;
+typedef union{
 	struct UN32word{
 		uint16_t w0;
 		uint16_t w1;
 	}word;
-	uint32_t n;
+	uint32_t dword;
 }_UN32var;
 typedef union{
-	struct UN64nibble{
-		uint32_t n0:4;
-		uint32_t n1:4;
-		uint32_t n2:4;
-		uint32_t n3:4;
-		uint32_t n4:4;
-		uint32_t n5:4;
-		uint32_t n6:4;
-		uint32_t n7:4;
-		uint32_t n8:4;
-		uint32_t n9:4;
-		uint32_t n10:4;
-		uint32_t n11:4;
-		uint32_t n12:4;
-		uint32_t n13:4;
-		uint32_t n14:4;
-		uint32_t n15:4;
-	}nibble;
-	struct UN64byte{
-		uint8_t b0;
-		uint8_t b1;
-		uint8_t b2;
-		uint8_t b3;
-		uint8_t b4;
-		uint8_t b5;
-		uint8_t b6;
-		uint8_t b7;
-	}byte;
-	struct UN64word{
-		uint16_t w0;
-		uint16_t w1;
-		uint16_t w2;
-		uint16_t w3;
-	}word;
 	struct UN64dword{
-		uint32_t d0;
-		uint32_t d1;
+		uint32_t dw0;
+		uint32_t dw1;
 	}dword;
-	uint64_t n;
+	uint64_t qword;
 }_UN64var;
-
+/****************************************/
 /*** Tools ***/
 void set_reg(volatile uint32_t* reg, uint32_t hbits);
 void clear_reg(volatile uint32_t* reg, uint32_t hbits);
@@ -124,7 +101,7 @@ void set_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void clear_hpins( GPIO_TypeDef* reg, uint16_t hpins );
 void set_pin( GPIO_TypeDef* reg, uint8_t pin );
 void clear_pin( GPIO_TypeDef* reg, uint8_t pin );
-
+/****************************************/
 /****** MISCELLANEOUS ******/
 /*** Clock ***/
 uint32_t getpllsourceclk(void);
@@ -149,6 +126,7 @@ uint16_t getplln(void);
 uint8_t getpllp(void);
 uint8_t getpllq(void);
 uint8_t getpllr(void);
+/****************************************/
 /*** NULL Check ***/
 int isPtrNull(void* ptr);
 /*** FPU ***/
@@ -159,6 +137,7 @@ float CalculateTemperature(uint16_t adc_value);
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
 void Usart_StopBits( USART_TypeDef* usart, double stopbits );
 void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
+/****************************************/
 /***
 
 ***/
