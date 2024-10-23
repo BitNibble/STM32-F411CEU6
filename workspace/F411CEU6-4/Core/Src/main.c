@@ -1,4 +1,4 @@
-/********************************************************************************
+/****************************************************************
 Title: A simple Clock
 Author: Sergio Manuel Santos
 	<sergio.salazar.santos@gmail.com>
@@ -19,7 +19,7 @@ GPIO PB6 - D4
 GPIO PB7 - D5
 GPIO PB8 - D6
 GPIO PB9 - D7
-********************************************************************************/
+****************************************************************/
 #include "main.h"
 /******/
 #include "stm32fxxxrcc.h"
@@ -69,13 +69,15 @@ int main(void)
     rtc()->inic(1);
     PA = EXPLODE_enable();
 
-    uint8_t Menu = 7;
+    _UN8var Menu;
+    Menu.byte.b = 7;
     uint8_t count_0 = 0;
     uint8_t count_1 = ADC_DELAY;
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-    uint16_t adc_value = 0;
+    _UN16var adc_value;
+    adc_value.word.w = 0;
     const char unit = (char)0xDF;
 
     ARMLCD0_enable(gpiob()->instance);
@@ -102,7 +104,7 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        switch (Menu) {
+        switch (Menu.nibble.n0) {
         case 0:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Hour", 12);
@@ -120,7 +122,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 1; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 1; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetName());
                 }
             } else {
@@ -145,7 +147,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 2; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 2; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetVersion());
                 }
             } else {
@@ -170,7 +172,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 3; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 3; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetPin());
                 }
             } else {
@@ -195,7 +197,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 4; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 4; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetRole());
                 }
             } else {
@@ -220,7 +222,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 5; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 5; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetUART());
                 }
             } else {
@@ -245,7 +247,7 @@ int main(void)
             	_delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                	Menu = 6; count_0 = 0; skip_0 = 0;
+                	Menu.byte.b = 6; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_Test());
                 }
             } else {
@@ -270,7 +272,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 7; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 7; count_0 = 0; skip_0 = 0;
                 }
             } else {
                 count_0 = 0;
@@ -285,14 +287,14 @@ int main(void)
                 count_1 = ADC_DELAY;
                 if (n_sample) {
                     n_sample--;
-                    adc_value += adc1()->readtemperature();
+                    adc_value.word.w += adc1()->readtemperature();
                 } else {
                     n_sample = ADC_SAMPLE;
-                    adc_value /= ADC_SAMPLE;  // Ensure proper averaging
+                    adc_value.word.w /= ADC_SAMPLE;  // Ensure proper averaging
                     //temperature = CalculateTemperature(adc_value);
-                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value), unit);
+                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value.word.w), unit);
                     lcd0()->string_size(str, 8);
-                    adc_value = 0;  // Reset adc_value after use
+                    adc_value.word.w = 0;  // Reset adc_value after use
                 }
             }
 
@@ -307,7 +309,7 @@ int main(void)
                 HAL_Delay(1000);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu = 0; count_0 = 0; skip_0 = 0;
+                    Menu.byte.b = 0; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_Test());
                 }
             } else {

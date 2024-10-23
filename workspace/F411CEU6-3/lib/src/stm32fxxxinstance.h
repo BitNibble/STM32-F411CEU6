@@ -48,41 +48,49 @@ Comment:
 /****************************************/
 typedef union{
 	struct UN8bit{
-		uint8_t b0:1;
-		uint8_t b1:1;
-		uint8_t b2:1;
-		uint8_t b3:1;
-		uint8_t b4:1;
-		uint8_t b5:1;
-		uint8_t b6:1;
-		uint8_t b7:1;
+		uint8_t p0:1;
+		uint8_t p1:1;
+		uint8_t p2:1;
+		uint8_t p3:1;
+		uint8_t p4:1;
+		uint8_t p5:1;
+		uint8_t p6:1;
+		uint8_t p7:1;
 	}bit;
 	struct UN8nibble{
 		uint8_t n0:4;
 		uint8_t n1:4;
 	}nibble;
-	uint8_t byte;
+	struct UN8{
+		uint8_t b;
+	}byte;
 }_UN8var;
 typedef union{
 	struct UN16byte{
 		uint8_t b0;
 		uint8_t b1;
 	}byte;
-	uint16_t word;
+	struct UN16{
+		uint16_t w;
+	}word;
 }_UN16var;
 typedef union{
 	struct UN32word{
 		uint16_t w0;
 		uint16_t w1;
 	}word;
-	uint32_t dword;
+	struct UN32{
+		uint32_t dw;
+	}dword;
 }_UN32var;
 typedef union{
 	struct UN64dword{
 		uint32_t dw0;
 		uint32_t dw1;
 	}dword;
-	uint64_t qword;
+	struct UN64{
+		uint64_t qw;
+	}qword;
 }_UN64var;
 /****************************************/
 /*** Tools ***/
