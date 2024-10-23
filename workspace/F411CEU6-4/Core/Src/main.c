@@ -83,10 +83,9 @@ int main(void)
 
     ARMLCD0_enable(gpiob()->instance);
 
-    set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
-
-    set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODER0, GPIO_MODER_MODER0_Pos, 0);
-    set_reg_Msk(&GPIOA->PUPDR, GPIO_PUPDR_PUPD0, GPIO_PUPDR_PUPD0_Pos, 1);
+    gpioc()->moder(13,1);
+    gpioa()->moder(0,0);
+    gpioa()->pupd(0,1);
 
     FUNC_enable();
     adc1()->temperaturesetup();
@@ -334,10 +333,10 @@ int main(void)
         lcd0()->string_size(str, 8);
 
         if(!strcmp(oneshot,"s01.")){
-        	gpioc()->instance->BSRR = GPIO_BSRR_BS13;
+        	gpioc()->set_hpins(1 << 13);
         }
          if(!strcmp(oneshot,"s00.")){
-         	gpioc()->instance->BSRR = GPIO_BSRR_BR13;
+         	gpioc()->clear_hpins(1 << 13);
         }
     }
 }
@@ -352,12 +351,12 @@ void setup_usart1(void){
 	gpioa()->moder(9,MODE_AF); gpioa()->moder(10,MODE_AF);
 
 	// Set alternate function type to AF7 (USART1) for PA9 and PA10
-	gpioa()->afr(9,7); gpioa()->afr(10,7); // Set AF7 for PA9 and PA10
+	gpioa()->af(9,7); gpioa()->af(10,7); // Set AF7 for PA9 and PA10
 
 	// Set PA9 as push-pull output, high speed
-	gpioa()->instance->OSPEEDR |= GPIO_OSPEEDER_OSPEEDR9 | GPIO_OSPEEDER_OSPEEDR10; // High speed for PA9, PA10
-	gpioa()->instance->OTYPER &= ~(GPIO_OTYPER_OT9 | GPIO_OTYPER_OT10); // Set to push-pull
-	gpioa()->instance->PUPDR &= ~(GPIO_PUPDR_PUPDR9 | GPIO_PUPDR_PUPDR10); // No pull-up, no pull-down
+	gpioa()->ospeed(9,3); gpioa()->ospeed(10,3); // High speed for PA9, PA10
+	gpioa()->otype(9,0); gpioa()->otype(10,0);  // Set to push-pull
+	gpioa()->pupd(9,0); gpioa()->pupd(10,0); // No pull-up, no pull-down
 
 	// Set USART1 baud rate
 	usart1()->samplingmode(0,38400);

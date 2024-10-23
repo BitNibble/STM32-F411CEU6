@@ -28,8 +28,13 @@ typedef struct
 	GPIO_TypeDef* instance;
 	/*** Clock and Nvic ***/
 	void (*moder)(uint8_t pin, uint8_t mode);
+	void (*otype)(uint8_t pin, uint8_t otype);
+	void (*ospeed)(uint8_t pin, uint8_t ospeed);
+	void (*pupd)(uint8_t pin, uint8_t pupd);
+	void (*set_hpins)(uint16_t hpins);
+	void (*clear_hpins)(uint16_t hpins);
 	void (*lck)(uint16_t hpins);
-	void (*afr)(uint8_t pin, uint8_t af);
+	void (*af)(uint8_t pin, uint8_t af);
 	/*************/
 	void (*clock)( uint8_t state );
 	/*************/
