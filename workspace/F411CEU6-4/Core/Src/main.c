@@ -70,14 +70,15 @@ int main(void)
     PA = EXPLODE_enable();
 
     _UN8var Menu;
-    Menu.byte.b = 7;
+    Menu.un8.b = 7;
+    _UN16var adc_value;
+    adc_value.un16.w = 0;
     uint8_t count_0 = 0;
     uint8_t count_1 = ADC_DELAY;
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-    _UN16var adc_value;
-    adc_value.word.w = 0;
+
     const char unit = (char)0xDF;
 
     ARMLCD0_enable(gpiob()->instance);
@@ -96,7 +97,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    while (1)  // Infinite loop
+    while (ONE)  // Infinite loop
     {
         PA.update(&PA.par, gpioa()->instance->IDR);
 
@@ -122,7 +123,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 1; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetName());
                 }
             } else {
@@ -147,7 +148,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 2; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetVersion());
                 }
             } else {
@@ -172,7 +173,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 3; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetPin());
                 }
             } else {
@@ -197,7 +198,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 4; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetRole());
                 }
             } else {
@@ -222,7 +223,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 5; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_GetUART());
                 }
             } else {
@@ -247,7 +248,7 @@ int main(void)
             	_delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                	Menu.byte.b = 6; count_0 = 0; skip_0 = 0;
+                	Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_Test());
                 }
             } else {
@@ -272,7 +273,7 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 7; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
                 }
             } else {
                 count_0 = 0;
@@ -287,14 +288,14 @@ int main(void)
                 count_1 = ADC_DELAY;
                 if (n_sample) {
                     n_sample--;
-                    adc_value.word.w += adc1()->readtemperature();
+                    adc_value.un16.w += adc1()->readtemperature();
                 } else {
                     n_sample = ADC_SAMPLE;
-                    adc_value.word.w /= ADC_SAMPLE;  // Ensure proper averaging
+                    adc_value.un16.w /= ADC_SAMPLE;  // Ensure proper averaging
                     //temperature = CalculateTemperature(adc_value);
-                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value.word.w), unit);
+                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value.un16.w), unit);
                     lcd0()->string_size(str, 8);
-                    adc_value.word.w = 0;  // Reset adc_value after use
+                    adc_value.un16.w = 0;  // Reset adc_value after use
                 }
             }
 
@@ -309,7 +310,7 @@ int main(void)
                 HAL_Delay(1000);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.byte.b = 0; count_0 = 0; skip_0 = 0;
+                    Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
                     usart1()->transmit_string(BT_AT_Test());
                 }
             } else {
