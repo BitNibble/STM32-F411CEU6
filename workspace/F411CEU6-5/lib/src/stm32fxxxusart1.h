@@ -14,8 +14,8 @@ Comment:
 /*** Library ***/
 #include "stm32fxxxinstance.h"
 /*** Define and Macros ***/
-#define USART1_RX_BUFFER_SIZE 128
-#define USART1_TX_BUFFER_SIZE 128
+#define USART1_RX_BUFFER_SIZE 129
+#define USART1_TX_BUFFER_SIZE 129
 /*** USART 1..6 Handler TypeDef ***/
 // USART -> USART1
 typedef struct

@@ -13,17 +13,12 @@ Comment:
 #include <math.h>
 
 /****************************************/
-#define ONE 1
 #define TWO 2
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
 #define WORD_BITS 16
 #define DWORD_BITS 32
 #define QWORD_BITS 64
-#define N_BITS 32
-#define N_LIMBITS 33
-#define H_BIT 31
-#define L_BIT 0
 /****************************************/
 /*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
@@ -67,7 +62,7 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 {
 	uint32_t value = *reg;
 	if((bit_n + size_block - ONE) < DWORD_BITS) {
-		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		data &= mask; value &= ~(mask << bit_n);
 		data = (data << bit_n);
 		value |= data;
@@ -77,7 +72,7 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	if((bit_n + size_block - ONE) < DWORD_BITS) {
-		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		data &= mask;
 		*reg &= ~(mask << bit_n);
 		*reg |= (data << bit_n);
@@ -86,7 +81,7 @@ void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
 	uint32_t value;
-	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
+	uint32_t n = bit_n / DWORD_BITS; bit_n = bit_n % DWORD_BITS;
 	value = *(reg + n );
 	if((bit_n + size_block - ONE) < DWORD_BITS){
 		uint32_t mask = (uint32_t)((1U << size_block) - 1);
@@ -96,9 +91,9 @@ uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n
 }
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
+	uint32_t n = bit_n / DWORD_BITS; bit_n = bit_n % DWORD_BITS;
 	if((bit_n + size_block - ONE) < DWORD_BITS) {
-		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		data &= mask;
 		*(reg + n ) &= ~(mask << bit_n);
 		*(reg + n ) |= (data << bit_n);
@@ -127,7 +122,7 @@ inline void clear_pin( GPIO_TypeDef* reg, uint8_t pin )
 void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
 	uint8_t i;
-	if(n_bits > L_BIT && n_bits < N_LIMBITS){ // Filter input
+	if(n_bits > ZERO && n_bits <= DWORD_BITS){ // Filter input
 		va_list list;
 		va_start(list, n_bits);
 		for(i = 0; i < n_bits; i++){
@@ -139,7 +134,7 @@ void STM32446SetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 void STM32446ResetRegBits( uint32_t* reg, uint8_t n_bits, ... )
 {
 	uint8_t i;
-	if(n_bits > L_BIT && n_bits < N_LIMBITS){ // Filter input
+	if(n_bits > ZERO && n_bits <= DWORD_BITS){ // Filter input
 		va_list list;
 		va_start(list, n_bits);
 		for(i = 0; i < n_bits; i++){
@@ -152,7 +147,7 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 {
 	const unsigned int n_bits = sizeof(data) * BYTE_BITS;
 	if(size_block > n_bits){ size_block = n_bits; }
-	const unsigned int mask = (uint32_t) ((1 << size_block) - 1);
+	const unsigned int mask = (uint32_t) ((1U << size_block) - 1);
 	unsigned int index = (block_n * size_block) / n_bits;
 	data &= mask;
 	vec[index] &= ~( mask << ((block_n * size_block) - (index * n_bits)) );
