@@ -47,7 +47,11 @@ int main(void)
 
     uint8_t Menu = 6;
     uint8_t count_0 = 0;
-    int number = 0;
+    uint32_t number[4];
+    number[0] = 0;
+    number[1] = 0;
+    number[2] = 0;
+    number[3] = 0;
 
     ARMLCD0_enable(GPIOB);
     set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODER13, GPIO_MODER_MODER13_Pos, 1);
@@ -172,9 +176,9 @@ int main(void)
             break;
         }/*** switch ***/
         /*** Testing ***/
-        number = 3;
+        number[0] = 11;
 		//set_bit_block(&test[0],33,20+64,~0);
-        RealNum_TypeDef a = func()->realnumber( -67.010101, number);
+        RealNum_TypeDef a = func()->realnumber( -67.010101, number[0]);
         //RealNum_TypeDef a = func()->divide( 83333 , 65536);
 		lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ftoa(1/0.7,4), 10);
@@ -182,14 +186,17 @@ int main(void)
 		lcd0()->string_size(func()->i32toa( a.Denominator ), 15);
 		//lcd0()->string_size(func()->ui32toa( pow(10,2) ), 4);
 		lcd0()->gotoxy(2, 0);
-		lcd0()->string_size(func()->ftoa( a.Number, number ), 11);lcd0()->hspace(1);
-		lcd0()->string_size(func()->ftoa( a.Fpart, number ), 8);
+		lcd0()->string_size(func()->ftoa( a.Number, number[0] ), 11);lcd0()->hspace(1);
+		lcd0()->string_size(func()->ftoa( a.Fpart, number[0] ), 8);
 		lcd0()->gotoxy(3, 0);
 		//lcd0()->string_size(func()->i16toa( a.sign ), 3);
-		lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);lcd0()->hspace(1);
-		lcd0()->string_size(func()->ui32toa( a.Remainder ), 11);
+		//lcd0()->string_size(func()->ui32toa( a.Numerator ), 8);lcd0()->hspace(1);
+		//lcd0()->string_size(func()->ui32toa( a.Remainder ), 11);
 		//lcd0()->string_size(func()->ui32toa( a.Denominator ), 8);
-		//lcd0()->string_size(func()->ui32toa(test[2]), 10);
+		//set_bit_block(number,1,32,1);
+		set_reg_block(number,1,0,1);
+		//lcd0()->string_size(func()->ui32toa(number[0]), 20);
+		lcd0()->string_size(func()->ui32toa(get_reg_block(number[0],33,0)), 20);
 		//lcd0()->gotoxy(1, 0);
 		//lcd0()->string_size(func()->ui32toa(HAL_GetTick()), 8);
 		//lcd0()->string_size(func()->ui32toa(HAL_GetTickFreq()), 4);

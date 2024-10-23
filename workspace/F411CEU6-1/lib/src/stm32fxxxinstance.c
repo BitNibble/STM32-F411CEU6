@@ -18,6 +18,8 @@ Comment:
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
 #define WORD_BITS 16
+#define DWORD_BITS 32
+#define QWORD_BITS 64
 #define N_BITS 32
 #define N_LIMBITS 33
 #define H_BIT 31
@@ -49,21 +51,16 @@ inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint3
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	if(size_block > N_BITS){ size_block = N_BITS; }
-	if(bit_n > H_BIT){ bit_n = L_BIT; reg = 0; }
-	else{
-		uint32_t mask = (uint32_t)((1 << size_block) - 1);
-		reg &= (mask << bit_n);
-		reg = (reg >> bit_n);
+	if((bit_n + size_block - ONE) < DWORD_BITS) {
+		uint32_t mask = (uint32_t)((1U << size_block) - 1);
+		reg = (reg & (mask << bit_n)) >> bit_n;
 	}
 	return reg;
 }
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(size_block > N_BITS){ size_block = N_BITS; }
-	if(bit_n > H_BIT){ bit_n = H_BIT; }
-	else{
-		uint32_t value = *reg;
+	uint32_t value = *reg;
+	if((bit_n + size_block - ONE) < DWORD_BITS) {
 		uint32_t mask = (uint32_t)((1 << size_block) - 1);
 		data &= mask; value &= ~(mask << bit_n);
 		data = (data << bit_n);
@@ -73,9 +70,7 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(size_block > N_BITS){ size_block = N_BITS; }
-	if(bit_n > H_BIT){ bit_n = H_BIT; }
-	else{
+	if((bit_n + size_block - ONE) < DWORD_BITS) {
 		uint32_t mask = (uint32_t)((1 << size_block) - 1);
 		data &= mask;
 		*reg &= ~(mask << bit_n);
@@ -85,22 +80,23 @@ void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, ui
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {
 	uint32_t value;
-	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
 	value = *(reg + n );
-	uint32_t mask = (uint32_t)((1 << size_block) - 1);
-	value &= (mask << bit_n);
-	value = (value >> bit_n);
+	if((bit_n + size_block - ONE) < DWORD_BITS){
+		uint32_t mask = (uint32_t)((1U << size_block) - 1);
+		value = (value & (mask << bit_n)) >> bit_n;
+	}
 	return value;
 }
 void set_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(size_block > N_BITS){ size_block = N_BITS; }
 	uint32_t n = bit_n / N_BITS; bit_n = bit_n % N_BITS;
-	uint32_t mask = (uint32_t)((1 << size_block) - 1);
-	data &= mask;
-	*(reg + n ) &= ~(mask << bit_n);
-	*(reg + n ) |= (data << bit_n);
+	if((bit_n + size_block - ONE) < DWORD_BITS) {
+		uint32_t mask = (uint32_t)((1 << size_block) - 1);
+		data &= mask;
+		*(reg + n ) &= ~(mask << bit_n);
+		*(reg + n ) |= (data << bit_n);
+	}
 }
 /****************************************/
 // IO

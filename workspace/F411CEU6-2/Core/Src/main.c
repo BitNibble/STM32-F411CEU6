@@ -168,7 +168,7 @@ int main(void)
 
 	//HAL_I2C_Master_Transmit( &i2c, devaddr, pdata, size, timeout );
 
-	//stm()->rtc->BckWrite(2,45);
+	//rtc()->BckWrite(2,23);
 
 	while (1){
 		/*** preamble ***/
