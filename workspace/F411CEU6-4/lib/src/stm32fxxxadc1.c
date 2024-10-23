@@ -11,7 +11,7 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc1.h"
 
-#define ADC_STAB_DELAY 15
+#define ADC_STAB_DELAY 15 // 15
 #define END_OF_CONVERSION_TIME_OUT 100
 /*** File Variables ***/
 // ADC1
