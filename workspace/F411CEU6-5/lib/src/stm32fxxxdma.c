@@ -162,11 +162,11 @@ STM32FXXX_DMA_func* stm32fxxx_dma2_func_inic(void);
 /*******************************************/
 /*** DMA Procedure & Function Definition ***/
 /*******************************************/
-void STM32FXXXDma1Clock(uint8_t state)
+void DMA1_Clock(uint8_t state)
 {
 	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_DMA1EN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_DMA1EN_Pos); }
 }
-void STM32FXXXDma2Clock(uint8_t state)
+void DMA2_Clock(uint8_t state)
 {
 	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_DMA2EN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_DMA2EN_Pos); }
 }
@@ -1734,7 +1734,7 @@ STM32FXXX_DMA_func* stm32fxxx_dma1_func_inic(void)
 /****************************************************/
 void dma1_enable(void)
 {
-	STM32FXXXDma1Clock(ON);
+	DMA1_Clock(ON);
 	stm32fxxx_dma1.instance = DMA1;
 	/*** DMA1 Bit Mapping Link ***/
 	stm32fxxx_dma1.sr = stm32fxxx_dma1_sr_inic();
@@ -1804,7 +1804,7 @@ void dma1_enable(void)
 	stm32fxxx_dma1.stream[7]->m1a = stm32fxxx_dma1_stream7_m1a;
 	/*** Clock and Nvic ***/
 	stm32fxxx_dma1.func = stm32fxxx_dma1_func_inic();
-	stm32fxxx_dma1.clock = STM32FXXXDma1Clock;
+	stm32fxxx_dma1.clock = DMA1_Clock;
 	//return &stm32fxxx_dma1;
 }
 
@@ -3373,7 +3373,7 @@ STM32FXXX_DMA_func* stm32fxxx_dma2_func_inic(void)
 /****************************************************/
 void dma2_enable(void)
 {
-	STM32FXXXDma2Clock(ON);
+	DMA2_Clock(ON);
 	stm32fxxx_dma2.instance = DMA2;
 	/*** DMA2 Bit Mapping Link ***/
 	stm32fxxx_dma2.sr = stm32fxxx_dma2_sr_inic();
@@ -3443,7 +3443,7 @@ void dma2_enable(void)
 	stm32fxxx_dma2.stream[7]->m1a = stm32fxxx_dma2_stream7_m1a;
 	/*** Clock and Nvic ***/
 	stm32fxxx_dma2.func = stm32fxxx_dma2_func_inic();
-	stm32fxxx_dma2.clock = STM32FXXXDma2Clock;
+	stm32fxxx_dma2.clock = DMA2_Clock;
 	//return &stm32fxxx_dma2;
 }
 
