@@ -449,6 +449,7 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
 /****************************************/
 /***
 TypeDef -> Instance -> Handler
+bit_n = bit_n % DWORD_BITS; is the same as bit_n = bit_n & (DWORD_BITS - 1);, for power of two numbers.
 ***/
 
 /*** EOF ***/
