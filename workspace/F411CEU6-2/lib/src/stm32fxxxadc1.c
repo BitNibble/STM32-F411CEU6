@@ -13,6 +13,12 @@ Comment:
 
 #define ADC_STAB_DELAY 15 // 15
 #define END_OF_CONVERSION_TIME_OUT 100
+#ifndef ZERO
+	#define ZERO 0
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
 /*** File Variables ***/
 // ADC1
 static STM32FXXX_ADC1 stm32fxxx_adc1 = {0};

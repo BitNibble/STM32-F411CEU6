@@ -12,6 +12,13 @@ Comment:
 
 /*** Define and Macro ***/
 #define START_TIME_OUT 1000
+/*** Define and Macro ***/
+#ifndef ZERO
+	#define ZERO 0
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
 /*** File Variable ***/
 static STM32FXXX_I2C1_Handler stm32fxxx_i2c1 = {0};
 static STM32FXXX_I2C2_Handler stm32fxxx_i2c2 = {0};

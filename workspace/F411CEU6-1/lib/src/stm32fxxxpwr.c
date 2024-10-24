@@ -11,6 +11,13 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxpwr.h"
 
+/*** Define and Macro ***/
+#ifndef ZERO
+	#define ZERO 0
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
 /*** File Variable ***/
 static STM32FXXX_PWR_cr stm32fxxx_pwr_cr = {0};
 static STM32FXXX_PWR_csr stm32fxxx_pwr_csr = {0};

@@ -11,6 +11,13 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxsyscfg.h"
 
+/*** Define and Macro ***/
+#ifndef ZERO
+	#define ZERO 0
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
 /*** File Variables ***/
 static SYSCFG_memrmp memrmp;
 static SYSCFG_pmc pmc;

@@ -11,8 +11,15 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxadc3.h"
 
+/*** Define and Macro ***/
 #define ADC_STAB_DELAY 15
 #define END_OF_CONVERSION_TIME_OUT 100
+#ifndef ZERO
+	#define ZERO 0
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
 /*** File Variables ***/
 #ifdef STM32F446xx
 // ADC3
