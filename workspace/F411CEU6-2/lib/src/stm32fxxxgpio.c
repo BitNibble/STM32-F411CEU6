@@ -50,7 +50,7 @@ static STM32FXXX_GPIOE stm32fxxx_gpioe = {0};
 #endif
 /*** GPIO Procedure & Function Definition ***/
 /*** GPIOA ***/
-void STM32FXXXGpioAclock(uint8_t enable)
+void GPIOA_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOAEN_Pos);
@@ -58,7 +58,7 @@ void STM32FXXXGpioAclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOAEN_Pos);
     }
 }
-void STM32FXXXGpioAmoder( uint8_t pin, uint8_t mode )
+void GPIOA_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -69,13 +69,13 @@ void STM32FXXXGpioAmoder( uint8_t pin, uint8_t mode )
 		GPIOA->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioAotype(uint8_t pin, uint8_t otype)
+void GPIOA_otype(uint8_t pin, uint8_t otype)
 {
     if(pin < WORD_BITS && otype < TWO){
     	GPIOA->OTYPER |= ( otype << pin );
     }
 }
-void STM32FXXXGpioAospeed(uint8_t pin, uint8_t ospeed)
+void GPIOA_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -86,7 +86,7 @@ void STM32FXXXGpioAospeed(uint8_t pin, uint8_t ospeed)
 		GPIOA->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioApupd(uint8_t pin, uint8_t pupd)
+void GPIOA_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -97,15 +97,15 @@ void STM32FXXXGpioApupd(uint8_t pin, uint8_t pupd)
 		GPIOA->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioAsethpins(uint16_t hpins)
+void GPIOA_set_hpins(uint16_t hpins)
 {
 	GPIOA->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioAclearhpins(uint16_t hpins)
+void GPIOA_clear_hpins(uint16_t hpins)
 {
 	GPIOA->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioAlck(uint16_t hpins){
+void GPIOA_lck(uint16_t hpins){
 	GPIOA->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOA->LCKR & (1 << WORD_BITS)) {
@@ -120,7 +120,7 @@ void STM32FXXXGpioAlck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioAaf(uint8_t pin, uint8_t af)
+void GPIOA_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -137,7 +137,7 @@ void STM32FXXXGpioAaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOB ***/
-void STM32FXXXGpioBclock(uint8_t enable)
+void GPIOB_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOBEN_Pos);
@@ -145,7 +145,7 @@ void STM32FXXXGpioBclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOBEN_Pos);
     }
 }
-void STM32FXXXGpioBmoder( uint8_t pin, uint8_t mode )
+void GPIOB_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -156,13 +156,13 @@ void STM32FXXXGpioBmoder( uint8_t pin, uint8_t mode )
 		GPIOB->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioBotype(uint8_t pin, uint8_t otype)
+void GPIOB_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOB->OTYPER |= ( otype << pin );
 	}
 }
-void STM32FXXXGpioBospeed(uint8_t pin, uint8_t ospeed)
+void GPIOB_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -173,7 +173,7 @@ void STM32FXXXGpioBospeed(uint8_t pin, uint8_t ospeed)
     	GPIOB->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioBpupd(uint8_t pin, uint8_t pupd)
+void GPIOB_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -184,15 +184,15 @@ void STM32FXXXGpioBpupd(uint8_t pin, uint8_t pupd)
     	GPIOB->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioBsethpins(uint16_t hpins)
+void GPIOB_set_hpins(uint16_t hpins)
 {
 	GPIOB->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioBclearhpins(uint16_t hpins)
+void GPIOB_clear_hpins(uint16_t hpins)
 {
 	GPIOB->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioBlck(uint16_t hpins){
+void GPIOB_lck(uint16_t hpins){
 	GPIOB->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOB->LCKR & (1 << WORD_BITS)) {
@@ -206,7 +206,7 @@ void STM32FXXXGpioBlck(uint16_t hpins){
 		}
 	}
 }
-void STM32FXXXGpioBaf(uint8_t pin, uint8_t af)
+void GPIOB_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -223,7 +223,7 @@ void STM32FXXXGpioBaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOC ***/
-void STM32FXXXGpioCclock(uint8_t enable)
+void GPIOC_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOCEN_Pos);
@@ -231,7 +231,7 @@ void STM32FXXXGpioCclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOCEN_Pos);
     }
 }
-void STM32FXXXGpioCmoder( uint8_t pin, uint8_t mode )
+void GPIOC_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -242,13 +242,13 @@ void STM32FXXXGpioCmoder( uint8_t pin, uint8_t mode )
 		GPIOC->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioCotype(uint8_t pin, uint8_t otype)
+void GPIOC_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
     	GPIOC->OTYPER |= ( otype << pin );
 	}
 }
-void STM32FXXXGpioCospeed(uint8_t pin, uint8_t ospeed)
+void GPIOC_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -259,7 +259,7 @@ void STM32FXXXGpioCospeed(uint8_t pin, uint8_t ospeed)
     	GPIOC->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioCpupd(uint8_t pin, uint8_t pupd)
+void GPIOC_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -270,15 +270,15 @@ void STM32FXXXGpioCpupd(uint8_t pin, uint8_t pupd)
     	GPIOC->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioCsethpins(uint16_t hpins)
+void GPIOC_set_hpins(uint16_t hpins)
 {
 	GPIOC->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioCclearhpins(uint16_t hpins)
+void GPIOC_clear_hpins(uint16_t hpins)
 {
 	GPIOC->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioClck(uint16_t hpins){
+void GPIOC_lck(uint16_t hpins){
 	GPIOC->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOC->LCKR & (1 << WORD_BITS)) {
@@ -293,7 +293,7 @@ void STM32FXXXGpioClck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioCaf(uint8_t pin, uint8_t af)
+void GPIOC_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -310,7 +310,7 @@ void STM32FXXXGpioCaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOD ***/
-void STM32FXXXGpioDclock(uint8_t enable)
+void GPIOD_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIODEN_Pos);
@@ -318,7 +318,7 @@ void STM32FXXXGpioDclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIODEN_Pos);
     }
 }
-void STM32FXXXGpioDmoder( uint8_t pin, uint8_t mode )
+void GPIOD_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -329,13 +329,13 @@ void STM32FXXXGpioDmoder( uint8_t pin, uint8_t mode )
 		GPIOD->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioDotype(uint8_t pin, uint8_t otype)
+void GPIOD_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOD->OTYPER |= ( otype << pin );
 	}
 }
-void STM32FXXXGpioDospeed(uint8_t pin, uint8_t ospeed)
+void GPIOD_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -346,7 +346,7 @@ void STM32FXXXGpioDospeed(uint8_t pin, uint8_t ospeed)
 		GPIOD->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioDpupd(uint8_t pin, uint8_t pupd)
+void GPIOD_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -357,15 +357,15 @@ void STM32FXXXGpioDpupd(uint8_t pin, uint8_t pupd)
     	GPIOD->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioDsethpins(uint16_t hpins)
+void GPIOD_set_hpins(uint16_t hpins)
 {
 	GPIOD->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioDclearhpins(uint16_t hpins)
+void GPIOD_clear_hpins(uint16_t hpins)
 {
 	GPIOD->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioDlck(uint16_t hpins){
+void GPIOD_lck(uint16_t hpins){
 	GPIOD->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOD->LCKR & (1 << WORD_BITS)) {
@@ -379,7 +379,7 @@ void STM32FXXXGpioDlck(uint16_t hpins){
 		}
 	}
 }
-void STM32FXXXGpioDaf(uint8_t pin, uint8_t af)
+void GPIOD_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -396,7 +396,7 @@ void STM32FXXXGpioDaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOE ***/
-void STM32FXXXGpioEclock(uint8_t enable)
+void GPIOE_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOEEN_Pos);
@@ -404,7 +404,7 @@ void STM32FXXXGpioEclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOEEN_Pos);
     }
 }
-void STM32FXXXGpioEmoder( uint8_t pin, uint8_t mode )
+void GPIOE_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -415,13 +415,13 @@ void STM32FXXXGpioEmoder( uint8_t pin, uint8_t mode )
 		GPIOE->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioEotype(uint8_t pin, uint8_t otype)
+void GPIOE_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOE->OTYPER |= ( otype << pin );
 	}
 }
-void STM32FXXXGpioEospeed(uint8_t pin, uint8_t ospeed)
+void GPIOE_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -432,7 +432,7 @@ void STM32FXXXGpioEospeed(uint8_t pin, uint8_t ospeed)
 		GPIOE->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioEpupd(uint8_t pin, uint8_t pupd)
+void GPIOE_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -443,15 +443,15 @@ void STM32FXXXGpioEpupd(uint8_t pin, uint8_t pupd)
 		GPIOE->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioEsethpins(uint16_t hpins)
+void GPIOE_set_hpins(uint16_t hpins)
 {
 	GPIOE->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioEclearhpins(uint16_t hpins)
+void GPIOE_clear_hpins(uint16_t hpins)
 {
 	GPIOE->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioElck(uint16_t hpins){
+void GPIOE_lck(uint16_t hpins){
 	GPIOE->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOE->LCKR & (1 << WORD_BITS)) {
@@ -466,7 +466,7 @@ void STM32FXXXGpioElck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioEaf(uint8_t pin, uint8_t af)
+void GPIOE_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -484,7 +484,7 @@ void STM32FXXXGpioEaf(uint8_t pin, uint8_t af)
 
 #ifdef STM32F446xx
 /*** GPIOF ***/
-void STM32FXXXGpioFclock(uint8_t enable)
+void GPIOF_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOFEN_Pos);
@@ -492,7 +492,7 @@ void STM32FXXXGpioFclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOFEN_Pos);
     }
 }
-void STM32FXXXGpioFmoder( uint8_t pin, uint8_t mode )
+void GPIOF_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -503,13 +503,13 @@ void STM32FXXXGpioFmoder( uint8_t pin, uint8_t mode )
 		GPIOF->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioFotype(uint8_t pin, uint8_t otype)
+void GPIOF_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOF->OTYPER |= ( otype << Pin );
 	}
 }
-void STM32FXXXGpioFospeed(uint8_t pin, uint8_t ospeed)
+void GPIOF_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -520,7 +520,7 @@ void STM32FXXXGpioFospeed(uint8_t pin, uint8_t ospeed)
     	GPIOF->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioFpupd(uint8_t pin, uint8_t pupd)
+void GPIOF_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -531,15 +531,15 @@ void STM32FXXXGpioFpupd(uint8_t pin, uint8_t pupd)
     	GPIOF->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioFsethpins(uint16_t hpins)
+void GPIOF_set_hpins(uint16_t hpins)
 {
 	GPIOF->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioFclearhpins(uint16_t hpins)
+void GPIOF_clear_hpins(uint16_t hpins)
 {
 	GPIOF->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioFlck(uint16_t hpins){
+void GPIOF_lck(uint16_t hpins){
 	GPIOF->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOF->LCKR & (1 << WORD_BITS)) {
@@ -554,7 +554,7 @@ void STM32FXXXGpioFlck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioFaf(uint8_t pin, uint8_t af)
+void GPIOF_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -571,7 +571,7 @@ void STM32FXXXGpioFaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOG ***/
-void STM32FXXXGpioGclock(uint8_t enable)
+void GPIOG_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOGEN_Pos);
@@ -579,7 +579,7 @@ void STM32FXXXGpioGclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOGEN_Pos);
     }
 }
-void STM32FXXXGpioGmoder( uint8_t pin, uint8_t mode )
+void GPIOG_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -590,13 +590,13 @@ void STM32FXXXGpioGmoder( uint8_t pin, uint8_t mode )
 		GPIOG->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioGotype(uint8_t pin, uint8_t otype)
+void GPIOG_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOG->OTYPER |= ( otype << Pin );
 	}
 }
-void STM32FXXXGpioGospeed(uint8_t pin, uint8_t ospeed)
+void GPIOG_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -607,7 +607,7 @@ void STM32FXXXGpioGospeed(uint8_t pin, uint8_t ospeed)
     	GPIOG->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioGpupd(uint8_t pin, uint8_t pupd)
+void GPIOG_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -618,15 +618,15 @@ void STM32FXXXGpioGpupd(uint8_t pin, uint8_t pupd)
     	GPIOG->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioGsethpins(uint16_t hpins)
+void GPIOG_set_hpins(uint16_t hpins)
 {
 	GPIOG->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioGclearhpins(uint16_t hpins)
+void GPIOG_clear_hpins(uint16_t hpins)
 {
 	GPIOG->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioGlck(uint16_t hpins){
+void GPIOG_lck(uint16_t hpins){
 	GPIOG->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOG->LCKR & (1 << WORD_BITS)) {
@@ -641,7 +641,7 @@ void STM32FXXXGpioGlck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioGaf(uint8_t pin, uint8_t af)
+void GPIOG_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -658,7 +658,7 @@ void STM32FXXXGpioGaf(uint8_t pin, uint8_t af)
 }
 
 /*** GPIOH ***/
-void STM32FXXXGpioHclock(uint8_t enable)
+void GPIOH_clock(uint8_t enable)
 {
     if (enable) {
         RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOHEN_Pos);
@@ -666,7 +666,7 @@ void STM32FXXXGpioHclock(uint8_t enable)
         RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOHEN_Pos);
     }
 }
-void STM32FXXXGpioHmoder( uint8_t pin, uint8_t mode )
+void GPIOH_moder( uint8_t pin, uint8_t mode )
 {
 	if(pin < WORD_BITS && mode < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -677,13 +677,13 @@ void STM32FXXXGpioHmoder( uint8_t pin, uint8_t mode )
 		GPIOH->MODER |= (mode << Pos);
 	}
 }
-void STM32FXXXGpioHotype(uint8_t pin, uint8_t otype)
+void GPIOH_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
 		GPIOH->OTYPER |= ( otype << Pin );
 	}
 }
-void STM32FXXXGpioHospeed(uint8_t pin, uint8_t ospeed)
+void GPIOH_ospeed(uint8_t pin, uint8_t ospeed)
 {
 	if(pin < WORD_BITS && ospeed < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -694,7 +694,7 @@ void STM32FXXXGpioHospeed(uint8_t pin, uint8_t ospeed)
     	GPIOH->OSPEEDR |= ( ospeed << Pos );
 	}
 }
-void STM32FXXXGpioHpupd(uint8_t pin, uint8_t pupd)
+void GPIOH_pupd(uint8_t pin, uint8_t pupd)
 {
 	if(pin < WORD_BITS && pupd < NIBBLE_BITS){
 		const uint8_t BLOCK_SIZE = TWO;
@@ -705,15 +705,15 @@ void STM32FXXXGpioHpupd(uint8_t pin, uint8_t pupd)
     	GPIOH->PUPDR |= ( pupd << Pos );
 	}
 }
-void STM32FXXXGpioHsethpins(uint16_t hpins)
+void GPIOH_set_hpins(uint16_t hpins)
 {
 	GPIOH->BSRR = (uint32_t)hpins;
 }
-void STM32FXXXGpioHclearhpins(uint16_t hpins)
+void GPIOH_clear_hpins(uint16_t hpins)
 {
 	GPIOH->BSRR = (uint32_t)(hpins << WORD_BITS);
 }
-void STM32FXXXGpioHlck(uint16_t hpins){
+void GPIOH_lck(uint16_t hpins){
 	GPIOH->LCKR = hpins;
 	for(uint8_t status = TWO; status; ) {
 		if(GPIOH->LCKR & (1 << WORD_BITS)) {
@@ -728,7 +728,7 @@ void STM32FXXXGpioHlck(uint16_t hpins){
 	}
 
 }
-void STM32FXXXGpioHaf(uint8_t pin, uint8_t af)
+void GPIOH_af(uint8_t pin, uint8_t af)
 {
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
@@ -748,21 +748,21 @@ void STM32FXXXGpioHaf(uint8_t pin, uint8_t af)
 void gpioa_enable(void)
 {
 	/*** Enable Clock ***/
-	STM32FXXXGpioAclock(ON);
+	GPIOA_clock(ON);
     /*** GPIOA TypeDef ***/
 	stm32fxxx_gpioa.instance = GPIOA;
     /*** GPIOA RCC Clock Enable ***/
-    stm32fxxx_gpioa.clock = STM32FXXXGpioAclock;
+    stm32fxxx_gpioa.clock = GPIOA_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpioa.moder = STM32FXXXGpioAmoder;
-    stm32fxxx_gpioa.otype = STM32FXXXGpioAotype;
-    stm32fxxx_gpioa.ospeed = STM32FXXXGpioAospeed;
-    stm32fxxx_gpioa.pupd = STM32FXXXGpioApupd;
-    stm32fxxx_gpioa.set_hpins = STM32FXXXGpioAsethpins;
-    stm32fxxx_gpioa.clear_hpins = STM32FXXXGpioAclearhpins;
-    stm32fxxx_gpioa.lck = STM32FXXXGpioAlck;
-    stm32fxxx_gpioa.af = STM32FXXXGpioAaf;
+    stm32fxxx_gpioa.moder = GPIOA_moder;
+    stm32fxxx_gpioa.otype = GPIOA_otype;
+    stm32fxxx_gpioa.ospeed = GPIOA_ospeed;
+    stm32fxxx_gpioa.pupd = GPIOA_pupd;
+    stm32fxxx_gpioa.set_hpins = GPIOA_set_hpins;
+    stm32fxxx_gpioa.clear_hpins = GPIOA_clear_hpins;
+    stm32fxxx_gpioa.lck = GPIOA_lck;
+    stm32fxxx_gpioa.af = GPIOA_af;
     //return &stm32fxxx_gpioa;
 }
 
@@ -771,21 +771,21 @@ STM32FXXX_GPIOA* gpioa(void) { return &stm32fxxx_gpioa; }
 void gpiob_enable(void)
 {
 	/*** Enable Clock ***/
-	STM32FXXXGpioBclock(ON);
+	GPIOB_clock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpiob.instance = GPIOB;
     /*** GPIOB RCC Clock Enable ***/
-    stm32fxxx_gpiob.clock = STM32FXXXGpioBclock;
+    stm32fxxx_gpiob.clock = GPIOB_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpiob.moder = STM32FXXXGpioBmoder;
-    stm32fxxx_gpiob.otype = STM32FXXXGpioBotype;
-    stm32fxxx_gpiob.ospeed = STM32FXXXGpioBospeed;
-    stm32fxxx_gpiob.pupd = STM32FXXXGpioBpupd;
-    stm32fxxx_gpiob.set_hpins = STM32FXXXGpioBsethpins;
-    stm32fxxx_gpiob.clear_hpins = STM32FXXXGpioBclearhpins;
-    stm32fxxx_gpiob.lck = STM32FXXXGpioBlck;
-    stm32fxxx_gpiob.af = STM32FXXXGpioBaf;
+    stm32fxxx_gpiob.moder = GPIOB_moder;
+    stm32fxxx_gpiob.otype = GPIOB_otype;
+    stm32fxxx_gpiob.ospeed = GPIOB_ospeed;
+    stm32fxxx_gpiob.pupd = GPIOB_pupd;
+    stm32fxxx_gpiob.set_hpins = GPIOB_set_hpins;
+    stm32fxxx_gpiob.clear_hpins = GPIOB_clear_hpins;
+    stm32fxxx_gpiob.lck = GPIOB_lck;
+    stm32fxxx_gpiob.af = GPIOB_af;
     //return &stm32fxxx_gpiob;
 }
 
@@ -794,21 +794,21 @@ STM32FXXX_GPIOB* gpiob(void) { return &stm32fxxx_gpiob; }
 void gpioc_enable(void)
 {
 	/*** Enable Clock ***/
-	STM32FXXXGpioCclock(ON);
+	GPIOC_clock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpioc.instance = GPIOC;
     /*** GPIOC RCC Clock Enable ***/
-    stm32fxxx_gpioc.clock = STM32FXXXGpioCclock;
+    stm32fxxx_gpioc.clock = GPIOC_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpioc.moder = STM32FXXXGpioCmoder;
-    stm32fxxx_gpioc.otype = STM32FXXXGpioCotype;
-    stm32fxxx_gpioc.ospeed = STM32FXXXGpioCospeed;
-    stm32fxxx_gpioc.pupd = STM32FXXXGpioCpupd;
-    stm32fxxx_gpioc.set_hpins = STM32FXXXGpioCsethpins;
-    stm32fxxx_gpioc.clear_hpins = STM32FXXXGpioCclearhpins;
-    stm32fxxx_gpioc.lck = STM32FXXXGpioClck;
-    stm32fxxx_gpioc.af = STM32FXXXGpioCaf;
+    stm32fxxx_gpioc.moder = GPIOC_moder;
+    stm32fxxx_gpioc.otype = GPIOC_otype;
+    stm32fxxx_gpioc.ospeed = GPIOC_ospeed;
+    stm32fxxx_gpioc.pupd = GPIOC_pupd;
+    stm32fxxx_gpioc.set_hpins = GPIOC_set_hpins;
+    stm32fxxx_gpioc.clear_hpins = GPIOC_clear_hpins;
+    stm32fxxx_gpioc.lck = GPIOC_lck;
+    stm32fxxx_gpioc.af = GPIOC_af;
     //return &stm32fxxx_gpioc;
 }
 
@@ -817,21 +817,21 @@ STM32FXXX_GPIOC* gpioc(void) { return &stm32fxxx_gpioc; }
 void gpiod_enable(void)
 {
 	/*** Enable Clock ***/
-	STM32FXXXGpioDclock(ON);
+	GPIOD_clock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpiod.instance = GPIOD;
     /*** GPIOD RCC Clock Enable ***/
-    stm32fxxx_gpiod.clock = STM32FXXXGpioDclock;
+    stm32fxxx_gpiod.clock = GPIOD_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpiod.moder = STM32FXXXGpioDmoder;
-    stm32fxxx_gpiod.otype = STM32FXXXGpioDotype;
-    stm32fxxx_gpiod.ospeed = STM32FXXXGpioDospeed;
-    stm32fxxx_gpiod.pupd = STM32FXXXGpioDpupd;
-    stm32fxxx_gpiod.set_hpins = STM32FXXXGpioDsethpins;
-    stm32fxxx_gpiod.clear_hpins = STM32FXXXGpioDclearhpins;
-    stm32fxxx_gpiod.lck = STM32FXXXGpioDlck;
-    stm32fxxx_gpiod.af = STM32FXXXGpioDaf;
+    stm32fxxx_gpiod.moder = GPIOD_moder;
+    stm32fxxx_gpiod.otype = GPIOD_otype;
+    stm32fxxx_gpiod.ospeed = GPIOD_ospeed;
+    stm32fxxx_gpiod.pupd = GPIOD_pupd;
+    stm32fxxx_gpiod.set_hpins = GPIOD_set_hpins;
+    stm32fxxx_gpiod.clear_hpins = GPIOD_clear_hpins;
+    stm32fxxx_gpiod.lck = GPIOD_lck;
+    stm32fxxx_gpiod.af = GPIOD_af;
     //return &stm32fxxx_gpiod;
 }
 
@@ -840,21 +840,21 @@ STM32FXXX_GPIOD* gpiod(void) { return &stm32fxxx_gpiod; }
 void gpioe_enable(void)
 {
 	/*** Enable Clock ***/
-	STM32FXXXGpioEclock(ON);
+	GPIOE_clock(ON);
     /*** GPIOA TypeDef ***/
     stm32fxxx_gpioe.instance = GPIOE;
     /*** GPIOE RCC Clock Enable ***/
-    stm32fxxx_gpioe.clock = STM32FXXXGpioEclock;
+    stm32fxxx_gpioe.clock = GPIOE_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpioe.moder = STM32FXXXGpioEmoder;
-    stm32fxxx_gpioe.otype = STM32FXXXGpioEotype;
-    stm32fxxx_gpioe.ospeed = STM32FXXXGpioEospeed;
-    stm32fxxx_gpioe.pupd = STM32FXXXGpioEpupd;
-    stm32fxxx_gpioe.set_hpins = STM32FXXXGpioEsethpins;
-    stm32fxxx_gpioe.clear_hpins = STM32FXXXGpioEclearhpins;
-    stm32fxxx_gpioe.lck = STM32FXXXGpioElck;
-    stm32fxxx_gpioe.af = STM32FXXXGpioEaf;
+    stm32fxxx_gpioe.moder = GPIOE_moder;
+    stm32fxxx_gpioe.otype = GPIOE_otype;
+    stm32fxxx_gpioe.ospeed = GPIOE_ospeed;
+    stm32fxxx_gpioe.pupd = GPIOE_pupd;
+    stm32fxxx_gpioe.set_hpins = GPIOE_set_hpins;
+    stm32fxxx_gpioe.clear_hpins = GPIOE_clear_hpins;
+    stm32fxxx_gpioe.lck = GPIOE_lck;
+    stm32fxxx_gpioe.af = GPIOE_af;
     //return &stm32fxxx_gpioe;
 }
 
@@ -863,20 +863,20 @@ STM32FXXX_GPIOE* gpioe(void) { return &stm32fxxx_gpioe; }
 #ifdef STM32F446xx
 void gpiof_enable(void)
 {
-	STM32FXXXGpioFclock(ON);
+	GPIOF_clock(ON);
     stm32fxxx_gpiof.instance = GPIOF;
     /*** GPIOF RCC Clock Enable ***/
-    stm32fxxx_gpiof.clock = STM32FXXXGpioFclock;
+    stm32fxxx_gpiof.clock = GPIOF_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpiof.moder = STM32FXXXGpioFmoder;
-    stm32fxxx_gpiof.otype = STM32FXXXGpioFotype;
-    stm32fxxx_gpiof.ospeed = STM32FXXXGpioFospeed;
-    stm32fxxx_gpiof.pupd = STM32FXXXGpioFpupd;
-    stm32fxxx_gpiof.set_hpins = STM32FXXXGpioFsethpins;
-    stm32fxxx_gpiof.clear_hpins = STM32FXXXGpioFclearhpins;
-    stm32fxxx_gpiof.lck = STM32FXXXGpioFlck;
-    stm32fxxx_gpiof.af = STM32FXXXGpioFaf;
+    stm32fxxx_gpiof.moder = GPIOF_moder;
+    stm32fxxx_gpiof.otype = GPIOF_otype;
+    stm32fxxx_gpiof.ospeed = GPIOF_ospeed;
+    stm32fxxx_gpiof.pupd = GPIOF_pupd;
+    stm32fxxx_gpiof.set_hpins = GPIOF_set_hpins;
+    stm32fxxx_gpiof.clear_hpins = GPIOF_clear_hpins;
+    stm32fxxx_gpiof.lck = GPIOF_lck;
+    stm32fxxx_gpiof.af = GPIOF_af;
     //return &stm32fxxx_gpiof;
 }
 
@@ -884,20 +884,20 @@ STM32FXXX_GPIOF* gpiof(void) { return &stm32fxxx_gpiof; }
 
 void gpiog_enable(void)
 {
-	STM32FXXXGpioGclock(ON);
+	GPIOG_clock(ON);
     stm32fxxx_gpiog.instance = GPIOG;
     /*** GPIOG RCC Clock Enable ***/
-    stm32fxxx_gpiog.clock = STM32FXXXGpioGclock;
+    stm32fxxx_gpiog.clock = GPIOG_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpiog.moder = STM32FXXXGpioGmoder;
-    stm32fxxx_gpiog.otype = STM32FXXXGpioGotype;
-    stm32fxxx_gpiog.ospeed = STM32FXXXGpioGospeed;
-    stm32fxxx_gpiog.pupd = STM32FXXXGpioGpupd;
-    stm32fxxx_gpiog.set_hpins = STM32FXXXGpioGsethpins;
-    stm32fxxx_gpiog.clear_hpins = STM32FXXXGpioGclearhpins;
-    stm32fxxx_gpiog.lck = STM32FXXXGpioGlck;
-    stm32fxxx_gpiog.af = STM32FXXXGpioGaf;
+    stm32fxxx_gpiog.moder = GPIOG_moder;
+    stm32fxxx_gpiog.otype = GPIOG_otype;
+    stm32fxxx_gpiog.ospeed = GPIOG_ospeed;
+    stm32fxxx_gpiog.pupd = GPIOG_pupd;
+    stm32fxxx_gpiog.set_hpins = GPIOG_set_hpins;
+    stm32fxxx_gpiog.clear_hpins = GPIOG_clear_hpins;
+    stm32fxxx_gpiog.lck = GPIOG_lck;
+    stm32fxxx_gpiog.af = GPIOG_af;
     //return &stm32fxxx_gpiog;
 }
 
@@ -905,20 +905,20 @@ STM32FXXX_GPIOG* gpiog(void) { return &stm32fxxx_gpiog; }
 
 void gpioh_enable(void)
 {
-	STM32FXXXGpioHclock(ON);
+	GPIOH_clock(ON);
     stm32fxxx_gpioh.instance = GPIOH;
     /*** GPIOH RCC Clock Enable ***/
-    stm32fxxx_gpioh.clock = STM32FXXXGpioHclock;
+    stm32fxxx_gpioh.clock = GPIOH_clock;
 	/*** Procedures ***/
 	/*** Other ***/
-    stm32fxxx_gpioh.moder = STM32FXXXGpioHmoder;
-    stm32fxxx_gpioh.otype = STM32FXXXGpioHotype;
-    stm32fxxx_gpioh.ospeed = STM32FXXXGpioHospeed;
-    stm32fxxx_gpioh.pupd = STM32FXXXGpioHpupd;
-    stm32fxxx_gpioh.set_hpins = STM32FXXXGpioHsethpins;
-    stm32fxxx_gpioh.clear_hpins = STM32FXXXGpioHclearhpins;
-    stm32fxxx_gpioh.lck = STM32FXXXGpioHlck;
-    stm32fxxx_gpioh.af = STM32FXXXGpioHaf;
+    stm32fxxx_gpioh.moder = GPIOH_moder;
+    stm32fxxx_gpioh.otype = GPIOH_otype;
+    stm32fxxx_gpioh.ospeed = GPIOH_ospeed;
+    stm32fxxx_gpioh.pupd = GPIOH_pupd;
+    stm32fxxx_gpioh.set_hpins = GPIOH_set_hpins;
+    stm32fxxx_gpioh.clear_hpins = GPIOH_clear_hpins;
+    stm32fxxx_gpioh.lck = GPIOH_lck;
+    stm32fxxx_gpioh.af = GPIOH_af;
     //return &stm32fxxx_gpioh;
 }
 
@@ -929,7 +929,7 @@ STM32FXXX_GPIOH* gpioh(void) { return &stm32fxxx_gpioh; }
 /*
  * More Interested in finding the best work flow, then coding itself. Because that will become redundant after
  * achieving the objective.
- *
+ * bit_n = bit_n % DWORD_BITS; is the same as bit_n = bit_n & (DWORD_BITS - 1);, for power of two numbers.
  * **/
 
 /******
