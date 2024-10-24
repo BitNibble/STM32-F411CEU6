@@ -450,6 +450,8 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
 /***
 TypeDef -> Instance -> Handler
 bit_n = bit_n % DWORD_BITS; is the same as bit_n = bit_n & (DWORD_BITS - 1);, for power of two numbers.
+General behavior for filtering inputs, is if does not pass the filter it is to be ignored and not make
+any changes, leaving everything as was. Maybe think later to just give a signal warning.
 ***/
 
 /*** EOF ***/
