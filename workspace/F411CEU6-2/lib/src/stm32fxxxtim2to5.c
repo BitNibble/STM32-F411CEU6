@@ -20,69 +20,69 @@ static STM32FXXX_TIM5 stm32fxxx_tim5 = {0};
 /************/
 /*** TIM2 ***/
 /************/
-void STM32FXXXTim2Clock(uint8_t state)
+void TIM2_Clock(uint8_t state)
 {
 	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM2EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM2EN_Pos);}
 }
-void STM32FXXXTim2Nvic(uint8_t state)
+void TIM2_Nvic(uint8_t state)
 { // 28
 	if(state){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
-void STM32FXXXTim2start(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void STM32FXXXTim2stop(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM2_start(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void TIM2_stop(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM3 ***/
 /************/
-void STM32FXXXTim3Clock(uint8_t state)
+void TIM3_Clock(uint8_t state)
 {
 	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM3EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM3EN_Pos);}
 }
-void STM32FXXXTim3Nvic(uint8_t state)
+void TIM3_Nvic(uint8_t state)
 { // 29
 	if(state){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
-void STM32FXXXTim3start(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void STM32FXXXTim3stop(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM3_start(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void TIM3_stop(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM4 ***/
 /************/
-void STM32FXXXTim4Clock(uint8_t state)
+void TIM4_Clock(uint8_t state)
 {
 	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM4EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM4EN_Pos);}
 }
-void STM32FXXXTim4Nvic(uint8_t state)
+void TIM4_Nvic(uint8_t state)
 { // 30
 	if(state){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
-void STM32FXXXTim4start(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void STM32FXXXTim4stop(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM4_start(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void TIM4_stop(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /************/
 /*** TIM5 ***/
 /************/
-void STM32FXXXTim5Clock(uint8_t state)
+void TIM5_Clock(uint8_t state)
 {
 	if(state){RCC->APB1ENR |= (1 << RCC_APB1ENR_TIM5EN_Pos);}else{RCC->APB1ENR &= ~(1 << RCC_APB1ENR_TIM5EN_Pos);}
 }
-void STM32FXXXTim5Nvic(uint8_t state)
+void TIM5_Nvic(uint8_t state)
 { // 50
 	if(state){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
-void STM32FXXXTim5start(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void STM32FXXXTim5stop(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM5_start(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
+void TIM5_stop(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
 /*** TIM2 INIC Procedure & Function Definition ***/
 void tim2_enable(void)
 {
-	STM32FXXXTim2Clock(ON);
+	TIM2_Clock(ON);
 	/*** TIM2 Bit Mapping Link ***/
 	stm32fxxx_tim2.instance = TIM2;
 	// CLOCK
-	stm32fxxx_tim2.clock = STM32FXXXTim2Clock;
+	stm32fxxx_tim2.clock = TIM2_Clock;
 	// NVIC
-	stm32fxxx_tim2.nvic = STM32FXXXTim2Nvic;
+	stm32fxxx_tim2.nvic = TIM2_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-	stm32fxxx_tim2.start = STM32FXXXTim2start;
-	stm32fxxx_tim2.stop = STM32FXXXTim2stop;
+	stm32fxxx_tim2.start = TIM2_start;
+	stm32fxxx_tim2.stop = TIM2_stop;
 	//return &stm32fxxx_tim2;
 }
 
@@ -91,17 +91,17 @@ STM32FXXX_TIM2* tim2(void){ return (STM32FXXX_TIM2*) &stm32fxxx_tim2; }
 /*** TIM3 INIC Procedure & Function Definition ***/
 void tim3_enable(void)
 {
-	STM32FXXXTim3Clock(ON);
+	TIM3_Clock(ON);
 	/*** TIM3 Bit Mapping Link ***/
 	stm32fxxx_tim3.instance = TIM3;
 	// CLOCK
-	stm32fxxx_tim3.clock = STM32FXXXTim3Clock;
+	stm32fxxx_tim3.clock = TIM3_Clock;
 	// NVIC
-	stm32fxxx_tim3.nvic = STM32FXXXTim3Nvic;
+	stm32fxxx_tim3.nvic = TIM3_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-	stm32fxxx_tim3.start = STM32FXXXTim3start;
-	stm32fxxx_tim3.stop = STM32FXXXTim3stop;
+	stm32fxxx_tim3.start = TIM3_start;
+	stm32fxxx_tim3.stop = TIM3_stop;
 	//return &stm32fxxx_tim3;
 }
 
@@ -110,17 +110,17 @@ STM32FXXX_TIM3* tim3(void){ return (STM32FXXX_TIM3*) &stm32fxxx_tim3; }
 /*** TIM4 INIC Procedure & Function Definition ***/
 void tim4_enable(void)
 {
-	STM32FXXXTim4Clock(ON);
+	TIM4_Clock(ON);
 	/*** TIM4 Bit Mapping Link ***/
 	stm32fxxx_tim4.instance = TIM4;
 	// CLOCK
-	stm32fxxx_tim4.clock = STM32FXXXTim4Clock;
+	stm32fxxx_tim4.clock = TIM4_Clock;
 	// NVIC
-	stm32fxxx_tim4.nvic = STM32FXXXTim4Nvic;
+	stm32fxxx_tim4.nvic = TIM4_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-	stm32fxxx_tim4.start = STM32FXXXTim4start;
-	stm32fxxx_tim4.stop = STM32FXXXTim4stop;
+	stm32fxxx_tim4.start = TIM4_start;
+	stm32fxxx_tim4.stop = TIM4_stop;
 	//return &stm32fxxx_tim4;
 }
 
@@ -129,17 +129,17 @@ STM32FXXX_TIM4* tim4(void){ return (STM32FXXX_TIM4*) &stm32fxxx_tim4; }
 /*** TIM5 INIC Procedure & Function Definition ***/
 void tim5_enable(void)
 {
-	STM32FXXXTim5Clock(ON);
+	TIM5_Clock(ON);
 	/*** TIM5 Bit Mapping Link ***/
 	stm32fxxx_tim5.instance = TIM5;
 	// CLOCK
-	stm32fxxx_tim5.clock = STM32FXXXTim5Clock;
+	stm32fxxx_tim5.clock = TIM5_Clock;
 	// NVIC
-	stm32fxxx_tim5.nvic = STM32FXXXTim5Nvic;
+	stm32fxxx_tim5.nvic = TIM5_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-	stm32fxxx_tim5.start = STM32FXXXTim5start;
-	stm32fxxx_tim5.stop = STM32FXXXTim5stop;
+	stm32fxxx_tim5.start = TIM5_start;
+	stm32fxxx_tim5.stop = TIM5_stop;
 	//return &stm32fxxx_tim5;
 }
 

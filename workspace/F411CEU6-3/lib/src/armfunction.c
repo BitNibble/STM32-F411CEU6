@@ -7,7 +7,8 @@ Hardware: all
 Date: 18062023
 Update: 07012024
 Comment:
-	Tested ->  Atemga128, Atmega328, Atmega32U4, Atmega324, Atmega8535, Atmega88, STM32F446RE
+	Tested ->  Atemga128, Atmega328, Atmega32U4, Atmega324, Atmega8535, Atmega88, STM32F446RE,
+	STM32F411CEU6.
 	Very Stable
 *************************************************************************/
 /*** File Library ***/

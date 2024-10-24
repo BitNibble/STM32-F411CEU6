@@ -19,31 +19,31 @@ Comment:
 static STM32FXXX_ADC2 stm32fxxx_adc2 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC2 ***/
-void STM32FXXXAdc2Clock(uint8_t state)
+void ADC2_Clock(uint8_t state)
 {
 	if(state){ RCC->APB2ENR |= RCC_APB2ENR_ADC2EN; }else{ RCC->APB2ENR &= ~RCC_APB2ENR_ADC2EN; }
 }
-void STM32FXXXAdc2Nvic(uint8_t state)
+void ADC2_Nvic(uint8_t state)
 {
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
-void STM32FXXXAdc2start(void){
+void ADC2_start(void){
 	set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
 }
-void STM32FXXXAdc2stop(void){
+void ADC2_stop(void){
 	set_reg_Msk(&ADC2->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF);
 }
 /*** ADC2 INIC Procedure & Function Definition ***/
 void adc2_enable(void)
 {
 	/*** ADC2 Clock ***/
-	STM32FXXXAdc2Clock(ON);
+	ADC2_Clock(ON);
 	/*** ADC2 TypeDef ***/
 	stm32fxxx_adc2.instance = ADC2;
 	stm32fxxx_adc2.common_instance = ADC123_COMMON;
 	/*** Clock and Nvic ***/
-	stm32fxxx_adc2.clock = STM32FXXXAdc2Clock;
-	stm32fxxx_adc2.nvic = STM32FXXXAdc2Nvic;
+	stm32fxxx_adc2.clock = ADC2_Clock;
+	stm32fxxx_adc2.nvic = ADC2_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
 

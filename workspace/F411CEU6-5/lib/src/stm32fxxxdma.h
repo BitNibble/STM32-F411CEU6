@@ -27,7 +27,7 @@ typedef struct
 	void (*clear_dmeif)(uint8_t stream_n);
 	uint8_t (*feif)(uint8_t stream_n);
 	void (*clear_feif)(uint8_t stream_n);
-}STM32FXXXDMA_sr;
+}STM32FXXX_DMA_sr;
 // CR
 typedef struct
 {
@@ -50,7 +50,7 @@ typedef struct
 	void (*teie)(uint8_t state);
 	void (*dmeie)(uint8_t state);
 	void (*en)(uint8_t state);
-}STM32FXXXDMA_STREAM_cr;
+}STM32FXXX_DMA_STREAM_cr;
 // FCR
 typedef struct
 {
@@ -58,12 +58,12 @@ typedef struct
 	void (*fs)(uint8_t value);
 	void (*dmdis)(uint8_t state);
 	void (*fth)(uint8_t value);
-}STM32FXXXDMA_STREAM_fcr;
+}STM32FXXX_DMA_STREAM_fcr;
 // FUNC
 typedef struct
 {
 	void (*circ_cfg)(volatile long unsigned int* p_addr, volatile long unsigned int* m_addr, uint8_t stream_n, uint8_t channel_n, uint16_t quant_d, uint8_t p_size, uint8_t m_size, uint8_t priority, uint8_t dir);
-}STM32FXXXDMA_func;
+}STM32FXXX_DMA_func;
 /*************************************/
 /*************************************/
 // DMA_Stream
@@ -71,24 +71,24 @@ typedef struct
 {
 	DMA_Stream_TypeDef* instance;
 	/*** Bit Mapping ***/
-	STM32FXXXDMA_STREAM_cr* cr;
+	STM32FXXX_DMA_STREAM_cr* cr;
 	void (*ndt)(uint16_t value);
 	void (*par)(volatile long unsigned int periferal_addr);
 	void (*m0a)(volatile long unsigned int mem0_addr);
 	void (*m1a)(volatile long unsigned int mem1_addr);
-	STM32FXXXDMA_STREAM_fcr* fcr;
+	STM32FXXX_DMA_STREAM_fcr* fcr;
 	void (*nvic)(uint8_t state);
-}STM32FXXXDMAStreamx;
+}STM32FXXX_DMA_Streamx;
 // DMA
 typedef struct
 {
 	DMA_TypeDef* instance;
-	STM32FXXXDMAStreamx* stream[8];
+	STM32FXXX_DMA_Streamx* stream[8];
 	/*** Bit Mapping ***/
-	STM32FXXXDMA_sr* sr;
+	STM32FXXX_DMA_sr* sr;
 	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
-	STM32FXXXDMA_func* func;
+	STM32FXXX_DMA_func* func;
 }STM32FXXX_DMA, STM32FXXX_DMA1, STM32FXXX_DMA2;
 /*************************************/
 /*************************************/

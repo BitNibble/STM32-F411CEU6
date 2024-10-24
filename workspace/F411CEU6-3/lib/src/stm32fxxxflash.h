@@ -42,7 +42,7 @@ typedef struct
 	void (*icen)(uint8_t state);
 	void (*prften)(uint8_t state);
 	void (*latency)(uint8_t value);
-}STM32FXXXFLASH_acr;
+}STM32FXXX_FLASH_acr;
 // SR
 typedef struct
 {
@@ -61,7 +61,7 @@ typedef struct
 	void (*clear_operr)(void);
 	uint8_t (*eop)(void);
 	void (*clear_eop)(void);
-}STM32FXXXFLASH_sr;
+}STM32FXXX_FLASH_sr;
 // CR
 typedef struct
 {
@@ -74,7 +74,7 @@ typedef struct
 	void (*mer)(uint8_t state);
 	void (*ser)(uint8_t state);
 	void (*pg)(uint8_t state);
-}STM32FXXXFLASH_cr;
+}STM32FXXX_FLASH_cr;
 // OPTCR
 typedef struct
 {
@@ -89,15 +89,15 @@ typedef struct
 	void (*bor_lev)(uint8_t value);
 	void (*optstrt)(uint8_t state);
 	void (*optlock)(uint8_t state);
-}STM32FXXXFLASH_optcr;
+}STM32FXXX_FLASH_optcr;
 /*** FLASH TypeDef ***/
 typedef struct
 {
 	/*** Bit Mapping ***/
-	STM32FXXXFLASH_acr* acr;
-	STM32FXXXFLASH_sr* sr;
-	STM32FXXXFLASH_cr* cr;
-	STM32FXXXFLASH_optcr* optcr;
+	STM32FXXX_FLASH_acr* acr;
+	STM32FXXX_FLASH_sr* sr;
+	STM32FXXX_FLASH_cr* cr;
+	STM32FXXX_FLASH_optcr* optcr;
 	void (*keyr)(uint32_t);
 	void (*optkeyr)(uint32_t);
 	/*** Clock and Nvic ***/

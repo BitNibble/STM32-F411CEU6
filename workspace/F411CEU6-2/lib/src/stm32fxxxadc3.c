@@ -19,29 +19,29 @@ Comment:
 static STM32FXXX_ADC3 stm32fxxx_adc3 = {0};
 /*** File Procedure & Function Header ***/
 /*** ADC3 ***/
-void STM32FXXXAdc3Clock(uint8_t state) {
+void ADC3_Clock(uint8_t state) {
 	if(state){ RCC->APB2ENR |= RCC_APB2ENR_ADC3EN; }else{ RCC->APB2ENR &= ~RCC_APB2ENR_ADC3EN; }
 }
-void STM32FXXXAdc3Nvic(uint8_t state) {
+void ADC3_Nvic(uint8_t state) {
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
-void STM32FXXXAdc3start(void) {
+void ADC3_start(void) {
 	set_reg_Msk(&ADC3->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
 }
-void STM32FXXXAdc3stop(void) {
+void ADC3_stop(void) {
 	set_reg_Msk(&ADC3->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF);
 }
 /*** ADC3 INIC Procedure & Function Definition ***/
 void adc3_enable(void)
 {
 	/*** ADC3 Clock ***/
-	STM32FXXXAdc3Clock(ON);
+	ADC3_Clock(ON);
 	/*** ADC3 TypeDef ***/
 	stm32fxxx_adc3.instance = ADC3;
 	stm32fxxx_adc3.common_instance = ADC123_COMMON;
 	/*** Clock and Nvic ***/
-	stm32fxxx_adc3.clock = STM32FXXXAdc3Clock;
-	stm32fxxx_adc3.nvic = STM32FXXXAdc3Nvic;
+	stm32fxxx_adc3.clock = ADC3_Clock;
+	stm32fxxx_adc3.nvic = ADC3_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
 

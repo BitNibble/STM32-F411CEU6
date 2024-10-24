@@ -19,17 +19,17 @@ typedef struct
 {
 	void (*division)(uint8_t pllm, uint16_t plln, uint8_t pllp, uint8_t pllq);
 	void (*enable)(void);
-}STM32FXXXRCCPLL;
+}STM32FXXX_RCC_PLL;
 // RCC -> PLLI2S
 typedef struct
 {
 	void (*enable)(void);
-}STM32FXXXRCCPLLI2S;
+}STM32FXXX_RCC_PLLI2S;
 // RCC -> PLLSAI
 typedef struct
 {
 	void (*enable)(void);
-}STM32FXXXRCCPLLSAI;
+}STM32FXXX_RCC_PLLSAI;
 /*** RCC TypeDef ***/
 typedef struct
 {
@@ -37,9 +37,9 @@ typedef struct
 	RCC_TypeDef* instance;
 	void (*prescaler)(uint16_t ahbpre, uint8_t ppre1, uint8_t ppre2, uint8_t rtcpre);
 	/*** Extended ***/
-	STM32FXXXRCCPLL* pll;
-	STM32FXXXRCCPLLI2S* plli2s;
-	STM32FXXXRCCPLLSAI* pllsai;
+	STM32FXXX_RCC_PLL* pll;
+	STM32FXXX_RCC_PLLI2S* plli2s;
+	STM32FXXX_RCC_PLLSAI* pllsai;
 	/*** Other ***/
 	void (*henable)(uint8_t hclock);
 	void (*hselect)(uint8_t sysclk);

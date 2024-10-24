@@ -19,7 +19,7 @@ static STM32FXXX_TIM8 stm32fxxx_tim8 = {0};
 /************/
 /*** TIM1 ***/
 /************/
-void STM32FXXXTim1Clock(uint8_t state)
+void TIM1_Clock(uint8_t state)
 {
 	//if(state){RCC->APB2ENR |= (1 << 0);}else{RCC->APB2ENR &= ~(1 << 0);}
 	if(state){
@@ -28,7 +28,7 @@ void STM32FXXXTim1Clock(uint8_t state)
 		set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_TIM1EN_Msk, RCC_APB2ENR_TIM1EN_Pos, OFF);
 	}
 }
-void STM32FXXXTim1Nvic(uint8_t value)
+void TIM1_Nvic(uint8_t value)
 { // 24, 25, 26, 27
 	nvic_enable();
 	switch(value){
@@ -78,21 +78,21 @@ void STM32FXXXTim1Nvic(uint8_t value)
 	break;
 	}
 }
-void STM32FXXXTim1start(void) {
+void TIM1_start(void) {
 	set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON);
 }
-void STM32FXXXTim1stop(void) {
+void TIM1_stop(void) {
 	set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF);
 }
 #ifdef STM32F446xx
 /************/
 /*** TIM8 ***/
 /************/
-void STM32FXXXTim8Clock(uint8_t state)
+void TIM8_Clock(uint8_t state)
 {
 	if(state){RCC->APB2ENR |= (1 << RCC_APB2ENR_TIM8EN_Pos);}else{RCC->APB2ENR &= ~(1 << RCC_APB2ENR_TIM8EN_Pos);}
 }
-void STM32FXXXTim8Nvic(uint8_t value)
+void TIM8_Nvic(uint8_t value)
 { // 43, 44, 45, 46
 	switch(value){
 		case 0b1000:
@@ -133,10 +133,10 @@ void STM32FXXXTim8Nvic(uint8_t value)
 	break;
 	}
 }
-void STM32FXXXTim8start(void) {
+void TIM8_start(void) {
 	set_reg_Msk(&TIM8->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON);
 }
-void STM32FXXXTim8stop(void) {
+void TIM8_stop(void) {
 	set_reg_Msk(&TIM8->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF);
 }
 
@@ -145,17 +145,17 @@ void STM32FXXXTim8stop(void) {
 /*** TIM1 INIC Procedure & Function Definition ***/
 void tim1_enable(void)
 {
-	STM32FXXXTim1Clock(ON);
+	TIM1_Clock(ON);
 	/*** TIM1 Bit Field ***/
 	stm32fxxx_tim1.instance = TIM1;
 	// CLOCK
-	stm32fxxx_tim1.clock = STM32FXXXTim1Clock;
+	stm32fxxx_tim1.clock = TIM1_Clock;
 	// NVIC
-	stm32fxxx_tim1.nvic = STM32FXXXTim1Nvic;
+	stm32fxxx_tim1.nvic = TIM1_Nvic;
 	/*** Procedures ***/
 	/*** Other ***/
-	stm32fxxx_tim1.start = STM32FXXXTim1start;
-	stm32fxxx_tim1.stop = STM32FXXXTim1stop;
+	stm32fxxx_tim1.start = TIM1_start;
+	stm32fxxx_tim1.stop = TIM1_stop;
 
 	//return &stm32fxxx_tim1;
 }
@@ -166,16 +166,16 @@ STM32FXXX_TIM1* tim1(void){ return (STM32FXXX_TIM1*) &stm32fxxx_tim1;}
 void tim8_enable(void)
 {
 	#ifdef STM32F446xx
-		STM32FXXXTim8Clock(ON);
+		TIM8_Clock(ON);
 		stm32fxxx_tim8.instance = TIM8;
 		// CLOCK
-		stm32fxxx_tim8.clock = STM32FXXXTim8Clock;
+		stm32fxxx_tim8.clock = TIM8_Clock;
 		// NVIC
-		stm32fxxx_tim8.nvic = STM32FXXXTim8Nvic;
+		stm32fxxx_tim8.nvic = TIM8_Nvic;
 		/*** Procedures ***/
 		/*** Other ***/
-		stm32fxxx_tim8.start = STM32FXXXTim8start;
-		stm32fxxx_tim8.stop = STM32FXXXTim8stop;
+		stm32fxxx_tim8.start = TIM8_start;
+		stm32fxxx_tim8.stop = TIM8_stop;
 	#endif
 
 	//return &stm32fxxx_tim8;

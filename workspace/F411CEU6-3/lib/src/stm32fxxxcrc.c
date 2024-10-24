@@ -16,41 +16,41 @@ static STM32FXXX_CRC stm32fxxx_crc = {0};
 
 /*** File Procedure & Function Header ***/
 /*** CRC Bit Mapping ***/
-void STM32FXXXCRC_dr(uint32_t value)
+void CRC_dr(uint32_t value)
 {
 	CRC->DR = value;
 }
-uint32_t STM32FXXXCRC_get_dr(void)
+uint32_t CRC_get_dr(void)
 {
 	return CRC->DR;
 }
-void STM32FXXXCRC_idr(uint8_t value)
+void CRC_idr(uint8_t value)
 {
 	CRC->IDR = value;
 }
-uint8_t STM32FXXXCRC_get_idr(void)
+uint8_t CRC_get_idr(void)
 {
 	return CRC->IDR;
 }
-void STM32FXXXCRC_reset(void)
+void CRC_reset(void)
 {
 	CRC->CR = 1;
 }
-void STM32FXXXCRC_clock(uint8_t state)
+void CRC_clock(uint8_t state)
 {
 	if(state){ RCC->AHB1ENR |= (1 << RCC_AHB1ENR_CRCEN_Pos); } else{ RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_CRCEN_Pos); }
 }
 /*** INIC Procedure & Function Definition ***/
 void crc_enable(void)
 {
-	STM32FXXXCRC_clock(ON);
+	CRC_clock(ON);
 	stm32fxxx_crc.instance = CRC;
 	/***CRC Bit Mapping Link***/
-	stm32fxxx_crc.dr = STM32FXXXCRC_dr;
-	stm32fxxx_crc.get_dr = STM32FXXXCRC_get_dr;
-	stm32fxxx_crc.idr = STM32FXXXCRC_idr;
-	stm32fxxx_crc.get_idr = STM32FXXXCRC_get_idr;
-	stm32fxxx_crc.reset = STM32FXXXCRC_reset;
+	stm32fxxx_crc.dr = CRC_dr;
+	stm32fxxx_crc.get_dr = CRC_get_dr;
+	stm32fxxx_crc.idr = CRC_idr;
+	stm32fxxx_crc.get_idr = CRC_get_idr;
+	stm32fxxx_crc.reset = CRC_reset;
 	//return &stm32fxxx_crc;
 }
 

@@ -63,7 +63,7 @@ typedef union{
 	}nibble;
 	struct UN8{
 		uint8_t b;
-	}byte;
+	}un8;
 }_UN8var;
 typedef union{
 	struct UN16byte{
@@ -72,7 +72,7 @@ typedef union{
 	}byte;
 	struct UN16{
 		uint16_t w;
-	}word;
+	}un16;
 }_UN16var;
 typedef union{
 	struct UN32word{
@@ -81,7 +81,7 @@ typedef union{
 	}word;
 	struct UN32{
 		uint32_t dw;
-	}dword;
+	}un32;
 }_UN32var;
 typedef union{
 	struct UN64dword{
@@ -90,7 +90,7 @@ typedef union{
 	}dword;
 	struct UN64{
 		uint64_t qw;
-	}qword;
+	}un64;
 }_UN64var;
 /****************************************/
 /*** Tools ***/
@@ -147,7 +147,10 @@ void Usart_StopBits( USART_TypeDef* usart, double stopbits );
 void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
 /****************************************/
 /***
-
+TypeDef -> Instance -> Handler
+bit_n = bit_n % DWORD_BITS; is the same as bit_n = bit_n & (DWORD_BITS - 1);, for power of two numbers.
+General behavior for filtering inputs, is if does not pass the filter it is to be ignored and not make
+any changes, leaving everything as was. Maybe think later to just give a signal warning.
 ***/
 
 /*** EOF ***/

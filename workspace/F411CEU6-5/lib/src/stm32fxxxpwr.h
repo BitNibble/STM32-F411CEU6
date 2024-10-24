@@ -35,7 +35,7 @@ typedef struct
 	void (*clear_cwuf)(void);
 	void (*pdds)(uint8_t state);
 	void (*lpds)(uint8_t state);
-}STM32FXXXPWR_cr;
+}STM32FXXX_PWR_cr;
 // CSR
 typedef struct
 {
@@ -51,15 +51,15 @@ typedef struct
 	uint8_t (*pvdo)(void);
 	uint8_t (*sbf)(void);
 	uint8_t (*wuf)(void);
-}STM32FXXXPWR_csr;
+}STM32FXXX_PWR_csr;
 
 /*** PWR TypeDef ***/
 typedef struct
 {
 	PWR_TypeDef* instance;
 	/*** Bit Mapping ***/
-	STM32FXXXPWR_cr* cr;
-	STM32FXXXPWR_csr* csr;
+	STM32FXXX_PWR_cr* cr;
+	STM32FXXX_PWR_csr* csr;
 	/*** Clock and Nvic ***/
 	void (*clock)(uint8_t state);
 }STM32FXXX_PWR;

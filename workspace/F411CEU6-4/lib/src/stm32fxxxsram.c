@@ -17,7 +17,7 @@ static STM32FXXX_SRAM stm32fxxx_sram = {0};
 static uint32_t sram_time_out;
 
 /*** SRAM Procedure & Function Definition ***/
-void STM32FXXXSramAccess(void)
+void SRAM_Access(void)
 {
 	// RM0390 pg 94
 	// SRAM access
@@ -42,7 +42,7 @@ void STM32FXXXSramAccess(void)
 /*** INIC Procedure & Function Definition ***/
 void sram_enable(void)
 {
-	stm32fxxx_sram.access = STM32FXXXSramAccess;
+	stm32fxxx_sram.access = SRAM_Access;
 	//return &stm32fxxx_sram;
 }
 
