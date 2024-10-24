@@ -6,7 +6,7 @@ License: GNU General Public License
 Hardware: ALL
 Date: 20102024
 Comment:
-	
+	BT05 and ZS-040
 *******************************************************************************/
 #ifndef _BT_COMMANDS_H_
 	#define _BT_COMMANDS_H_
@@ -14,92 +14,80 @@ Comment:
 #include <stdint.h>
 #include <inttypes.h>
 
+/*****************************************************/
 /*** USER ***/
 const char* BT_AT_NAME_1(void);
 const char* BT_AT_NAME_2(void);
-const char* BT_AT_PSWD_1(void);
-/*** 1. General Functions for AT Commands ***/
-// Function to get the basic AT command string (for testing the module)
+const char* BT_AT_PIN_1(void);
+/*****************************************************/
+/******** General Inquiry Function AT Commands *******/
+/*****************************************************/
+const char* BT_AT_Run(uint8_t inquiry);
 const char* BT_AT_Test(void);
-// Function to get the reset command string
-const char* BT_AT_Reset(void);
-// Function to get the firmware version command string
 const char* BT_AT_GetVersion(void);
-// Function to get the restore factory settings command string
-const char* BT_AT_RestoreDefaults(void);
-// Function to get the command string for getting the Bluetooth address
-const char* BT_AT_GetAddress(void);
-// Function to get the command string to set the Bluetooth name
-const char* BT_AT_SetName(const char *name);
-// Function to get the command string for retrieving the Bluetooth name
 const char* BT_AT_GetName(void);
-// Function to get the command string for retrieving the pairing password
-const char* BT_AT_GetPassword(void);
-// Function to get the command string for retrieving the pairing password
 const char* BT_AT_GetPin(void);
-/*** 2. Role and Connection Functions ***/
-// Function to get the command string to set the Bluetooth role
-const char* BT_AT_SetRole(uint8_t role);
-// Function to get the command string for retrieving the Bluetooth role
+const char* BT_AT_GetStat(void);
 const char* BT_AT_GetRole(void);
-// Function to get the command string for setting the connection mode
-const char* BT_AT_SetConnectionMode(uint8_t mode);
-// Function to get the command string for retrieving the connection mode
-const char* BT_AT_GetConnectionMode(void);
-// Function to get the command string for binding to a specific address
-const char* BT_AT_Bind(const char *address);
-/*** 3. UART and Communication Settings ***/
-// Function to get the command string for setting the UART parameters
-const char* BT_AT_SetUART(uint32_t baud, uint8_t stopBits, uint8_t parity);
-// Function to get the command string for retrieving the UART parameters
-const char* BT_AT_GetUART(void);
-/*** 4. Inquiry and Device Search Functions ***/
-// Function to get the command string for starting an inquiry
-const char* BT_AT_StartInquiry(void);
-// Function to get the command string for retrieving the inquiry access code
-const char* BT_AT_GetInquiryAccessCode(void);
-// Function to get the command string for setting the inquiry access code
-const char* BT_AT_SetInquiryAccessCode(const char *iac);
-// Function to get the command string for retrieving the inquiry mode
-const char* BT_AT_GetInquiryMode(void);
-// Function to get the command string for setting the inquiry mode
-const char* BT_AT_SetInquiryMode(uint8_t mode);
-// Function to get the command string for retrieving a remote device's name
-const char* BT_AT_GetRemoteDeviceName(const char *address);
-/*** 5. Power Management and Sleep Functions ***/
-// Function to get the command string for setting the power mode
-const char* BT_AT_SetPowerMode(uint8_t mode);
-// Function to get the command string for retrieving the power mode
-const char* BT_AT_GetPowerMode(void);
-// Function to get the command string for entering sleep mode
+const char* BT_AT_GetAdvi(void);
+const char* BT_AT_GetType(void);
+const char* BT_AT_GetBaud(void);
+const char* BT_AT_GetLaddr(void);
+const char* BT_AT_GetUuid(void);
+const char* BT_AT_GetChar(void);
+const char* BT_AT_GetInq(void);
+const char* BT_AT_GetTest(void);
+/*****************************************************/
+/*****************************************************/
+/*****************************************************/
 const char* BT_AT_EnterSleep(void);
-/*** 6. Pairing and Linking Functions ***/
-// Function to get the command string for pairing with a device
-const char* BT_AT_Pair(const char *address, uint16_t timeout);
-// Function to get the command string for linking to a specific device
-const char* BT_AT_Link(const char *address);
-// Function to get the command string for disconnecting the link
+const char* BT_AT_Reset(void);
+const char* BT_AT_RestoreDefaults(void);
 const char* BT_AT_Disconnect(void);
-/*** 7. Special Baud Rate Commands ***/
-// Function to get the command string for setting the baud rate to 1200
-const char* BT_AT_SetBaud1200(void);
-// Function to get the command string for setting the baud rate to 2400
-const char* BT_AT_SetBaud2400(void);
-// Function to get the command string for setting the baud rate to 4800
-const char* BT_AT_SetBaud4800(void);
-// Function to get the command string for setting the baud rate to 9600 (default)
-const char* BT_AT_SetBaud9600(void);
-// Function to get the command string for setting the baud rate to 19200
-const char* BT_AT_SetBaud19200(void);
-// Function to get the command string for setting the baud rate to 38400
-const char* BT_AT_SetBaud38400(void);
-// Function to get the command string for setting the baud rate to 57600
-const char* BT_AT_SetBaud57600(void);
-// Function to get the command string for setting the baud rate to 115200
-const char* BT_AT_SetBaud115200(void);
-// Function to get the command string for setting the chosen baud
+const char* BT_AT_GetHelp(void);
+/*****************************************************/
+/******** General Setting Function AT Commands *******/
+/*****************************************************/
+/*** Name Command ***/
+const char* BT_AT_SetName(const char *name);
+/*** Pin Command ***/
+const char* BT_AT_SetPin(uint32_t pin);
+/*** Role Commands ***/
+const char* BT_AT_SetRole(uint8_t role);
+const char* BT_AT_SetRole0(void);
+const char* BT_AT_SetRole1(void);
+const char* BT_AT_SetRole2(void);
+const char* BT_AT_SetRole3(void);
+const char* BT_AT_SetRole4(void);
+/*** Advi Commands ***/
+const char* BT_AT_SetAdvi(uint8_t advi);
+const char* BT_AT_SetAdvi0(void);
+const char* BT_AT_SetAdvi1(void);
+const char* BT_AT_SetAdvi2(void);
+const char* BT_AT_SetAdvi3(void);
+const char* BT_AT_SetAdvi4(void);
+const char* BT_AT_SetAdvi5(void);
+const char* BT_AT_SetAdvi6(void);
+/*** Type Commands ***/
+const char* BT_AT_SetType(uint8_t type);
+const char* BT_AT_SetType0(void);
+const char* BT_AT_SetType1(void);
+const char* BT_AT_SetType2(void);
+/*** Baud Rate Commands ***/
 const char* BT_AT_SetBaud(uint32_t baud);
-	
+const char* BT_AT_SetBaud1200(void);
+const char* BT_AT_SetBaud2400(void);
+const char* BT_AT_SetBaud4800(void);
+const char* BT_AT_SetBaud9600(void);
+const char* BT_AT_SetBaud19200(void);
+const char* BT_AT_SetBaud38400(void);
+const char* BT_AT_SetBaud57600(void);
+const char* BT_AT_SetBaud115200(void);
+/*** Inq Commands ***/
+const char* BT_AT_SetInq(uint8_t inq);
+const char* BT_AT_SetInq0(void);
+const char* BT_AT_SetInq1(void);
+
 #endif
 
 /*** EOF ***/

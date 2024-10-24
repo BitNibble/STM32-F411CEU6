@@ -78,6 +78,7 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
+    uint8_t AT_counter = 0;
 
     const char unit = (char)0xDF;
 
@@ -117,6 +118,14 @@ int main(void)
                 }
                 skip_0++;
             }
+
+
+
+            usart1()->transmit_string(BT_AT_Run(AT_counter));
+            _delay_ms(2000);
+            AT_counter++;
+            if(AT_counter > 11){ AT_counter = 0; }
+
 
             if (PA.par.LL & 1) { // Jump menu
                 _delay_ms(JMP_menu);
@@ -223,7 +232,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
-                    usart1()->transmit_string(BT_AT_GetUART());
+                    usart1()->transmit_string(BT_AT_Run(0));
                 }
             } else {
                 count_0 = 0;
@@ -310,7 +319,7 @@ int main(void)
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
-                    usart1()->transmit_string(BT_AT_Test());
+                    //usart1()->transmit_string(BT_AT_Test());
                 }
             } else {
                 count_0 = 0;
