@@ -68,7 +68,7 @@ const char* BT_AT_GetInq(void) {
 	return "AT+INQ\r\n";
 }
 const char* BT_AT_GetTest(void) {
-	return "AT+PM\r\n";
+	return "AT+GMR\r\n";
 }
 /*****************************************************/
 /*****************************************************/
@@ -337,10 +337,10 @@ const char* BT_AT_Run(uint8_t inquiry) {
 
 		break;
 		case 13:
-			str = BT_AT_Test();
+			//str = BT_AT_Test();
 			//str = BT_AT_GetHelp();
 			//str = BT_AT_SetName("BLE01");
-			//str = BT_AT_GetTest();
+			str = BT_AT_GetTest();
 		break;
 		default:
 			str = BT_AT_Test();

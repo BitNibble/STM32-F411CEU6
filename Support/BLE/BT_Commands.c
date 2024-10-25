@@ -68,7 +68,7 @@ const char* BT_AT_GetInq(void) {
 	return "AT+INQ\r\n";
 }
 const char* BT_AT_GetTest(void) {
-	return "AT+GMR\r\n";
+	return "AT+UART\r\n";
 }
 /*****************************************************/
 /*****************************************************/
