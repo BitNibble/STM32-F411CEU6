@@ -97,6 +97,7 @@ int main(void)
     char vecD[8]; // for calendar date
     char vecT[8]; // for calendar time
     PA.update(&PA.par, gpioa()->instance->IDR);
+    usart1()->transmit_string(esp8266_cmd_setjap("NOS-9C64", "RUSXRCKL"));
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
@@ -288,7 +289,7 @@ int main(void)
                     //usart1()->transmit_string(BT_AT_Run(AT_counter));
                     usart1()->transmit_string(esp8266_cmd(AT_counter, "none", "none"));
                     AT_counter++;
-                    if(AT_counter > 5){ AT_counter = 0; }
+                    if(AT_counter > 9){ AT_counter = 0; }
 
                 }
                 skip_0++;
