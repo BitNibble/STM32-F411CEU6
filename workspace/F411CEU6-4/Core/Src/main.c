@@ -385,7 +385,7 @@ int main(void)
 void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 	switch(*step) {
 		case(0): if(*feedback != 0){ // INICIALIZE
-				usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and AP
+				usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and Access Point
 				_delay_ms(100); // wait com
 				usart1()->transmit_string(esp8266_cmd_setwjap("NOS-9C64", "RUSXRCKL"));
 				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
@@ -429,7 +429,7 @@ void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 				//string=string+80;
 				//usart1()->transmit_string(esp8266_cmd_querywmode());
 				//usart1()->transmit_string(esp8266_cmd_queryipmode());
-				//usart1()->transmit_string(esp8266_cmd_queryipap());
+				usart1()->transmit_string(esp8266_cmd_queryipap());
 				//usart1()->transmit_string(esp8266_cmd_ipstatus());
 				//usart1()->transmit_string(esp8266_cmd_queryipapmac());
 				//usart1()->transmit_string(esp8266_cmd_queryipstamac());
@@ -439,13 +439,14 @@ void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 				//usart1()->transmit_string(esp8266_cmd_version());
 				//usart1()->transmit_string(esp8266_cmd_querysleep());
 				//usart1()->transmit_string(esp8266_cmd_queryrfvdd());
-				usart1()->transmit_string(esp8266_cmd_queryparwmode());
+				//usart1()->transmit_string(esp8266_cmd_queryparwmode());
 				//usart1()->transmit_string(esp8266_cmd_wlap());
 				//usart1()->transmit_string(esp8266_cmd_querywsap());
 				//usart1()->transmit_string(esp8266_cmd_querywdhcp());
 				//usart1()->transmit_string(esp8266_cmd_querywdhcps());
 				//usart1()->transmit_string(esp8266_cmd_queryipsta());
 				//usart1()->transmit_string(esp8266_cmd_cifsr());
+				//usart1()->transmit_string(esp8266_cmd_mux0ipd(50));
 
 				_delay_ms(100); // wait com
 
@@ -461,7 +462,6 @@ void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 			}
 			break;
 	}
-	//_delay_ms(100);
 	*feedback = *step;
 }
 /******/

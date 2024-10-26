@@ -161,6 +161,16 @@ const char* esp8266_cmd_set1ui82s2ui161ui8par(const char* cmd, uint8_t par1, con
 	ESP8266AT_str[esp8266_buff_size] = 0;
 	return ESP8266AT_str;
 }
+const char* esp8266_cmd_1ui16par(const char* cmd, uint16_t par1) {
+	snprintf(ESP8266AT_str, sizeof(ESP8266AT_str), "%s,%d\r\n", cmd, par1);
+	ESP8266AT_str[esp8266_buff_size] = 0;
+	return ESP8266AT_str;
+}
+const char* esp8266_cmd_1ui81ui16par(const char* cmd, uint8_t par1, uint16_t par2) {
+	snprintf(ESP8266AT_str, sizeof(ESP8266AT_str), "%s,%d,%d\r\n", cmd, par1, par2);
+	ESP8266AT_str[esp8266_buff_size] = 0;
+	return ESP8266AT_str;
+}
 /************************************************/
 /************** Basic AT Commands ***************/
 /************************************************/
@@ -190,11 +200,11 @@ const char* esp8266_cmd_setgslp(uint16_t time) {
 		//<time> OK
 	return esp8266_cmd_set1ui16par("GSLP", time);
 }
-const char* esp8266_cmd_echo(uint8_t state) {
+const char* esp8266_cmd_echo(uint8_t enable) {
 	// ATE – AT commands echo
 	// Response:
 		//OK
-	if(state){
+	if(enable){
 		strncpy(ESP8266AT_str, "ATE1\r\n", esp8266_buff_size);
 		ESP8266AT_str[esp8266_buff_size] = 0;
 	}else{
@@ -789,7 +799,20 @@ const char* esp8266_cmd_ipdinfo(uint8_t mode) {
 		str = esp8266_cmd_set1ui8par("CIPDINFO", 0);
 	return str;
 }
-
+const char* esp8266_cmd_mux0ipd(uint16_t length) {
+	// AT+CIPSEND – Send data
+	// Response:
+		//<data> data received
+	return esp8266_cmd_1ui16par("+IPD", length);
+	// ID 0
+}
+const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length) {
+	// AT+CIPSEND – Send data
+	// Response:
+		//<data> data received
+	return esp8266_cmd_1ui81ui16par("+IPD", ID, length);
+	// ID 0 to 4
+}
 /***
 Initialize -> Filter -> Execute -> return
 str = esp8266_cmd_set1ui324ui8par("UART_DEF", 38400, 8, 1, 0, 0);
@@ -800,8 +823,9 @@ str = esp8266_cmd_set1ui8par("RFPOWER", 50); // Max 82
 str = esp8266_cmd_setmode(3);
 str = esp8266_cmd_connect("NOS-9C64", "RUSXRCKL");
 <remote IP or domain name>
-w -> WIFI
+ws -> work station
 ip -> IP
+ap -> access point
 ***/
 
 /*** EOF ***/

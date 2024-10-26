@@ -21,7 +21,7 @@ const char* esp8266_cmd_check(void);
 const char* esp8266_cmd_reset(void);
 const char* esp8266_cmd_version(void);
 const char* esp8266_cmd_setgslp(uint16_t time);
-const char* esp8266_cmd_echo(uint8_t state);
+const char* esp8266_cmd_echo(uint8_t enable);
 const char* esp8266_cmd_restore(void);
 const char* esp8266_cmd_setuart(uint32_t baud, uint8_t databits, uint8_t stopbits, uint8_t parity, uint8_t control);
 const char* esp8266_cmd_querysleep(void);
@@ -105,6 +105,8 @@ const char* esp8266_cmd_ipsto_tcp(uint16_t time);
 const char* esp8266_cmd_ping(const char* host);
 const char* esp8266_cmd_iupdate(void);
 const char* esp8266_cmd_ipdinfo(uint8_t mode);
+const char* esp8266_cmd_mux0ipd(uint16_t length);
+const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
 
 #endif
 
