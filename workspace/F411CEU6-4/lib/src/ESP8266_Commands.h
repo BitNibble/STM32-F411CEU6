@@ -39,7 +39,7 @@ const char* esp8266_cmd_setjap(const char* ssid, const char* password);
 const char* esp8266_cmd_setlapopt(uint8_t sort_enable, uint8_t mask);
 const char* esp8266_cmd_setlap(const char* ssid);
 const char* esp8266_cmd_lap(void);
-const char* esp8266_cmd_disconnect(void);
+const char* esp8266_cmd_qap(void);
 const char* esp8266_cmd_querysap(void);
 const char* esp8266_cmd_setsap(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn);
 const char* esp8266_cmd_lif(void);
@@ -77,8 +77,8 @@ const char* esp8266_cmd_mux0send_udp(uint16_t length);
 const char* esp8266_cmd_mux1send_udp(uint8_t link_ID, uint16_t length);
 const char* esp8266_cmd_send_udp(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port);
 const char* esp8266_cmd_cipsend(void);
-const char* esp8266_cmd_mux0sendex_udp(uint16_t length);
-const char* esp8266_cmd_mux1sendex_udp(uint8_t link_ID, uint16_t length);
+const char* esp8266_cmd_mux0sendex(uint16_t length);
+const char* esp8266_cmd_mux1sendex(uint8_t link_ID, uint16_t length);
 const char* esp8266_cmd_sendex_udp(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port);
 const char* esp8266_cmd_mux0send_tcp(uint16_t length);
 const char* esp8266_cmd_mux1send_tcp(uint8_t link_ID, uint16_t length);
@@ -93,7 +93,7 @@ const char* esp8266_cmd_singleclose(void);
 const char* esp8266_cmd_cifsr(void);
 const char* esp8266_cmd_querymux(void);
 const char* esp8266_cmd_setmux(uint8_t mode);
-const char* esp8266_cmd_mux1server_tcp(uint8_t mode, uint16_t port);
+const char* esp8266_cmd_muxserver_tcp(uint8_t mode, uint16_t port);
 const char* esp8266_cmd_querycipmode(void);
 const char* esp8266_cmd_setcipmode(uint8_t mode);
 const char* esp8266_cmd_savetranslink_tcp(uint8_t mode, const char* remote_IP, uint16_t remote_port);
@@ -103,10 +103,6 @@ const char* esp8266_cmd_sto_tcp(uint16_t time);
 const char* esp8266_cmd_ping(const char* host);
 const char* esp8266_cmd_update(void);
 const char* esp8266_cmd_cipdinfo(uint8_t mode);
-/************************************************/
-/************* Main Command Function ************/
-/************************************************/
-const char* esp8266_cmd(uint16_t num, const char* arg1, const char* arg2);
 
 #endif
 

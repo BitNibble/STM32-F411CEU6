@@ -41,7 +41,7 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define BUFF_SIZE 21
+#define BUFF_SIZE 128
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -50,8 +50,23 @@ char str[32];
 char oneshot[BUFF_SIZE];
 char received[BUFF_SIZE];
 const uint16_t buff_size = (BUFF_SIZE - ONE);
+char* string = received;
 
 void setup_usart1(void);
+void Turing_Machine(uint16_t* feedback, uint8_t* step);
+
+void shiftLeft (char *string,int shiftLength)
+{
+	int i,size=strlen(string);
+	if(shiftLength >= size){
+		memset(string,'\0',size);
+		return;
+	}
+	for (i=0; i < size-shiftLength; i++){
+		string[i] = string[i + shiftLength];
+		string[i + shiftLength] = '\0';
+	}
+}
 
 int main(void)
 {
@@ -81,7 +96,8 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-    uint8_t AT_counter = 0;
+    uint8_t tm_step = 0;
+    uint16_t tm_feedback = 0;
 
     const char unit = (char)0xDF;
 
@@ -107,7 +123,9 @@ int main(void)
 
         lcd0()->gotoxy(1, 0);
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        lcd0()->string_size(received, 20);
+        lcd0()->string_size(string, 20);
+
+        Turing_Machine(&tm_feedback, &tm_step);
 
         switch (Menu.nibble.n0) {
         case 0:
@@ -285,11 +303,8 @@ int main(void)
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
-                	//usart1()->transmit_string(esp8266_cmd_echo(0));
-                    //usart1()->transmit_string(BT_AT_Run(AT_counter));
-                    usart1()->transmit_string(esp8266_cmd(AT_counter, "none", "none"));
-                    AT_counter++;
-                    if(AT_counter > 9){ AT_counter = 0; }
+                	/*****************************************************/
+                	tm_step++;
 
                 }
                 skip_0++;
@@ -366,7 +381,73 @@ int main(void)
         }
     }
 }
+/******/
+void Turing_Machine(uint16_t* feedback, uint8_t* step) {
+	switch(*step) {
+		case(0): if(*feedback != 0){
 
+				;
+			}
+			break;
+		case(1): if(*feedback != 1){
+
+			usart1()->transmit_string(esp8266_cmd_echo(0));
+		}
+			break;
+		case(2): if(*feedback != 2){
+
+			usart1()->transmit_string(esp8266_cmd_querysta());
+		}
+			break;
+		case(3): if(*feedback != 3){
+
+				string = string + 11;
+				*(string + 17) = 0;
+			}
+			break;
+		case(4): if(*feedback != 4){
+
+				string = string + 31;
+				*(string + 17) = 0;
+			}
+			break;
+		case(5): if(*feedback != 5){
+
+				string = string + 31;
+				*(string + 17) = 0;
+			}
+			break;
+		case(6): if(*feedback != 6){
+
+				string = received;
+				usart1()->transmit_string(esp8266_cmd_querycwmode());
+			}
+			break;
+		case(7): if(*feedback != 7){
+
+				usart1()->transmit_string(esp8266_cmd_status()); }
+			break;
+		case(8): if(*feedback != 8){
+
+				//usart1()->transmit_string(esp8266_cmd_cifsr());
+				usart1()->transmit_string(esp8266_cmd_version());
+			}
+			break;
+		case(9): if(*feedback != 9){
+
+				usart1()->transmit_string(esp8266_cmd_lif());
+			}
+			break;
+		case(10): if(*feedback != 10){
+
+				//usart1()->transmit_string(esp8266_cmd_echo(0)); *step = 1;
+				usart1()->transmit_string(esp8266_cmd_ping("www.google.com")); *step = 1;
+			}
+			break;
+	}
+	*feedback = *step;
+}
+/******/
 void setup_usart1(void){
 	usart1_enable();
 	// Enable GPIOA and USART1 clocks
