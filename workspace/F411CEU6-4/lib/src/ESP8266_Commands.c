@@ -254,37 +254,39 @@ const char* esp8266_cmd_rfvdd(void) {
 /************************************************/
 /********** Wi-Fi Related AT Commands ***********/
 /************************************************/
-const char* esp8266_cmd_queryparcwmode(void) {
+const char* esp8266_cmd_queryparwmode(void) {
 	// AT+CWMODE – WiFi mode
 	// Response:
 		//+CWMODE:( value scope of <mode>) OK
 	return esp8266_cmd_querypar("CWMODE_DEF");
 }
-const char* esp8266_cmd_querycwmode(void) {
+const char* esp8266_cmd_querywmode(void) {
 	// AT+CWMODE – WiFi mode
 	// Response:
 		//+CWMODE:<mode> OK
 	return esp8266_cmd_query("CWMODE_DEF");
 }
-const char* esp8266_cmd_setcwmode(uint8_t mode) {
+const char* esp8266_cmd_setwmode(uint8_t mode) {
 	// AT+CWMODE – WiFi mode 1 2 or 3
 	// Response:
 		//OK
 	return esp8266_cmd_set1ui8par("CWMODE_DEF", mode);
 }
-const char* esp8266_cmd_queryjap(void) {
+const char* esp8266_cmd_querywjap(void) {
 	// AT+CWJAP – Connect to AP
 	// Response:
 		//+CWJAP_DEF:<ssid>, <bssid>, <channel>, <rssi> OK
 	return esp8266_cmd_query("CWJAP_DEF");
+	//return esp8266_cmd_query("CWJAP");
 }
-const char* esp8266_cmd_setjap(const char* ssid, const char* password) {
+const char* esp8266_cmd_setwjap(const char* ssid, const char* password) {
 	// AT+CWJAP – Connect to AP
 	// Response:
 		//OK or +CWJAP:<error code> FAIL
 	return esp8266_cmd_set2spar("CWJAP_DEF", ssid, password);
+	//return esp8266_cmd_set2spar("CWJAP", ssid, password);
 }
-const char* esp8266_cmd_setlapopt(uint8_t sort_enable, uint8_t mask) {
+const char* esp8266_cmd_setwlapopt(uint8_t sort_enable, uint8_t mask) {
 	// AT+CWLAPOPT - Set configuration for command AT+CWLAP
 	// Response:
 		//OK or ERROR
@@ -294,69 +296,76 @@ const char* esp8266_cmd_setlapopt(uint8_t sort_enable, uint8_t mask) {
 	else
 		return esp8266_cmd_set2ui8par("CWLAPOPT", 0, mask);
 }
-const char* esp8266_cmd_setlap(const char* ssid) {
+const char* esp8266_cmd_setwlap(const char* ssid) {
 	// AT+CWLAP - Lists available APs
 	// Response:
 		//+CWLAP:<ecn>, <ssid>, <rssi>, <mac>, <ch>, <freq offset>, <freq calibration>
 		//OK or ERROR
 	return esp8266_cmd_set1spar("CWLAP", ssid);
 }
-const char* esp8266_cmd_lap(void) {
+const char* esp8266_cmd_wlap(void) {
 	// AT+CWLAP - Lists available APs
 	// Response:
 		//+CWLAP:<ecn>, <ssid>, <rssi>, <mac>, <ch>, <freq offset>, <freq calibration>
 		//OK or ERROR
 	return esp8266_cmd_execute("CWLAP");
 }
-const char* esp8266_cmd_qap(void) {
+const char* esp8266_cmd_wqap(void) {
 	// AT+CWQAP - Disconnect from AP
 	// Response:
 		//OK
 	return esp8266_cmd_execute("CWQAP");
 }
-const char* esp8266_cmd_querysap(void) {
+const char* esp8266_cmd_querywsap(void) {
 	// AT+ CWSAP – Configuration of softAP mode
 	// Response:
 		//+CWSAP:<ssid>, <pwd>, <chl>, <ecn>, <max conn>, <ssid hidden>
 	return esp8266_cmd_query("CWSAP_DEF");
 }
-const char* esp8266_cmd_setsap(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn) {
+const char* esp8266_cmd_setwsap(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn) {
 	// AT+ CWSAP – Configuration of softAP mode
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_set2s2ui8par("CWSAP_DEF", ssid, pwd, chl, ecn);
 }
-const char* esp8266_cmd_lif(void) {
+const char* esp8266_cmd_wlif(void) {
 	// AT+ CWLIF– IP of stations which are connected to ESP8266 softAP
-	// Response:
-		//<IP addr>, <mac> OK
+	// Response: <IP addr>, <mac>
+		//OK
 	return esp8266_cmd_execute("CWLIF");
 }
-const char* esp8266_cmd_querydhcp(void) {
+const char* esp8266_cmd_querywdhcp(void) {
 	// AT+ CWDHCP – Enable/Disable DHCP
 	// Response:
-		//DHCP disabled or enabled now? 0 or 1
+		//DHCP disabled or enabled now?
 	return esp8266_cmd_query("CWDHCP_DEF");
 }
-const char* esp8266_cmd_setdhcp(uint8_t mode, uint8_t enable) {
+const char* esp8266_cmd_setwdhcp(uint8_t mode, uint8_t enable) {
 	// AT+ CWDHCP – Enable/Disable DHCP
+	const char* str = NULL;
 	// Response:
 		//OK
-	return esp8266_cmd_set2ui8par("CWDHCP_DEF", mode, enable);
+	mode &= 0x03;
+	if(enable)
+		str = esp8266_cmd_set2ui8par("CWDHCP_DEF", mode, 1);
+	else
+		str = esp8266_cmd_set2ui8par("CWDHCP_DEF", mode, 0);
+	// mode 0, 1 or 2
+	return str;
 }
-const char* esp8266_cmd_querydhcps(void) {
+const char* esp8266_cmd_querywdhcps(void) {
 	// AT+CWDHCPS_CUR – Set the IP address allocated by ESP8266 soft-AP DHCP, not be stored in flash
 	// Response:
 		//+CWDHCPS_DEF=<lease time>, <start IP>, <end IP>
 	return esp8266_cmd_query("CWDHCPS_DEF");
 }
-const char* esp8266_cmd_setdhcps(uint8_t enable, uint8_t mode, const char* start_IP, const char* end_IP) {
+const char* esp8266_cmd_setwdhcps(uint8_t enable, uint8_t mode, const char* start_IP, const char* end_IP) {
 	// AT+CWDHCPS_CUR – Set the IP address allocated by ESP8266 soft-AP DHCP, not be stored in flash
 	// Response:
 		//OK
 	return esp8266_cmd_set2ui82spar("CWDHCPS_DEF", enable, mode, start_IP, end_IP);
 }
-const char* esp8266_cmd_setautoconn(uint8_t enable) {
+const char* esp8266_cmd_setwautoconn(uint8_t enable) {
 	// AT+CWAUTOCONN – Connect to AP automatically or not
 	// Response:
 		//OK
@@ -367,81 +376,81 @@ const char* esp8266_cmd_setautoconn(uint8_t enable) {
 		str = esp8266_cmd_set1ui8par("CWAUTOCONN", 0);
 	return str;
 }
-const char* esp8266_cmd_querystamac(void) {
+const char* esp8266_cmd_queryipstamac(void) {
 	// AT+ CIPSTAMAC – Set MAC address of ESP8266 station
 	// Response:
 		//+CIPSTAMAC_DEF:<mac> OK
 	return esp8266_cmd_query("CIPSTAMAC_DEF");
 }
-const char* esp8266_cmd_setstamac(const char* mac) {
+const char* esp8266_cmd_setipstamac(const char* mac) {
 	// AT+ CIPSTAMAC – Set MAC address of ESP8266 station
 	// Response:
 		//OK
 	return esp8266_cmd_set1spar("CIPSTAMAC_DEF", mac);
 }
-const char* esp8266_cmd_queryapmac(void) {
+const char* esp8266_cmd_queryipapmac(void) {
 	// AT+ CIPAPMAC – Set MAC address of ESP8266 softAP
 	// Response:
 		//+CIPAPMAC_DEF:<mac> OK
 	return esp8266_cmd_query("CIPAPMAC_DEF");
 }
-const char* esp8266_cmd_setapmac(const char* mac) {
+const char* esp8266_cmd_setipapmac(const char* mac) {
 	// AT+ CIPAPMAC – Set MAC address of ESP8266 softAP
 	// Response:
 		//OK
 	return esp8266_cmd_set1spar("CIPAPMAC_DEF", mac);
 }
-const char* esp8266_cmd_querysta(void) {
+const char* esp8266_cmd_queryipsta(void) {
 	// AT+ CIPSTA – Set IP address of ESP8266 station
 	// Response:
 		//+CIPSTA:<IP> OK
 	return esp8266_cmd_query("CIPSTA_DEF");
 }
-const char* esp8266_cmd_setsta(const char* IP, const char* gateway, const char* netmask) {
+const char* esp8266_cmd_setipsta(const char* IP, const char* gateway, const char* netmask) {
 	// AT+ CIPSTA – Set IP address of ESP8266 station
 	// Response:
 		//OK
 	return esp8266_cmd_set3spar("CIPSTA_DEF", IP, gateway, netmask);
 }
-const char* esp8266_cmd_queryap(void) {
+const char* esp8266_cmd_queryipap(void) {
 	// AT+ CIPAP – Set IP address of ESP8266 softAP
 	// Response:
-		//+CIPAP_DEF:<IP>OK
+		//+CIPAP_DEF:<IP> OK
 	return esp8266_cmd_query("CIPAP_DEF");
 }
-const char* esp8266_cmd_setap(const char* IP, const char* gateway, const char* netmask) {
+const char* esp8266_cmd_setipap(const char* IP, const char* gateway, const char* netmask) {
 	// AT+ CIPAP – Set IP address of ESP8266 softAP
 	// Response:
 		//OK
 	return esp8266_cmd_set3spar("CIPAP_DEF", IP, gateway, netmask);
 }
-const char* esp8266_cmd_startsmart(void) {
+const char* esp8266_cmd_wstartsmart(void) {
 	// AT+CWSTARTSMART – Start SmartConfig
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_execute("CWSTARTSMART");
 }
-const char* esp8266_cmd_setstartsmart(uint8_t type) {
+const char* esp8266_cmd_setwstartsmart(uint8_t type) {
 	// AT+CWSTARTSMART – Start SmartConfig
 	// Response:
 		//OK or ERROR
 	type &= 0x03;
 	return esp8266_cmd_set1ui8par("CWSTARTSMART", type);
 }
-const char* esp8266_cmd_stopsmart(void) {
+const char* esp8266_cmd_wstopsmart(void) {
 	// AT+CWSTOPSMART stop SmartConfig
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_execute("CWSTOPSMART");
 }
-const char* esp8266_cmd_setstartdiscover(const char* WeChat_number, const char* dev_type, uint8_t time) {
+const char* esp8266_cmd_setwstartdiscover(const char* WeChat_number, const char* dev_type, uint8_t time) {
 	// AT+CWSTARTDISCOVER
 	// – Start the mode that ESP8266 can be found by WeChat which is in the same LAN
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_set2s1ui8par("CWSTARTDISCOVER", WeChat_number, dev_type, time);
 }
-const char* esp8266_cmd_stopdiscover(void) {
+const char* esp8266_cmd_wstopdiscover(void) {
 	// AT+CWSTOPDISCOVER
 	// – Stop the mode that ESP8266 can be found by WeChat which is in the same LAN
 	// Response:
@@ -463,7 +472,7 @@ const char* esp8266_cmd_setmdns(uint8_t enable, const char* hostname, const char
 	// AT+MDNS – Set MDNS function
 	// Response:
 		//OK or ERROR
-	const char* str;
+	const char* str = NULL;
 	if(enable)
 		str = esp8266_cmd_set1ui82s1ui16par("MDNS", 1, hostname, server_name, server_port);
 	else
@@ -473,14 +482,14 @@ const char* esp8266_cmd_setmdns(uint8_t enable, const char* hostname, const char
 /************************************************/
 /********* TCP/IP Related AT Commands ***********/
 /************************************************/
-const char* esp8266_cmd_status(void) {
+const char* esp8266_cmd_ipstatus(void) {
 	// AT+CIPSTATUS – Check network connection status
 	// Response:
 		//STATUS:<stat>
 		//+CIPSTATUS:<link ID>, <type>, <remote_IP>, <remote_port>, <local_port>, <tetype>
 	return esp8266_cmd_execute("CIPSTATUS");
 }
-const char* esp8266_cmd_setdomain(const char* domain_name) {
+const char* esp8266_cmd_setipdomain(const char* domain_name) {
 	// AT+CIPDOMAIN – DNS function
 	// Response:
 		//+CIPDOMAIN:<IP address>
@@ -490,41 +499,41 @@ const char* esp8266_cmd_setdomain(const char* domain_name) {
 	//AT+CWJAP="SSID","password"  access to the internet
 	//AT+CIPDOMAIN="iot.espressif.cn"  DNS function
 }
-const char* esp8266_cmd_muxstart_tcp(const char* remote_IP, uint16_t remote_port) {
+const char* esp8266_cmd_muxipstart_tcp(const char* remote_IP, uint16_t remote_port) {
 	// AT+CIPSTART – Function 1: Establish TCP connection
 	// Response:
 		//OK or ERROR
 		//If TCP is connected already, returns ALREADY CONNECT
 	return esp8266_cmd_set2s1ui16par("CIPSTART", "TCP", remote_IP, remote_port);
 }
-const char* esp8266_cmd_mux0start_udp(const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode) {
+const char* esp8266_cmd_mux0ipstart_udp(const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode) {
 	// AT+CIPSTART – Function 2: Register UDP port
 	// Response:
 		//OK or ERROR
 		//If connection already exists, returns ALREADY CONNECT
 	return esp8266_cmd_set2s2ui161ui8par("CIPSTART", "UDP", remote_IP, remote_port, UDP_local_port, UDP_mode);
 }
-const char* esp8266_cmd_mux1start_udp(uint8_t link_ID, const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode) {
+const char* esp8266_cmd_mux1ipstart_udp(uint8_t link_ID, const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode) {
 	// AT+CIPSTART – Function 2: Register UDP port
 	// Response:
 		//OK or ERROR
 		//If connection already exists, returns ALREADY CONNECT
 	return esp8266_cmd_set1ui82s2ui161ui8par("CIPSTART", link_ID, "UDP", remote_IP, remote_port, UDP_local_port, UDP_mode);
 }
-const char* esp8266_cmd_muxstart_ssl(const char* remote_IP, uint16_t remote_port) {
+const char* esp8266_cmd_muxipstart_ssl(const char* remote_IP, uint16_t remote_port) {
 	// AT+CIPSTART – Function 3: Establish SSL connection
 	// Response:
 		//OK or ERROR
 		//If TCP is connected already, returns ALREADY CONNECT
 	return esp8266_cmd_set2s1ui16par("CIPSTART", "SSL", remote_IP, remote_port);
 }
-const char* esp8266_cmd_sslsize(uint16_t size) {
+const char* esp8266_cmd_ipsslsize(uint16_t size) {
 	// AT+CIPSSLSIZE – Set the size of SSL buffer
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_set1ui16par("CIPSSLSIZE", size);
 }
-const char* esp8266_cmd_mux0send_udp(uint16_t length) {
+const char* esp8266_cmd_mux0ipsend_udp(uint16_t length) {
 	// AT+CIPSEND – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -534,7 +543,7 @@ const char* esp8266_cmd_mux0send_udp(uint16_t length) {
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui16par("CIPSEND", length);
 }
-const char* esp8266_cmd_mux1send_udp(uint8_t link_ID, uint16_t length) {
+const char* esp8266_cmd_mux1ipsend_udp(uint8_t link_ID, uint16_t length) {
 	// AT+CIPSEND – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -544,7 +553,7 @@ const char* esp8266_cmd_mux1send_udp(uint8_t link_ID, uint16_t length) {
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui81ui16par("CIPSEND", link_ID, length);
 }
-const char* esp8266_cmd_send_udp(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port) {
+const char* esp8266_cmd_ipsend_udp(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port) {
 	// AT+CIPSEND – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -554,7 +563,7 @@ const char* esp8266_cmd_send_udp(uint8_t link_ID, uint16_t length, const char* r
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui81ui161s1ui16par("CIPSEND", link_ID, length, remote_IP, remote_port);
 }
-const char* esp8266_cmd_cipsend(void) {
+const char* esp8266_cmd_ipsend(void) {
 	// AT+CIPSEND – Send data
 	// Response:
 	//Wrap return ">" after execute command. Enters unvarnished transmission,
@@ -566,7 +575,7 @@ const char* esp8266_cmd_cipsend(void) {
 	//For UDP transparent transmission, <UDP mode> has to be 0 in command "AT+CIPSTART"
 	return esp8266_cmd_execute("CIPSEND");
 }
-const char* esp8266_cmd_mux0sendex(uint16_t length) {
+const char* esp8266_cmd_mux0ipsendex(uint16_t length) {
 	// AT+CIPSENDEX – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -577,7 +586,7 @@ const char* esp8266_cmd_mux0sendex(uint16_t length) {
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui16par("CIPSENDEX", length);
 }
-const char* esp8266_cmd_mux1sendex(uint8_t link_ID, uint16_t length) {
+const char* esp8266_cmd_mux1ipsendex(uint8_t link_ID, uint16_t length) {
 	// AT+CIPSENDEX – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -588,7 +597,7 @@ const char* esp8266_cmd_mux1sendex(uint8_t link_ID, uint16_t length) {
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui81ui16par("CIPSENDEX", link_ID, length);
 }
-const char* esp8266_cmd_sendex(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port) {
+const char* esp8266_cmd_ipsendex(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port) {
 	// AT+CIPSENDEX – Send data
 	// Response:
 		//Wrap return ">" after set command. Begins receive of serial data, when data
@@ -599,7 +608,7 @@ const char* esp8266_cmd_sendex(uint8_t link_ID, uint16_t length, const char* rem
 		//If data is transmitted successfully, returns SEND OK
 	return esp8266_cmd_set1ui81ui161s1ui16par("CIPSENDEX", link_ID, length, remote_IP, remote_port);
 }
-const char* esp8266_cmd_mux0send_tcp(uint16_t length) {
+const char* esp8266_cmd_mux0ipsend_tcp(uint16_t length) {
 	// AT+CIPSENDBUF – Write data into TCP-send-buffer
 	// Response:
 		//<current segment ID>, <segment ID of which sent successfully>
@@ -615,7 +624,7 @@ const char* esp8266_cmd_mux0send_tcp(uint16_t length) {
 		//<link ID>, <segment ID>, SEND OK
 	return esp8266_cmd_set1ui16par("CIPSENDBUF", length);
 }
-const char* esp8266_cmd_mux1send_tcp(uint8_t link_ID, uint16_t length) {
+const char* esp8266_cmd_mux1ipsend_tcp(uint8_t link_ID, uint16_t length) {
 	// AT+CIPSENDBUF – Write data into TCP-send-buffer
 	// Response:
 		//<current segment ID>, <segment ID of which sent successfully>
@@ -631,7 +640,7 @@ const char* esp8266_cmd_mux1send_tcp(uint8_t link_ID, uint16_t length) {
 		//<link ID>, <segment ID>, SEND OK
 	return esp8266_cmd_set1ui81ui16par("CIPSENDBUF", link_ID, length);
 }
-const char* esp8266_cmd_mux0status_tcp(void) {
+const char* esp8266_cmd_mux0ipstatus_tcp(void) {
 	// AT+CIPBUFSTATUS – Check status of TCP-send-buffer
 	// Response:
 		//<next segment ID>, < segment ID of which has sent >, < segment ID of
@@ -639,7 +648,7 @@ const char* esp8266_cmd_mux0status_tcp(void) {
 		//OK If connection is not established, returns ERROR
 	return esp8266_cmd_execute("CIPBUFSTATUS");
 }
-const char* esp8266_cmd_mux1status_tcp(uint8_t link_ID) {
+const char* esp8266_cmd_mux1ipstatus_tcp(uint8_t link_ID) {
 	// AT+CIPBUFSTATUS – Check status of TCP-send-buffer
 	// Response:
 		//<next segment ID>, < segment ID of which has sent >, < segment ID of
@@ -647,41 +656,41 @@ const char* esp8266_cmd_mux1status_tcp(uint8_t link_ID) {
 		//OK If connection is not established, returns ERROR
 	return esp8266_cmd_set1ui8par("CIPBUFSTATUS", link_ID);
 }
-const char* esp8266_cmd_mux0checkseq_tcp(uint8_t segment_ID) {
+const char* esp8266_cmd_mux0ipcheckseq_tcp(uint8_t segment_ID) {
 	// AT+CIPCHECKSEQ – Check if specific segment sent successfully or not
 	// Response:
 		//[<link ID>, ]<segment ID> , <status>
 		//OK If connection is not established, returns ERROR
 	return esp8266_cmd_set1ui8par("CIPCHECKSEQ", segment_ID);
 }
-const char* esp8266_cmd_mux1checkseq_tcp(uint8_t link_ID, uint8_t segment_ID) {
+const char* esp8266_cmd_mux1ipcheckseq_tcp(uint8_t link_ID, uint8_t segment_ID) {
 	// AT+CIPCHECKSEQ – Check if specific segment sent successfully or not
 	// Response:
 		//[<link ID>, ]<segment ID> , <status>
 		//OK If connection is not established, returns ERROR
 	return esp8266_cmd_set2ui8par("CIPCHECKSEQ", link_ID, segment_ID);
 }
-const char* esp8266_cmd_mux0reset_tcp(void) {
+const char* esp8266_cmd_mux0ipreset_tcp(void) {
 	// AT+CIPBUFRESET – Reset segment ID count
 	// Response:
 		//OK If connection is not established or there are still TCP data wait for sending,
 		//returns ERROR
 	return esp8266_cmd_execute("CIPBUFRESET");
 }
-const char* esp8266_cmd_mux1reset_tcp(uint8_t link_ID) {
+const char* esp8266_cmd_mux1ipreset_tcp(uint8_t link_ID) {
 	// AT+CIPBUFRESET – Reset segment ID count
 	// Response:
 		//OK If connection is not established or there are still TCP data wait for sending,
 		//returns ERROR
 	return esp8266_cmd_set1ui8par("CIPBUFRESET", link_ID);
 }
-const char* esp8266_cmd_multiclose(uint8_t link_ID) {
+const char* esp8266_cmd_multipclose(uint8_t link_ID) {
 	// AT+CIPCLOSE – Close TCP, UDP or SSL connection
 	// Response:
 		//OK or ERROR
 	return esp8266_cmd_set1ui8par("CIPCLOSE", link_ID);
 }
-const char* esp8266_cmd_singleclose(void) {
+const char* esp8266_cmd_singipclose(void) {
 	// AT+CIPCLOSE – Close TCP, UDP or SSL connection
 	// Response:
 		//OK or If no such connection, returns ERROR
@@ -691,15 +700,15 @@ const char* esp8266_cmd_cifsr(void) {
 	// AT+CIFSR – Get local IP address
 	// Response:
 		//+ CIFSR:<IP address> OK ERROR
-	return esp8266_cmd_execute("CIFSR"); // AT+CIFSR – Get local IP address
+	return esp8266_cmd_execute("CIFSR"); // important to get IP
 }
-const char* esp8266_cmd_querymux(void) {
+const char* esp8266_cmd_queryipmux(void) {
 	// AT+ CIPMUX – Enable multiple connections or not
 	// Response:
 		//+ CIPMUX:<mode> OK
 	return esp8266_cmd_query("CIPMUX");
 }
-const char* esp8266_cmd_setmux(uint8_t mode) {
+const char* esp8266_cmd_setipmux(uint8_t mode) {
 	// AT+ CIPMUX – Enable multiple connections or not
 	// Response:
 		//OK If already connected, returns Link is builded
@@ -710,19 +719,19 @@ const char* esp8266_cmd_setmux(uint8_t mode) {
 		str = esp8266_cmd_set1ui8par("CIPMUX", 0);
 	return str;
 }
-const char* esp8266_cmd_muxserver_tcp(uint8_t mode, uint16_t port) {
+const char* esp8266_cmd_muxipserver_tcp(uint8_t mode, uint16_t port) {
 	// AT+CIPSERVER – Configure as TCP server
 	// Response:
 		//OK
 	return esp8266_cmd_set1ui81ui16par("CIPSERVER", mode, port);
 }
-const char* esp8266_cmd_querycipmode(void) {
+const char* esp8266_cmd_queryipmode(void) {
 	// AT+ CIPMODE – Set transfer mode
 	// Response:
 		//+ CIPMODE:<mode> OK
 	return esp8266_cmd_query("CIPMODE");
 }
-const char* esp8266_cmd_setcipmode(uint8_t mode) {
+const char* esp8266_cmd_setipmode(uint8_t mode) {
 	// AT+ CIPMODE – Set transfer mode
 	// Response:
 		//OK If already connected, returns Link is builded
@@ -745,13 +754,13 @@ const char* esp8266_cmd_savetranslink_udp(uint8_t mode, const char* remote_IP, u
 		//OK or ERROR
 	return esp8266_cmd_set1ui81s1ui161s1ui16par("SAVETRANSLINK", mode, remote_IP, remote_port, "UDP", UDP_local_port);
 }
-const char* esp8266_cmd_querysto_tcp(void) {
+const char* esp8266_cmd_queryipsto_tcp(void) {
 	// AT+ CIPSTO – Set TCP server timeout
 	// Response:
 		//+ CIPSTO:<time> OK
 	return esp8266_cmd_query("CIPSTO");
 }
-const char* esp8266_cmd_sto_tcp(uint16_t time) {
+const char* esp8266_cmd_ipsto_tcp(uint16_t time) {
 	// AT+ CIPSTO – Set TCP server timeout
 	// Response:
 		//OK
@@ -763,13 +772,13 @@ const char* esp8266_cmd_ping(const char* host) {
 		//+<time> OK Or ERROR // means ping fail
 	return esp8266_cmd_set1spar("PING", host);
 }
-const char* esp8266_cmd_update(void) {
+const char* esp8266_cmd_iupdate(void) {
 	// AT+ CIUPDATE – update through network
 	// Response:
 		//+CIUPDATE:<n> OK
 	return esp8266_cmd_execute("CIUPDATE"); // AT+CIFSR – Get local IP address
 }
-const char* esp8266_cmd_cipdinfo(uint8_t mode) {
+const char* esp8266_cmd_ipdinfo(uint8_t mode) {
 	// AT+CIPDINFO – Show remote IP and port with "+IPD" ( received data from network )
 	// Response:
 		//OK or ERROR
@@ -791,6 +800,8 @@ str = esp8266_cmd_set1ui8par("RFPOWER", 50); // Max 82
 str = esp8266_cmd_setmode(3);
 str = esp8266_cmd_connect("NOS-9C64", "RUSXRCKL");
 <remote IP or domain name>
+w -> WIFI
+ip -> IP
 ***/
 
 /*** EOF ***/

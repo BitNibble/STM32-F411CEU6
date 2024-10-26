@@ -100,6 +100,7 @@ char USART1_ReceiveChar(void) {
 void USART1_RxFlush(void) {
 	usart1_rx_index = ZERO;
 	usart1_rx_buffer[ZERO] = ZERO;
+	usart1_rx_buffer[ONE] = ZERO;
 }
 void USART1_TransmitString(const char *str) {
 	usart1_tx_index = ZERO;

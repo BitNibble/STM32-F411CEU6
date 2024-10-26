@@ -41,7 +41,7 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define BUFF_SIZE 128
+#define BUFF_SIZE 200
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -97,7 +97,7 @@ int main(void)
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
     uint8_t tm_step = 0;
-    uint16_t tm_feedback = 0;
+    uint16_t tm_feedback = 1;
 
     const char unit = (char)0xDF;
 
@@ -113,7 +113,6 @@ int main(void)
     char vecD[8]; // for calendar date
     char vecT[8]; // for calendar time
     PA.update(&PA.par, gpioa()->instance->IDR);
-    usart1()->transmit_string(esp8266_cmd_setjap("NOS-9C64", "RUSXRCKL"));
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
@@ -128,7 +127,33 @@ int main(void)
         Turing_Machine(&tm_feedback, &tm_step);
 
         switch (Menu.nibble.n0) {
+
         case 0:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("BLE", 12);
+
+            if (PA.par.LH & 1) {
+                if (skip_0 > 0) { // Handle button hold logic if necessary
+
+                	/*****************************************************/
+                	tm_step++;
+
+                }
+                skip_0++;
+            }
+
+            if (PA.par.LL & 1) {
+                _delay_ms(2*JMP_menu);
+                count_0++;
+                if (count_0 > JMP_menu_repeat) {
+                    Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 1:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Hour", 12);
 
@@ -145,30 +170,6 @@ int main(void)
                 _delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
-                }
-            } else {
-                count_0 = 0;
-            }
-            break;
-
-        case 1:
-            lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("Set Minute", 12);
-
-            if (PA.par.LH & 1) {
-                if (skip_0 > 0) { // Handle button hold logic if necessary
-                    incr_0 = rtc()->get_Minute();
-                    incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
-                    rtc()->Minute(incr_0);
-                }
-                skip_0++;
-            }
-
-            if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
-                if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
                 }
             } else {
@@ -178,13 +179,13 @@ int main(void)
 
         case 2:
             lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("Set Second", 12);
+            lcd0()->string_size("Set Minute", 12);
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) { // Handle button hold logic if necessary
-                    incr_0 = rtc()->get_Second();
+                    incr_0 = rtc()->get_Minute();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
-                    rtc()->Second(incr_0);
+                    rtc()->Minute(incr_0);
                 }
                 skip_0++;
             }
@@ -202,13 +203,13 @@ int main(void)
 
         case 3:
             lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("Set Year", 12);
+            lcd0()->string_size("Set Second", 12);
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) { // Handle button hold logic if necessary
-                    incr_0 = rtc()->get_Year();
-                    incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
-                    rtc()->Year(incr_0);
+                    incr_0 = rtc()->get_Second();
+                    incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
+                    rtc()->Second(incr_0);
                 }
                 skip_0++;
             }
@@ -226,13 +227,13 @@ int main(void)
 
         case 4:
             lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("Set Month", 12);
+            lcd0()->string_size("Set Year", 12);
 
             if (PA.par.LH & 1) {
                 if (skip_0 > 0) { // Handle button hold logic if necessary
-                    incr_0 = rtc()->get_Month();
-                    incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
-                    rtc()->Month(incr_0);
+                    incr_0 = rtc()->get_Year();
+                    incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
+                    rtc()->Year(incr_0);
                 }
                 skip_0++;
             }
@@ -249,6 +250,30 @@ int main(void)
             break;
 
         case 5:
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("Set Month", 12);
+
+            if (PA.par.LH & 1) {
+                if (skip_0 > 0) { // Handle button hold logic if necessary
+                    incr_0 = rtc()->get_Month();
+                    incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
+                    rtc()->Month(incr_0);
+                }
+                skip_0++;
+            }
+
+            if (PA.par.LL & 1) {
+                _delay_ms(JMP_menu);
+                count_0++;
+                if (count_0 > JMP_menu_repeat) {
+                    Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
+                }
+            } else {
+                count_0 = 0;
+            }
+            break;
+
+        case 6:
         	lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set WeekDay", 12);
 
@@ -265,14 +290,14 @@ int main(void)
             	_delay_ms(JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
-                	Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
+                	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
                 }
             } else {
             	count_0 = 0;
             }
             break;
 
-        case 6:
+        case 7:
             lcd0()->gotoxy(0, 0);
             lcd0()->string_size("Set Day", 12);
 
@@ -287,31 +312,6 @@ int main(void)
 
             if (PA.par.LL & 1) {
                 _delay_ms(JMP_menu);
-                count_0++;
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
-                }
-            } else {
-                count_0 = 0;
-            }
-            break;
-
-        case 7:
-            lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("BLE", 12);
-
-            if (PA.par.LH & 1) {
-                if (skip_0 > 0) { // Handle button hold logic if necessary
-
-                	/*****************************************************/
-                	tm_step++;
-
-                }
-                skip_0++;
-            }
-
-            if (PA.par.LL & 1) {
-                _delay_ms(2*JMP_menu);
                 count_0++;
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
@@ -384,67 +384,84 @@ int main(void)
 /******/
 void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 	switch(*step) {
-		case(0): if(*feedback != 0){
+		case(0): if(*feedback != 0){ // INICIALIZE
+				usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and AP
+				_delay_ms(100); // wait com
+				usart1()->transmit_string(esp8266_cmd_setwjap("NOS-9C64", "RUSXRCKL"));
+				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				//usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and AP
+				//usart1()->transmit_string(esp8266_cmd_setwlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_setwdhcp(2, 1));
+				//usart1()->transmit_string(esp8266_cmd_setwstartsmart(3));
 
-				;
 			}
 			break;
 		case(1): if(*feedback != 1){
 
-			usart1()->transmit_string(esp8266_cmd_echo(0));
-		}
+				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
+				usart1()->transmit_string(esp8266_cmd_echo(0));
+				//usart1()->transmit_string(esp8266_cmd_startsmart());
+				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+			}
 			break;
 		case(2): if(*feedback != 2){
 
-			usart1()->transmit_string(esp8266_cmd_querysta());
-		}
+				usart1()->transmit_string(esp8266_cmd_wlap());
+				//usart1()->transmit_string(esp8266_cmd_setdhcp(2, 1));
+				string = string + 33;
+				_delay_ms(100); // wait com
+			}
 			break;
 		case(3): if(*feedback != 3){
 
-				string = string + 11;
-				*(string + 17) = 0;
+				string = received;
+				usart1()->transmit_string(esp8266_cmd_version());
 			}
 			break;
 		case(4): if(*feedback != 4){
 
-				string = string + 31;
-				*(string + 17) = 0;
+				usart1()->transmit_string(esp8266_cmd_ipstatus());
+				_delay_ms(100); // wait com
 			}
 			break;
 		case(5): if(*feedback != 5){
 
-				string = string + 31;
-				*(string + 17) = 0;
+				//string=string+80;
+				//usart1()->transmit_string(esp8266_cmd_querywmode());
+				//usart1()->transmit_string(esp8266_cmd_queryipmode());
+				//usart1()->transmit_string(esp8266_cmd_queryipap());
+				//usart1()->transmit_string(esp8266_cmd_ipstatus());
+				//usart1()->transmit_string(esp8266_cmd_queryipapmac());
+				//usart1()->transmit_string(esp8266_cmd_queryipstamac());
+				//usart1()->transmit_string(esp8266_cmd_querywsap());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcps());
+				//usart1()->transmit_string(esp8266_cmd_querywjap());
+				//usart1()->transmit_string(esp8266_cmd_version());
+				//usart1()->transmit_string(esp8266_cmd_querysleep());
+				//usart1()->transmit_string(esp8266_cmd_queryrfvdd());
+				usart1()->transmit_string(esp8266_cmd_queryparwmode());
+				//usart1()->transmit_string(esp8266_cmd_wlap());
+				//usart1()->transmit_string(esp8266_cmd_querywsap());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcp());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcps());
+				//usart1()->transmit_string(esp8266_cmd_queryipsta());
+				//usart1()->transmit_string(esp8266_cmd_cifsr());
+
+				_delay_ms(100); // wait com
+
 			}
 			break;
 		case(6): if(*feedback != 6){
 
 				string = received;
-				usart1()->transmit_string(esp8266_cmd_querycwmode());
-			}
-			break;
-		case(7): if(*feedback != 7){
-
-				usart1()->transmit_string(esp8266_cmd_status()); }
-			break;
-		case(8): if(*feedback != 8){
-
-				//usart1()->transmit_string(esp8266_cmd_cifsr());
-				usart1()->transmit_string(esp8266_cmd_version());
-			}
-			break;
-		case(9): if(*feedback != 9){
-
-				usart1()->transmit_string(esp8266_cmd_lif());
-			}
-			break;
-		case(10): if(*feedback != 10){
-
-				//usart1()->transmit_string(esp8266_cmd_echo(0)); *step = 1;
-				usart1()->transmit_string(esp8266_cmd_ping("www.google.com")); *step = 1;
+				//usart1()->rx_flush();
+				//usart1()->transmit_string(esp8266_cmd_echo(0));
+				usart1()->transmit_string(esp8266_cmd_ping("www.google.com"));
+				*step = 1;
 			}
 			break;
 	}
+	//_delay_ms(100);
 	*feedback = *step;
 }
 /******/
