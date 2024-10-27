@@ -36,12 +36,14 @@ const char* esp8266_cmd_rfvdd(void);
 const char* esp8266_cmd_queryparwmode(void);
 const char* esp8266_cmd_querywmode(void);
 const char* esp8266_cmd_setwmode(uint8_t mode);
-const char* esp8266_cmd_querywjap(void);
+// AP - Access Point (Router)
+const char* esp8266_cmd_querywjap(void); // join access point
 const char* esp8266_cmd_setwjap(const char* ssid, const char* password); // This command needs station mode enable.
 const char* esp8266_cmd_setwlapopt(uint8_t sort_enable, uint8_t mask);
 const char* esp8266_cmd_setwlap(const char* ssid);
 const char* esp8266_cmd_wlap(void);
 const char* esp8266_cmd_wqap(void);
+// SAP - Soft Access Point
 const char* esp8266_cmd_querywsap(void);
 const char* esp8266_cmd_setwsap(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn);
 const char* esp8266_cmd_wlif(void);
@@ -69,6 +71,11 @@ const char* esp8266_cmd_setmdns(uint8_t enable, const char* hostname, const char
 /********* TCP/IP Related AT Commands ***********/
 /************************************************/
 const char* esp8266_cmd_ipstatus(void);
+//IPSTATUS:
+//2 - The ESP8266 Station is connected to an AP and its IP is obtained.
+//3 - The ESP8266 Station has created a TCP or UDP transmission.
+//4 - The TCP or UDP n of ESP8266 Station is disconnected.
+//5 - The ESP8266 Station does NOT connect to an AP.
 const char* esp8266_cmd_setipdomain(const char* domain_name);
 const char* esp8266_cmd_muxipstart_tcp(const char* remote_IP, uint16_t remote_port);
 const char* esp8266_cmd_mux0ipstart_udp(const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode);
@@ -92,7 +99,8 @@ const char* esp8266_cmd_mux0ipreset_tcp(void);
 const char* esp8266_cmd_mux1ipreset_tcp(uint8_t link_ID);
 const char* esp8266_cmd_multipclose(uint8_t link_ID);
 const char* esp8266_cmd_singipclose(void);
-const char* esp8266_cmd_cifsr(void);
+const char* esp8266_cmd_ifsr(void);
+// MUX Single or Multi connections
 const char* esp8266_cmd_queryipmux(void);
 const char* esp8266_cmd_setipmux(uint8_t mode);
 const char* esp8266_cmd_muxipserver_tcp(uint8_t mode, uint16_t port);
@@ -110,10 +118,12 @@ const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
 /************************************************/
 /*************** Turing Machines ****************/
 /************************************************/
-void Turing_Machine(void);
+void Turing_Machine( void );
 void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password );
 void Turing_Wifi_Setting( void );
-void tm_setstep(uint32_t tm_step);
+void tm_setstep( uint32_t tm_step );
+void Turing_Station_Mux0Send_tcp( void );
+void tm_delaystep( uint32_t tm_state, uint32_t tm_delay );
 
 #endif
 

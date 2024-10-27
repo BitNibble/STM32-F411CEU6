@@ -41,7 +41,7 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define BUFF_SIZE 200
+#define BUFF_SIZE 513
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -100,7 +100,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turing_Connect_Wifi( 3 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
+    Turing_Connect_Wifi( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
 
     while (ONE)  // Infinite loop
     {
@@ -112,6 +112,7 @@ int main(void)
 
         Turing_Wifi_Setting( );
         Turing_Machine( );
+        Turing_Station_Mux0Send_tcp( );
 
         switch (Menu.nibble.n0) {
 

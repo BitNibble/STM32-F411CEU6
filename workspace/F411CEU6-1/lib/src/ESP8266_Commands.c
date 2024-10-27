@@ -718,7 +718,7 @@ const char* esp8266_cmd_singipclose(void) {
 		//OK or If no such connection, returns ERROR
 	return esp8266_cmd_execute("CIPCLOSE");
 }
-const char* esp8266_cmd_cifsr(void) {
+const char* esp8266_cmd_ifsr(void) {
 	// AT+CIFSR – Get local IP address
 	// Response:
 		//+ CIFSR:<IP address> OK ERROR
@@ -837,6 +837,13 @@ void tm_state( uint32_t tm_state, const char* tm_cmd, uint32_t tm_delay ) {
 	}
 	if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
+void tm_delaystep( uint32_t tm_state, uint32_t tm_delay ) {
+	if( tm_par[FEEDBACK] != tm_state ){
+		tm_par[FEEDBACK] = tm_state;
+		tm_par[DELAY] = tm_delay; // wait com
+	}
+	if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+}
 void tm_setstep(uint32_t tm_step) {
 	if( !tm_par[DELAY] ){
 		tm_par[STEP] = tm_step;
@@ -875,7 +882,8 @@ void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password )
 				tm_state( 2, esp8266_cmd_setwjap( ssid, password ), 14000 );
 			break;
 			case 3:
-				tm_state( 3, esp8266_cmd_setipdomain("iot.espressif.cn"), 1000 );
+				tm_state( 3, esp8266_cmd_echo(0), 300 );
+				tm_setstep(8);
 			break;
 		}
 	}
@@ -884,42 +892,70 @@ void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password )
 void Turing_Wifi_Setting( void ) {
 	switch( tm_par[STEP] ) {
 		case 4:
-			tm_state( 4, esp8266_cmd_echo(0), 200 );
+			tm_state( 4, esp8266_cmd_echo(0), 300 );
 		break;
 		case 5:
-			tm_state( 5, esp8266_cmd_setwlapopt(1, 0x1F), 200 );
+			tm_state( 5, esp8266_cmd_setwlapopt(1, 0x1F), 300 );
 		break;
 		case 6:
-			tm_state( 6, esp8266_cmd_setwdhcp(2, 1), 200 );
+			tm_state( 6, esp8266_cmd_setwdhcp(2, 1), 300 );
 		break;
 		case 7:
-			tm_state( 7, esp8266_cmd_setwstartsmart(3), 200 );
+			tm_state( 7, esp8266_cmd_setwstartsmart(3), 300 );
+		break;
+	}
+}
+
+void Turing_Station_Mux0Send_tcp( void ) {
+	switch( tm_par[STEP] ) {
+		case 8:
+			tm_state( 8, esp8266_cmd_muxipstart_tcp("thingspeak.com", 80), 900 );
+		break;
+		case 9:
+			tm_state( 9, esp8266_cmd_mux0ipsend_tcp(13), 800 ); // 1200
+		break;
+		case 10:
+			// Transmit data
+			usart1()->transmit_string("Hello World!\0");
+			tm_setstep(11);
+		break;
+		case 11:
+			tm_delaystep( 11, 4 );
+		break;
+		case 12:
+			tm_state( 12, esp8266_cmd_singipclose(), 400 );
+		break;
+		case 13:
+			tm_delaystep( 13, 1000 );
+		break;
+		case 14:
+			tm_state( 14, esp8266_cmd_ipstatus(), 600 );
+			//tm_setstep(8);
 		break;
 	}
 }
 
 void Turing_Machine( void ) {
 	switch( tm_par[STEP] ) {
-		case 8:
-			tm_state( 8, esp8266_cmd_version(), 500 );
+		case 15:
+			tm_state( 15, esp8266_cmd_version(), 500 );
 		break;
-		case 9:
-			tm_state( 9, esp8266_cmd_querywjap(), 400 );
+		case 16:
+			tm_state( 16, esp8266_cmd_querywjap(), 400 );
 		break;
-		case 10:
-			tm_state( 10, esp8266_cmd_wlap(), 1300 );
+		case 17:
+			tm_state( 17, esp8266_cmd_ifsr(), 500 );
 		break;
-		case 11:
-			tm_state( 11, esp8266_cmd_ping("www.google.com"), 600 );
+		case 18:
+			tm_state( 18, esp8266_cmd_ping("www.google.com"), 600 );
 		break;
-		case 12:
-			tm_state( 12, esp8266_cmd_echo(0), 200 );
-			tm_setstep(8);
+		case 19:
+			tm_state( 19, esp8266_cmd_echo(0), 200 );
 		break;
 	}
 }
-
 /***
+tm_state( 10, esp8266_cmd_wlap(), 1300 );
 Initialize -> Filter -> Execute -> return
 str = esp8266_cmd_set1ui324ui8par("UART_DEF", 38400, 8, 1, 0, 0);
 str = esp8266_cmd_set1ui324ui8par("UART_CUR", 38400, 8, 1, 0, 0);
