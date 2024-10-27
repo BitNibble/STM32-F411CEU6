@@ -37,7 +37,7 @@ const char* esp8266_cmd_queryparwmode(void);
 const char* esp8266_cmd_querywmode(void);
 const char* esp8266_cmd_setwmode(uint8_t mode);
 const char* esp8266_cmd_querywjap(void);
-const char* esp8266_cmd_setwjap(const char* ssid, const char* password);
+const char* esp8266_cmd_setwjap(const char* ssid, const char* password); // This command needs station mode enable.
 const char* esp8266_cmd_setwlapopt(uint8_t sort_enable, uint8_t mask);
 const char* esp8266_cmd_setwlap(const char* ssid);
 const char* esp8266_cmd_wlap(void);
@@ -59,7 +59,7 @@ const char* esp8266_cmd_setipsta(const char* IP, const char* gateway, const char
 const char* esp8266_cmd_queryipap(void);
 const char* esp8266_cmd_setipap(const char* IP, const char* gateway, const char* netmask);
 const char* esp8266_cmd_wstartsmart(void);
-const char* esp8266_cmd_setwstartsmart(uint8_t type);
+const char* esp8266_cmd_setwstartsmart(uint8_t type); // Access point
 const char* esp8266_cmd_wstopsmart(void);
 const char* esp8266_cmd_setwstartdiscover(const char* WeChat_number, const char* dev_type, uint8_t time);
 const char* esp8266_cmd_wstopdiscover(void);
@@ -107,6 +107,11 @@ const char* esp8266_cmd_iupdate(void);
 const char* esp8266_cmd_ipdinfo(uint8_t mode);
 const char* esp8266_cmd_mux0ipd(uint16_t length);
 const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
+/************************************************/
+/*************** Turing Machines ****************/
+/************************************************/
+void Turing_Machine(void);
+void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password );
 
 #endif
 

@@ -133,6 +133,25 @@ void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl
 		}
 	}else { USART1_RxFlush( ); }
 }
+void USART1_ReceiveRxString(char* rx, size_t size, const char* endl) {
+	const uint32_t buff_size = size - ONE;
+	rx[buff_size] = ZERO;
+	char *ptr = (char*)usart1_rx_buffer;
+	size_t ptr_length = strlen((char*)ptr);
+	if( ptr_length < usart1_rx_buffer_size ) {
+		size_t endl_length = strlen(endl);
+		int32_t diff_length = ptr_length - endl_length;
+		int32_t check;
+		if( diff_length >= ZERO ) {
+			check = strcmp((char*)ptr + diff_length, endl);
+			if( !check ) {
+				strncpy(rx, (const char*)ptr, buff_size);
+				rx[diff_length] = ZERO;
+				USART1_RxFlush( );
+			}
+		}
+	}else { USART1_RxFlush( ); }
+}
 void USART1_start(void) { USART1->CR1 |= USART_CR1_UE; }
 void USART1_stop(void) { USART1->CR1 &= ~USART_CR1_UE; }
 
@@ -157,6 +176,7 @@ void usart1_enable(void)
 	stm32fxxx_usart1.rx_flush = USART1_RxFlush;
 	stm32fxxx_usart1.transmit_string = USART1_TransmitString;
 	stm32fxxx_usart1.receive_string = USART1_ReceiveString;
+	stm32fxxx_usart1.receive_rxstring = USART1_ReceiveRxString;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
 	// Inic

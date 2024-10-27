@@ -38,6 +38,7 @@ typedef struct
 	void (*rx_flush)(void);
 	void (*transmit_string)(const char *str);
 	void (*receive_string)(char* oneshot, char* rx, size_t size, const char* endl);
+	void (*receive_rxstring)(char* rx, size_t size, const char* endl);
 	void (*start)(void);
 	void (*stop)(void);
 }STM32FXXX_USART1;

@@ -14,15 +14,26 @@ Comment:
 #include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
+#include "stm32fxxxusart1.h"
+#include "armlcd.h"
+#include "armfunction.h"
+#include "armsystick.h"
 
 #define ESPTOUCH 1
 #define AIRKISS 2
 #define ESPTOUCH_AIRKISS 3
+#define FEEDBACK 0
+#define STEP 1
+#define DELAY 2
 
 #define ESP8266_BUFF_SIZE 128
 // Static buffer for command strings
 static char ESP8266AT_str[ESP8266_BUFF_SIZE];
 const uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
+// Turing parameters
+static uint32_t tm_par[3] = {1,0,0};
+char ESP8266_str[32];
+const uint16_t esp8266_str_size = 31;
 
 /************************************************/
 /******************** TOOLS *********************/
@@ -813,6 +824,224 @@ const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length) {
 	return esp8266_cmd_1ui81ui16par("+IPD", ID, length);
 	// ID 0 to 4
 }
+/************************************************/
+/*************** Turing Machines ****************/
+/************************************************/
+void Turing_Machine( void ) {
+
+	switch(tm_par[STEP]) {
+		case 3:
+			if(tm_par[FEEDBACK] != 3){
+				tm_par[FEEDBACK] = 3;
+
+				usart1()->transmit_string(esp8266_cmd_echo(0));
+				tm_par[DELAY] = 800; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 4:
+			if(tm_par[FEEDBACK] != 4){
+				tm_par[FEEDBACK] = 4;
+
+				usart1()->transmit_string(esp8266_cmd_setwlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_wstartsmart());
+				tm_par[DELAY] = 800; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 5:
+			if(tm_par[FEEDBACK] != 5){
+				tm_par[FEEDBACK] = 5;
+
+				usart1()->transmit_string(esp8266_cmd_setwdhcp(2, 1));
+				tm_par[DELAY] = 800; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 6:
+			tm_par[FEEDBACK] = 6;
+			if(tm_par[FEEDBACK] != 6){
+				tm_par[FEEDBACK] = 6;
+
+				usart1()->transmit_string(esp8266_cmd_setwstartsmart(3)); // Access point
+				tm_par[DELAY] = 800; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			//break;
+
+		case 7:
+			if(tm_par[FEEDBACK] != 7){
+				tm_par[FEEDBACK] = 7;
+
+				usart1()->transmit_string(esp8266_cmd_version());
+				tm_par[DELAY] = 800; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 8:
+			if(tm_par[FEEDBACK] != 8){
+				tm_par[FEEDBACK] = 8;
+
+				usart1()->transmit_string(esp8266_cmd_ipstatus());
+				tm_par[DELAY] = 500; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 9:
+			if(tm_par[FEEDBACK] != 9){
+				tm_par[FEEDBACK] = 9;
+
+				//string=string+80;
+				//usart1()->transmit_string(esp8266_cmd_querywmode());
+				//usart1()->transmit_string(esp8266_cmd_queryipmode());
+				usart1()->transmit_string(esp8266_cmd_queryipap());
+				//usart1()->transmit_string(esp8266_cmd_ipstatus());
+				//usart1()->transmit_string(esp8266_cmd_queryipapmac());
+				//usart1()->transmit_string(esp8266_cmd_queryipstamac());
+				//usart1()->transmit_string(esp8266_cmd_querywsap());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcps());
+				//usart1()->transmit_string(esp8266_cmd_querywjap());
+				//usart1()->transmit_string(esp8266_cmd_version());
+				//usart1()->transmit_string(esp8266_cmd_querysleep());
+				//usart1()->transmit_string(esp8266_cmd_queryrfvdd());
+				//usart1()->transmit_string(esp8266_cmd_queryparwmode());
+				//usart1()->transmit_string(esp8266_cmd_wlap());
+				//usart1()->transmit_string(esp8266_cmd_querywsap());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcp());
+				//usart1()->transmit_string(esp8266_cmd_querywdhcps());
+				//usart1()->transmit_string(esp8266_cmd_queryipsta());
+				//usart1()->transmit_string(esp8266_cmd_cifsr());
+				//usart1()->transmit_string(esp8266_cmd_mux0ipd(50));
+
+				tm_par[DELAY] = 1600; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 10:
+			if(tm_par[FEEDBACK] != 10){
+				tm_par[FEEDBACK] = 10;
+
+				usart1()->transmit_string(esp8266_cmd_ping("www.google.com"));
+				tm_par[DELAY] = 2000; // wait com
+			}
+			if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+		default:
+			tm_par[STEP] = 3;
+			break;
+	}
+}
+
+void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password ) {
+	//mode: 1-STATION, 2-ACCESS POINT, 3-BOTH (number)
+	//ssid; WIFI NAME (string)
+	//password: WIFI PASSWORD (Router) (string)
+	tm_par[FEEDBACK] = 1; tm_par[STEP] = 0;
+
+	lcd0()->gotoxy(0, 0);
+	func()->format_string(ESP8266_str,32,"%s - %s", "Connecting", "Wifi");
+	lcd0()->string_size(ESP8266_str, 20);
+
+	if( mode == 1 || mode == 3 ) { // Filter par
+		mode &= 0x03;
+	}else {
+		lcd0()->gotoxy(1, 0);
+		func()->format_string(ESP8266_str,32,"%s: %d or %d", "mode", 1, 3);
+		lcd0()->string_size(ESP8266_str, 20);
+		_delay_ms(6000);
+		return;
+	}
+
+	while(tm_par[STEP] < 24){
+		usart1()->receive_rxstring( ESP8266_str, esp8266_str_size, "\r\n" );
+		lcd0()->gotoxy(1, 0);
+		lcd0()->string_size(ESP8266_str, 20);
+		switch(tm_par[STEP]) {
+			case 0:
+				if(tm_par[FEEDBACK] != 0){
+					tm_par[FEEDBACK] = 0;
+
+					usart1()->transmit_string(esp8266_cmd_setwmode(mode)); // Station and Access Point
+					//tm_par[DELAY] = 1200000; // wait com, with disabled usart and lcd and func (commented out).
+					tm_par[DELAY] = 1200; // wait com
+				}
+				if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+				//lcd0()->gotoxy(1, 0);
+				//func()->format_string(ESP8266_str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+				//lcd0()->string_size(ESP8266_str, 20);
+			break;
+
+			case 1:
+				if(tm_par[FEEDBACK] != 1){
+					tm_par[FEEDBACK] = 1;
+
+					usart1()->transmit_string(esp8266_cmd_setwjap( ssid, password ));
+					tm_par[DELAY] = 4000; // wait com, add three zeros with disabled usart and lcd and func (commented out).
+				}
+				if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+				//lcd0()->gotoxy(1, 0);
+				//func()->format_string(ESP8266_str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+				//lcd0()->string_size(ESP8266_str, 20);
+			break;
+
+			case 2:
+				if(tm_par[FEEDBACK] != 2){
+					tm_par[FEEDBACK] = 2;
+
+					usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+					tm_par[DELAY] = 1000; // wait com
+				}
+				if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+				//lcd0()->gotoxy(1, 0);
+				//func()->format_string(ESP8266_str,32,"%u - %u - %u", tm_par[FEEDBACK], tm_par[STEP], tm_par[DELAY]);
+				//lcd0()->string_size(ESP8266_str, 20);
+				break;
+
+			default:
+				tm_par[STEP] = 0xFFFFFFFF;
+				break;
+		}
+	}
+	tm_par[FEEDBACK] = 1; tm_par[STEP] = 0;
+}
+
+
+
+
+
+
+
+
 /***
 Initialize -> Filter -> Execute -> return
 str = esp8266_cmd_set1ui324ui8par("UART_DEF", 38400, 8, 1, 0, 0);
