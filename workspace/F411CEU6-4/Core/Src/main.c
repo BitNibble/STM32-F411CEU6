@@ -42,6 +42,9 @@ GPIO PB9 - D7
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
 #define BUFF_SIZE 200
+#define FEEDBACK 0
+#define STEP 1
+#define DELAY 2
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -53,20 +56,7 @@ const uint16_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
 
 void setup_usart1(void);
-void Turing_Machine(uint16_t* feedback, uint8_t* step);
-
-void shiftLeft (char *string,int shiftLength)
-{
-	int i,size=strlen(string);
-	if(shiftLength >= size){
-		memset(string,'\0',size);
-		return;
-	}
-	for (i=0; i < size-shiftLength; i++){
-		string[i] = string[i + shiftLength];
-		string[i + shiftLength] = '\0';
-	}
-}
+void Turing_Machine(uint32_t* par);
 
 int main(void)
 {
@@ -96,8 +86,7 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-    uint8_t tm_step = 0;
-    uint16_t tm_feedback = 1;
+    uint32_t tm_par[3] = {1,0,0};
 
     const char unit = (char)0xDF;
 
@@ -122,9 +111,9 @@ int main(void)
 
         lcd0()->gotoxy(1, 0);
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        lcd0()->string_size(string, 20);
+        lcd0()->string_size(received, 20);
 
-        Turing_Machine(&tm_feedback, &tm_step);
+        Turing_Machine(tm_par);
 
         switch (Menu.nibble.n0) {
 
@@ -136,7 +125,7 @@ int main(void)
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
                 	/*****************************************************/
-                	tm_step++;
+                	//tm_step++;
 
                 }
                 skip_0++;
@@ -382,49 +371,143 @@ int main(void)
     }
 }
 /******/
-void Turing_Machine(uint16_t* feedback, uint8_t* step) {
-	switch(*step) {
-		case(0): if(*feedback != 0){ // INICIALIZE
+void Turing_Machine(uint32_t* par) {
+
+	switch(par[STEP]) {
+		case 0:
+			if(par[FEEDBACK] != 0){
+				par[FEEDBACK] = 0;
+
 				usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and Access Point
-				_delay_ms(100); // wait com
-				usart1()->transmit_string(esp8266_cmd_setwjap("NOS-9C64", "RUSXRCKL"));
-				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
-				//usart1()->transmit_string(esp8266_cmd_setwmode(3)); // Station and AP
-				//usart1()->transmit_string(esp8266_cmd_setwlapopt(1, 0x1F)); // Set List AP parameters
-				//usart1()->transmit_string(esp8266_cmd_setwdhcp(2, 1));
-				//usart1()->transmit_string(esp8266_cmd_setwstartsmart(3));
-
+				par[DELAY] = 1000; // wait com
 			}
-			break;
-		case(1): if(*feedback != 1){
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
+		break;
 
-				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
+		case 1:
+			if(par[FEEDBACK] != 1){
+				par[FEEDBACK] = 1;
+
+				usart1()->transmit_string(esp8266_cmd_setwjap("NOS-9C64", "RUSXRCKL"));
+				par[DELAY] = 2000; // wait com
+			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
+		break;
+
+		case 2:
+			if(par[FEEDBACK] != 2){
+				par[FEEDBACK] = 2;
+
+				usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				 par[DELAY] = 500; // wait com
+			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 3:
+			if(par[FEEDBACK] != 3){
+				par[FEEDBACK] = 3;
+
 				usart1()->transmit_string(esp8266_cmd_echo(0));
+				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
 				//usart1()->transmit_string(esp8266_cmd_startsmart());
 				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				 par[DELAY] = 500; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
-		case(2): if(*feedback != 2){
 
-				usart1()->transmit_string(esp8266_cmd_wlap());
-				//usart1()->transmit_string(esp8266_cmd_setdhcp(2, 1));
-				string = string + 33;
-				_delay_ms(100); // wait com
+		case 4:
+			if(par[FEEDBACK] != 4){
+				par[FEEDBACK] = 4;
+
+				usart1()->transmit_string(esp8266_cmd_setwlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_startsmart());
+				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				 par[DELAY] = 500; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
-		case(3): if(*feedback != 3){
+
+		case 5:
+			if(par[FEEDBACK] != 5){
+				par[FEEDBACK] = 5;
+
+				usart1()->transmit_string(esp8266_cmd_setwdhcp(2, 1));
+				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_startsmart());
+				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				 par[DELAY] = 500; // wait com
+			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			break;
+
+		case 6:
+			par[FEEDBACK] = 6;
+			if(par[FEEDBACK] != 6){
+				par[FEEDBACK] = 6;
+
+				usart1()->transmit_string(esp8266_cmd_setwstartsmart(3));
+				//usart1()->transmit_string(esp8266_cmd_setlapopt(1, 0x1F)); // Set List AP parameters
+				//usart1()->transmit_string(esp8266_cmd_startsmart());
+				//usart1()->transmit_string(esp8266_cmd_setipdomain("iot.espressif.cn"));
+				 par[DELAY] = 500; // wait com
+			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
+			//break;
+
+		case 7:
+			if(par[FEEDBACK] != 7){
+				par[FEEDBACK] = 7;
 
 				string = received;
 				usart1()->transmit_string(esp8266_cmd_version());
+				par[DELAY] = 500; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
-		case(4): if(*feedback != 4){
+
+		case 8:
+			if(par[FEEDBACK] != 8){
+				par[FEEDBACK] = 8;
 
 				usart1()->transmit_string(esp8266_cmd_ipstatus());
-				_delay_ms(100); // wait com
+				par[DELAY] = 500; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
-		case(5): if(*feedback != 5){
+
+		case 9:
+			if(par[FEEDBACK] != 9){
+				par[FEEDBACK] = 9;
 
 				//string=string+80;
 				//usart1()->transmit_string(esp8266_cmd_querywmode());
@@ -448,22 +531,32 @@ void Turing_Machine(uint16_t* feedback, uint8_t* step) {
 				//usart1()->transmit_string(esp8266_cmd_cifsr());
 				//usart1()->transmit_string(esp8266_cmd_mux0ipd(50));
 
-				_delay_ms(100); // wait com
-
+				par[DELAY] = 1600; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP]++; }else{par[DELAY]--;}
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
-		case(6): if(*feedback != 6){
+
+		case 10:
+			if(par[FEEDBACK] != 10){
+				par[FEEDBACK] = 10;
 
 				string = received;
 				//usart1()->rx_flush();
 				//usart1()->transmit_string(esp8266_cmd_echo(0));
 				usart1()->transmit_string(esp8266_cmd_ping("www.google.com"));
-				*step = 1;
+				par[DELAY] = 1000; // wait com
 			}
+			if( !par[DELAY] ){ par[STEP] = 7; }else{par[DELAY]--; }
+			//lcd0()->gotoxy(1, 0);
+			//func()->format_string(str,32,"%u - %u - %u", par[FEEDBACK], par[STEP], par[DELAY]);
+			//lcd0()->string_size(str, 20);
 			break;
 	}
-	*feedback = *step;
 }
+
 /******/
 void setup_usart1(void){
 	usart1_enable();
