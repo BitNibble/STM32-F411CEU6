@@ -32,6 +32,7 @@ static char ESP8266AT_str[ESP8266_BUFF_SIZE];
 const uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
 // Turing parameters
 static uint32_t tm_par[3] = {1,0,0};
+//static uint32_t tm_lock = 0;
 char ESP8266_str[128];
 const uint16_t esp8266_str_size = 127;
 
@@ -837,26 +838,11 @@ void tm_state( uint32_t tm_state, const char* tm_cmd, uint32_t tm_delay ) {
 	if( !tm_par[DELAY] ){ tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
 void tm_setstep(uint32_t tm_step) {
-	if( !tm_par[DELAY] ){ tm_par[STEP] = 7; }
-}
-void Turing_Machine( void ) {
-	switch( tm_par[STEP] ) {
-		case 7:
-			tm_state( 7, esp8266_cmd_version(), 500 );
-			break;
-		case 8:
-			tm_state( 8, esp8266_cmd_ipstatus(), 500 );
-			break;
-		case 9:
-			tm_state( 9, esp8266_cmd_queryipap(), 800 );
-			break;
-		case 10:
-			tm_state( 10, esp8266_cmd_ping("www.google.com"), 1000 );
-			tm_setstep(7);
-			break;
+	if( !tm_par[DELAY] ){
+		tm_par[STEP] = tm_step;
 	}
 }
-
+/************************************************/
 void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password ) {
 	//mode: 1-STATION, 2-ACCESS POINT, 3-BOTH (number)
 	//ssid; WIFI NAME (string)
@@ -874,41 +860,64 @@ void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password )
 		_delay_ms(6000);
 		return;
 	}
-	while(tm_par[STEP] < 3){
+	while( tm_par[STEP] < 4 ){
 		usart1()->receive_rxstring( ESP8266_str, esp8266_str_size, "\r\n" );
 		lcd0()->gotoxy(1, 0);
 		lcd0()->string_size(ESP8266_str, 20);
-		switch(tm_par[STEP]) {
+		switch( tm_par[STEP] ) {
 			case 0:
-				tm_state( 0, esp8266_cmd_setwmode(mode), 2000 );
+				tm_state( 0, esp8266_cmd_check(), 200 );
 			break;
 			case 1:
-				tm_state( 1, esp8266_cmd_setwjap( ssid, password ), 14000 );
+				tm_state( 1, esp8266_cmd_setwmode(mode), 2000 );
 			break;
 			case 2:
-				tm_state( 2, esp8266_cmd_setipdomain("iot.espressif.cn"), 2000 );
+				tm_state( 2, esp8266_cmd_setwjap( ssid, password ), 14000 );
+			break;
+			case 3:
+				tm_state( 3, esp8266_cmd_setipdomain("iot.espressif.cn"), 1000 );
 			break;
 		}
 	}
 }
 
 void Turing_Wifi_Setting( void ) {
-	switch(tm_par[STEP]) {
-		case 3:
-			tm_state( 3, esp8266_cmd_echo(0), 200 );
-		break;
+	switch( tm_par[STEP] ) {
 		case 4:
-			tm_state( 4, esp8266_cmd_setwlapopt(1, 0x1F), 200 );
+			tm_state( 4, esp8266_cmd_echo(0), 200 );
 		break;
 		case 5:
-			tm_state( 5, esp8266_cmd_setwdhcp(2, 1), 200 );
+			tm_state( 5, esp8266_cmd_setwlapopt(1, 0x1F), 200 );
 		break;
 		case 6:
-			tm_state( 6, esp8266_cmd_setwstartsmart(3), 200 );
+			tm_state( 6, esp8266_cmd_setwdhcp(2, 1), 200 );
+		break;
+		case 7:
+			tm_state( 7, esp8266_cmd_setwstartsmart(3), 200 );
 		break;
 	}
 }
 
+void Turing_Machine( void ) {
+	switch( tm_par[STEP] ) {
+		case 8:
+			tm_state( 8, esp8266_cmd_version(), 500 );
+		break;
+		case 9:
+			tm_state( 9, esp8266_cmd_querywjap(), 400 );
+		break;
+		case 10:
+			tm_state( 10, esp8266_cmd_wlap(), 1300 );
+		break;
+		case 11:
+			tm_state( 11, esp8266_cmd_ping("www.google.com"), 600 );
+		break;
+		case 12:
+			tm_state( 12, esp8266_cmd_echo(0), 200 );
+			tm_setstep(8);
+		break;
+	}
+}
 
 /***
 Initialize -> Filter -> Execute -> return
