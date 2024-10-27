@@ -110,7 +110,8 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        //Turing_Machine( );
+        Turing_Wifi_Setting( );
+        Turing_Machine( );
 
         switch (Menu.nibble.n0) {
 

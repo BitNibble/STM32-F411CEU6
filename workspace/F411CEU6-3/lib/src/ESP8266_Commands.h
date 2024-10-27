@@ -112,6 +112,7 @@ const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
 /************************************************/
 void Turing_Machine(void);
 void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password );
+void Turing_Wifi_Setting( void );
 
 #endif
 
