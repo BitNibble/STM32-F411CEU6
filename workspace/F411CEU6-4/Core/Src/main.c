@@ -100,7 +100,8 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turing_Connect_Wifi( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
+    Turingi0to3_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
+    tm_jumpstep( 4, 15 );
 
     while (ONE)  // Infinite loop
     {
@@ -110,10 +111,12 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        Turing_Wifi_Setting( );
-        Turing_Machine( );
-        Turing_Station_Mux0Send_tcp( );
-        Turing_Station_Mux1Server( );
+        Turingi4to7_Wifi_Setting( );
+        Turingi8to14_Station_Mux0Send_tcp( );
+        //tm_jumpstep( 15, 8 );
+        Turingi15to17_Station_Mux1Server( );
+        tm_jumpstep( 18, 16 );
+        Turingi19to23_Machine( );
 
         switch (Menu.nibble.n0) {
 

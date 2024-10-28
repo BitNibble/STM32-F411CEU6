@@ -118,13 +118,12 @@ const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
 /************************************************/
 /*************** Turing Machines ****************/
 /************************************************/
-void Turing_Machine( void );
-void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password );
-void Turing_Wifi_Setting( void );
-void tm_setstep( uint32_t tm_step );
-void Turing_Station_Mux0Send_tcp( void );
-void tm_delaystep( uint32_t tm_state, uint32_t tm_delay );
-void Turing_Station_Mux1Server( void );
+void tm_jumpstep( uint32_t from, uint32_t to );
+void Turingi0to3_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
+void Turingi4to7_Wifi_Setting( void );
+void Turingi8to14_Station_Mux0Send_tcp( void );
+void Turingi15to17_Station_Mux1Server( void );
+void Turingi19to23_Machine( void );
 
 #endif
 
