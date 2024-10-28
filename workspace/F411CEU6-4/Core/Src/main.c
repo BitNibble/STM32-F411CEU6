@@ -102,6 +102,7 @@ int main(void)
 
     Turingi0to3_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 4, 15 );
+    //tm_jumpstep( 4, 500 );
 
     while (ONE)  // Infinite loop
     {
@@ -115,8 +116,10 @@ int main(void)
         Turingi8to14_Station_Mux0Send_tcp( );
         //tm_jumpstep( 15, 8 );
         Turingi15to17_Station_Mux1Server( );
-        tm_jumpstep( 18, 16 );
-        Turingi19to23_Machine( );
+        tm_jumpstep( 18, 17 );
+        Turingi18to23_Station_Mux1ServerSend_tcp( );
+        Turingi500to504_Machine( );
+        tm_jumpstep( 505, 500 );
 
         switch (Menu.nibble.n0) {
 

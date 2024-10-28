@@ -123,7 +123,8 @@ void Turingi0to3_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 void Turingi4to7_Wifi_Setting( void );
 void Turingi8to14_Station_Mux0Send_tcp( void );
 void Turingi15to17_Station_Mux1Server( void );
-void Turingi19to23_Machine( void );
+void Turingi18to23_Station_Mux1ServerSend_tcp( void );
+void Turingi500to504_Machine( void );
 
 #endif
 
