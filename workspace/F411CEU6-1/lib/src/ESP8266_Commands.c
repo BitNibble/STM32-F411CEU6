@@ -963,7 +963,7 @@ void Turingi15to17_Station_Mux1Server( void ) {
 void Turingi18to23_Station_Mux1ServerSend_tcp( void ) {
 	switch( tm_par[STEP] ) {
 		case 18:
-			tm_state( esp8266_cmd_mux0ipsend_tcp(13), 800 ); // 1200
+			tm_state( esp8266_cmd_mux1ipsend_tcp( 1, 13 ), 800 ); // 1200
 		break;
 		case 19:
 			// Transmit data
@@ -974,7 +974,7 @@ void Turingi18to23_Station_Mux1ServerSend_tcp( void ) {
 			tm_delaystep( 4 );
 		break;
 		case 21:
-			tm_state( esp8266_cmd_singipclose(), 400 );
+			tm_state( esp8266_cmd_multipclose( 1 ), 400 );
 		break;
 		case 22:
 			tm_delaystep( 1000 );
