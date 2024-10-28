@@ -113,6 +113,7 @@ int main(void)
         Turing_Wifi_Setting( );
         Turing_Machine( );
         Turing_Station_Mux0Send_tcp( );
+        Turing_Station_Mux1Server( );
 
         switch (Menu.nibble.n0) {
 

@@ -882,8 +882,8 @@ void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password )
 				tm_state( 2, esp8266_cmd_setwjap( ssid, password ), 14000 );
 			break;
 			case 3:
-				tm_state( 3, esp8266_cmd_echo(0), 300 );
-				tm_setstep(8);
+				tm_state( 3, esp8266_cmd_echo(1), 300 );
+				tm_setstep(15);
 			break;
 		}
 	}
@@ -892,7 +892,7 @@ void Turing_Connect_Wifi( uint8_t mode, const char* ssid, const char* password )
 void Turing_Wifi_Setting( void ) {
 	switch( tm_par[STEP] ) {
 		case 4:
-			tm_state( 4, esp8266_cmd_echo(0), 300 );
+			tm_state( 4, esp8266_cmd_echo(1), 300 );
 		break;
 		case 5:
 			tm_state( 5, esp8266_cmd_setwlapopt(1, 0x1F), 300 );
@@ -935,22 +935,39 @@ void Turing_Station_Mux0Send_tcp( void ) {
 	}
 }
 
-void Turing_Machine( void ) {
+void Turing_Station_Mux1Server( void ) {
 	switch( tm_par[STEP] ) {
 		case 15:
-			tm_state( 15, esp8266_cmd_version(), 500 );
+			tm_state( 15, esp8266_cmd_setipmux(1), 400 );
 		break;
 		case 16:
-			tm_state( 16, esp8266_cmd_querywjap(), 400 );
+			tm_state( 16, esp8266_cmd_muxipserver_tcp(1, 80), 800 ); // 1200
 		break;
 		case 17:
-			tm_state( 17, esp8266_cmd_ifsr(), 500 );
+			tm_delaystep( 17, 2000 );
 		break;
 		case 18:
-			tm_state( 18, esp8266_cmd_ping("www.google.com"), 600 );
+			tm_setstep(16);
 		break;
+	}
+}
+
+void Turing_Machine( void ) {
+	switch( tm_par[STEP] ) {
 		case 19:
-			tm_state( 19, esp8266_cmd_echo(0), 200 );
+			tm_state( 19, esp8266_cmd_version(), 500 );
+		break;
+		case 20:
+			tm_state( 20, esp8266_cmd_querywjap(), 400 );
+		break;
+		case 21:
+			tm_state( 21, esp8266_cmd_ifsr(), 500 );
+		break;
+		case 22:
+			tm_state( 22, esp8266_cmd_ping("www.google.com"), 600 );
+		break;
+		case 23:
+			tm_state( 23, esp8266_cmd_echo(0), 200 );
 		break;
 	}
 }

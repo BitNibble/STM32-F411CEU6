@@ -124,6 +124,7 @@ void Turing_Wifi_Setting( void );
 void tm_setstep( uint32_t tm_step );
 void Turing_Station_Mux0Send_tcp( void );
 void tm_delaystep( uint32_t tm_state, uint32_t tm_delay );
+void Turing_Station_Mux1Server( void );
 
 #endif
 
