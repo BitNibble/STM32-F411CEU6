@@ -39,6 +39,7 @@ const char* esp8266_cmd_setwmode(uint8_t mode);
 // AP - Access Point (Router)
 const char* esp8266_cmd_querywjap(void); // join access point
 const char* esp8266_cmd_setwjap(const char* ssid, const char* password); // This command needs station mode enable.
+// List Settings
 const char* esp8266_cmd_setwlapopt(uint8_t sort_enable, uint8_t mask);
 const char* esp8266_cmd_setwlap(const char* ssid);
 const char* esp8266_cmd_wlap(void);
@@ -113,17 +114,15 @@ const char* esp8266_cmd_ipsto_tcp(uint16_t time);
 const char* esp8266_cmd_ping(const char* host);
 const char* esp8266_cmd_iupdate(void);
 const char* esp8266_cmd_ipdinfo(uint8_t mode);
-const char* esp8266_cmd_mux0ipd(uint16_t length);
-const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length);
 /************************************************/
 /*************** Turing Machines ****************/
 /************************************************/
 void tm_jumpstep( uint32_t from, uint32_t to );
-void Turingi0to3_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
-void Turingi4to7_Wifi_Setting( void );
-void Turingi8to14_Station_Mux0Send_tcp( void );
-void Turingi15to17_Station_Mux1Server( void );
-void Turingi18to23_Station_Mux1ServerSend_tcp( void );
+void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
+void Turingi5to8_Wifi_Setting( void );
+void Turingi9to15_Station_Mux0Send_tcp( void );
+void Turingi16to18_Station_Mux1Server( void );
+void Turingi19to24_Station_Mux1ServerSend_tcp( void );
 void Turingi500to504_Machine( void );
 
 #endif

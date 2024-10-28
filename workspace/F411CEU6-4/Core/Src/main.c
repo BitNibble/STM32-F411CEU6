@@ -42,6 +42,7 @@ GPIO PB9 - D7
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
 #define BUFF_SIZE 513
+#define MAX_TOKENS 4
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -82,8 +83,13 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-
+    // PARSE STRING VAR
+    //char parse_str0[20] = {0};
+    //char parse_str1[20] = {0};
+    //int parse_int0 = 0;
+    //int parse_int1 = 0;
     const char unit = (char)0xDF;
+    char *tokens[MAX_TOKENS]; // Array of pointers to hold token addresses
 
     ARMLCD0_enable(gpiob()->instance);
 
@@ -100,9 +106,9 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to3_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
-    tm_jumpstep( 4, 15 );
-    //tm_jumpstep( 4, 500 );
+    Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
+    tm_jumpstep( 5, 16 );
+    //tm_jumpstep( 5, 500 );
 
     while (ONE)  // Infinite loop
     {
@@ -112,12 +118,14 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        Turingi4to7_Wifi_Setting( );
-        Turingi8to14_Station_Mux0Send_tcp( );
-        //tm_jumpstep( 15, 8 );
-        Turingi15to17_Station_Mux1Server( );
-        tm_jumpstep( 18, 17 );
-        Turingi18to23_Station_Mux1ServerSend_tcp( );
+        func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
+
+        Turingi5to8_Wifi_Setting( );
+        Turingi9to15_Station_Mux0Send_tcp( );
+        //tm_jumpstep( 16, 9 );
+        Turingi16to18_Station_Mux1Server( );
+        tm_jumpstep( 19, 17 );
+        Turingi19to24_Station_Mux1ServerSend_tcp( );
         Turingi500to504_Machine( );
         tm_jumpstep( 505, 500 );
 
@@ -365,10 +373,10 @@ int main(void)
         func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);
         lcd0()->string_size(str, 8);
 
-        if(!strcmp(oneshot,"s01.")){
+        if(!strcmp(tokens[3],"s01.")){
         	gpioc()->set_hpins(1 << 13);
         }
-         if(!strcmp(oneshot,"s00.")){
+         if(!strcmp(tokens[3],"s00.")){
          	gpioc()->clear_hpins(1 << 13);
         }
     }

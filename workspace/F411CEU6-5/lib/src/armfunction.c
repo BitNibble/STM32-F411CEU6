@@ -83,6 +83,8 @@ long function_gcd_v2(long a, long b);
 /*** 7 ***/
 int function_StrToInt (const char string[]);
 /*** 8 ***/
+int function_tokenize_string(char *input, char *tokens[], int max_tokens, const char *delimiters);
+/*** 9 ***/
 uint32_t function_triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
 uint32_t function_read_value(void);
@@ -145,10 +147,12 @@ FUNC FUNC_enable( void )
 	// 8
 	setup_func.strToInt = function_StrToInt;
 	// 9
+	setup_func.tokenize_string = function_tokenize_string;
+	// 10
 	setup_func.triggerA = function_triggerA;
 	setup_func.triggerB = function_triggerB;
 	setup_func.value = function_read_value;
-	// 10
+	// 11
 	setup_func.arm = arm_func_inic();
 
 	return setup_func;
@@ -758,6 +762,19 @@ void float_to_string(float value, char* buffer, size_t buffer_size) {
     if (buffer_size > 0) {
         snprintf(buffer, buffer_size, "%.2f", value); // Adjust the format as needed
     }
+}
+// Function to tokenize a string
+int function_tokenize_string(char *input, char *tokens[], int max_tokens, const char *delimiters) {
+	int count = 0;
+
+	// Get the first token
+	char *token = strtok(input, delimiters);
+	while (token != NULL && count < max_tokens) {
+		tokens[count++] = token; // Store the pointer to the token
+		token = strtok(NULL, delimiters); // Get the next token
+	}
+
+	return count; // Return the number of tokens found
 }
 /******/
 // triggerA

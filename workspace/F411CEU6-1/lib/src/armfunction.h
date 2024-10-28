@@ -80,6 +80,8 @@ typedef struct
 	int (*gcd_v1)(uint32_t a, uint32_t b);
 	long (*gcd_v2)(long a, long b);
 	/******/
+	int (*tokenize_string)(char *input, char *tokens[], int max_tokens, const char *delimiters);
+	/******/
 	uint32_t (*triggerA)(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 	uint32_t (*triggerB)(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
 	uint32_t (*value)(void);
