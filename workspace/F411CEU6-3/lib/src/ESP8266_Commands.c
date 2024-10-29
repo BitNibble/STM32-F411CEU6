@@ -29,15 +29,15 @@ Comment:
 #define DELAY 2
 
 
-#define ESP8266_BUFF_SIZE 128
+#define ESP8266_BUFF_SIZE 129
 // Static buffer for command strings
 static char ESP8266AT_str[ESP8266_BUFF_SIZE];
 const uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
 // Turing parameters
 static uint32_t tm_par[3] = {TM_OPEN,0,0};
 //static uint32_t tm_lock = 0;
-char ESP8266_str[128];
-const uint16_t esp8266_str_size = 127;
+char ESP8266_str[ESP8266_BUFF_SIZE];
+const uint16_t esp8266_str_size = (ESP8266_BUFF_SIZE - 1);
 
 /************************************************/
 /******************** TOOLS *********************/
@@ -871,7 +871,7 @@ void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 	//ssid; WIFI NAME (string)
 	//password: WIFI PASSWORD (Router) (string)
 	lcd0()->gotoxy(0, 0);
-	func()->format_string(ESP8266_str, esp8266_str_size, "%s - %s", "Connecting", "Wifi");
+	func()->format_string(ESP8266_str, esp8266_str_size, "%s - %s", "START", "Wifi");
 	lcd0()->string_size(ESP8266_str, 20);
 	if( mode == 1 || mode == 3 ) { // Filter par
 		mode &= 0x03;
@@ -897,7 +897,8 @@ void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 				tm_state( esp8266_cmd_setwjap( ssid, password ), 14000 );
 			break;
 			case 3:
-				//tm_state( esp8266_cmd_setipsta("192.168.1.5", "192.168.1.1", "255.255.255.0"), 4000 );
+				//tm_state( esp8266_cmd_setipsta("192.168.1.53", "192.168.1.1", "255.255.255.0"), 4000 );
+				//tm_state( esp8266_cmd_ifsr(), 500 );
 				tm_setstep(4);
 			break;
 			case 4:
@@ -924,21 +925,21 @@ void Turingi5to8_Wifi_Setting( void ) {
 	}
 }
 
-void Turingi9to15_Station_Mux0Send_tcp( void ) {
+void Turingi9to15_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 9:
-			tm_state( esp8266_cmd_muxipstart_tcp("thingspeak.com", 80), 900 );
+			tm_state( esp8266_cmd_muxipstart_tcp(server, 53861), 900 );
 		break;
 		case 10:
-			tm_state( esp8266_cmd_mux0ipsend_tcp(13), 800 ); // 1200
+			tm_state( esp8266_cmd_mux0ipsend_tcp(size), 800 ); // 1200
 		break;
 		case 11:
-			// Transmit data
-			usart1()->transmit_string("Hello World!\0");
 			tm_setstep(12);
+			// Transmit data
+			usart1()->transmit_string(send);
 		break;
 		case 12:
-			tm_delaystep( 4 );
+			tm_delaystep( 10 );
 		break;
 		case 13:
 			tm_state( esp8266_cmd_singipclose(), 400 );
@@ -961,32 +962,35 @@ void Turingi16to18_Station_Mux1Server( void ) {
 			tm_state( esp8266_cmd_muxipserver_tcp(1, 80), 800 ); // 1200
 		break;
 		case 18:
-			tm_delaystep( 10000 );
+			//tm_state( esp8266_cmd_ifsr(), 500 );
+			tm_delaystep( 200 );
 		break;
 	}
 }
 
-void Turingi19to24_Station_Mux1ServerSend_tcp( void ) {
+void Turingi19to24_Station_Mux1ServerSend_tcp( const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 19:
-			tm_state( esp8266_cmd_mux1ipsend_tcp( 1, 13 ), 800 ); // 1200
+			tm_state( esp8266_cmd_mux1ipsend_tcp( 0, size ), 600 ); // 1200
 		break;
 		case 20:
+			tm_setstep(21);
 			// Transmit data
-			usart1()->transmit_string("Hello World!\0");
-			tm_setstep(20);
+			usart1()->transmit_string(send);
 		break;
 		case 21:
-			tm_delaystep( 4 );
+			tm_delaystep( 600 );
 		break;
 		case 22:
-			tm_state( esp8266_cmd_multipclose( 1 ), 400 );
+			//tm_state( esp8266_cmd_multipclose( 1 ), 20 );
+			tm_delaystep( 10 );
 		break;
 		case 23:
-			tm_delaystep( 1000 );
+			tm_delaystep( 10 );
 		break;
 		case 24:
-			tm_state( esp8266_cmd_ipstatus(), 600 );
+			//tm_state( esp8266_cmd_ipstatus(), 600 );
+			tm_delaystep( 10 );
 		break;
 	}
 }

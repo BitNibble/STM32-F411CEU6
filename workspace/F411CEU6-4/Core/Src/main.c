@@ -41,9 +41,8 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define BUFF_SIZE 513
 #define MAX_TOKENS 4
-#define BLESP_BUFF_SIZE 21
+#define BUFF_SIZE 513
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -53,9 +52,6 @@ char oneshot[BUFF_SIZE];
 char received[BUFF_SIZE];
 const uint16_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
-
-char blesp[BLESP_BUFF_SIZE];
-const char blesp_buff_size = BLESP_BUFF_SIZE - 1;
 
 void setup_usart1(void);
 
@@ -111,7 +107,9 @@ int main(void)
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
     Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
+    //tm_jumpstep( 5, 9 );
     tm_jumpstep( 5, 16 );
+    //tm_jumpstep( 5, 19 );
     //tm_jumpstep( 5, 500 );
 
     while (ONE)  // Infinite loop
@@ -122,19 +120,18 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        strncpy(blesp, oneshot, blesp_buff_size);
-
-        func()->tokenize_string(blesp, tokens, MAX_TOKENS, ",:");
+        func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
 
         Turingi5to8_Wifi_Setting( );
-        Turingi9to15_Station_Mux0Send_tcp( );
+        Turingi9to15_Station_Mux0ClientSend_tcp( "thingspeak.com", "Hello World!\0", 13 );
         //tm_jumpstep( 16, 9 );
         Turingi16to18_Station_Mux1Server( );
         //tm_jumpstep( 19, 17 );
-        tm_jumpstep( 19, 255 );
-        Turingi19to24_Station_Mux1ServerSend_tcp( );
+        //tm_jumpstep( 19, 18 );
+        Turingi19to24_Station_Mux1ServerSend_tcp( "Hello World!\r\n", 14 );
+        tm_jumpstep( 24, 19 );
         Turingi500to504_Machine( );
-        tm_jumpstep( 505, 500 );
+        //tm_jumpstep( 505, 500 );
 
         switch (Menu.nibble.n0) {
 
@@ -380,19 +377,24 @@ int main(void)
         func()->format_string(str,32,"%d%d:%d%d:%d%d",vecT[0], vecT[1], vecT[2], vecT[3], vecT[4], vecT[5]);
         lcd0()->string_size(str, 8);
 
-        if(!strcmp(tokens[3],"s01.")){
-        	gpioc()->set_hpins(1 << 13);
-        }
-         if(!strcmp(tokens[3],"s00.")){
+        /***/
+        if(tokens[3] != NULL){
+        	if(!strcmp(tokens[3],"s01.")){
+        		gpioc()->set_hpins(1 << 13);
+        	}
+        	if(!strcmp(tokens[3],"s00.")){
          	gpioc()->clear_hpins(1 << 13);
+        	}
         }
-
-         if(!strcmp(tokens[0],"s01.")){
-        	 gpioc()->set_hpins(1 << 13);
-         }
-         if(!strcmp(tokens[0],"s00.")){
+        if(tokens[0] != NULL){
+        	if(!strcmp(tokens[0],"s01.")){
+        		gpioc()->set_hpins(1 << 13);
+        	}
+        	if(!strcmp(tokens[0],"s00.")){
         	 gpioc()->clear_hpins(1 << 13);
-         }
+        	}
+        }
+        /***/
     }
 }
 
