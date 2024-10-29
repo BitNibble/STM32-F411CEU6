@@ -78,11 +78,13 @@ const char* esp8266_cmd_ipstatus(void);
 //4 - The TCP or UDP n of ESP8266 Station is disconnected.
 //5 - The ESP8266 Station does NOT connect to an AP.
 const char* esp8266_cmd_setipdomain(const char* domain_name);
+//Connect to Server
 const char* esp8266_cmd_muxipstart_tcp(const char* remote_IP, uint16_t remote_port);
 const char* esp8266_cmd_mux0ipstart_udp(const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode);
 const char* esp8266_cmd_mux1ipstart_udp(uint8_t link_ID, const char* remote_IP, uint16_t remote_port, uint16_t UDP_local_port, uint8_t UDP_mode);
 const char* esp8266_cmd_muxipstart_ssl(const char* remote_IP, uint16_t remote_port);
 const char* esp8266_cmd_ipsslsize(uint16_t size);
+//Communication (Used in all settings)
 const char* esp8266_cmd_mux0ipsend_udp(uint16_t length);
 const char* esp8266_cmd_mux1ipsend_udp(uint8_t link_ID, uint16_t length);
 const char* esp8266_cmd_ipsend_udp(uint8_t link_ID, uint16_t length, const char* remote_IP, uint16_t remote_port);
@@ -101,7 +103,7 @@ const char* esp8266_cmd_mux1ipreset_tcp(uint8_t link_ID);
 const char* esp8266_cmd_multipclose(uint8_t link_ID);
 const char* esp8266_cmd_singipclose(void);
 const char* esp8266_cmd_ifsr(void);
-// MUX Single or Multi connections
+// MUX Single or Multiple connections
 const char* esp8266_cmd_queryipmux(void);
 const char* esp8266_cmd_setipmux(uint8_t mode);
 const char* esp8266_cmd_muxipserver_tcp(uint8_t mode, uint16_t port);

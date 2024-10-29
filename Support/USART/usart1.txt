@@ -121,3 +121,45 @@ void USART1_IRQHandler(void) {
         // Handle wakeup event (e.g., resume communication)
     //}
 }
+
+
+
+
+void USART_ErrorHandler(USART_TypeDef *USARTx) {
+    // Check for Overrun Error
+    if (USARTx->SR & USART_SR_ORE) {
+        // Clear Overrun Error by reading the data register
+        (void)USARTx->DR;
+    }
+
+    // Check for Framing Error
+    if (USARTx->SR & USART_SR_FE) {
+        // Clear Framing Error by reading the data register
+        (void)USARTx->DR;
+    }
+
+    // Check for Noise Error
+    if (USARTx->SR & USART_SR_NE) {
+        // Clear Noise Error by reading the data register
+        (void)USARTx->DR;
+    }
+
+    // Check for Parity Error
+    if (USARTx->SR & USART_SR_PE) {
+        // Clear Parity Error by reading the data register
+        (void)USARTx->DR;
+    }
+
+    // Clear any remaining data in receive buffer
+    while (USARTx->SR & USART_SR_RXNE) {
+        (void)USARTx->DR; // Clear data by reading it
+    }
+
+    // Reinitialize USART settings if needed (optional)
+    USARTx->CR1 |= USART_CR1_RE | USART_CR1_TE; // Enable transmitter and receiver
+
+    // (Optional) Check for idle line or timeout to detect if device has reconnected
+    if (USARTx->SR & USART_SR_IDLE) {
+        (void)USARTx->DR; // Clear the idle line flag by reading DR
+    }
+}
