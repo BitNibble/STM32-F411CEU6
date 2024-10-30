@@ -892,18 +892,18 @@ void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 				tm_step( esp8266_cmd_setwjap( ssid, password ), 4000 );
 			break;
 			case 3:
-				tm_step( esp8266_cmd_echo(0), 600 );
+				tm_step( esp8266_cmd_echo(1), 600 );
 			break;
 			case 4:
-				//tm_step( esp8266_cmd_setipsta("192.168.1.53", "192.168.1.1", "255.255.255.0"), 4000 );
-				tm_step( esp8266_cmd_ifsr(), 100000 );
-				//tm_delaystep(10);
+				tm_step( esp8266_cmd_setipsta("192.168.1.53", "192.168.1.1", "255.255.255.0"), 4000 );
+				//tm_step( esp8266_cmd_ifsr(), 10000 );
 			break;
 		}
 		usart1()->receive_rxstring( ESP8266_str, esp8266_str_size, "\r\n" );
 		lcd0()->gotoxy(0, 0);
-		lcd0()->string_size(ESP8266_str+7, 20);
+		lcd0()->string_size(ESP8266_str, 20);
 	}
+	tm_setstep(0);
 }
 
 void Turingi5to8_Wifi_Setting( void ) {

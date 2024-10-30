@@ -111,9 +111,8 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
-
-    tm_jumpstep( 5, 16 );
+    Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "XXXXXXXXXX" ); // wmode 1 and 3
+    tm_jumpstep( 0, 19 );
 
     while (ONE)  // Infinite loop
     {
@@ -121,14 +120,14 @@ int main(void)
 
         lcd0()->gotoxy(1, 0);
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        //lcd0()->string_size(received, 20);
+        lcd0()->string_size(received, 20);
 
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
-        lcd0()->string_size(tokens[0],5);lcd0()->string_size(tokens[1],5);lcd0()->string_size(tokens[2],5);lcd0()->string_size(tokens[3],5);
+        //lcd0()->string_size(tokens[0],5);lcd0()->string_size(tokens[1],5);lcd0()->string_size(tokens[2],5);lcd0()->string_size(tokens[3],5);
 
-        if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[1][0] == '4' ) {
-        	tm_setstep( 19 ); link_ID = atoi(tokens[1]);
-        }
+        //if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[1][0] == '4' ) {
+        	//tm_setstep( 19 ); link_ID = atoi(tokens[1]);
+        //}
         //if( tokens[0][0] == '0' || tokens[0][0] == '1' || tokens[0][0] == '2' || tokens[0][0] == '3' || tokens[1][0] == '4' ) {
         //        tm_setstep( 19 ); link_ID = atoi(tokens[0]);
         //}
@@ -136,9 +135,9 @@ int main(void)
         //if( !strcmp( tokens[1],"CLOSED" )) {
         	//tm_setstep( 0 );
         //}
-        if( strcmp( "0, CONNECT", oneshot ) ) {
-        	tm_setstep( 19 );
-        }
+        //if( strcmp( "0, CONNECT", oneshot ) ) {
+        	//tm_setstep( 19 );
+        //}
 
         Turingi5to8_Wifi_Setting( );
 
