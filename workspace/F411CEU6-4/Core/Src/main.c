@@ -111,8 +111,8 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "XXXXXXXXXX" ); // wmode 1 and 3
-    tm_jumpstep( 0, 19 );
+    Turingi0to6_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXXXXXXXX"); // wmode 1 and 3
+    tm_jumpstep( 0, 18 );
 
     while (ONE)  // Infinite loop
     {
@@ -122,30 +122,37 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
+        /*** IPD || CONNECT ***/
+	   if( strstr( oneshot, "IPD,0" ) != NULL || strstr( oneshot, "0,CONNECT" ) != NULL ) {
+		   link_ID = 0;
+		   usart1()->rx_flush();
+		   tm_setstep( 21 );
+	   }
+	   if( strstr( oneshot, "IPD,1" ) != NULL || strstr( oneshot, "1,CONNECT" ) != NULL ) {
+		   link_ID = 1;
+		   usart1()->rx_flush();
+		   tm_setstep( 21 );
+	   }
+	   if( strstr( oneshot, "IPD,2" ) != NULL || strstr( oneshot, "2,CONNECT" ) != NULL ) {
+		   link_ID = 2;
+		   usart1()->rx_flush();
+		   tm_setstep( 21 );
+	   }
+	   if( strstr( oneshot, "IPD,3" ) != NULL || strstr( oneshot, "3,CONNECT" ) != NULL ) {
+		   link_ID = 3;
+		   usart1()->rx_flush();
+		   tm_setstep( 21 );
+	   }
+
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
-        //lcd0()->string_size(tokens[0],5);lcd0()->string_size(tokens[1],5);lcd0()->string_size(tokens[2],5);lcd0()->string_size(tokens[3],5);
 
-        //if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[1][0] == '4' ) {
-        	//tm_setstep( 19 ); link_ID = atoi(tokens[1]);
-        //}
-        //if( tokens[0][0] == '0' || tokens[0][0] == '1' || tokens[0][0] == '2' || tokens[0][0] == '3' || tokens[1][0] == '4' ) {
-        //        tm_setstep( 19 ); link_ID = atoi(tokens[0]);
-        //}
+        Turingi7to10_Wifi_Setting( );
 
-        //if( !strcmp( tokens[1],"CLOSED" )) {
-        	//tm_setstep( 0 );
-        //}
-        //if( strcmp( "0, CONNECT", oneshot ) ) {
-        	//tm_setstep( 19 );
-        //}
+        Turingi11to17_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
 
-        Turingi5to8_Wifi_Setting( );
+        Turingi18to20_Station_Mux1Server( );
 
-        Turingi9to15_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
-
-        Turingi16to18_Station_Mux1Server( );
-
-        Turingi19to24_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
+        Turingi21to26_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
 
         Turingi500to504_Machine( );
 

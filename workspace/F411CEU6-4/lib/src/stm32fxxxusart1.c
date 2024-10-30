@@ -100,8 +100,9 @@ char USART1_ReceiveChar(void) {
 }
 void USART1_RxFlush(void) {
 	usart1_rx_index = ZERO;
-	usart1_rx_buffer[ZERO] = ZERO;
-	usart1_rx_buffer[ONE] = ZERO;
+	//usart1_rx_buffer[ZERO] = ZERO;
+	//usart1_rx_buffer[ONE] = ZERO;
+	memset(usart1_rx_buffer,0,usart1_rx_buffer_size);
 }
 void USART1_TransmitString(const char *str) {
 	usart1_tx_index = ZERO;
@@ -114,8 +115,8 @@ void USART1_TransmitString(const char *str) {
 void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
 	const uint32_t buff_size = size - ONE;
 	oneshot[buff_size] = ZERO; rx[buff_size] = ZERO;
-	//if(usart1_flag) { memset(oneshot, 0, buff_size); usart1_flag = ZERO; }
-	if(usart1_flag) { oneshot[0] = 0; usart1_flag = ZERO; }
+	if(usart1_flag) { memset(oneshot, 0, buff_size); usart1_flag = ZERO; }
+	//if(usart1_flag) { oneshot[0] = 0; usart1_flag = ZERO; }
 	char *ptr = (char*)usart1_rx_buffer;
 	size_t ptr_length = strlen((char*)ptr);
 	if( ptr_length < usart1_rx_buffer_size ) {
