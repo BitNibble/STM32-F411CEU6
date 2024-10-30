@@ -24,6 +24,8 @@ Comment:
 #define ESPTOUCH_AIRKISS 3
 #define TM_LOCKED 0x03
 #define TM_OPEN 0
+#define TM_LINK_ID_LOCKED 0x03
+#define TM_LINK_ID_OPEN 0
 #define FEEDBACK TM_OPEN
 #define STEP 1
 #define DELAY 2
@@ -35,6 +37,8 @@ static char ESP8266AT_str[ESP8266_BUFF_SIZE];
 const uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
 // Turing parameters
 static uint32_t tm_par[3] = {TM_OPEN,0,0};
+static uint8_t tm_link_ID_var = 0;
+static uint8_t tm_link_ID_lock = 0;
 
 char ESP8266_str[ESP8266_BUFF_SIZE];
 const uint16_t esp8266_str_size = (ESP8266_BUFF_SIZE - 1);
@@ -888,17 +892,17 @@ void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 				tm_step( esp8266_cmd_setwjap( ssid, password ), 4000 );
 			break;
 			case 3:
-				//tm_step( esp8266_cmd_setipsta("192.168.1.53", "192.168.1.1", "255.255.255.0"), 4000 );
-				//tm_step( esp8266_cmd_ifsr(), 500 );
-				tm_setstep(4);
+				tm_step( esp8266_cmd_echo(0), 600 );
 			break;
 			case 4:
-				tm_step( esp8266_cmd_echo(1), 600 );
+				//tm_step( esp8266_cmd_setipsta("192.168.1.53", "192.168.1.1", "255.255.255.0"), 4000 );
+				tm_step( esp8266_cmd_ifsr(), 100000 );
+				//tm_delaystep(10);
 			break;
 		}
 		usart1()->receive_rxstring( ESP8266_str, esp8266_str_size, "\r\n" );
 		lcd0()->gotoxy(0, 0);
-		lcd0()->string_size(ESP8266_str, 20);
+		lcd0()->string_size(ESP8266_str+7, 20);
 	}
 }
 
@@ -966,30 +970,35 @@ void Turingi16to18_Station_Mux1Server( void ) {
 }
 
 void Turingi19to24_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size ) {
+	if( !tm_link_ID_lock ){ // Dynamic vars have to be locked in TM
+		tm_link_ID_lock = TM_LINK_ID_LOCKED;
+		tm_link_ID_var = link_ID;
+	}
 	switch( tm_par[STEP] ) {
 		case 19:
-			tm_delaystep( 300 );
+			tm_delaystep( 600 ); //300 or 600
 		break;
 		case 20:
-			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 400 ); // 1200
+			tm_step( esp8266_cmd_mux1ipsend_tcp( tm_link_ID_var, size ), 400 ); // 400
 		break;
 		case 21:
-			tm_setstep(22);
+			tm_setstep(30); // 22
 			// Transmit data
 			usart1()->transmit_string(send);
 		break;
 		case 22:
-			tm_delaystep( 100 );
+			tm_delaystep( 300 ); // 300
 		break;
 		case 23:
-			//tm_state( esp8266_cmd_multipclose( link_ID ), 20 );
-			tm_delaystep( 0 );
+			if(tm_link_ID_var)
+				tm_step( esp8266_cmd_multipclose( tm_link_ID_var ), 20 );
+			else
+				tm_delaystep( 20 ); // 20
 		break;
-
 		case 24:
-			//tm_state( esp8266_cmd_ipstatus(), 600 );
-			tm_delaystep( 0 );
+			tm_link_ID_lock = TM_LINK_ID_OPEN;
 			tm_setstep( TM_END );
+			tm_delaystep( 0 ); // 0
 		break;
 	}
 }

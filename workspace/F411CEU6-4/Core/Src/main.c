@@ -54,7 +54,11 @@ char received[BUFF_SIZE];
 const uint16_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
 
-const char* htmlContent = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head><body><h1>Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP.</p></body></html>";
+const char* htmlContent = "<!DOCTYPE html><html lang='en'>"
+		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+		"<title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head>"
+		"<body><h1>Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
+		"</p></body></html>";
 const size_t htmlContent_size = 346;
 
 void setup_usart1(void);
@@ -117,13 +121,25 @@ int main(void)
 
         lcd0()->gotoxy(1, 0);
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        lcd0()->string_size(received, 20);
+        //lcd0()->string_size(received, 20);
 
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
+        lcd0()->string_size(tokens[0],5);lcd0()->string_size(tokens[1],5);lcd0()->string_size(tokens[2],5);lcd0()->string_size(tokens[3],5);
 
-        if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[0][0] == '0' || tokens[0][0] == '1' || tokens[0][0] == '2' || tokens[0][0] == '3' ) {
+        if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[1][0] == '4' ) {
         	tm_setstep( 19 ); link_ID = atoi(tokens[1]);
         }
+        //if( tokens[0][0] == '0' || tokens[0][0] == '1' || tokens[0][0] == '2' || tokens[0][0] == '3' || tokens[1][0] == '4' ) {
+        //        tm_setstep( 19 ); link_ID = atoi(tokens[0]);
+        //}
+
+        //if( !strcmp( tokens[1],"CLOSED" )) {
+        	//tm_setstep( 0 );
+        //}
+        if( strcmp( "0, CONNECT", oneshot ) ) {
+        	tm_setstep( 19 );
+        }
+
         Turingi5to8_Wifi_Setting( );
 
         Turingi9to15_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
