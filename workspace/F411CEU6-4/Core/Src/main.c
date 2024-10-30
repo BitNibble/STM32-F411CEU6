@@ -35,6 +35,7 @@ GPIO PB9 - D7
 #include "armfunction.h"
 #include "explode.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define JMP_menu 120
@@ -52,6 +53,9 @@ char oneshot[BUFF_SIZE];
 char received[BUFF_SIZE];
 const uint16_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
+
+const char* htmlContent = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head><body><h1>Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP.</p></body></html>";
+const size_t htmlContent_size = 346;
 
 void setup_usart1(void);
 
@@ -83,13 +87,10 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
-    // PARSE STRING VAR
-    //char parse_str0[20] = {0};
-    //char parse_str1[20] = {0};
-    //int parse_int0 = 0;
-    //int parse_int1 = 0;
+    uint8_t link_ID = 0;
+
     const char unit = (char)0xDF;
-    char *tokens[MAX_TOKENS]; // Array of pointers to hold token addresses
+    char *tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
 
     ARMLCD0_enable(gpiob()->instance);
 
@@ -107,10 +108,8 @@ int main(void)
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
     Turingi0to4_Wifi_Connect( 1 , "NOS-9C64" , "RUSXRCKL" ); // wmode 1 and 3
-    //tm_jumpstep( 5, 9 );
+
     tm_jumpstep( 5, 16 );
-    //tm_jumpstep( 5, 19 );
-    //tm_jumpstep( 5, 500 );
 
     while (ONE)  // Infinite loop
     {
@@ -122,16 +121,19 @@ int main(void)
 
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
 
+        if( tokens[1][0] == '0' || tokens[1][0] == '1' || tokens[1][0] == '2' || tokens[1][0] == '3' || tokens[0][0] == '0' || tokens[0][0] == '1' || tokens[0][0] == '2' || tokens[0][0] == '3' ) {
+        	tm_setstep( 19 ); link_ID = atoi(tokens[1]);
+        }
         Turingi5to8_Wifi_Setting( );
-        Turingi9to15_Station_Mux0ClientSend_tcp( "thingspeak.com", "Hello World!\0", 13 );
-        //tm_jumpstep( 16, 9 );
+
+        Turingi9to15_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
+
         Turingi16to18_Station_Mux1Server( );
-        //tm_jumpstep( 19, 17 );
-        //tm_jumpstep( 19, 18 );
-        Turingi19to24_Station_Mux1ServerSend_tcp( "Hello World!\r\n", 14 );
-        tm_jumpstep( 24, 19 );
+
+        Turingi19to24_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
+
         Turingi500to504_Machine( );
-        //tm_jumpstep( 505, 500 );
+
 
         switch (Menu.nibble.n0) {
 
@@ -378,22 +380,18 @@ int main(void)
         lcd0()->string_size(str, 8);
 
         /***/
-        if(tokens[3] != NULL){
-        	if(!strcmp(tokens[3],"s01.")){
-        		gpioc()->set_hpins(1 << 13);
-        	}
-        	if(!strcmp(tokens[3],"s00.")){
-         	gpioc()->clear_hpins(1 << 13);
-        	}
+        if(!strcmp(tokens[3],"s01.")){
+        	gpioc()->set_hpins(1 << 13);
         }
-        if(tokens[0] != NULL){
-        	if(!strcmp(tokens[0],"s01.")){
-        		gpioc()->set_hpins(1 << 13);
-        	}
-        	if(!strcmp(tokens[0],"s00.")){
-        	 gpioc()->clear_hpins(1 << 13);
-        	}
+        if(!strcmp(tokens[3],"s00.")){
+         gpioc()->clear_hpins(1 << 13);
         }
+        if(!strcmp(tokens[0],"s01.")){
+        	gpioc()->set_hpins(1 << 13);
+       }
+        if(!strcmp(tokens[0],"s00.")){
+        	gpioc()->clear_hpins(1 << 13);
+       }
         /***/
     }
 }

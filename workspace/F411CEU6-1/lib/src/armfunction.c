@@ -37,6 +37,7 @@ static ARM_FUNC setup_arm_func;
 static char FUNCstr[MAX_FUNCSTR_LEN];
 static uint32_t mem[4];
 static uint32_t nen[4];
+static char* function_token_default = "none\r\n";
 /*** SYSTEM ***/
 void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 
@@ -703,7 +704,7 @@ int function_StrToInt(const char string[]) {
     int result = 0;
     bool isNegative = false;
 
-    // Skip leading whitespaces
+    // Skip leading white spaces
     while (string[i] == ' ') {
         i++;
     }
@@ -766,16 +767,28 @@ void float_to_string(float value, char* buffer, size_t buffer_size) {
 }
 // Function to tokenize a string
 int function_tokenize_string(char *input, char *tokens[], int max_tokens, const char *delimiters) {
-	int count = 0;
+    int count = 0;
 
-	// Get the first token
-	char *token = strtok(input, delimiters);
-	while (token != NULL && count < max_tokens) {
-		tokens[count++] = token; // Store the pointer to the token
-		token = strtok(NULL, delimiters); // Get the next token
-	}
+    // Get the first token
+    char *token = strtok(input, delimiters);
 
-	return count; // Return the number of tokens found
+    // Loop until either max_tokens is reached or no more tokens are found
+    while (count < max_tokens) {
+        if (token != NULL) {
+            tokens[count++] = token; // Store the pointer to the token
+            token = strtok(NULL, delimiters); // Get the next token
+        } else {
+            tokens[count++] = function_token_default; // Store the default token
+            break; // Exit loop since there are no more tokens
+        }
+    }
+
+    // If we still have space, fill it with default tokens
+    while (count < max_tokens) {
+        tokens[count++] = function_token_default;
+    }
+
+    return count; // Return the number of tokens found
 }
 /******/
 // triggerA

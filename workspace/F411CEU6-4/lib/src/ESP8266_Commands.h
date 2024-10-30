@@ -14,6 +14,8 @@ Comment:
 #include <stdint.h>
 #include <inttypes.h>
 #include <stddef.h>
+
+#define TM_END 0
 /************************************************/
 /************** Basic AT Commands ***************/
 /************************************************/
@@ -119,12 +121,14 @@ const char* esp8266_cmd_ipdinfo(uint8_t mode);
 /************************************************/
 /**************** Turing Machine ****************/
 /************************************************/
+uint32_t tm_getstep( void );
+void tm_setstep( uint32_t tm_step );
 void tm_jumpstep( uint32_t from, uint32_t to );
 void Turingi0to4_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
 void Turingi5to8_Wifi_Setting( void );
 void Turingi9to15_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
 void Turingi16to18_Station_Mux1Server( void );
-void Turingi19to24_Station_Mux1ServerSend_tcp( const char * send, size_t size );
+void Turingi19to24_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
 void Turingi500to504_Machine( void );
 
 #endif
