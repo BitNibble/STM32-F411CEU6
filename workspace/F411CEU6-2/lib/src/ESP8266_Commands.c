@@ -893,7 +893,7 @@ void Turingi0to6_Wifi_Connect( uint8_t mode, const char* ssid, const char* passw
 	while( tm_par[STEP] < 7 ){
 		switch( tm_par[STEP] ) {
 			case 0:
-				tm_delay( 800 );
+				tm_delay( 200 );
 				tm_step( esp8266_cmd_version(), 2400 );
 				//tm_step( esp8266_cmd_setuart(115200, 8, 1, 0, 0), 1000 );
 				//tm_step( esp8266_cmd_setuart(38400, 8, 1, 0, 0), 1000 );
@@ -1002,13 +1002,13 @@ void Turingi18to20_Station_Mux1Server( void ) {
 void Turingi21to26_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 21:
-			tm_delaystep( 50 ); //300 or 600
+			tm_delaystep( 0 ); //50
 		break;
 		case 22:
-			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 400 ); // 400
+			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 300 ); // 400
 		break;
 		case 23:
-			tm_setstep(24);
+			tm_setstep(24); // ##  24 do not change!  ##
 			// Transmit data
 			usart1()->transmit_string(send);
 		break;
@@ -1017,9 +1017,9 @@ void Turingi21to26_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 		break;
 		case 25:
 			if( link_ID )
-				tm_step( esp8266_cmd_multipclose( link_ID ), 20 );
+				tm_step( esp8266_cmd_multipclose( link_ID ), 0 ); // 20
 			else
-				tm_delaystep( 20 ); // 20
+				tm_delaystep( 0 ); // 20
 			tm_purge();
 		break;
 		case 26:

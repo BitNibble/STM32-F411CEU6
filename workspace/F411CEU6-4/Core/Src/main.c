@@ -57,9 +57,9 @@ char* string = received;
 const char* htmlContent = "<!DOCTYPE html><html lang='en'>"
 		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
 		"<title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head>"
-		"<body><h1>Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
+		"<body><h1>Sergio Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
 		"</p></body></html>";
-const size_t htmlContent_size = 346;
+const size_t htmlContent_size = 353;
 
 void setup_usart1(void);
 
@@ -111,7 +111,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to6_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXXXXXXXX"); // wmode 1 and 3
+    Turingi0to6_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL"); // wmode 1 and 3
     tm_jumpstep( 0, 18 );
 
     while (ONE)  // Infinite loop
