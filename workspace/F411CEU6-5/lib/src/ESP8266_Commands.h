@@ -24,7 +24,8 @@ const char* esp8266_cmd_version(void);
 const char* esp8266_cmd_setgslp(uint16_t time);
 const char* esp8266_cmd_echo(uint8_t enable);
 const char* esp8266_cmd_restore(void);
-const char* esp8266_cmd_setuart(uint32_t baud, uint8_t databits, uint8_t stopbits, uint8_t parity, uint8_t control);
+const char* esp8266_cmd_setuart_cur(uint32_t baud, uint8_t databits, uint8_t stopbits, uint8_t parity, uint8_t control);
+const char* esp8266_cmd_setuart_def(uint32_t baud, uint8_t databits, uint8_t stopbits, uint8_t parity, uint8_t control);
 const char* esp8266_cmd_querysleep(void);
 const char* esp8266_cmd_setsleep(uint8_t mode);
 const char* esp8266_cmd_setrfpower(uint8_t TX_power);
@@ -36,10 +37,12 @@ const char* esp8266_cmd_rfvdd(void);
 /************************************************/
 const char* esp8266_cmd_queryparwmode(void);
 const char* esp8266_cmd_querywmode(void);
-const char* esp8266_cmd_setwmode(uint8_t mode);
+const char* esp8266_cmd_setwmode_cur(uint8_t mode);
+const char* esp8266_cmd_setwmode_def(uint8_t mode);
 // AP - Access Point (Router)
 const char* esp8266_cmd_querywjap(void); // join access point
-const char* esp8266_cmd_setwjap(const char* ssid, const char* password); // This command needs station mode enable.
+const char* esp8266_cmd_setwjap_cur(const char* ssid, const char* password); // This command needs station mode enable.
+const char* esp8266_cmd_setwjap_def(const char* ssid, const char* password); // This command needs station mode enable.
 // List Settings
 const char* esp8266_cmd_setwlapopt(uint8_t sort_enable, uint8_t mask);
 const char* esp8266_cmd_setwlap(const char* ssid);
@@ -47,21 +50,28 @@ const char* esp8266_cmd_wlap(void);
 const char* esp8266_cmd_wqap(void);
 // SAP - Soft Access Point
 const char* esp8266_cmd_querywsap(void);
-const char* esp8266_cmd_setwsap(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn);
+const char* esp8266_cmd_setwsap_cur(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn);
+const char* esp8266_cmd_setwsap_def(const char* ssid, const char* pwd, uint8_t chl, uint8_t ecn);
 const char* esp8266_cmd_wlif(void);
 const char* esp8266_cmd_querywdhcp(void);
-const char* esp8266_cmd_setwdhcp(uint8_t mode, uint8_t enable);
+const char* esp8266_cmd_setwdhcp_cur(uint8_t mode, uint8_t enable);
+const char* esp8266_cmd_setwdhcp_def(uint8_t mode, uint8_t enable);
 const char* esp8266_cmd_querywdhcps(void);
-const char* esp8266_cmd_setwdhcps(uint8_t enable, uint8_t mode, const char* start_IP, const char* end_IP);
+const char* esp8266_cmd_setwdhcps_cur(uint8_t enable, uint8_t mode, const char* start_IP, const char* end_IP);
+const char* esp8266_cmd_setwdhcps_def(uint8_t enable, uint8_t mode, const char* start_IP, const char* end_IP);
 const char* esp8266_cmd_setwautoconn(uint8_t enable);
 const char* esp8266_cmd_queryipstamac(void);
-const char* esp8266_cmd_setipstamac(const char* mac);
+const char* esp8266_cmd_setipstamac_cur(const char* mac);
+const char* esp8266_cmd_setipstamac_def(const char* mac);
 const char* esp8266_cmd_queryipapmac(void);
-const char* esp8266_cmd_setipapmac(const char* mac);
+const char* esp8266_cmd_setipapmac_cur(const char* mac);
+const char* esp8266_cmd_setipapmac_def(const char* mac);
 const char* esp8266_cmd_queryipsta(void);
-const char* esp8266_cmd_setipsta(const char* IP, const char* gateway, const char* netmask);
+const char* esp8266_cmd_setipsta_cur(const char* IP, const char* gateway, const char* netmask);
+const char* esp8266_cmd_setipsta_def(const char* IP, const char* gateway, const char* netmask);
 const char* esp8266_cmd_queryipap(void);
-const char* esp8266_cmd_setipap(const char* IP, const char* gateway, const char* netmask);
+const char* esp8266_cmd_setipap_cur(const char* IP, const char* gateway, const char* netmask);
+const char* esp8266_cmd_setipap_def(const char* IP, const char* gateway, const char* netmask);
 const char* esp8266_cmd_wstartsmart(void);
 const char* esp8266_cmd_setwstartsmart(uint8_t type); // Access point
 const char* esp8266_cmd_wstopsmart(void);
@@ -124,14 +134,15 @@ void tm_delay( uint32_t tm_delay );
 uint32_t tm_getstep( void );
 void tm_setstep( uint32_t tm_step );
 void tm_jumpstep( uint32_t from, uint32_t to );
-void Turingi0to6_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
-void Turingi7to10_Wifi_Setting( void );
-void Turingi11to17_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
-void Turingi18to20_Station_Mux1Server( void );
-void Turingi21to26_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
+void tm_connect_buf( char* connect, size_t size );
+void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
+void Turingi11to15_Wifi_Setting( void );
+void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
+void Turingi23to25_Station_Mux1Server( void );
+void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
 void Turingi500to504_Machine( void );
 
 #endif
 
-
 /*** EOF ***/
+
