@@ -959,8 +959,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 4;
 			break;
 			case 4:
-				tm_step( esp8266_cmd_setipdomain( "esp8266.local" ), 5000 ); // static IP
-				i_connect = 6;
+				tm_delaystep( 0 );
 			break;
 			case 5:
 				//tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 );
@@ -1074,7 +1073,7 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			usart1()->transmit_string(send);
 		break;
 		case 29:
-			tm_delaystep( 300 ); // 300
+			tm_delaystep( 600 ); // 300
 		break;
 		case 30:
 			if( link_ID )
