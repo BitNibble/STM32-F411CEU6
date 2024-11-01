@@ -86,6 +86,7 @@ long function_gcd_v2(long a, long b);
 int function_StrToInt (const char string[]);
 /*** 8 ***/
 int function_tokenize_string(char *input, char *tokens[], int max_tokens, const char *delimiters);
+void function_nullify_last_n_chars(char *str, int n);
 /*** 9 ***/
 uint32_t function_triggerA(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
@@ -150,6 +151,7 @@ FUNC FUNC_enable( void )
 	setup_func.strToInt = function_StrToInt;
 	// 9
 	setup_func.tokenize_string = function_tokenize_string;
+	setup_func.nullify_last_n_chars = function_nullify_last_n_chars;
 	// 10
 	setup_func.triggerA = function_triggerA;
 	setup_func.triggerB = function_triggerB;
@@ -790,6 +792,20 @@ int function_tokenize_string(char *input, char *tokens[], int max_tokens, const 
 
     return count; // Return the number of tokens found
 }
+void function_nullify_last_n_chars(char *str, int n) {
+    int length = strlen(str);
+    if (n < 0) {
+        return;
+    }
+    if (n >= length) {
+        str[0] = 0;  // Nullify the entire string
+    } else {
+        for (int i = 0; i < n; i++) {
+            str[length - 1 - i] = 0;
+        }
+    }
+}
+
 /******/
 // triggerA
 uint32_t function_triggerA(uint32_t ll_io, uint8_t pin, uint32_t counter)

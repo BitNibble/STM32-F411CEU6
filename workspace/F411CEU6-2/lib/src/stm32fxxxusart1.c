@@ -22,16 +22,18 @@ Comment:
 	#define ONE 1
 #endif
 /*** File Variable ***/
-static STM32FXXX_USART1 stm32fxxx_usart1 = {ZERO};
+static STM32FXXX_USART1 stm32fxxx_usart1 = {0};
 /******/
 // Buffer for received and transmit data
-uint8_t usart1_rx_buffer[USART1_RX_BUFFER_SIZE];
+static char usart1_rx_buffer[USART1_RX_BUFFER_SIZE] = {0};
+const uint16_t usart1_rx_buffer_size = (USART1_RX_BUFFER_SIZE - 1);
 volatile uint16_t usart1_rx_index = ZERO;
 static uint8_t usart1_flag = ZERO;
-uint8_t usart1_tx_buffer[USART1_TX_BUFFER_SIZE];
+static char usart1_tx_buffer[USART1_TX_BUFFER_SIZE] = {0};
+const uint16_t usart1_tx_buffer_size = (USART1_TX_BUFFER_SIZE - 1);
 volatile uint16_t usart1_tx_index = ZERO;
-const uint16_t usart1_rx_buffer_size = (USART1_RX_BUFFER_SIZE - ONE);
-const uint16_t usart1_tx_buffer_size = (USART1_TX_BUFFER_SIZE - ONE);
+
+
 /*** USART Procedure & Function Definition ***/
 /*** USART1 ***/
 void USART1_Clock( uint8_t state )
@@ -100,24 +102,23 @@ char USART1_ReceiveChar(void) {
 }
 void USART1_RxFlush(void) {
 	usart1_rx_index = ZERO;
-	//usart1_rx_buffer[ZERO] = ZERO;
-	//usart1_rx_buffer[ONE] = ZERO;
-	memset(usart1_rx_buffer,0,usart1_rx_buffer_size);
+	memset( usart1_rx_buffer, 0, USART1_RX_BUFFER_SIZE );
+}
+void USART1_TxFlush(void) {
+	usart1_tx_index = ZERO;
+	memset( usart1_tx_buffer, 0, USART1_TX_BUFFER_SIZE );
 }
 void USART1_TransmitString(const char *str) {
-	usart1_tx_index = ZERO;
+	USART1_TxFlush();
     // Copy the string into the transmit buffer
-    strncpy((char *)usart1_tx_buffer, str, usart1_tx_buffer_size); // Ensure tx_buffer is big enough
-    usart1_tx_buffer[usart1_tx_buffer_size] = ZERO;
+    strncpy( (char *)usart1_tx_buffer, str, usart1_tx_buffer_size ); // Ensure tx_buffer is big enough
     // Enable the TXE interrupt to start sending data
     USART1->CR1 |= USART_CR1_TXEIE;
 }
 void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
 	const uint32_t buff_size = size - ONE;
-	oneshot[buff_size] = ZERO; rx[buff_size] = ZERO;
-	if(usart1_flag) { memset(oneshot, 0, buff_size); usart1_flag = ZERO; }
-	//if(usart1_flag) { oneshot[0] = 0; usart1_flag = ZERO; }
-	char *ptr = (char*)usart1_rx_buffer;
+	if(usart1_flag) { memset(oneshot, 0, size); usart1_flag = ZERO; }
+	char *ptr = usart1_rx_buffer;
 	size_t ptr_length = strlen((char*)ptr);
 	if( ptr_length < usart1_rx_buffer_size ) {
 		size_t endl_length = strlen(endl);
@@ -138,8 +139,7 @@ void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl
 }
 void USART1_ReceiveRxString(char* rx, size_t size, const char* endl) {
 	const uint32_t buff_size = size - ONE;
-	rx[buff_size] = ZERO;
-	char *ptr = (char*)usart1_rx_buffer;
+	char *ptr = usart1_rx_buffer;
 	size_t ptr_length = strlen((char*)ptr);
 	if( ptr_length < usart1_rx_buffer_size ) {
 		size_t endl_length = strlen(endl);

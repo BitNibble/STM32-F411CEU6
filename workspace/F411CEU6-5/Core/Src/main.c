@@ -148,8 +148,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL"); // wmode 1 and 3
-    tm_connect_buf( received, buff_size );
+    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXX"); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 
     while (ONE)  // Infinite loop
@@ -161,19 +160,19 @@ int main(void)
         lcd0()->string_size(received, 20);
 
         /*** IPD || CONNECT ***/
-	   if( strstr( oneshot, "IPD,0" ) != NULL || strstr( oneshot, "0,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
 		   link_ID = 0;
-		   tm_setstep( 26 );
+		   //tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,1" ) != NULL || strstr( oneshot, "1,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
 		   link_ID = 1;
 		   tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,2" ) != NULL || strstr( oneshot, "2,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
 		   link_ID = 2;
 		   tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,3" ) != NULL || strstr( oneshot, "3,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
 		   link_ID = 3;
 		   tm_setstep( 26 );
 	   }

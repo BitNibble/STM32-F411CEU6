@@ -111,8 +111,8 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to6_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL"); // wmode 1 and 3
-    tm_jumpstep( 0, 18 );
+    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXX"); // wmode 1 and 3
+    tm_jumpstep( 0, 23 );
 
     while (ONE)  // Infinite loop
     {
@@ -126,33 +126,33 @@ int main(void)
 	   if( strstr( oneshot, "IPD,0" ) != NULL || strstr( oneshot, "0,CONNECT" ) != NULL ) {
 		   link_ID = 0;
 		   usart1()->rx_flush();
-		   tm_setstep( 21 );
+		   tm_setstep( 26 );
 	   }
 	   if( strstr( oneshot, "IPD,1" ) != NULL || strstr( oneshot, "1,CONNECT" ) != NULL ) {
 		   link_ID = 1;
 		   usart1()->rx_flush();
-		   tm_setstep( 21 );
+		   tm_setstep( 26 );
 	   }
 	   if( strstr( oneshot, "IPD,2" ) != NULL || strstr( oneshot, "2,CONNECT" ) != NULL ) {
 		   link_ID = 2;
 		   usart1()->rx_flush();
-		   tm_setstep( 21 );
+		   tm_setstep( 26 );
 	   }
 	   if( strstr( oneshot, "IPD,3" ) != NULL || strstr( oneshot, "3,CONNECT" ) != NULL ) {
 		   link_ID = 3;
 		   usart1()->rx_flush();
-		   tm_setstep( 21 );
+		   tm_setstep( 26 );
 	   }
 
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
 
-        Turingi7to10_Wifi_Setting( );
+        Turingi11to15_Wifi_Setting( );
 
-        Turingi11to17_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
+        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
 
-        Turingi18to20_Station_Mux1Server( );
+        Turingi23to25_Station_Mux1Server( );
 
-        Turingi21to26_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
+        Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
 
         Turingi500to504_Machine( );
 

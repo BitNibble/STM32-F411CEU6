@@ -81,6 +81,7 @@ typedef struct
 	long (*gcd_v2)(long a, long b);
 	/******/
 	int (*tokenize_string)(char *input, char *tokens[], int max_tokens, const char *delimiters);
+	void (*nullify_last_n_chars)(char *str, int n);
 	/******/
 	uint32_t (*triggerA)(uint32_t hllh_io, uint8_t pin, uint32_t counter);
 	uint32_t (*triggerB)(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t counter);
