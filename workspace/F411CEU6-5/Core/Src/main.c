@@ -38,12 +38,11 @@ GPIO PB9 - D7
 #include <stdlib.h>
 #include <string.h>
 
-#define JMP_menu 120
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define STEP_DELAY 100
-#define MAIN_MENU_DELAY 300
+#define STEP_DELAY 300
+#define MAIN_MENU_DELAY 600
 #define MAX_TOKENS 4
 #define BUFF_SIZE 513
 
@@ -125,7 +124,6 @@ int main(void)
     Menu.un8.b = 8;
     _UN16var adc_value;
     adc_value.un16.w = 0;
-    uint8_t count_0 = 0;
     uint8_t count_1 = ADC_DELAY;
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
@@ -207,12 +205,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 1; skip_0++;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -231,12 +226,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 2; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -255,12 +247,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 3; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -279,12 +268,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 4; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -303,12 +289,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 5; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -327,12 +310,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 6; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -351,12 +331,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                	Menu.un8.b = 7; skip_0 = 0;
                 }
-            } else {
-            	count_0 = 0;
             }
             break;
 
@@ -375,12 +352,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(STEP_DELAY)){
+                    Menu.un8.b = 8; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -412,12 +386,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                if(ftdelayCycles(MAIN_MENU_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
+                if(ftdelayCycles(MAIN_MENU_DELAY)){
+                    Menu.un8.b = 0;  skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
         }
