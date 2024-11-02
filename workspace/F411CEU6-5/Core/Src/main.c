@@ -42,6 +42,8 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
+#define STEP_DELAY 100
+#define MAIN_MENU_DELAY 300
 #define MAX_TOKENS 4
 #define BUFF_SIZE 513
 
@@ -148,7 +150,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXX"); // wmode 1 and 3
+    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 
     while (ONE)  // Infinite loop
@@ -197,6 +199,7 @@ int main(void)
             lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
                 }
@@ -204,8 +207,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(2*JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
                 }
@@ -219,6 +221,7 @@ int main(void)
             lcd0()->string_size("Set Hour", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Hour();
                     incr_0 = (incr_0 > 22) ? 0 : incr_0 + 1;
@@ -228,8 +231,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
                 }
@@ -243,6 +245,7 @@ int main(void)
             lcd0()->string_size("Set Minute", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Minute();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -252,8 +255,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
                 }
@@ -267,6 +269,7 @@ int main(void)
             lcd0()->string_size("Set Second", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Second();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -276,8 +279,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
                 }
@@ -291,6 +293,7 @@ int main(void)
             lcd0()->string_size("Set Year", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Year();
                     incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
@@ -300,8 +303,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
                 }
@@ -315,6 +317,7 @@ int main(void)
             lcd0()->string_size("Set Month", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Month();
                     incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
@@ -324,8 +327,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
                 }
@@ -339,6 +341,7 @@ int main(void)
             lcd0()->string_size("Set WeekDay", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
             	if (skip_0 > 0) { // Handle button hold logic if necessary
             		incr_0 = rtc()->get_WeekDay();
                     incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
@@ -348,8 +351,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	_delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                 	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
                 }
@@ -363,6 +365,7 @@ int main(void)
             lcd0()->string_size("Set Day", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Day();
                     incr_0 = (incr_0 > 30) ? 1 : incr_0 + 1;
@@ -372,8 +375,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
                 }
@@ -402,6 +404,7 @@ int main(void)
             }
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 < 1) { // Handle button hold logic if necessary
 
                 }
@@ -409,8 +412,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                HAL_Delay(1000);
-                count_0++;
+                if(ftdelayCycles(MAIN_MENU_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
                 }

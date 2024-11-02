@@ -15,12 +15,14 @@ Comment:
 #define SYSTICK_TICKINT (1 << 1)
 #define SYSTICK_CLKSOURCE (1 << 2)
 /******/
-static uint32_t systick_us;
-static uint32_t systick_10us;
-static uint32_t systick_100us;
-static uint32_t systick_ms;
+static uint32_t systick_us = 0;
+static uint32_t systick_10us = 0;
+static uint32_t systick_100us = 0;
+static uint32_t systick_ms = 0;
 /*** File Variables ***/
-volatile uint32_t DelayCounter_0;
+volatile uint32_t DelayCounter_0 = 0;
+static unsigned ft_Delay_Lock = 0;
+volatile unsigned int ftCounter = 0;
 /******/
 void delay_Configure(void)
 {
@@ -48,6 +50,19 @@ inline uint32_t get_systick_10us(void)
 inline uint32_t get_systick_ms(void)
 {
 	return systick_ms;
+}
+int ftdelayCycles(unsigned int n_cycle) {
+	int ret = 0;
+	if(!ft_Delay_Lock) {
+		ft_Delay_Lock = 1;
+		ftCounter = n_cycle;
+	}
+    if( ftCounter-- );else{ ft_Delay_Lock = 0; ret = 1; }
+    return ret;
+}
+void ftdelayReset(void) {
+	ft_Delay_Lock = 0;
+	ftCounter = 0;
 }
 void delayMiliseconds(unsigned int ms) {
     volatile unsigned int count = ms * get_systick_ms( );

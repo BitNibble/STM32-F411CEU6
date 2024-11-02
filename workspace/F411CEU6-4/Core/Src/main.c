@@ -42,6 +42,8 @@ GPIO PB9 - D7
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
+#define STEP_DELAY 100
+#define MAIN_MENU_DELAY 300
 #define MAX_TOKENS 4
 #define BUFF_SIZE 513
 
@@ -49,17 +51,54 @@ EXPLODE PA;
 char ADC_msg[32];
 char str[32];
 
-char oneshot[BUFF_SIZE];
-char received[BUFF_SIZE];
-const uint16_t buff_size = (BUFF_SIZE - ONE);
+char oneshot[BUFF_SIZE] = {0};
+char received[BUFF_SIZE] = {0};
+const uint32_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
 
-const char* htmlContent = "<!DOCTYPE html><html lang='en'>"
+const char* htmlContent_1 = "<!DOCTYPE html><html lang='en'>"
 		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
 		"<title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head>"
 		"<body><h1>Sergio Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
 		"</p></body></html>";
-const size_t htmlContent_size = 353;
+const size_t htmlContent_1_size = 353; //353
+
+const char* htmlContent_2 =
+	"<!DOCTYPE html>"
+	"<html lang=\"en\">"
+	"<head>"
+		"<meta charset=\"UTF-8\">"
+		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+		"<title>ESP8266 Input</title>"
+	"</head>"
+	"<body>"
+		"<h1>Send Data to ESP8266</h1>"
+		"<input type=\"text\" id=\"dataInput\" placeholder=\"Enter your data here\">"
+		"<button onclick=\"sendData()\">Send</button>"
+		"<script>"
+			"function sendData() {"
+				"const input = document.getElementById('dataInput').value;"
+				"fetch('/data', {"
+					"method: 'POST',"
+					"headers: {"
+						"'Content-Type': 'application/json',"
+					"},"
+					"body: JSON.stringify({ data: input }),"
+				"})"
+				".then(response => response.json())"
+				".then(data => {"
+					"console.log('Success:', data);"
+					"alert('Data sent successfully!');"
+				"})"
+				".catch((error) => {"
+					"console.error('Error:', error);"
+					"alert('Error sending data.');"
+				"});"
+			"}"
+		"</script>"
+	"</body>"
+	"</html>" ;
+const size_t htmlContent_2_size = 734;
 
 void setup_usart1(void);
 
@@ -111,7 +150,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "XXXXXXXXXX"); // wmode 1 and 3
+    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 
     while (ONE)  // Infinite loop
@@ -123,24 +162,20 @@ int main(void)
         lcd0()->string_size(received, 20);
 
         /*** IPD || CONNECT ***/
-	   if( strstr( oneshot, "IPD,0" ) != NULL || strstr( oneshot, "0,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
 		   link_ID = 0;
-		   usart1()->rx_flush();
-		   tm_setstep( 26 );
+		   //tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,1" ) != NULL || strstr( oneshot, "1,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
 		   link_ID = 1;
-		   usart1()->rx_flush();
 		   tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,2" ) != NULL || strstr( oneshot, "2,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
 		   link_ID = 2;
-		   usart1()->rx_flush();
 		   tm_setstep( 26 );
 	   }
-	   if( strstr( oneshot, "IPD,3" ) != NULL || strstr( oneshot, "3,CONNECT" ) != NULL ) {
+	   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
 		   link_ID = 3;
-		   usart1()->rx_flush();
 		   tm_setstep( 26 );
 	   }
 
@@ -148,11 +183,11 @@ int main(void)
 
         Turingi11to15_Wifi_Setting( );
 
-        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent, htmlContent_size );
+        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent_1, htmlContent_1_size );
 
         Turingi23to25_Station_Mux1Server( );
 
-        Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent, htmlContent_size ); // link_ID
+        Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent_2, htmlContent_2_size ); // link_ID
 
         Turingi500to504_Machine( );
 
@@ -164,6 +199,7 @@ int main(void)
             lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
                 }
@@ -171,8 +207,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(2*JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
                 }
@@ -186,6 +221,7 @@ int main(void)
             lcd0()->string_size("Set Hour", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Hour();
                     incr_0 = (incr_0 > 22) ? 0 : incr_0 + 1;
@@ -195,8 +231,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
                 }
@@ -210,6 +245,7 @@ int main(void)
             lcd0()->string_size("Set Minute", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Minute();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -219,8 +255,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
                 }
@@ -234,6 +269,7 @@ int main(void)
             lcd0()->string_size("Set Second", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Second();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -243,8 +279,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
                 }
@@ -258,6 +293,7 @@ int main(void)
             lcd0()->string_size("Set Year", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Year();
                     incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
@@ -267,8 +303,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
                 }
@@ -282,6 +317,7 @@ int main(void)
             lcd0()->string_size("Set Month", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Month();
                     incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
@@ -291,8 +327,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
                 }
@@ -306,6 +341,7 @@ int main(void)
             lcd0()->string_size("Set WeekDay", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
             	if (skip_0 > 0) { // Handle button hold logic if necessary
             		incr_0 = rtc()->get_WeekDay();
                     incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
@@ -315,8 +351,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	_delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                 	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
                 }
@@ -330,6 +365,7 @@ int main(void)
             lcd0()->string_size("Set Day", 12);
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Day();
                     incr_0 = (incr_0 > 30) ? 1 : incr_0 + 1;
@@ -339,8 +375,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                _delay_ms(JMP_menu);
-                count_0++;
+            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
                 }
@@ -369,6 +404,7 @@ int main(void)
             }
 
             if (PA.par.LH & 1) {
+            	ftdelayReset();
                 if (skip_0 < 1) { // Handle button hold logic if necessary
 
                 }
@@ -376,8 +412,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                HAL_Delay(1000);
-                count_0++;
+                if(ftdelayCycles(MAIN_MENU_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
                 }

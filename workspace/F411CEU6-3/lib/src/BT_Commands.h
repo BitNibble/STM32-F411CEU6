@@ -14,6 +14,10 @@ Comment:
 #include <stdint.h>
 #include <inttypes.h>
 
+#define WIFI_CONNECT 0
+#define START_SEVER 23
+#define SERVER_SEND 26
+
 /*****************************************************/
 /*** USER ***/
 const char* BT_AT_NAME_1(void);

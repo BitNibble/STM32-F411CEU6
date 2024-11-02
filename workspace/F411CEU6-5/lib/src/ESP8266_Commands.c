@@ -43,6 +43,8 @@ static char ESP8266[ESP8266_BUFF_SIZE] = {0};
 static uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
 
 static char* TM_COM_MAIN = ESP8266;
+static unsigned int tm_func_id = 0;
+volatile unsigned int test_counter = 0;
 
 /************************************************/
 /******************** TOOLS *********************/
@@ -218,7 +220,7 @@ const char* esp8266_cmd_setuart_def(uint32_t baud, uint8_t databits, uint8_t sto
 	// AT+UART_DEF=<baudrate>, <databits>, <stopbits>, <parity>, <flow control>
 	// Response:
 		//OK
-	return esp8266_cmd_set1ui324ui8par("UART_DEF", baud, databits, stopbits, parity, control);
+	return esp8266_cmd_set1ui324ui8par("UART", baud, databits, stopbits, parity, control);
 }
 const char* esp8266_cmd_querysleep(void) {
 	// AT+SLEEP – sleep mode
@@ -943,7 +945,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 			case 0:
 				tm_delay( 100 );
 				//tm_step( esp8266_cmd_setuart_cur(115200, 8, 1, 0, 0), 3000 );
-				tm_step( esp8266_cmd_setuart_cur(38400, 8, 1, 0, 0), 3000 );
+				tm_step( esp8266_cmd_setuart_def(38400, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 0;
 			break;
@@ -997,6 +999,15 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	tm_buffpurge();
 	lcd0()->clear();
 	tm_setstep( TM_END );
+}
+
+void func_test_1(unsigned int next){
+	unsigned int id = 1;
+	if(id == tm_func_id){ // Put your code here (remember delays are ifs)
+			printf("function %d - %d\n", test_counter, id);
+		if(test_counter){test_counter--;}else{test_counter=3;tm_func_id=next;}
+	}
+	// It only exits if different tm_func_id is passed.
 }
 
 void Turingi11to15_Wifi_Setting( void ) {
