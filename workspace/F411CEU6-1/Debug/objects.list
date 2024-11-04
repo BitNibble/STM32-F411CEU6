@@ -25,7 +25,6 @@
 "./lib/src/armlcd.o"
 "./lib/src/armsystick.o"
 "./lib/src/buffer.o"
-"./lib/src/circbuffer.o"
 "./lib/src/explode.o"
 "./lib/src/stm32fxxxadc1.o"
 "./lib/src/stm32fxxxadc2.o"
