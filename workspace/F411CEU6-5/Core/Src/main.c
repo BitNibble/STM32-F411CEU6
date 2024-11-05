@@ -356,6 +356,7 @@ int main(void)
                     Menu.un8.b = 8; skip_0 = 0;
                 }
             }
+
             break;
 
         case 8:

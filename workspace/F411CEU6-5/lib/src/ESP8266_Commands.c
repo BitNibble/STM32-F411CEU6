@@ -1068,7 +1068,7 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			tm_delaystep( 100 ); //50
 		break;
 		case 27:
-			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 600 ); // 300
+			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 400 ); // 300
 		break;
 		case 28:
 			tm_setstep(29); // ##  29 do not change!  ##
@@ -1076,15 +1076,16 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			usart1()->transmit_string(send);
 		break;
 		case 29:
-			tm_delaystep( 600 ); // 300
+			tm_delaystep( 400 ); // 300
 		break;
 		case 30:
 			if( link_ID )
 				tm_step( esp8266_cmd_multipclose( link_ID ), 0 ); // 20
 			else
-				tm_delaystep( 0 ); // 0
+				tm_delaystep( 200 ); // 0
 		break;
 		case 31:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
