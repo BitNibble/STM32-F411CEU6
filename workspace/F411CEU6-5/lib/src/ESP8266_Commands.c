@@ -919,8 +919,8 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	//ssid; WIFI NAME (string)
 	//password: WIFI PASSWORD (Router) (string)
 	unsigned int fastboot = 1;
-	const size_t str_size = 65;
-	char str[str_size];
+	char str[ESP8266AT_BUFF_SIZE] = {0};
+	const size_t str_size = ESP8266AT_BUFF_SIZE - 1;
 	uint8_t i_connect = 0;
 	if( mode == 1 || mode == 3 ) { // Filter par
 		mode &= 0x03;
