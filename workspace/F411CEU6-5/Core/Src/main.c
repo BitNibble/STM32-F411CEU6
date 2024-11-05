@@ -205,7 +205,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 1; skip_0++;
                 }
             }
@@ -226,7 +226,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 2; skip_0 = 0;
                 }
             }
@@ -247,7 +247,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 3; skip_0 = 0;
                 }
             }
@@ -268,7 +268,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 4; skip_0 = 0;
                 }
             }
@@ -289,7 +289,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 5; skip_0 = 0;
                 }
             }
@@ -310,7 +310,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 6; skip_0 = 0;
                 }
             }
@@ -331,7 +331,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                 	Menu.un8.b = 7; skip_0 = 0;
                 }
             }
@@ -352,7 +352,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){
+            	if(ftdelayCycles(1, STEP_DELAY)){
                     Menu.un8.b = 8; skip_0 = 0;
                 }
             }
@@ -386,7 +386,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                if(ftdelayCycles(MAIN_MENU_DELAY)){
+                if(ftdelayCycles(1, MAIN_MENU_DELAY)){
                     Menu.un8.b = 0;  skip_0 = 0;
                 }
             }

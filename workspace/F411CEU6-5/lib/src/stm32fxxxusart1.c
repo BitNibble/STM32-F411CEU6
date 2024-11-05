@@ -90,6 +90,7 @@ void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
 void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
 void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
 void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
+/*****************************************************************************/
 void USART1_TransmitChar(char c) {
 	USART1->CR1 &= ~USART_CR1_TXEIE;
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
