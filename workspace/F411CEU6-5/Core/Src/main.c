@@ -43,8 +43,9 @@ GPIO PB9 - D7
 #define ADC_SAMPLE 8
 #define STEP_DELAY 300
 #define MAIN_MENU_DELAY 600
-#define MAX_TOKENS 4
+#define MAX_TOKENS 10
 #define BUFF_SIZE 513
+#define MAIN_BAUD 38400
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -54,6 +55,8 @@ char oneshot[BUFF_SIZE] = {0};
 char received[BUFF_SIZE] = {0};
 const uint32_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
+char parse[1025] = {0};
+char sub_parse[513] = {0};
 
 const char* htmlContent_1 = "<!DOCTYPE html><html lang='en'>"
 		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
@@ -107,6 +110,7 @@ int main(void)
 	systick_start();
 	fpu_enable();
 
+	_delay_ms(10);
     HAL_Init();
 
     rtc_enable();
@@ -132,6 +136,7 @@ int main(void)
 
     const char unit = (char)0xDF;
     char *tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
+    char *sub_tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
 
     ARMLCD0_enable(gpiob()->instance);
 
@@ -150,34 +155,45 @@ int main(void)
 
     Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
-
+/*****************************************************************************/
+/*****************************************************************************/
     while (ONE)  // Infinite loop
     {
         PA.update(&PA.par, gpioa()->instance->IDR);
 
-        lcd0()->gotoxy(1, 0);
-        usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        lcd0()->string_size(received, 20);
+        /*** Magic ***/
+        if( !isPtrNull( usart1()->rxbuff ) ){
+        	if( ftdelayCycles( 2, 300 ) ) {
+        		strncpy( parse, usart1()->rxbuff, 1024 );
+        		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
+        		strncpy( sub_parse, tokens[0], 512 );
+        		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
+        		usart1()->rx_purge();
+        	}
+        }
+
+       lcd0()->gotoxy(0, 0); lcd0()->string_size( tokens[0], 11 ); //3
+       lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[3], 11 ); //3
 
         /*** IPD || CONNECT ***/
-	   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
-		   link_ID = 0;
-	   }
-	   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
+ 	   if( strstr( tokens[0], "0,CONNECT" ) != NULL ) {
+ 		   link_ID = 0;
+ 	   }
+	   if( strstr( tokens[0], "1,CONNECT" ) != NULL ) {
 		   link_ID = 1;
 	   }
-	   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
+	   if( strstr( tokens[0], "2,CONNECT" ) != NULL ) {
 		   link_ID = 2;
 	   }
-	   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
+	   if( strstr( tokens[0], "3,CONNECT" ) != NULL ) {
 		   link_ID = 3;
 	   }
-	   if( strstr( oneshot, "GET" ) != NULL ) {
-		   tm_setstep( 26 );
+	   if( strstr( tokens[0], "4,CONNECT" ) != NULL ) {
+		   link_ID = 4;
 	   }
-	   /******/
-
-        func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
+       if( strstr( tokens[1], "GET" ) != NULL ) {
+    	   tm_setstep( 26 );
+       }
 
         Turingi11to15_Wifi_Setting( );
 
@@ -187,14 +203,14 @@ int main(void)
 
         Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent_2, htmlContent_2_size ); // link_ID
 
-        Turingi500to504_Machine( );
+        Turingi500to505_Machine( );
 
 
         switch (Menu.nibble.n0) {
 
         case 0:
-            lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("BLE", 12);
+            //lcd0()->gotoxy(0, 0);
+            //lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
             	ftdelayReset();
@@ -360,8 +376,8 @@ int main(void)
             break;
 
         case 8:
-            lcd0()->gotoxy(0, 0);
-            lcd0()->string_size("Clock", 12);
+            lcd0()->gotoxy(0, 12);
+            //lcd0()->string_size("Clock", 12);
             count_1--;
             if (!count_1) {
                 count_1 = ADC_DELAY;
@@ -409,16 +425,18 @@ int main(void)
         lcd0()->string_size(str, 8);
 
         /***/
-        if(!strcmp(tokens[3],"s01.")){
+        if(!strcmp(sub_tokens[3],"s01.")){
         	gpioc()->set_hpins(1 << 13);
+        	usart1()->rx_flush();
         }
-        if(!strcmp(tokens[3],"s00.")){
-         gpioc()->clear_hpins(1 << 13);
+        if(!strcmp(sub_tokens[3],"s00.")){
+        	gpioc()->clear_hpins(1 << 13);
+        	usart1()->rx_flush();
         }
-        if(!strcmp(tokens[0],"s01.")){
+        if(!strcmp(sub_tokens[0],"s01.")){
         	gpioc()->set_hpins(1 << 13);
        }
-        if(!strcmp(tokens[0],"s00.")){
+        if(!strcmp(sub_tokens[0],"s00.")){
         	gpioc()->clear_hpins(1 << 13);
        }
         /***/
@@ -440,11 +458,10 @@ void setup_usart1(void){
 	// Set PA9 as push-pull output, high speed
 	gpioa()->ospeed(9,3); gpioa()->ospeed(10,3); // High speed for PA9, PA10
 	gpioa()->otype(9,0); gpioa()->otype(10,0);  // Set to push-pull
-	gpioa()->pupd(9,0); gpioa()->pupd(10,0); // No pull-up, no pull-down
+	gpioa()->pupd(9,1); gpioa()->pupd(10,1); // No pull-up, no pull-down
 
 	// Set USART1 baud rate
-	usart1()->samplingmode(0,38400);
-	//usart1()->samplingmode(0,115200);
+	usart1()->samplingmode( 0, MAIN_BAUD );
 
 	// Interrupt handler setup
 	usart1()->instance->CR1 |= USART_CR1_TXEIE;

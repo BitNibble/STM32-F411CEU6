@@ -27,6 +27,7 @@ Comment:
 #define DELAY 2
 #define TM_END 0
 #define PORT_NUMBER 80
+#define TM_BAUD 38400
 
 #define ESP8266AT_BUFF_SIZE 65
 
@@ -932,9 +933,9 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 		switch( tm_par[STEP] ) {
 			case 0:
 				tm_delay( 100 ); // 100
-				//tm_step( esp8266_cmd_setuart_cur(115200, 8, 1, 0, 0), 3000 );
-				tm_step( esp8266_cmd_setuart_def(38400, 8, 1, 0, 0), 3000 );
+				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
+				//tm_step( esp8266_cmd_restore(), 2400 );
 				i_connect = 3; // 3
 			break;
 			case 1:
@@ -1057,6 +1058,7 @@ void Turingi23to25_Station_Mux1Server( void ) {
 			tm_step( esp8266_cmd_muxipserver_tcp(1, PORT_NUMBER), 300 ); // 300
 		break;
 		case 25:
+			usart1()->rx_purge();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1085,13 +1087,12 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 				tm_delaystep( 200 ); // 0
 		break;
 		case 31:
-			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
 }
 
-void Turingi500to504_Machine( void ) {
+void Turingi500to505_Machine( void ) {
 	switch( tm_par[STEP] ) {
 		case 500:
 			tm_step( esp8266_cmd_version(), 500 ); // 500
@@ -1107,6 +1108,8 @@ void Turingi500to504_Machine( void ) {
 		break;
 		case 504:
 			tm_step( esp8266_cmd_echo(0), 200 ); // 200
+		break;
+		case 505:
 			tm_setstep( TM_END );
 		break;
 	}

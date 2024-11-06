@@ -20,6 +20,8 @@ Comment:
 // USART -> USART1
 typedef struct
 {
+	char* rxbuff;
+	char* txbuff;
 	/*** Bit Mapping ***/
 	USART_TypeDef* instance;
 	/*** Clock and Nvic ***/
@@ -36,6 +38,7 @@ typedef struct
 	void (*transmit_char)(char c);
 	char (*receive_char)(void);
 	void (*rx_flush)(void);
+	void (*rx_purge)(void);
 	void (*transmit_string)(const char *str);
 	void (*receive_string)(char* oneshot, char* rx, size_t size, const char* endl);
 	void (*receive_rxstring)(char* rx, size_t size, const char* endl);

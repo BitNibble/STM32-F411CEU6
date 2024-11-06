@@ -27,13 +27,11 @@ static STM32FXXX_USART1 stm32fxxx_usart1 = {0};
 // Buffer for received and transmit data
 static char usart1_rx_buffer[USART1_RX_BUFFER_SIZE] = {0};
 const uint16_t usart1_rx_buffer_size = (USART1_RX_BUFFER_SIZE - 1);
-volatile uint16_t usart1_rx_index = ZERO;
-static uint8_t usart1_flag = ZERO;
+uint16_t usart1_rx_index = 0;
+static uint8_t usart1_flag = 0;
 static char usart1_tx_buffer[USART1_TX_BUFFER_SIZE] = {0};
 const uint16_t usart1_tx_buffer_size = (USART1_TX_BUFFER_SIZE - 1);
-volatile uint16_t usart1_tx_index = ZERO;
-
-
+uint16_t usart1_tx_index = 0;
 /*** USART Procedure & Function Definition ***/
 /*** USART1 ***/
 void USART1_Clock( uint8_t state )
@@ -102,12 +100,17 @@ char USART1_ReceiveChar(void) {
     return (char)USART1->DR;               // Return the received character
 }
 void USART1_RxFlush(void) {
-	usart1_rx_index = ZERO;
+	usart1_rx_index = 0;
+	usart1_rx_buffer[0] = 0;
+}
+void USART1_RxPurge(void) {
+	usart1_rx_index = 0;
 	memset( usart1_rx_buffer, 0, USART1_RX_BUFFER_SIZE );
 }
 void USART1_TxFlush(void) {
-	usart1_tx_index = ZERO;
-	memset( usart1_tx_buffer, 0, USART1_TX_BUFFER_SIZE );
+	usart1_tx_index = 0;
+	usart1_tx_buffer[0] = 0;
+	//memset( usart1_tx_buffer, 0, USART1_TX_BUFFER_SIZE );
 }
 void USART1_TransmitString(const char *str) {
 	USART1_TxFlush();
@@ -178,14 +181,14 @@ void usart1_enable(void)
 	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.rx_flush = USART1_RxFlush;
+	stm32fxxx_usart1.rx_purge = USART1_RxPurge;
 	stm32fxxx_usart1.transmit_string = USART1_TransmitString;
 	stm32fxxx_usart1.receive_string = USART1_ReceiveString;
 	stm32fxxx_usart1.receive_rxstring = USART1_ReceiveRxString;
+	stm32fxxx_usart1.rxbuff = usart1_rx_buffer;
+	stm32fxxx_usart1.txbuff = usart1_tx_buffer;
 	stm32fxxx_usart1.start = USART1_start;
 	stm32fxxx_usart1.stop = USART1_stop;
-	// Inic
-	usart1_tx_buffer[usart1_tx_buffer_size] = ZERO;
-	usart1_rx_buffer[usart1_rx_buffer_size] = ZERO;
 }
 
 STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
@@ -198,9 +201,8 @@ void USART1_IRQHandler(void) {
 	if(cr1 & USART_CR1_RXNEIE) {
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if (sr & USART_SR_RXNE) {
-			uint8_t received_byte = USART1->DR;
 			if (usart1_rx_index < usart1_rx_buffer_size) {
-				usart1_rx_buffer[usart1_rx_index++] = received_byte;
+				usart1_rx_buffer[usart1_rx_index++] = USART1->DR;
 				usart1_rx_buffer[usart1_rx_index] = ZERO;
 			}
 		}
@@ -217,6 +219,7 @@ void USART1_IRQHandler(void) {
 		}
 	}
 
+	/***
 	if(cr1 & USART_CR1_TCIE) {
 		// Check if the TC (Transmission Complete) flag is set
 		if (sr & USART_SR_TC) {
@@ -271,7 +274,7 @@ void USART1_IRQHandler(void) {
 
         // Optionally reset USART or take corrective action based on error type
     }
-
+	***/
     // Wakeup from STOP mode (if enabled and used)
     //if (sr & USART_SR_WU) {
         // Clear wakeup flag by writing a 0
