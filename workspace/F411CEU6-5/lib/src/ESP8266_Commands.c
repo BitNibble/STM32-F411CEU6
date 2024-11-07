@@ -881,22 +881,25 @@ void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
 
 		usart1()->transmit_string( tm_cmd ); // Access point
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 	}
-	if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
 void tm_delay( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ){
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; }else{ tm_par[DELAY]--; }
 	}
-	if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; }else{ tm_par[DELAY]--; }
 }
 void tm_delaystep( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ){
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 	}
-	if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
 uint32_t tm_getstep( void ) {
 		return tm_par[STEP];
@@ -988,6 +991,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 		}
 	}
 	tm_atpurge();
+	usart1()->rx_flush();
 	lcd0()->clear();
 	tm_setstep( TM_END );
 }
@@ -1016,6 +1020,7 @@ void Turingi11to15_Wifi_Setting( void ) {
 			tm_step( esp8266_cmd_setwstartsmart(3), 600 ); // 600
 		break;
 		case 15:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1044,6 +1049,7 @@ void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * 
 			tm_delaystep( 0 ); // 0
 		break;
 		case 22:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1087,6 +1093,7 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 				tm_delaystep( 200 ); // 0
 		break;
 		case 31:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1110,6 +1117,7 @@ void Turingi500to505_Machine( void ) {
 			tm_step( esp8266_cmd_echo(0), 200 ); // 200
 		break;
 		case 505:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}

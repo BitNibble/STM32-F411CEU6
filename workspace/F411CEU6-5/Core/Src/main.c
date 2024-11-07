@@ -110,7 +110,7 @@ int main(void)
 	systick_start();
 	fpu_enable();
 
-	_delay_ms(10);
+	_delay_ms(1);
     HAL_Init();
 
     rtc_enable();
@@ -163,17 +163,17 @@ int main(void)
 
         /*** Magic ***/
         if( !isPtrNull( usart1()->rxbuff ) ){
-        	if( ftdelayCycles( 2, 300 ) ) {
+        	if( ftdelayCycles( 2, 250 ) ) { // 300 or more for webpages (slow)
         		strncpy( parse, usart1()->rxbuff, 1024 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
-        		strncpy( sub_parse, tokens[0], 512 );
+        		strncpy( sub_parse, tokens[0], 512 ); // 0
         		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
         		usart1()->rx_purge();
         	}
         }
 
-       lcd0()->gotoxy(0, 0); lcd0()->string_size( tokens[0], 11 ); //3
-       lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[3], 11 ); //3
+       //lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
+       //lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[1], 11 ); //3
 
         /*** IPD || CONNECT ***/
  	   if( strstr( tokens[0], "0,CONNECT" ) != NULL ) {
@@ -191,9 +191,13 @@ int main(void)
 	   if( strstr( tokens[0], "4,CONNECT" ) != NULL ) {
 		   link_ID = 4;
 	   }
-       if( strstr( tokens[1], "GET" ) != NULL ) {
+       if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
     	   tm_setstep( 26 );
        }
+       if( strstr( tokens[1], "POST" ) != NULL ) {
+    	   //lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[2], 11 ); //3
+       }
+
 
         Turingi11to15_Wifi_Setting( );
 
@@ -209,8 +213,8 @@ int main(void)
         switch (Menu.nibble.n0) {
 
         case 0:
-            //lcd0()->gotoxy(0, 0);
-            //lcd0()->string_size("BLE", 12);
+            lcd0()->gotoxy(0, 0);
+            lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
             	ftdelayReset();
@@ -376,8 +380,9 @@ int main(void)
             break;
 
         case 8:
-            lcd0()->gotoxy(0, 12);
-            //lcd0()->string_size("Clock", 12);
+        	lcd0()->gotoxy(0, 0);
+            //lcd0()->gotoxy(0, 12);
+            lcd0()->string_size("Clock", 12);
             count_1--;
             if (!count_1) {
                 count_1 = ADC_DELAY;
