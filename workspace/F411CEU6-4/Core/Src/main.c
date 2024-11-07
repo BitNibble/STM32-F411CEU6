@@ -189,7 +189,7 @@ int main(void)
 
         Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent_2, htmlContent_2_size ); // link_ID
 
-        Turingi500to504_Machine( );
+        Turingi500to505_Machine( );
 
 
         switch (Menu.nibble.n0) {
@@ -207,7 +207,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
                 }
@@ -231,7 +231,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
                 }
@@ -255,7 +255,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
                 }
@@ -279,7 +279,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
                 }
@@ -303,7 +303,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
                 }
@@ -327,7 +327,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
                 }
@@ -351,7 +351,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                 	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
                 }
@@ -375,7 +375,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(STEP_DELAY)){ count_0++; }
+            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
                 }
@@ -412,7 +412,7 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                if(ftdelayCycles(MAIN_MENU_DELAY)){ count_0++; }
+                if(ftdelayCycles(1, MAIN_MENU_DELAY)){ count_0++; }
                 if (count_0 > JMP_menu_repeat) {
                     Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
                 }

@@ -12,13 +12,14 @@ Comment:
 	#define _ARMSYSTICK_H_
 
 /*** File Library ***/
+#include <stdint.h>
 #include <inttypes.h>
 /*** Function Identity ***/
 void delay_Configure(void);
 uint32_t get_systick_us(void);
 uint32_t get_systick_10us(void);
 uint32_t get_systick_ms(void);
-int ftdelayCycles(unsigned int n_cycle);
+int ftdelayCycles(uint8_t lock_ID, unsigned int n_cycle);
 void ftdelayReset(void);
 void delayMiliseconds(unsigned int ms);
 void delayMicroseconds(unsigned int us);

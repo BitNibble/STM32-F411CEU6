@@ -10,6 +10,9 @@ Comment:
 *******************************************************************************/
 #include "armsystick.h"
 #include "stm32fxxxinstance.h"
+#include <stdio.h>
+#include <string.h>
+#define FTDELAY_SIZE 255
 /******/
 #define SYSTICK_ENABLE (1 << 0)
 #define SYSTICK_TICKINT (1 << 1)
@@ -21,8 +24,8 @@ static uint32_t systick_100us = 0;
 static uint32_t systick_ms = 0;
 /*** File Variables ***/
 volatile uint32_t DelayCounter_0 = 0;
-static unsigned ft_Delay_Lock = 0;
-volatile unsigned int ftCounter = 0;
+unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
+unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /******/
 void delay_Configure(void)
 {
@@ -51,18 +54,19 @@ inline uint32_t get_systick_ms(void)
 {
 	return systick_ms;
 }
-int ftdelayCycles(unsigned int n_cycle) {
+int ftdelayCycles( uint8_t lock_ID, unsigned int n_cycle ) {
 	int ret = 0;
-	if(!ft_Delay_Lock) {
-		ft_Delay_Lock = 1;
-		ftCounter = n_cycle;
+	if( ft_Delay_Lock[lock_ID] != lock_ID) {
+		ft_Delay_Lock[lock_ID] = lock_ID;
+		ftCounter[lock_ID] = n_cycle;
+	}else{
+		if( ftCounter[lock_ID]-- );else{ ft_Delay_Lock[lock_ID] = 0; ret = lock_ID; }
 	}
-    if( ftCounter-- );else{ ft_Delay_Lock = 0; ret = 1; }
     return ret;
 }
 void ftdelayReset(void) {
-	ft_Delay_Lock = 0;
-	ftCounter = 0;
+	memset( (unsigned int*)ft_Delay_Lock, 0, FTDELAY_SIZE*sizeof(unsigned int) );
+	memset( (unsigned int*)ftCounter, 0, FTDELAY_SIZE*sizeof(unsigned int) );
 }
 void delayMiliseconds(unsigned int ms) {
     volatile unsigned int count = ms * get_systick_ms( );

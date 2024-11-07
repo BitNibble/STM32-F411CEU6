@@ -27,9 +27,9 @@ Comment:
 #define DELAY 2
 #define TM_END 0
 #define PORT_NUMBER 80
+#define TM_BAUD 38400
 
 #define ESP8266AT_BUFF_SIZE 65
-#define ESP8266_BUFF_SIZE 513
 
 // Static buffer for command strings
 static char ESP8266AT[ESP8266AT_BUFF_SIZE] = {0};
@@ -38,11 +38,6 @@ const uint32_t esp8266at_buff_size = (ESP8266AT_BUFF_SIZE - 1);
 // Turing parameters
 static uint32_t tm_par[3] = {TM_OPEN,0,0};
 
-// Static buffer for command echo or feedback
-static char ESP8266[ESP8266_BUFF_SIZE] = {0};
-static uint32_t esp8266_buff_size = (ESP8266_BUFF_SIZE - 1);
-
-static char* TM_COM_MAIN = ESP8266;
 static unsigned int tm_func_id = 0;
 volatile unsigned int test_counter = 0;
 
@@ -877,39 +872,34 @@ const char* esp8266_cmd_mux1ipd(uint8_t ID, uint16_t length) {
 /************************************************/
 /*************** Turing Machines ****************/
 /************************************************/
-void tm_buffpurge( void ) {
-	memset( ESP8266, 0, ESP8266_BUFF_SIZE );
-}
 void tm_atpurge( void ) {
 	memset( ESP8266AT, 0, ESP8266AT_BUFF_SIZE );
 }
 void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
-	int fastboot = 1;
 	if( tm_par[FEEDBACK] != TM_LOCKED ) { // ONESHOT
 		tm_par[FEEDBACK] = TM_LOCKED;
-		tm_buffpurge();
 
 		usart1()->transmit_string( tm_cmd ); // Access point
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 	}
-
-	if( strstr( TM_COM_MAIN, "OK" ) != NULL && fastboot){
-		tm_par[DELAY] = 0; tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
-	}else if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
 void tm_delay( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ){
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; }else{ tm_par[DELAY]--; }
 	}
-	if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; }else{ tm_par[DELAY]--; }
 }
 void tm_delaystep( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ){
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
+	}else{
+		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 	}
-	if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
 }
 uint32_t tm_getstep( void ) {
 		return tm_par[STEP];
@@ -932,7 +922,9 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	//mode: 1-STATION, 2-ACCESS POINT, 3-BOTH (number)
 	//ssid; WIFI NAME (string)
 	//password: WIFI PASSWORD (Router) (string)
-	char* str_connect = ESP8266;
+	unsigned int fastboot = 1;
+	char str[ESP8266AT_BUFF_SIZE] = {0};
+	const size_t str_size = ESP8266AT_BUFF_SIZE - 1;
 	uint8_t i_connect = 0;
 	if( mode == 1 || mode == 3 ) { // Filter par
 		mode &= 0x03;
@@ -943,60 +935,63 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	while( tm_par[STEP] < 11 ){
 		switch( tm_par[STEP] ) {
 			case 0:
-				tm_delay( 100 );
-				//tm_step( esp8266_cmd_setuart_cur(115200, 8, 1, 0, 0), 3000 );
-				tm_step( esp8266_cmd_setuart_def(38400, 8, 1, 0, 0), 3000 );
+				tm_delay( 100 ); // 100
+				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
-				i_connect = 0;
+				//tm_step( esp8266_cmd_restore(), 2400 );
+				i_connect = 3; // 3
 			break;
 			case 1:
-				tm_step( esp8266_cmd_setwmode_cur(mode), 3000 );
-				i_connect = 5;
+				tm_step( esp8266_cmd_setwmode_cur(mode), 3000 ); // 3000
+				i_connect = 5; // 5
 			break;
 			case 2:
-				tm_step( esp8266_cmd_setwdhcp_cur( 1, 0 ), 3000 ); // 1 : set ESP8266 station 0 : Disable DHCP
-				i_connect = 5;
+				tm_step( esp8266_cmd_setwdhcp_cur( 1, 0 ), 3000 ); // 1 : set ESP8266 station 0 : Disable DHCP 3000
+				i_connect = 5; // 5
 			break;
 			case 3:
-				tm_step( esp8266_cmd_setipsta_cur("192.168.1.53", "192.168.1.1", "255.255.255.0"), 3000 ); // static IP
-				i_connect = 4;
+				tm_step( esp8266_cmd_setipsta_cur("192.168.1.53", "192.168.1.1", "255.255.255.0"), 3000 ); // static IP 3000
+				i_connect = 4; // 4
 			break;
 			case 4:
-				tm_delaystep( 0 );
+				tm_delaystep( 0 ); // 0
 			break;
 			case 5:
-				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 );
-				i_connect = 0;
+				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
+				i_connect = 0; // 0
 			break;
 			case 6:
-				tm_step( esp8266_cmd_querywmode(), 3000 );
-				i_connect = 19;
+				tm_step( esp8266_cmd_querywmode(), 3000 ); // 3000
+				i_connect = 20; // 20
 			break;
 			case 7:
-				tm_step( esp8266_cmd_querywdhcp(), 3000 );
-				i_connect = 20;
+				tm_step( esp8266_cmd_querywdhcp(), 3000 ); // 3000
+				i_connect = 20; // 20
 			break;
 			case 8:
-				tm_step( esp8266_cmd_querywjap(), 3000 );
-				i_connect = 19;
+				tm_step( esp8266_cmd_querywjap(), 3000 ); // 3000
+				i_connect = 19; // 19
 			break;
 			case 9:
-				tm_step( esp8266_cmd_ifsr(), 3000 );
-				i_connect = 18;
+				tm_step( esp8266_cmd_ifsr(), 3000 ); // 3000
+				i_connect = 18; // 18
 			break;
 			case 10:
 				//tm_step( esp8266_cmd_reset(), 4000 );
 				//tm_step( esp8266_cmd_restore(), 4000 );
-				tm_step( esp8266_cmd_echo(1), 3000 );
-				i_connect = 0;
+				tm_step( esp8266_cmd_echo(1), 3000 ); // 3000
+				i_connect = 0; // 0
 			break;
 		}
-		usart1()->receive_rxstring( ESP8266, esp8266_buff_size, "\r\n" );
+		usart1()->receive_rxstring( str, str_size, "\r\n" );
 		lcd0()->gotoxy( 0, 0 );
-		lcd0()->string_size( str_connect + i_connect, 20 );
+		lcd0()->string_size( str + i_connect, 20 );
+		if( strstr( str, "OK" ) != NULL && fastboot){
+			memset(str,0,str_size); tm_par[FEEDBACK] = TM_OPEN; tm_par[DELAY] = 0; tm_par[STEP]++;
+		}
 	}
 	tm_atpurge();
-	tm_buffpurge();
+	usart1()->rx_flush();
 	lcd0()->clear();
 	tm_setstep( TM_END );
 }
@@ -1013,18 +1008,19 @@ void func_test_1(unsigned int next){
 void Turingi11to15_Wifi_Setting( void ) {
 	switch( tm_par[STEP] ) {
 		case 11:
-			tm_step( esp8266_cmd_echo(1), 300 );
+			tm_step( esp8266_cmd_echo(1), 300 ); // 300
 		break;
 		case 12:
-			tm_step( esp8266_cmd_setwlapopt(1, 0x1F), 600 );
+			tm_step( esp8266_cmd_setwlapopt(1, 0x1F), 600 ); // 600
 		break;
 		case 13:
-			tm_step( esp8266_cmd_setwdhcp_def(2, 1), 600 );
+			tm_step( esp8266_cmd_setwdhcp_def(2, 1), 600 ); // 600
 		break;
 		case 14:
-			tm_step( esp8266_cmd_setwstartsmart(3), 600 );
+			tm_step( esp8266_cmd_setwstartsmart(3), 600 ); // 600
 		break;
 		case 15:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1033,10 +1029,10 @@ void Turingi11to15_Wifi_Setting( void ) {
 void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 16:
-			tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 );
+			tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 ); // 900
 		break;
 		case 17:
-			tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 1200
+			tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 600
 		break;
 		case 18:
 			tm_setstep(19); // ##  19 do not change!  ##
@@ -1047,12 +1043,13 @@ void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * 
 			tm_delaystep( 600 ); // 300
 		break;
 		case 20:
-			tm_step( esp8266_cmd_singipclose(), 0 );
+			tm_step( esp8266_cmd_singipclose(), 0 ); // 0
 		break;
 		case 21:
-			tm_delaystep( 0 );
+			tm_delaystep( 0 ); // 0
 		break;
 		case 22:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1061,12 +1058,13 @@ void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * 
 void Turingi23to25_Station_Mux1Server( void ) {
 	switch( tm_par[STEP] ) {
 		case 23:
-			tm_step( esp8266_cmd_setipmux(1), 300 );
+			tm_step( esp8266_cmd_setipmux(1), 300 ); // 300
 		break;
 		case 24:
-			tm_step( esp8266_cmd_muxipserver_tcp(1, PORT_NUMBER), 300 ); // 1200
+			tm_step( esp8266_cmd_muxipserver_tcp(1, PORT_NUMBER), 300 ); // 300
 		break;
 		case 25:
+			usart1()->rx_purge();
 			tm_setstep( TM_END );
 		break;
 	}
@@ -1078,7 +1076,7 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			tm_delaystep( 100 ); //50
 		break;
 		case 27:
-			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 600 ); // 300
+			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 400 ); // 300
 		break;
 		case 28:
 			tm_setstep(29); // ##  29 do not change!  ##
@@ -1086,36 +1084,40 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			usart1()->transmit_string(send);
 		break;
 		case 29:
-			tm_delaystep( 600 ); // 300
+			tm_delaystep( 400 ); // 300
 		break;
 		case 30:
 			if( link_ID )
 				tm_step( esp8266_cmd_multipclose( link_ID ), 0 ); // 20
 			else
-				tm_delaystep( 0 ); // 0
+				tm_delaystep( 200 ); // 0
 		break;
 		case 31:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
 }
 
-void Turingi500to504_Machine( void ) {
+void Turingi500to505_Machine( void ) {
 	switch( tm_par[STEP] ) {
 		case 500:
-			tm_step( esp8266_cmd_version(), 500 );
+			tm_step( esp8266_cmd_version(), 500 ); // 500
 		break;
 		case 501:
-			tm_step( esp8266_cmd_querywjap(), 400 );
+			tm_step( esp8266_cmd_querywjap(), 400 ); // 400
 		break;
 		case 502:
-			tm_step( esp8266_cmd_ifsr(), 500 );
+			tm_step( esp8266_cmd_ifsr(), 500 ); // 500
 		break;
 		case 503:
-			tm_step( esp8266_cmd_ping("www.google.com"), 600 );
+			tm_step( esp8266_cmd_ping("www.google.com"), 600 ); // 600
 		break;
 		case 504:
-			tm_step( esp8266_cmd_echo(0), 200 );
+			tm_step( esp8266_cmd_echo(0), 200 ); // 200
+		break;
+		case 505:
+			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
