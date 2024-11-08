@@ -1000,7 +1000,15 @@ void func_test_1(unsigned int next){
 	unsigned int id = 1;
 	if(id == tm_func_id){ // Put your code here (remember delays are ifs)
 			printf("function %d - %d\n", test_counter, id);
-		if(test_counter){test_counter--;}else{test_counter=3;tm_func_id=next;}
+		if( test_counter){ test_counter--; }else { test_counter=3; tm_func_id = next; }
+	}
+	// It only exits if different tm_func_id is passed.
+}
+
+void func_test_2(unsigned int func_ID){
+	if(func_ID == tm_func_id){ // Put your code here (remember delays are ifs)
+			printf("function %d - %d\n", test_counter, func_ID);
+		if( test_counter){ test_counter--; }else { test_counter=3; tm_func_id = 0; }
 	}
 	// It only exits if different tm_func_id is passed.
 }
@@ -1087,10 +1095,10 @@ void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			tm_delaystep( 400 ); // 300
 		break;
 		case 30:
-			if( link_ID )
+			//if( link_ID )
 				tm_step( esp8266_cmd_multipclose( link_ID ), 0 ); // 20
-			else
-				tm_delaystep( 200 ); // 0
+			//else
+				//tm_delaystep( 200 ); // 0
 		break;
 		case 31:
 			usart1()->rx_flush();

@@ -60,7 +60,7 @@ int ftdelayCycles( uint8_t lock_ID, unsigned int n_cycle ) {
 		ft_Delay_Lock[lock_ID] = lock_ID;
 		ftCounter[lock_ID] = n_cycle;
 	}else{
-		if( ftCounter[lock_ID]-- );else{ ft_Delay_Lock[lock_ID] = 0; ret = lock_ID; }
+		if( ftCounter[lock_ID]-- );else{ ft_Delay_Lock[lock_ID] = 0; ret = 1; }
 	}
     return ret;
 }

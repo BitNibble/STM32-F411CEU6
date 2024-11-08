@@ -163,7 +163,7 @@ int main(void)
 
         /*** Magic ***/
         if( !isPtrNull( usart1()->rxbuff ) ){
-        	if( ftdelayCycles( 2, 250 ) ) { // 300 or more for webpages (slow)
+        	if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
         		strncpy( parse, usart1()->rxbuff, 1024 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
         		strncpy( sub_parse, tokens[0], 512 ); // 0
@@ -192,6 +192,9 @@ int main(void)
 		   link_ID = 4;
 	   }
        if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
+    	   tm_setstep( 26 );
+       }
+       if( strstr( tokens[0], "GET / HTTP" ) != NULL ) {
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[1], "POST" ) != NULL ) {
@@ -432,11 +435,9 @@ int main(void)
         /***/
         if(!strcmp(sub_tokens[3],"s01.")){
         	gpioc()->set_hpins(1 << 13);
-        	usart1()->rx_flush();
         }
         if(!strcmp(sub_tokens[3],"s00.")){
         	gpioc()->clear_hpins(1 << 13);
-        	usart1()->rx_flush();
         }
         if(!strcmp(sub_tokens[0],"s01.")){
         	gpioc()->set_hpins(1 << 13);
