@@ -19,6 +19,16 @@ GPIO PB6 - D4
 GPIO PB7 - D5
 GPIO PB8 - D6
 GPIO PB9 - D7
+	BLE or ESP8266
+GPIOA9 and GPIOA10 usart1
+***************************************************************
+This program can run bluetooth module BLE05 or Z040, and it also can run
+ESP8266 as replacement, after reset. In ESP8266 it is a server that gives a webpage
+with two buttons, to turn on and off the gpioc13. Also the BLE does the same using the
+mobile phone application "Serial Bluetooth Terminal" the message to turn on is "s00.",
+and off "s01.". If use BLE can step down the time of reception considerably, since
+in server mode using esp8266 is quiet slow and 300 is used in the "Magic" section.
+Also "Serial WiFi Terminal" works, faster.
 ****************************************************************/
 #include "main.h"
 /******/
@@ -34,6 +44,7 @@ GPIO PB9 - D7
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
+#include "webpages.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,52 +66,8 @@ char oneshot[BUFF_SIZE] = {0};
 char received[BUFF_SIZE] = {0};
 const uint32_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
-char parse[1025] = {0};
+char parse[2049] = {0};
 char sub_parse[513] = {0};
-
-const char* htmlContent_1 = "<!DOCTYPE html><html lang='en'>"
-		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-		"<title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head>"
-		"<body><h1>Sergio Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
-		"</p></body></html>";
-const size_t htmlContent_1_size = 353; //353
-
-const char* htmlContent_2 =
-	"<!DOCTYPE html>"
-	"<html lang=\"en\">"
-	"<head>"
-		"<meta charset=\"UTF-8\">"
-		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-		"<title>ESP8266 Input</title>"
-	"</head>"
-	"<body>"
-		"<h1>Send Data to ESP8266</h1>"
-		"<input type=\"text\" id=\"dataInput\" placeholder=\"Enter your data here\">"
-		"<button onclick=\"sendData()\">Send</button>"
-		"<script>"
-			"function sendData() {"
-				"const input = document.getElementById('dataInput').value;"
-				"fetch('/data', {"
-					"method: 'POST',"
-					"headers: {"
-						"'Content-Type': 'application/json',"
-					"},"
-					"body: JSON.stringify({ data: input }),"
-				"})"
-				".then(response => response.json())"
-				".then(data => {"
-					"console.log('Success:', data);"
-					"alert('Data sent successfully!');"
-				"})"
-				".catch((error) => {"
-					"console.error('Error:', error);"
-					"alert('Error sending data.');"
-				"});"
-			"}"
-		"</script>"
-	"</body>"
-	"</html>" ;
-const size_t htmlContent_2_size = 734;
 
 void setup_usart1(void);
 
@@ -132,6 +99,8 @@ int main(void)
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
+    char* webpage_ptr = NULL;
+    size_t webpage_size = 0;
     uint8_t link_ID = 0;
 
     const char unit = (char)0xDF;
@@ -164,7 +133,7 @@ int main(void)
         /*** Magic ***/
         if( !isPtrNull( usart1()->rxbuff ) ){
         	if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
-        		strncpy( parse, usart1()->rxbuff, 1024 );
+        		strncpy( parse, usart1()->rxbuff, 2048 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
         		strncpy( sub_parse, tokens[0], 512 ); // 0
         		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
@@ -172,8 +141,8 @@ int main(void)
         	}
         }
 
-       //lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
-       //lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[1], 11 ); //3
+       lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
+       lcd0()->gotoxy(3, 0); lcd0()->string_size( tokens[1], 11 ); //3
 
         /*** IPD || CONNECT ***/
  	   if( strstr( tokens[0], "0,CONNECT" ) != NULL ) {
@@ -188,30 +157,48 @@ int main(void)
 	   if( strstr( tokens[0], "3,CONNECT" ) != NULL ) {
 		   link_ID = 3;
 	   }
-	   if( strstr( tokens[0], "4,CONNECT" ) != NULL ) {
-		   link_ID = 4;
-	   }
+       if( strstr( tokens[2], "GET / HTTP" ) != NULL ) {
+    	   webpage_ptr = webpage_4().str;
+    	   webpage_size = webpage_4().size;
+    	   tm_setstep( 26 );
+       }
        if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
+    	   webpage_ptr = webpage_4().str;
+    	   webpage_size = webpage_4().size;
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[0], "GET / HTTP" ) != NULL ) {
+    	   webpage_ptr = webpage_4().str;
+    	   webpage_size = webpage_4().size;
     	   tm_setstep( 26 );
        }
-       if( strstr( tokens[1], "POST" ) != NULL ) {
-    	   //lcd0()->gotoxy(3, 0); lcd0()->string_size( sub_tokens[2], 11 ); //3
+       // Check for "button_one_on" or "button_one_off"
+       if (strstr(tokens[1], "Button%201")) {
+           // Implement device ON functionality here
+    	   webpage_ptr = webpage_5().str;
+    	   webpage_size = webpage_5().size;
+    	   gpioc()->clear_hpins(1 << 13);
+    	   tm_setstep( 31 );
        }
-
+       if (strstr(tokens[1], "Button%202")) {
+           // Implement device OFF functionality here
+    	   webpage_ptr = webpage_5().str;
+    	   webpage_size = webpage_5().size;
+    	   gpioc()->set_hpins(1 << 13);
+    	   tm_setstep( 31 );
+       }
 
         Turingi11to15_Wifi_Setting( );
 
-        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent_1, htmlContent_1_size );
+        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_ptr , webpage_size );
 
         Turingi23to25_Station_Mux1Server( );
 
-        Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent_2, htmlContent_2_size ); // link_ID
+        Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
+
+        Turingi31to35_Station_Mux1Servereceive_tcp( link_ID, (const char*)webpage_ptr, webpage_size );
 
         Turingi500to505_Machine( );
-
 
         switch (Menu.nibble.n0) {
 

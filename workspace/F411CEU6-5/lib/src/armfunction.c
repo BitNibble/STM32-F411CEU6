@@ -780,7 +780,6 @@ int function_tokenize_string(char *input, char *tokens[], int max_tokens, const 
             tokens[count++] = token; // Store the pointer to the token
             token = strtok(NULL, delimiters); // Get the next token
         } else {
-            tokens[count++] = function_token_default; // Store the default token
             break; // Exit loop since there are no more tokens
         }
     }
