@@ -128,10 +128,200 @@ const char* htmlContent_4 =
 "</html>";
 const size_t htmlContent_4_size = 885; // 885
 
-// Send response back to client
+
 const char* htmlContent_5 =
+"<!DOCTYPE html>"
+"<html lang=\"en\">"
+"<head>"
+"<meta charset=\"UTF-8\">"
+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+"<title>ESP8266 Button Page</title>"
+"<style>"
+"body {"
+"font-family: Arial, sans-serif;"
+"text-align: center;"
+"padding: 20px;"
+"}"
+".button {"
+"font-size: 20px;"
+"padding: 15px 30px;"
+"margin: 20px;"
+"cursor: pointer;"
+"background-color: #4CAF50;"
+"color: white;"
+"border: none;"
+"border-radius: 5px;"
+"transition: background-color 0.3s;"
+"}"
+".button:disabled {"
+"background-color: #ccc;"
+"cursor: not-allowed;"
+"}"
+".button:hover {"
+"background-color: #45a049;"
+"}"
+"</style>"
+"</head>"
+"<body>"
+"<h1>Press a Button</h1>"
+"<button class=\"button\" onclick=\"sendMessage('Button 1 Pressed')\" id=\"button1\">Button 1</button>"
+"<button class=\"button\" onclick=\"sendMessage('Button 2 Pressed')\" id=\"button2\">Button 2</button>"
+"<script>"
+"function sendMessage(message) {"
+"// Disable both buttons to prevent multiple clicks"
+"document.getElementById('button1').disabled = true;"
+"document.getElementById('button2').disabled = true;"
+"fetch(`/send?message=${message}`)"
+".then(response => {"
+"console.log('Message sent:', message);"
+"// Re-enable buttons after successful response"
+"document.getElementById('button1').disabled = false;"
+"document.getElementById('button2').disabled = false;"
+"})"
+".catch(error => {"
+"console.error('Error sending message:', error);"
+"// Re-enable buttons even if there is an error"
+"document.getElementById('button1').disabled = false;"
+"document.getElementById('button2').disabled = false;"
+"});"
+"}"
+"</script>"
+"</body>"
+"</html>";
+const size_t htmlContent_5_size = 1335; // 1335
+
+const char* htmlContent_6 =
+"<!DOCTYPE html>"
+"<html lang=\"en\">"
+"<head>"
+"<meta charset=\"UTF-8\">"
+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+"<title>ESP8266 Button Page</title>"
+"<style>"
+"body {"
+"font-family: Arial, sans-serif;"
+"text-align: center;"
+"padding: 20px;"
+"}"
+".button {"
+"font-size: 20px;"
+"padding: 15px 30px;"
+"margin: 20px;"
+"cursor: pointer;"
+"background-color: #4CAF50;"
+"color: white;"
+"border: none;"
+"border-radius: 5px;"
+"transition: background-color 0.3s;"
+"}"
+".button:disabled {"
+"background-color: #ccc;"
+"cursor: not-allowed;"
+"}"
+".button:hover:not(:disabled) {"
+"background-color: #45a049;"
+"}"
+"</style>"
+"</head>"
+"<body>"
+"<h1>Press a Button</h1>"
+"<button class=\"button\" onclick=\"sendMessage('Button 1 Pressed', 'button1')\" id=\"button1\">Button 1</button>"
+"<button class=\"button\" onclick=\"sendMessage('Button 2 Pressed', 'button2')\" id=\"button2\">Button 2</button>"
+"<script>"
+"function sendMessage(message, buttonId) {"
+"const button = document.getElementById(buttonId);"
+"button.disabled = true;"
+"fetch(`/send?message=${encodeURIComponent(message)}`)"
+".then(response => {"
+"if (response.ok) {"
+"console.log(\"Message sent:\", message);"
+"} else {"
+"console.error(\"Server error:\", response.status);"
+"}"
+"button.disabled = false;"
+"})"
+".catch(error => {"
+"console.error(\"Network error:\", error);"
+"button.disabled = false;"
+"});"
+"}"
+"</script>"
+"</body>"
+"</html>";
+const size_t htmlContent_6_size = 1233; // 1233
+
+const char* htmlContent_7 =
+"<!DOCTYPE html>"
+"<html lang=\"en\">"
+"<head>"
+"<meta charset=\"UTF-8\">"
+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+"<title>ESP8266 Button Page</title>"
+"<style>"
+"body {"
+"font-family: Arial, sans-serif;"
+"text-align: center;"
+"padding: 20px;"
+"}"
+".button {"
+"font-size: 20px;"
+"padding: 15px 30px;"
+"margin: 20px;"
+"cursor: pointer;"
+"background-color: #4CAF50;"
+"color: white;"
+"border: none;"
+"border-radius: 5px;"
+"transition: background-color 0.3s;"
+"}"
+".button:disabled {"
+"background-color: #ccc;"
+"cursor: not-allowed;"
+"}"
+".button:hover:not(:disabled) {"
+"background-color: #45a049;"
+"}"
+"</style>"
+"</head>"
+"<body>"
+"<h1>Press a Button</h1>"
+"<button class=\"button\" onclick=\"sendMessage('Button 1 Pressed', 'button1')\" id=\"button1\">Button 1</button>"
+"<button class=\"button\" onclick=\"sendMessage('Button 2 Pressed', 'button2')\" id=\"button2\">Button 2</button>"
+"<script>"
+"let requestInProgress = false;"
+"function sendMessage(message, buttonId) {"
+"if (requestInProgress) {"
+"console.log(\"Request in progress, ignoring button press:\", message);"
+"return;"
+"}"
+"requestInProgress = true;"
+"const button = document.getElementById(buttonId);"
+"button.disabled = true;"
+"fetch(`/send?message=${encodeURIComponent(message)}`)"
+".then(response => {"
+"if (response.ok) {"
+"console.log(\"Message sent:\", message);"
+"} else {"
+"console.error(\"Server error:\", response.status);"
+"}"
+"button.disabled = false;"
+"requestInProgress = false;"
+"})"
+".catch(error => {"
+"console.error(\"Network error:\", error);"
+"button.disabled = false;"
+"requestInProgress = false;"
+"});"
+"}"
+"</script>"
+"</body>"
+"</html>";
+const size_t htmlContent_7_size = 1441; // 1441
+
+// Send response back to client
+const char* htmlContent_200 =
 "HTTP/1.1 200 OK";
-const size_t htmlContent_5_size = 15; // 15
+const size_t htmlContent_200_size = 15; // 15
 
 web_page webpage_1(void)
 {
@@ -170,6 +360,30 @@ web_page webpage_5(void)
 	web_page page;
 	page.str = (char*)htmlContent_5;
 	page.size = htmlContent_5_size;
+	return page;
+}
+
+web_page webpage_6(void)
+{
+	web_page page;
+	page.str = (char*)htmlContent_6;
+	page.size = htmlContent_6_size;
+	return page;
+}
+
+web_page webpage_7(void)
+{
+	web_page page;
+	page.str = (char*)htmlContent_7;
+	page.size = htmlContent_7_size;
+	return page;
+}
+
+web_page webpage_200(void)
+{
+	web_page page;
+	page.str = (char*)htmlContent_200;
+	page.size = htmlContent_200_size;
 	return page;
 }
 

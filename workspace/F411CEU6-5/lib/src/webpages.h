@@ -14,7 +14,10 @@ web_page webpage_2(void);
 web_page webpage_3(void);
 web_page webpage_4(void);
 web_page webpage_5(void);
-web_page reply(void);
+web_page webpage_6(void);
+web_page webpage_7(void);
+
+web_page webpage_200(void);
 
 #endif
 

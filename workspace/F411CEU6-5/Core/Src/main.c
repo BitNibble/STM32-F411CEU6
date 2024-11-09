@@ -158,32 +158,32 @@ int main(void)
 		   link_ID = 3;
 	   }
        if( strstr( tokens[2], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_4().str;
-    	   webpage_size = webpage_4().size;
+    	   webpage_ptr = webpage_7().str;
+    	   webpage_size = webpage_7().size;
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_4().str;
-    	   webpage_size = webpage_4().size;
+    	   webpage_ptr = webpage_7().str;
+    	   webpage_size = webpage_7().size;
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[0], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_4().str;
-    	   webpage_size = webpage_4().size;
+    	   webpage_ptr = webpage_7().str;
+    	   webpage_size = webpage_7().size;
     	   tm_setstep( 26 );
        }
        // Check for "button_one_on" or "button_one_off"
        if (strstr(tokens[1], "Button%201")) {
            // Implement device ON functionality here
-    	   webpage_ptr = webpage_5().str;
-    	   webpage_size = webpage_5().size;
+    	   webpage_ptr = webpage_200().str;
+    	   webpage_size = webpage_200().size;
     	   gpioc()->clear_hpins(1 << 13);
     	   tm_setstep( 31 );
        }
        if (strstr(tokens[1], "Button%202")) {
            // Implement device OFF functionality here
-    	   webpage_ptr = webpage_5().str;
-    	   webpage_size = webpage_5().size;
+    	   webpage_ptr = webpage_200().str;
+    	   webpage_size = webpage_200().size;
     	   gpioc()->set_hpins(1 << 13);
     	   tm_setstep( 31 );
        }
