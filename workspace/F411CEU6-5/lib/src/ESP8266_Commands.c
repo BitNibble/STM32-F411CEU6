@@ -938,7 +938,6 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				tm_delay( 100 ); // 100
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
-				//tm_step( esp8266_cmd_restore(), 2400 );
 				i_connect = 3; // 3
 			break;
 			case 1:
@@ -954,7 +953,8 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 4; // 4
 			break;
 			case 4:
-				tm_delaystep( 0 ); // 0
+				//tm_delaystep( 0 ); // 0
+				tm_setstep(10);
 			break;
 			case 5:
 				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
@@ -979,7 +979,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 			case 10:
 				//tm_step( esp8266_cmd_reset(), 4000 );
 				//tm_step( esp8266_cmd_restore(), 4000 );
-				tm_step( esp8266_cmd_echo(1), 3000 ); // 3000
+				tm_step( esp8266_cmd_echo(0), 3000 ); // 3000
 				i_connect = 0; // 0
 			break;
 		}

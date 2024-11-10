@@ -64,9 +64,9 @@ int ftdelayCycles( uint8_t lock_ID, unsigned int n_cycle ) {
 	}
     return ret;
 }
-void ftdelayReset(void) {
-	memset( (unsigned int*)ft_Delay_Lock, 0, FTDELAY_SIZE*sizeof(unsigned int) );
-	memset( (unsigned int*)ftCounter, 0, FTDELAY_SIZE*sizeof(unsigned int) );
+void ftdelayReset(uint8_t ID) {
+	ft_Delay_Lock[ID] = 0;
+	ftCounter[ID] = 0;
 }
 void delayMiliseconds(unsigned int ms) {
     volatile unsigned int count = ms * get_systick_ms( );

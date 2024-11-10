@@ -142,7 +142,7 @@ int main(void)
         }
 
        lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
-       lcd0()->gotoxy(3, 0); lcd0()->string_size( tokens[1], 11 ); //3
+       //lcd0()->gotoxy(3, 0); lcd0()->string_size( tokens[1], 11 ); //3
 
         /*** IPD || CONNECT ***/
  	   if( strstr( tokens[0], "0,CONNECT" ) != NULL ) {
@@ -207,7 +207,7 @@ int main(void)
             lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
                 }
@@ -226,7 +226,7 @@ int main(void)
             lcd0()->string_size("Set Hour", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Hour();
                     incr_0 = (incr_0 > 22) ? 0 : incr_0 + 1;
@@ -247,7 +247,7 @@ int main(void)
             lcd0()->string_size("Set Minute", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Minute();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -268,7 +268,7 @@ int main(void)
             lcd0()->string_size("Set Second", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Second();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -289,7 +289,7 @@ int main(void)
             lcd0()->string_size("Set Year", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Year();
                     incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
@@ -310,7 +310,7 @@ int main(void)
             lcd0()->string_size("Set Month", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Month();
                     incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
@@ -331,7 +331,7 @@ int main(void)
             lcd0()->string_size("Set WeekDay", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
             	if (skip_0 > 0) { // Handle button hold logic if necessary
             		incr_0 = rtc()->get_WeekDay();
                     incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
@@ -352,7 +352,7 @@ int main(void)
             lcd0()->string_size("Set Day", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Day();
                     incr_0 = (incr_0 > 30) ? 1 : incr_0 + 1;
@@ -390,7 +390,7 @@ int main(void)
             }
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 < 1) { // Handle button hold logic if necessary
 
                 }

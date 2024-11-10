@@ -37,7 +37,7 @@ static ARM_FUNC setup_arm_func;
 static char FUNCstr[MAX_FUNCSTR_LEN];
 static uint32_t mem[4];
 static uint32_t nen[4];
-static char* function_token_default = "none\r\n";
+static char* function_token_default = ":";
 /*** SYSTEM ***/
 void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 
