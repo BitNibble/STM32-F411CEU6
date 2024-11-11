@@ -119,23 +119,25 @@ int main(void)
         usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
         lcd0()->string_size(received, 20);
 
-        /*** IPD || CONNECT ***/
-	   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
-		   link_ID = 0;
-		   //tm_setstep( 26 );
-	   }
-	   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
-		   link_ID = 1;
-		   tm_setstep( 26 );
-	   }
-	   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
-		   link_ID = 2;
-		   tm_setstep( 26 );
-	   }
-	   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
-		   link_ID = 3;
-		   tm_setstep( 26 );
-	   }
+        if (!tm_getstep()) { // avoid simultaneous calls
+			/*** IPD || CONNECT ***/
+		   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
+			   link_ID = 0;
+			   //tm_setstep( 26 );
+		   }
+		   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
+			   link_ID = 1;
+			   tm_setstep( 26 );
+		   }
+		   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
+			   link_ID = 2;
+			   tm_setstep( 26 );
+		   }
+		   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
+			   link_ID = 3;
+			   tm_setstep( 26 );
+		   }
+       }
 
         func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
 

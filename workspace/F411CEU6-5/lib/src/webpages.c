@@ -91,32 +91,33 @@ const char* htmlContent_3 =
 "let requestInProgress = false;"
 "function sendMessage(message, buttonId) {"
 "if (requestInProgress) {"
-"console.log(\"Request in progress, ignoring button press:\", message);"
+"console.log('Request already in progress, ignoring button press:', message);"
 "return;"
 "}"
 "requestInProgress = true;"
 "const button = document.getElementById(buttonId);"
 "button.disabled = true;"
-"fetch(`/send?message=${encodeURIComponent(message)}`)"
-".then(response => {"
-"if (response.ok) {"
-"console.log(\"Message sent:\", message);"
+"console.log('Sending message:', message);"
+"var xhr = new XMLHttpRequest();"
+"xhr.open('GET', '/send?message=' + encodeURIComponent(message), true);"
+"xhr.onreadystatechange = function() {"
+"if (xhr.readyState === 4) {"
+"button.disabled = false;"
+"requestInProgress = false;"
+"if (xhr.status === 200) {"
+"console.log('Message sent:', message);"
 "} else {"
-"console.error(\"Server error:\", response.status);"
+"console.error('Server error:', xhr.status);"
+"alert('Server error. Please try again.');"
 "}"
-"button.disabled = false;"
-"requestInProgress = false;"
-"})"
-".catch(error => {"
-"console.error(\"Network error:\", error);"
-"button.disabled = false;"
-"requestInProgress = false;"
-"});"
+"}"
+"};"
+"xhr.send();"
 "}"
 "</script>"
 "</body>"
 "</html>";
-const size_t htmlContent_3_size = 1441; // 1441
+const size_t htmlContent_3_size = 1528; // 1528
 
 // Send response back to client
 const char* htmlContent_200 =
@@ -139,7 +140,7 @@ web_page webpage_2(void)
 	return page;
 }
 
-web_page webpage_3(void)
+web_page webpage_3(void) // to remove
 {
 	web_page page;
 	page.str = (char*)htmlContent_3;

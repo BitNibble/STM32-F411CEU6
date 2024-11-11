@@ -144,48 +144,40 @@ int main(void)
        lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
        //lcd0()->gotoxy(3, 0); lcd0()->string_size( tokens[1], 11 ); //3
 
-        /*** IPD || CONNECT ***/
- 	   if( strstr( tokens[0], "0,CONNECT" ) != NULL ) {
- 		   link_ID = 0;
- 	   }
-	   if( strstr( tokens[0], "1,CONNECT" ) != NULL ) {
-		   link_ID = 1;
-	   }
-	   if( strstr( tokens[0], "2,CONNECT" ) != NULL ) {
-		   link_ID = 2;
-	   }
-	   if( strstr( tokens[0], "3,CONNECT" ) != NULL ) {
-		   link_ID = 3;
-	   }
-       if( strstr( tokens[2], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_3().str;
-    	   webpage_size = webpage_3().size;
-    	   tm_setstep( 26 );
-       }
-       if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_3().str;
-    	   webpage_size = webpage_3().size;
-    	   tm_setstep( 26 );
-       }
-       if( strstr( tokens[0], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_3().str;
-    	   webpage_size = webpage_3().size;
-    	   tm_setstep( 26 );
-       }
-       // Check for "button_one_on" or "button_one_off"
-       if (strstr(tokens[1], "Button%201")) {
-           // Implement device ON functionality here
-    	   webpage_ptr = webpage_200().str;
-    	   webpage_size = webpage_200().size;
-    	   gpioc()->clear_hpins(1 << 13);
-    	   tm_setstep( 31 );
-       }
-       if (strstr(tokens[1], "Button%202")) {
-           // Implement device OFF functionality here
-    	   webpage_ptr = webpage_200().str;
-    	   webpage_size = webpage_200().size;
-    	   gpioc()->set_hpins(1 << 13);
-    	   tm_setstep( 31 );
+       if (!tm_getstep()) { // avoid simultaneous calls
+           /*** IPD || CONNECT ***/
+           for (int i = 0; i < 4; i++) {
+               char connectStr[10];
+               sprintf(connectStr, "%d,CONNECT", i);
+               if (strstr(tokens[0], connectStr) != NULL) {
+                   link_ID = i;
+                   break;
+               }
+           }
+
+           // Check for "GET / HTTP" in tokens[0], tokens[1], or tokens[2]
+           if (strstr(tokens[0], "GET / HTTP") != NULL ||
+               strstr(tokens[1], "GET / HTTP") != NULL ||
+               strstr(tokens[2], "GET / HTTP") != NULL) {
+               webpage_ptr = webpage_3().str;
+               webpage_size = webpage_3().size;
+               tm_setstep(26);
+           }
+           // Check for "Button%201" or "Button%202" in tokens[1]
+           else if (strstr(tokens[1], "Button%201")) {
+               // Implement device ON functionality here
+               webpage_ptr = webpage_200().str;
+               webpage_size = webpage_200().size;
+               gpioc()->clear_hpins(1 << 13);
+               tm_setstep(31);
+           }
+           else if (strstr(tokens[1], "Button%202")) {
+               // Implement device OFF functionality here
+               webpage_ptr = webpage_200().str;
+               webpage_size = webpage_200().size;
+               gpioc()->set_hpins(1 << 13);
+               tm_setstep(31);
+           }
        }
 
         Turingi11to15_Wifi_Setting( );
