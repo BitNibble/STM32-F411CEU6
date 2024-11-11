@@ -36,7 +36,7 @@ static char ESP8266AT[ESP8266AT_BUFF_SIZE] = {0};
 const uint32_t esp8266at_buff_size = (ESP8266AT_BUFF_SIZE - 1);
 
 // Turing parameters
-static uint32_t tm_par[3] = {TM_OPEN,0,0};
+static uint32_t tm_par[3] = {TM_OPEN,1,0};
 
 static unsigned int tm_func_id = 0;
 volatile unsigned int test_counter = 0;
@@ -918,10 +918,11 @@ void tm_jumpstep( uint32_t from, uint32_t to ) {
 }
 /************************************************/
 /************************************************/
-void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* password ) {
+void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* password ) {
 	//mode: 1-STATION, 2-ACCESS POINT, 3-BOTH (number)
 	//ssid; WIFI NAME (string)
 	//password: WIFI PASSWORD (Router) (string)
+	tm_par[STEP] = 1; tm_par[DELAY] = 0;
 	unsigned int fastboot = 1;
 	char str[ESP8266AT_BUFF_SIZE] = {0};
 	const size_t str_size = ESP8266AT_BUFF_SIZE - 1;
@@ -932,51 +933,51 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 		(void)i_connect;
 		return;
 	}
-	while( tm_par[STEP] < 11 ){
+	while( tm_par[STEP] < 12 ){
 		switch( tm_par[STEP] ) {
-			case 0:
+			case 1:
 				tm_delay( 100 ); // 100
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 3; // 3
 			break;
-			case 1:
+			case 2:
 				tm_step( esp8266_cmd_setwmode_cur(mode), 3000 ); // 3000
 				i_connect = 5; // 5
 			break;
-			case 2:
+			case 3:
 				tm_step( esp8266_cmd_setwdhcp_cur( 1, 0 ), 3000 ); // 1 : set ESP8266 station 0 : Disable DHCP 3000
 				i_connect = 5; // 5
 			break;
-			case 3:
+			case 4:
 				tm_step( esp8266_cmd_setipsta_cur("192.168.1.53", "192.168.1.1", "255.255.255.0"), 3000 ); // static IP 3000
 				i_connect = 4; // 4
 			break;
-			case 4:
-				//tm_delaystep( 0 ); // 0
-				tm_setstep(10);
-			break;
 			case 5:
+				//tm_delaystep( 0 ); // 0
+				tm_setstep(11);
+			break;
+			case 6:
 				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
 				i_connect = 0; // 0
 			break;
-			case 6:
+			case 7:
 				tm_step( esp8266_cmd_querywmode(), 3000 ); // 3000
 				i_connect = 20; // 20
 			break;
-			case 7:
+			case 8:
 				tm_step( esp8266_cmd_querywdhcp(), 3000 ); // 3000
 				i_connect = 20; // 20
 			break;
-			case 8:
+			case 9:
 				tm_step( esp8266_cmd_querywjap(), 3000 ); // 3000
 				i_connect = 19; // 19
 			break;
-			case 9:
+			case 10:
 				tm_step( esp8266_cmd_ifsr(), 3000 ); // 3000
 				i_connect = 18; // 18
 			break;
-			case 10:
+			case 11:
 				//tm_step( esp8266_cmd_reset(), 4000 );
 				//tm_step( esp8266_cmd_restore(), 4000 );
 				tm_step( esp8266_cmd_echo(0), 3000 ); // 3000
@@ -1013,57 +1014,54 @@ void func_test_2(unsigned int func_ID){
 	// It only exits if different tm_func_id is passed.
 }
 
-void Turingi11to15_Wifi_Setting( void ) {
+void Turingi12to16_Wifi_Setting( void ) {
 	switch( tm_par[STEP] ) {
-		case 11:
+		case 12:
 			tm_step( esp8266_cmd_echo(1), 300 ); // 300
 		break;
-		case 12:
+		case 13:
 			tm_step( esp8266_cmd_setwlapopt(1, 0x1F), 600 ); // 600
 		break;
-		case 13:
+		case 14:
 			tm_step( esp8266_cmd_setwdhcp_def(2, 1), 600 ); // 600
 		break;
-		case 14:
+		case 15:
 			tm_step( esp8266_cmd_setwstartsmart(3), 600 ); // 600
 		break;
-		case 15:
+		case 16:
 			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;
 	}
 }
 /****/
-void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
+void Turingi17to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
-		case 16:
+		case 17:
 			if( server != NULL ) {
 				tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 ); // 900
 			}else
 				tm_setstep( 22 ); // ##  22 do not change!  ##
 		break;
-		case 17:
+		case 18:
 			if( size > 0 ) {
 				tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 600
 			}else
-				tm_setstep( 20 ); // ##  20 do not change!  ##
+				tm_setstep( 21 ); // ##  20 do not change!  ##
 		break;
-		case 18:
+		case 19:
 			if( send != NULL ) {
 			// Transmit data
 			tm_setstep(19); // ##  19 do not change!  ##
 			usart1()->transmit_string(send);
 			}else
-				tm_setstep( 20 ); // ##  20 do not change!  ##
-		break;
-		case 19:
-			tm_delaystep( 300 ); // 300
+				tm_setstep( 21 ); // ##  20 do not change!  ##
 		break;
 		case 20:
-			tm_step( esp8266_cmd_singipclose(), 0 ); // 0
+			tm_delaystep( 300 ); // 300
 		break;
 		case 21:
-			tm_delaystep( 0 ); // 0
+			tm_step( esp8266_cmd_singipclose(), 0 ); // 0
 		break;
 		case 22:
 			usart1()->rx_flush();

@@ -122,7 +122,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
+    Turingi1to11_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 /*****************************************************************************/
 /*****************************************************************************/
@@ -180,9 +180,9 @@ int main(void)
            }
        }
 
-        Turingi11to15_Wifi_Setting( );
+        Turingi12to16_Wifi_Setting( );
 
-        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_ptr , webpage_size );
+        Turingi17to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_ptr , webpage_size );
 
         Turingi23to25_Station_Mux1Server( );
 
