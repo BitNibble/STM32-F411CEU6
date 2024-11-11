@@ -37,7 +37,7 @@ static ARM_FUNC setup_arm_func;
 static char FUNCstr[MAX_FUNCSTR_LEN];
 static uint32_t mem[4];
 static uint32_t nen[4];
-static char* function_token_default = "none\r\n";
+static char* function_token_default = ":";
 /*** SYSTEM ***/
 void ARMFUNC_ArmParDisplay4x20(ARMLCD0* func_lcd);
 
@@ -780,7 +780,6 @@ int function_tokenize_string(char *input, char *tokens[], int max_tokens, const 
             tokens[count++] = token; // Store the pointer to the token
             token = strtok(NULL, delimiters); // Get the next token
         } else {
-            tokens[count++] = function_token_default; // Store the default token
             break; // Exit loop since there are no more tokens
         }
     }

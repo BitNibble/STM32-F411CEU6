@@ -34,9 +34,11 @@ GPIO PB9 - D7
 #include "armlcd.h"
 #include "armfunction.h"
 #include "explode.h"
+#include "webpages.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 #define JMP_menu 120
 #define JMP_menu_repeat 5
@@ -55,50 +57,6 @@ char oneshot[BUFF_SIZE] = {0};
 char received[BUFF_SIZE] = {0};
 const uint32_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
-
-const char* htmlContent_1 = "<!DOCTYPE html><html lang='en'>"
-		"<head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-		"<title>ESP8266 Example</title><style>body { font-family: Arial, sans-serif; } h1 { color: #333; }</style></head>"
-		"<body><h1>Sergio Welcome to ESP8266 PHP Page!</h1><p>This is a simple HTML page served by PHP."
-		"</p></body></html>";
-const size_t htmlContent_1_size = 353; //353
-
-const char* htmlContent_2 =
-	"<!DOCTYPE html>"
-	"<html lang=\"en\">"
-	"<head>"
-		"<meta charset=\"UTF-8\">"
-		"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-		"<title>ESP8266 Input</title>"
-	"</head>"
-	"<body>"
-		"<h1>Send Data to ESP8266</h1>"
-		"<input type=\"text\" id=\"dataInput\" placeholder=\"Enter your data here\">"
-		"<button onclick=\"sendData()\">Send</button>"
-		"<script>"
-			"function sendData() {"
-				"const input = document.getElementById('dataInput').value;"
-				"fetch('/data', {"
-					"method: 'POST',"
-					"headers: {"
-						"'Content-Type': 'application/json',"
-					"},"
-					"body: JSON.stringify({ data: input }),"
-				"})"
-				".then(response => response.json())"
-				".then(data => {"
-					"console.log('Success:', data);"
-					"alert('Data sent successfully!');"
-				"})"
-				".catch((error) => {"
-					"console.error('Error:', error);"
-					"alert('Error sending data.');"
-				"});"
-			"}"
-		"</script>"
-	"</body>"
-	"</html>" ;
-const size_t htmlContent_2_size = 734;
 
 void setup_usart1(void);
 
@@ -183,11 +141,11 @@ int main(void)
 
         Turingi11to15_Wifi_Setting( );
 
-        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", htmlContent_1, htmlContent_1_size );
+        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_1().str, webpage_1().size );
 
         Turingi23to25_Station_Mux1Server( );
 
-        Turingi26to31_Station_Mux1ServerSend_tcp( link_ID, htmlContent_2, htmlContent_2_size ); // link_ID
+        Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, webpage_2().str, webpage_2().size ); // link_ID
 
         Turingi500to505_Machine( );
 
@@ -199,7 +157,7 @@ int main(void)
             lcd0()->string_size("BLE", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
 
                 }
@@ -221,7 +179,7 @@ int main(void)
             lcd0()->string_size("Set Hour", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Hour();
                     incr_0 = (incr_0 > 22) ? 0 : incr_0 + 1;
@@ -245,7 +203,7 @@ int main(void)
             lcd0()->string_size("Set Minute", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Minute();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -269,7 +227,7 @@ int main(void)
             lcd0()->string_size("Set Second", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Second();
                     incr_0 = (incr_0 > 58) ? 0 : incr_0 + 1;
@@ -293,7 +251,7 @@ int main(void)
             lcd0()->string_size("Set Year", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Year();
                     incr_0 = (incr_0 > 98) ? 0 : incr_0 + 1;
@@ -317,7 +275,7 @@ int main(void)
             lcd0()->string_size("Set Month", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Month();
                     incr_0 = (incr_0 > 11) ? 1 : incr_0 + 1;
@@ -341,7 +299,7 @@ int main(void)
             lcd0()->string_size("Set WeekDay", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
             	if (skip_0 > 0) { // Handle button hold logic if necessary
             		incr_0 = rtc()->get_WeekDay();
                     incr_0 = (incr_0 > 6) ? 1 : incr_0 + 1;
@@ -365,7 +323,7 @@ int main(void)
             lcd0()->string_size("Set Day", 12);
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 > 0) { // Handle button hold logic if necessary
                     incr_0 = rtc()->get_Day();
                     incr_0 = (incr_0 > 30) ? 1 : incr_0 + 1;
@@ -404,7 +362,7 @@ int main(void)
             }
 
             if (PA.par.LH & 1) {
-            	ftdelayReset();
+            	ftdelayReset(1);
                 if (skip_0 < 1) { // Handle button hold logic if necessary
 
                 }

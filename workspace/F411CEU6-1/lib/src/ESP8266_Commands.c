@@ -938,7 +938,6 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				tm_delay( 100 ); // 100
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
-				//tm_step( esp8266_cmd_restore(), 2400 );
 				i_connect = 3; // 3
 			break;
 			case 1:
@@ -954,7 +953,8 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 4; // 4
 			break;
 			case 4:
-				tm_delaystep( 0 ); // 0
+				//tm_delaystep( 0 ); // 0
+				tm_setstep(10);
 			break;
 			case 5:
 				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
@@ -979,7 +979,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 			case 10:
 				//tm_step( esp8266_cmd_reset(), 4000 );
 				//tm_step( esp8266_cmd_restore(), 4000 );
-				tm_step( esp8266_cmd_echo(1), 3000 ); // 3000
+				tm_step( esp8266_cmd_echo(0), 3000 ); // 3000
 				i_connect = 0; // 0
 			break;
 		}
@@ -991,7 +991,7 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 		}
 	}
 	tm_atpurge();
-	usart1()->rx_flush();
+	usart1()->rx_purge();
 	lcd0()->clear();
 	tm_setstep( TM_END );
 }
@@ -1000,7 +1000,15 @@ void func_test_1(unsigned int next){
 	unsigned int id = 1;
 	if(id == tm_func_id){ // Put your code here (remember delays are ifs)
 			printf("function %d - %d\n", test_counter, id);
-		if(test_counter){test_counter--;}else{test_counter=3;tm_func_id=next;}
+		if( test_counter){ test_counter--; }else { test_counter=3; tm_func_id = next; }
+	}
+	// It only exits if different tm_func_id is passed.
+}
+
+void func_test_2(unsigned int func_ID){
+	if(func_ID == tm_func_id){ // Put your code here (remember delays are ifs)
+			printf("function %d - %d\n", test_counter, func_ID);
+		if( test_counter){ test_counter--; }else { test_counter=3; tm_func_id = 0; }
 	}
 	// It only exits if different tm_func_id is passed.
 }
@@ -1025,7 +1033,7 @@ void Turingi11to15_Wifi_Setting( void ) {
 		break;
 	}
 }
-
+/****/
 void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 16:
@@ -1035,8 +1043,8 @@ void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * 
 			tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 600
 		break;
 		case 18:
-			tm_setstep(19); // ##  19 do not change!  ##
 			// Transmit data
+			tm_setstep(19); // ##  19 do not change!  ##
 			usart1()->transmit_string(send);
 		break;
 		case 19:
@@ -1054,7 +1062,7 @@ void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * 
 		break;
 	}
 }
-
+/****/
 void Turingi23to25_Station_Mux1Server( void ) {
 	switch( tm_par[STEP] ) {
 		case 23:
@@ -1070,29 +1078,58 @@ void Turingi23to25_Station_Mux1Server( void ) {
 	}
 }
 
-void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size ) {
+void Turingi26to30_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 26:
-			tm_delaystep( 100 ); //50
+			if( link_ID < 4 && size > 0 )
+				tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 300 ); // 300
+			else
+				tm_setstep( 30 ); // ##  30 do not change!  ##
 		break;
 		case 27:
-			tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 400 ); // 300
+			// Transmit data
+			if(send != NULL){
+				tm_setstep(28); // ##  28 do not change!  ##
+				usart1()->transmit_string(send);
+			}else
+				tm_setstep( 29 ); // ##  29 do not change!  ##
 		break;
 		case 28:
-			tm_setstep(29); // ##  29 do not change!  ##
-			// Transmit data
-			usart1()->transmit_string(send);
+			tm_delaystep( 300 ); // 300
 		break;
 		case 29:
-			tm_delaystep( 400 ); // 300
+			tm_step( esp8266_cmd_multipclose( link_ID ), 2 ); // 20
 		break;
 		case 30:
-			if( link_ID )
-				tm_step( esp8266_cmd_multipclose( link_ID ), 0 ); // 20
-			else
-				tm_delaystep( 200 ); // 0
+			usart1()->rx_flush();
+			tm_setstep( TM_END );
 		break;
+	}
+}
+
+void Turingi31to35_Station_Mux1Servereceive_tcp( uint8_t link_ID, const char * send, size_t size ) {
+	switch( tm_par[STEP] ) {
 		case 31:
+			if( link_ID < 4 && size > 0 )
+				tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 300 ); // 300
+			else
+				tm_setstep( 35 ); // ##  35 do not change!  ##
+		break;
+		case 32:
+			// Transmit data
+			if( send != NULL ) {
+				tm_setstep(33); // ##  33 do not change!  ##
+				usart1()->transmit_string(send);
+			}else
+				tm_setstep( 34 ); // ##  33 do not change!  ##
+		break;
+		case 33:
+			tm_delaystep( 300 ); // 300
+		break;
+		case 34:
+			tm_step( esp8266_cmd_multipclose( link_ID ), 2 ); // 20
+		break;
+		case 35:
 			usart1()->rx_flush();
 			tm_setstep( TM_END );
 		break;

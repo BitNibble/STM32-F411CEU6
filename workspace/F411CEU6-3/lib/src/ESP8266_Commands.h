@@ -138,7 +138,8 @@ void Turingi0to10_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 void Turingi11to15_Wifi_Setting( void );
 void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
 void Turingi23to25_Station_Mux1Server( void );
-void Turingi26to31_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
+void Turingi26to30_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
+void Turingi31to35_Station_Mux1Servereceive_tcp( uint8_t link_ID, const char * send, size_t size );
 void Turingi500to505_Machine( void );
 
 #endif
