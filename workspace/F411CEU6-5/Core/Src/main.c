@@ -158,18 +158,18 @@ int main(void)
 		   link_ID = 3;
 	   }
        if( strstr( tokens[2], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_7().str;
-    	   webpage_size = webpage_7().size;
+    	   webpage_ptr = webpage_3().str;
+    	   webpage_size = webpage_3().size;
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[1], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_7().str;
-    	   webpage_size = webpage_7().size;
+    	   webpage_ptr = webpage_3().str;
+    	   webpage_size = webpage_3().size;
     	   tm_setstep( 26 );
        }
        if( strstr( tokens[0], "GET / HTTP" ) != NULL ) {
-    	   webpage_ptr = webpage_7().str;
-    	   webpage_size = webpage_7().size;
+    	   webpage_ptr = webpage_3().str;
+    	   webpage_size = webpage_3().size;
     	   tm_setstep( 26 );
        }
        // Check for "button_one_on" or "button_one_off"
