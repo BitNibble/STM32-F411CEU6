@@ -19,6 +19,16 @@ GPIO PB6 - D4
 GPIO PB7 - D5
 GPIO PB8 - D6
 GPIO PB9 - D7
+	BLE or ESP8266
+GPIOA9 and GPIOA10 usart1
+***************************************************************
+This program can run bluetooth module BLE05 or Z040, and it also can run
+ESP8266 as replacement, after reset. In ESP8266 it is a server that gives a webpage
+with two buttons, to turn on and off the gpioc13. Also the BLE does the same using the
+mobile phone application "Serial Bluetooth Terminal" the message to turn on is "s00.",
+and off "s01.". If use BLE can step down the time of reception considerably, since
+in server mode using esp8266 is quiet slow and 300 is used in the "Magic" section.
+Also "Serial WiFi Terminal" works, faster.
 ****************************************************************/
 #include "main.h"
 /******/
@@ -39,15 +49,14 @@ GPIO PB9 - D7
 #include <stdlib.h>
 #include <string.h>
 
-
-#define JMP_menu 120
 #define JMP_menu_repeat 5
 #define ADC_DELAY 20
 #define ADC_SAMPLE 8
-#define STEP_DELAY 100
-#define MAIN_MENU_DELAY 300
-#define MAX_TOKENS 4
+#define STEP_DELAY 300
+#define MAIN_MENU_DELAY 600
+#define MAX_TOKENS 10
 #define BUFF_SIZE 513
+#define MAIN_BAUD 38400
 
 EXPLODE PA;
 char ADC_msg[32];
@@ -57,6 +66,8 @@ char oneshot[BUFF_SIZE] = {0};
 char received[BUFF_SIZE] = {0};
 const uint32_t buff_size = (BUFF_SIZE - ONE);
 char* string = received;
+char parse[2049] = {0};
+char sub_parse[513] = {0};
 
 void setup_usart1(void);
 
@@ -66,6 +77,7 @@ int main(void)
 	systick_start();
 	fpu_enable();
 
+	_delay_ms(1);
     HAL_Init();
 
     rtc_enable();
@@ -83,15 +95,17 @@ int main(void)
     Menu.un8.b = 8;
     _UN16var adc_value;
     adc_value.un16.w = 0;
-    uint8_t count_0 = 0;
     uint8_t count_1 = ADC_DELAY;
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
     uint8_t skip_0 = 0;
+    char* webpage_ptr = NULL;
+    size_t webpage_size = 0;
     uint8_t link_ID = 0;
 
     const char unit = (char)0xDF;
     char *tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
+    char *sub_tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
 
     ARMLCD0_enable(gpiob()->instance);
 
@@ -110,47 +124,73 @@ int main(void)
 
     Turingi0to10_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
-
+/*****************************************************************************/
+/*****************************************************************************/
     while (ONE)  // Infinite loop
     {
         PA.update(&PA.par, gpioa()->instance->IDR);
 
-        lcd0()->gotoxy(1, 0);
-        usart1()->receive_string(oneshot, received, BUFF_SIZE, "\r\n");
-        lcd0()->string_size(received, 20);
+        /*** Magic ***/
+        if( !isPtrNull( usart1()->rxbuff ) ){
+        	if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
+        		strncpy( parse, usart1()->rxbuff, 2048 );
+        		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
+        		strncpy( sub_parse, tokens[0], 512 ); // 0
+        		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
+        		usart1()->rx_purge();
+        	}
+        }
 
-        if (!tm_getstep()) { // avoid simultaneous calls
-			/*** IPD || CONNECT ***/
-		   if( strstr( oneshot, "0,CONNECT" ) != NULL ) {
-			   link_ID = 0;
-			   //tm_setstep( 26 );
-		   }
-		   if( strstr( oneshot, "1,CONNECT" ) != NULL ) {
-			   link_ID = 1;
-			   tm_setstep( 26 );
-		   }
-		   if( strstr( oneshot, "2,CONNECT" ) != NULL ) {
-			   link_ID = 2;
-			   tm_setstep( 26 );
-		   }
-		   if( strstr( oneshot, "3,CONNECT" ) != NULL ) {
-			   link_ID = 3;
-			   tm_setstep( 26 );
-		   }
+       lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
+       //lcd0()->gotoxy(3, 0); lcd0()->string_size( tokens[1], 11 ); //3
+
+       if (!tm_getstep()) { // avoid simultaneous calls
+           /*** IPD || CONNECT ***/
+           for (int i = 0; i < 4; i++) {
+               char connectStr[10];
+               sprintf(connectStr, "%d,CONNECT", i);
+               if (strstr(tokens[0], connectStr) != NULL) {
+                   link_ID = i;
+                   break;
+               }
+           }
+           // Check for "GET / HTTP" in tokens[0], tokens[1], or tokens[2], or tokens[3]
+           if (strstr(tokens[0], "GET / HTTP") != NULL ||
+               strstr(tokens[1], "GET / HTTP") != NULL ||
+			   strstr(tokens[2], "GET / HTTP") != NULL ||
+               strstr(tokens[3], "GET / HTTP") != NULL) {
+               webpage_ptr = webpage_3().str;
+               webpage_size = webpage_3().size;
+               tm_setstep(26);
+           }
+           // Check for "Button%201" or "Button%202" in tokens[1]
+           else if (strstr(tokens[1], "Button%201")) {
+               // Implement device ON functionality here
+               webpage_ptr = webpage_200().str;
+               webpage_size = webpage_200().size;
+               gpioc()->clear_hpins(1 << 13);
+               tm_setstep(31);
+           }
+           else if (strstr(tokens[1], "Button%202")) {
+               // Implement device OFF functionality here
+               webpage_ptr = webpage_200().str;
+               webpage_size = webpage_200().size;
+               gpioc()->set_hpins(1 << 13);
+               tm_setstep(31);
+           }
        }
-
-        func()->tokenize_string(oneshot, tokens, MAX_TOKENS, ",:");
 
         Turingi11to15_Wifi_Setting( );
 
-        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_1().str, webpage_1().size );
+        Turingi16to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_ptr , webpage_size );
 
         Turingi23to25_Station_Mux1Server( );
 
-        Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, webpage_2().str, webpage_2().size ); // link_ID
+        Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
+
+        Turingi31to35_Station_Mux1Servereceive_tcp( link_ID, (const char*)webpage_ptr, webpage_size );
 
         Turingi500to505_Machine( );
-
 
         switch (Menu.nibble.n0) {
 
@@ -167,12 +207,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 1; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 1; skip_0++;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -191,12 +228,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) { // Jump menu
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 2; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 2; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -215,12 +249,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 3; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 3; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -239,12 +270,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 4; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 4; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -263,12 +291,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 5; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 5; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -287,12 +312,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 6; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 6; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
 
@@ -311,12 +333,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                	Menu.un8.b = 7; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                	Menu.un8.b = 7; skip_0 = 0;
                 }
-            } else {
-            	count_0 = 0;
             }
             break;
 
@@ -335,17 +354,16 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-            	if(ftdelayCycles(1, STEP_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 8; count_0 = 0; skip_0 = 0;
+            	if(ftdelayCycles(1, STEP_DELAY)){
+                    Menu.un8.b = 8; skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
+
             break;
 
         case 8:
-            lcd0()->gotoxy(0, 0);
+        	lcd0()->gotoxy(0, 0);
+            //lcd0()->gotoxy(0, 12);
             lcd0()->string_size("Clock", 12);
             count_1--;
             if (!count_1) {
@@ -372,12 +390,9 @@ int main(void)
             }
 
             if (PA.par.LL & 1) {
-                if(ftdelayCycles(1, MAIN_MENU_DELAY)){ count_0++; }
-                if (count_0 > JMP_menu_repeat) {
-                    Menu.un8.b = 0; count_0 = 0; skip_0 = 0;
+                if(ftdelayCycles(1, MAIN_MENU_DELAY)){
+                    Menu.un8.b = 0;  skip_0 = 0;
                 }
-            } else {
-                count_0 = 0;
             }
             break;
         }
@@ -397,16 +412,16 @@ int main(void)
         lcd0()->string_size(str, 8);
 
         /***/
-        if(!strcmp(tokens[3],"s01.")){
+        if(!strcmp(sub_tokens[3],"s01.")){
         	gpioc()->set_hpins(1 << 13);
         }
-        if(!strcmp(tokens[3],"s00.")){
-         gpioc()->clear_hpins(1 << 13);
+        if(!strcmp(sub_tokens[3],"s00.")){
+        	gpioc()->clear_hpins(1 << 13);
         }
-        if(!strcmp(tokens[0],"s01.")){
+        if(!strcmp(sub_tokens[0],"s01.")){
         	gpioc()->set_hpins(1 << 13);
        }
-        if(!strcmp(tokens[0],"s00.")){
+        if(!strcmp(sub_tokens[0],"s00.")){
         	gpioc()->clear_hpins(1 << 13);
        }
         /***/
@@ -428,11 +443,10 @@ void setup_usart1(void){
 	// Set PA9 as push-pull output, high speed
 	gpioa()->ospeed(9,3); gpioa()->ospeed(10,3); // High speed for PA9, PA10
 	gpioa()->otype(9,0); gpioa()->otype(10,0);  // Set to push-pull
-	gpioa()->pupd(9,0); gpioa()->pupd(10,0); // No pull-up, no pull-down
+	gpioa()->pupd(9,1); gpioa()->pupd(10,1); // No pull-up, no pull-down
 
 	// Set USART1 baud rate
-	usart1()->samplingmode(0,38400);
-	//usart1()->samplingmode(0,115200);
+	usart1()->samplingmode( 0, MAIN_BAUD );
 
 	// Interrupt handler setup
 	usart1()->instance->CR1 |= USART_CR1_TXEIE;

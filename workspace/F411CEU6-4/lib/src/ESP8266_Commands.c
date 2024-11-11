@@ -1037,18 +1037,27 @@ void Turingi11to15_Wifi_Setting( void ) {
 void Turingi16to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size ) {
 	switch( tm_par[STEP] ) {
 		case 16:
-			tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 ); // 900
+			if( server != NULL ) {
+				tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 ); // 900
+			}else
+				tm_setstep( 22 ); // ##  22 do not change!  ##
 		break;
 		case 17:
-			tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 600
+			if( size > 0 ) {
+				tm_step( esp8266_cmd_mux0ipsend_tcp(size), 600 ); // 600
+			}else
+				tm_setstep( 20 ); // ##  20 do not change!  ##
 		break;
 		case 18:
+			if( send != NULL ) {
 			// Transmit data
 			tm_setstep(19); // ##  19 do not change!  ##
 			usart1()->transmit_string(send);
+			}else
+				tm_setstep( 20 ); // ##  20 do not change!  ##
 		break;
 		case 19:
-			tm_delaystep( 600 ); // 300
+			tm_delaystep( 300 ); // 300
 		break;
 		case 20:
 			tm_step( esp8266_cmd_singipclose(), 0 ); // 0
