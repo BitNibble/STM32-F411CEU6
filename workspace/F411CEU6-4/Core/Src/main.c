@@ -122,7 +122,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi1to11_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
+    Turingi1to11_Wifi_Connect(1, "xxxxxxxx", "xxxxxxxx" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 /*****************************************************************************/
 /*****************************************************************************/

@@ -881,31 +881,37 @@ void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
 
 		usart1()->transmit_string( tm_cmd ); // Access point
 		tm_par[DELAY] = tm_delay; // wait com
-	}else{
-		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+	}else if( !tm_par[DELAY] ) {
+		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
+	}else {
+		tm_par[DELAY]--;
 	}
 }
 void tm_delay( uint32_t tm_delay ) {
-	if( tm_par[FEEDBACK] != TM_LOCKED ){
+	if( tm_par[FEEDBACK] != TM_LOCKED ) {
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
-	}else{
-		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; }else{ tm_par[DELAY]--; }
+	}else if( !tm_par[DELAY] ) {
+		tm_par[FEEDBACK] = TM_OPEN;
+	}else {
+		tm_par[DELAY]--;
 	}
 }
 void tm_delaystep( uint32_t tm_delay ) {
-	if( tm_par[FEEDBACK] != TM_LOCKED ){
+	if( tm_par[FEEDBACK] != TM_LOCKED ) {
 		tm_par[FEEDBACK] = TM_LOCKED;
 		tm_par[DELAY] = tm_delay; // wait com
-	}else{
-		if( !tm_par[DELAY] ){ tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++; }else{ tm_par[DELAY]--; }
+	}else if( !tm_par[DELAY] ) {
+		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
+	}else {
+		tm_par[DELAY]--;
 	}
 }
 uint32_t tm_getstep( void ) {
 		return tm_par[STEP];
 }
 void tm_setstep( uint32_t tm_step ) {
-	if( !tm_par[FEEDBACK] ){
+	if( !tm_par[FEEDBACK] ) {
 		tm_par[STEP] = tm_step;
 	}
 }
