@@ -52,7 +52,7 @@ inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint3
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	if(bit_n < DWORD_BITS &&  size_block != 0 && bit_n + size_block <= DWORD_BITS) {
+	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
 		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		reg = (reg & (mask << bit_n)) >> bit_n;
 	}
@@ -61,7 +61,7 @@ uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
 	uint32_t value = *reg;
-	if(bit_n < DWORD_BITS &&  size_block != 0 && bit_n + size_block <= DWORD_BITS) {
+	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
 		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		data &= mask; value &= ~(mask << bit_n);
 		data = (data << bit_n);
@@ -71,7 +71,7 @@ void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, 
 }
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n < DWORD_BITS &&  size_block != 0 && bit_n + size_block <= DWORD_BITS) {
+	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
 		uint32_t mask = (uint32_t)((1U << size_block) - 1);
 		data &= mask;
 		*reg &= ~(mask << bit_n);
