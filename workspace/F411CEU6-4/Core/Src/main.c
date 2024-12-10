@@ -92,9 +92,9 @@ int main(void)
     PA = EXPLODE_enable();
 
     _UN8var Menu;
-    Menu.un8.b = 8;
+    Menu.un8 = 8;
     _UN16var adc_value;
-    adc_value.un16.w = 0;
+    adc_value.un16 = 0;
     uint8_t count_1 = ADC_DELAY;
     uint8_t n_sample = ADC_SAMPLE;
     uint16_t incr_0 = 0;
@@ -208,7 +208,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 1; skip_0++;
+                    Menu.un8 = 1; skip_0++;
                 }
             }
             break;
@@ -229,7 +229,7 @@ int main(void)
 
             if (PA.par.LL & 1) { // Jump menu
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 2; skip_0 = 0;
+                    Menu.un8 = 2; skip_0 = 0;
                 }
             }
             break;
@@ -250,7 +250,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 3; skip_0 = 0;
+                    Menu.un8 = 3; skip_0 = 0;
                 }
             }
             break;
@@ -271,7 +271,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 4; skip_0 = 0;
+                    Menu.un8 = 4; skip_0 = 0;
                 }
             }
             break;
@@ -292,7 +292,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 5; skip_0 = 0;
+                    Menu.un8 = 5; skip_0 = 0;
                 }
             }
             break;
@@ -313,7 +313,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 6; skip_0 = 0;
+                    Menu.un8 = 6; skip_0 = 0;
                 }
             }
             break;
@@ -334,7 +334,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                	Menu.un8.b = 7; skip_0 = 0;
+                	Menu.un8 = 7; skip_0 = 0;
                 }
             }
             break;
@@ -355,7 +355,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
             	if(ftdelayCycles(1, STEP_DELAY)){
-                    Menu.un8.b = 8; skip_0 = 0;
+                    Menu.un8 = 8; skip_0 = 0;
                 }
             }
 
@@ -370,14 +370,14 @@ int main(void)
                 count_1 = ADC_DELAY;
                 if (n_sample) {
                     n_sample--;
-                    adc_value.un16.w += adc1()->readtemperature();
+                    adc_value.un16 += adc1()->readtemperature();
                 } else {
                     n_sample = ADC_SAMPLE;
-                    adc_value.un16.w /= ADC_SAMPLE;  // Ensure proper averaging
+                    adc_value.un16 /= ADC_SAMPLE;  // Ensure proper averaging
                     //temperature = CalculateTemperature(adc_value);
-                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value.un16.w), unit);
+                    snprintf(str, 8, "%.1f %cC", CalculateTemperature(adc_value.un16), unit);
                     lcd0()->string_size(str, 8);
-                    adc_value.un16.w = 0;  // Reset adc_value after use
+                    adc_value.un16 = 0;  // Reset adc_value after use
                 }
             }
 
@@ -391,7 +391,7 @@ int main(void)
 
             if (PA.par.LL & 1) {
                 if(ftdelayCycles(1, MAIN_MENU_DELAY)){
-                    Menu.un8.b = 0;  skip_0 = 0;
+                    Menu.un8 = 0;  skip_0 = 0;
                 }
             }
             break;

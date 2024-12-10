@@ -61,36 +61,28 @@ typedef union{
 		uint8_t n0:4;
 		uint8_t n1:4;
 	}nibble;
-	struct UN8{
-		uint8_t b;
-	}un8;
+	uint8_t un8;
 }_UN8var;
 typedef union{
 	struct UN16byte{
 		uint8_t b0;
 		uint8_t b1;
 	}byte;
-	struct UN16{
-		uint16_t w;
-	}un16;
+	uint16_t un16;
 }_UN16var;
 typedef union{
 	struct UN32word{
 		uint16_t w0;
 		uint16_t w1;
 	}word;
-	struct UN32{
-		uint32_t dw;
-	}un32;
+	uint32_t un32;
 }_UN32var;
 typedef union{
 	struct UN64dword{
 		uint32_t dw0;
 		uint32_t dw1;
 	}dword;
-	struct UN64{
-		uint64_t qw;
-	}un64;
+	uint64_t un64;
 }_UN64var;
 /****************************************/
 /*** Tools ***/
