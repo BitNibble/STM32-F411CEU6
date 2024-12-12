@@ -47,7 +47,6 @@
 "./lib/src/stm32fxxxtim2to5.o"
 "./lib/src/stm32fxxxtim6and7.o"
 "./lib/src/stm32fxxxtim9to14.o"
-"./lib/src/stm32fxxxusart.o"
 "./lib/src/stm32fxxxusart1.o"
 "./lib/src/stm32fxxxusart2.o"
 "./lib/src/stm32fxxxusart6.o"
