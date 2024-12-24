@@ -29,6 +29,7 @@ mobile phone application "Serial Bluetooth Terminal" the message to turn on is "
 and off "s01.". If use BLE can step down the time of reception considerably, since
 in server mode using esp8266 is quiet slow and 300 is used in the "Magic" section.
 Also "Serial WiFi Terminal" works, faster.
+Par ("192.168.1.53", "192.168.1.1", "255.255.255.0").
 ****************************************************************/
 #include "main.h"
 /******/
