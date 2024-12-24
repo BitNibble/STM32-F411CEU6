@@ -122,7 +122,7 @@ int main(void)
 
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
-    Turingi1to11_Wifi_Connect(1, "xxxxxxxx", "xxxxxxxx" ); // wmode 1 and 3
+    Turingi1to11_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
     tm_jumpstep( 0, 23 );
 /*****************************************************************************/
 /*****************************************************************************/
@@ -169,14 +169,14 @@ int main(void)
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
                gpioc()->clear_hpins(1 << 13);
-               tm_setstep(31);
+               tm_setstep(26);
            }
            else if (strstr(tokens[1], "Button%202")) {
                // Implement device OFF functionality here
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
                gpioc()->set_hpins(1 << 13);
-               tm_setstep(31);
+               tm_setstep(26);
            }
        }
 
@@ -187,8 +187,6 @@ int main(void)
         Turingi23to25_Station_Mux1Server( );
 
         Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
-
-        Turingi31to35_Station_Mux1Servereceive_tcp( link_ID, (const char*)webpage_ptr, webpage_size );
 
         Turingi500to505_Machine( );
 

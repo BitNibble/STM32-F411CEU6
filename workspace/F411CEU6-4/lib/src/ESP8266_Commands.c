@@ -1120,35 +1120,6 @@ void Turingi26to30_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 	}
 }
 
-void Turingi31to35_Station_Mux1Servereceive_tcp( uint8_t link_ID, const char * send, size_t size ) {
-	switch( tm_par[STEP] ) {
-		case 31:
-			if( link_ID < 4 && size > 0 )
-				tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 300 ); // 300
-			else
-				tm_setstep( 35 ); // ##  35 do not change!  ##
-		break;
-		case 32:
-			// Transmit data
-			if( send != NULL ) {
-				tm_setstep(33); // ##  33 do not change!  ##
-				usart1()->transmit_string(send);
-			}else
-				tm_setstep( 34 ); // ##  33 do not change!  ##
-		break;
-		case 33:
-			tm_delaystep( 300 ); // 300
-		break;
-		case 34:
-			tm_step( esp8266_cmd_multipclose( link_ID ), 2 ); // 20
-		break;
-		case 35:
-			usart1()->rx_flush();
-			tm_setstep( TM_END );
-		break;
-	}
-}
-
 void Turingi500to505_Machine( void ) {
 	switch( tm_par[STEP] ) {
 		case 500:
