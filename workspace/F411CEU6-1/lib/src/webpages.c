@@ -120,9 +120,14 @@ const char* htmlContent_3 =
 const size_t htmlContent_3_size = 1528; // 1528
 
 // Send response back to client
-const char* htmlContent_200 =
+const char* htmlContent_200_v1 =
 "HTTP/1.1 200 OK";
-const size_t htmlContent_200_size = 15; // 15
+const size_t htmlContent_200_v1_size = 15; // 15
+
+// Send response back to client
+const char* htmlContent_200_v2 =
+"HTTP 200 OK";
+const size_t htmlContent_200_v2_size = 11; // 11
 
 web_page webpage_1(void)
 {
@@ -151,8 +156,8 @@ web_page webpage_3(void) // to remove
 web_page webpage_200(void)
 {
 	web_page page;
-	page.str = (char*)htmlContent_200;
-	page.size = htmlContent_200_size;
+	page.str = (char*)htmlContent_200_v2;
+	page.size = htmlContent_200_v2_size;
 	return page;
 }
 

@@ -137,6 +137,9 @@ float CalculateTemperature(uint16_t adc_value);
 void Usart_WordLength( USART_TypeDef* usart, uint8_t wordlength );
 void Usart_StopBits( USART_TypeDef* usart, double stopbits );
 void Usart_SamplingMode( USART_TypeDef* usart, uint8_t samplingmode, uint32_t baudrate);
+/*** Fall Threw Delay ***/
+int ftdelayCycles(uint8_t lock_ID, unsigned int n_cycle);
+void ftdelayReset(uint8_t ID);
 /****************************************/
 /***
 TypeDef -> Instance -> Handler

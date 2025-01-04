@@ -19,6 +19,9 @@ Comment:
 #define WORD_BITS 16
 #define DWORD_BITS 32
 #define QWORD_BITS 64
+#define FTDELAY_SIZE 255
+unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
+unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /****************************************/
 /*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
@@ -445,6 +448,21 @@ void Usart_SamplingMode(USART_TypeDef* usart, uint8_t samplingmode, uint32_t bau
     uint32_t fraction = (sampling == 16) ? round(fracpart * 16) : round(fracpart * 8);
     usart->BRR |= (uint32_t) fraction; // Set DIV_Fraction
     usart->BRR |= ((uint32_t) intpart << 4); // Set DIV_Mantissa[11:0]
+}
+/*** Fall Threw Delay ***/
+int ftdelayCycles( uint8_t lock_ID, unsigned int n_cycle ) {
+	int ret = 0;
+	if( ft_Delay_Lock[lock_ID] != lock_ID) {
+		ft_Delay_Lock[lock_ID] = lock_ID;
+		ftCounter[lock_ID] = n_cycle;
+	}else{
+		if( ftCounter[lock_ID]-- );else{ ft_Delay_Lock[lock_ID] = 0; ret = 1; }
+	}
+    return ret;
+}
+void ftdelayReset(uint8_t ID) {
+	ft_Delay_Lock[ID] = 0;
+	ftCounter[ID] = 0;
 }
 /****************************************/
 /***

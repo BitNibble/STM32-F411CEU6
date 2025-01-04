@@ -12,7 +12,6 @@ Comment:
 #include "stm32fxxxinstance.h"
 #include <stdio.h>
 #include <string.h>
-#define FTDELAY_SIZE 255
 /******/
 #define SYSTICK_ENABLE (1 << 0)
 #define SYSTICK_TICKINT (1 << 1)
@@ -22,10 +21,7 @@ static uint32_t systick_us = 0;
 static uint32_t systick_10us = 0;
 static uint32_t systick_100us = 0;
 static uint32_t systick_ms = 0;
-/*** File Variables ***/
 volatile uint32_t DelayCounter_0 = 0;
-unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
-unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /******/
 void delay_Configure(void)
 {
@@ -53,20 +49,6 @@ inline uint32_t get_systick_10us(void)
 inline uint32_t get_systick_ms(void)
 {
 	return systick_ms;
-}
-int ftdelayCycles( uint8_t lock_ID, unsigned int n_cycle ) {
-	int ret = 0;
-	if( ft_Delay_Lock[lock_ID] != lock_ID) {
-		ft_Delay_Lock[lock_ID] = lock_ID;
-		ftCounter[lock_ID] = n_cycle;
-	}else{
-		if( ftCounter[lock_ID]-- );else{ ft_Delay_Lock[lock_ID] = 0; ret = 1; }
-	}
-    return ret;
-}
-void ftdelayReset(uint8_t ID) {
-	ft_Delay_Lock[ID] = 0;
-	ftCounter[ID] = 0;
 }
 void delayMiliseconds(unsigned int ms) {
     volatile unsigned int count = ms * get_systick_ms( );
