@@ -88,6 +88,10 @@ void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
 void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
 void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
 void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
+void USART1_TxInterruptEnable(void) { USART1->CR1 |= USART_CR1_TXEIE; }
+void USART1_TxInterruptDisable(void) { USART1->CR1 &= ~USART_CR1_TXEIE; }
+void USART1_RxInterruptEnable(void) { USART1->CR1 |= USART_CR1_RXNEIE; }
+void USART1_RxInterruptDisable(void) { USART1->CR1 &= ~USART_CR1_RXNEIE; }
 /*****************************************************************************/
 void USART1_TransmitChar(char c) {
 	USART1->CR1 &= ~USART_CR1_TXEIE;
@@ -178,6 +182,10 @@ void usart1_enable(void)
 	stm32fxxx_usart1.tx_disable = USART1_TxDisable;
 	stm32fxxx_usart1.rx_enable = USART1_RxEnable;
 	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
+	stm32fxxx_usart1.tx_interruptenable = USART1_TxInterruptEnable;
+	stm32fxxx_usart1.tx_interruptdisable = USART1_TxInterruptDisable;
+	stm32fxxx_usart1.rx_interruptenable = USART1_RxInterruptEnable;
+	stm32fxxx_usart1.rx_interruptdisable = USART1_RxInterruptDisable;
 	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.rx_flush = USART1_RxFlush;

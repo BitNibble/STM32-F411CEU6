@@ -35,6 +35,10 @@ typedef struct
 	void (*tx_disable)(void);
 	void (*rx_enable)(void);
 	void (*rx_disable)(void);
+	void (*tx_interruptenable)(void);
+	void (*tx_interruptdisable)(void);
+	void (*rx_interruptenable)(void);
+	void (*rx_interruptdisable)(void);
 	void (*transmit_char)(char c);
 	char (*receive_char)(void);
 	void (*rx_flush)(void);
