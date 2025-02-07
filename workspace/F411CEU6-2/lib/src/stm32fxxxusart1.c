@@ -84,14 +84,30 @@ void USART1_SamplingMode(uint8_t samplingmode, uint32_t baudrate)
     USART1->BRR |= (uint32_t) fraction; // Set DIV_Fraction
     USART1->BRR |= ((uint32_t) intpart << USART_BRR_DIV_Mantissa_Pos); // Set DIV_Mantissa[11:0]
 }
-void USART1_TxEnable(void) { USART1->CR1 |= USART_CR1_TE; }
-void USART1_TxDisable(void) { USART1->CR1 &= ~USART_CR1_TE; }
-void USART1_RxEnable(void) { USART1->CR1 |= USART_CR1_RE; }
-void USART1_RxDisable(void) { USART1->CR1 &= ~USART_CR1_RE; }
-void USART1_TxInterruptEnable(void) { USART1->CR1 |= USART_CR1_TXEIE; }
-void USART1_TxInterruptDisable(void) { USART1->CR1 &= ~USART_CR1_TXEIE; }
-void USART1_RxInterruptEnable(void) { USART1->CR1 |= USART_CR1_RXNEIE; }
-void USART1_RxInterruptDisable(void) { USART1->CR1 &= ~USART_CR1_RXNEIE; }
+void USART1_Tx( uint8_t state ) {
+	if( state )
+		USART1->CR1 |= USART_CR1_TE;
+	else
+		USART1->CR1 &= ~USART_CR1_TE;
+}
+void USART1_Rx( uint8_t state ) {
+	if( state )
+		USART1->CR1 |= USART_CR1_RE;
+	else
+		USART1->CR1 &= ~USART_CR1_RE;
+}
+void USART1_Tx_Interrupt( uint8_t state ) {
+	if( state )
+		USART1->CR1 |= USART_CR1_TXEIE;
+	else
+		USART1->CR1 &= ~USART_CR1_TXEIE;
+}
+void USART1_Rx_Interrupt( uint8_t state) {
+	if ( state )
+		USART1->CR1 |= USART_CR1_RXNEIE;
+	else
+		USART1->CR1 &= ~USART_CR1_RXNEIE;
+}
 /*****************************************************************************/
 void USART1_TransmitChar(char c) {
 	USART1->CR1 &= ~USART_CR1_TXEIE;
@@ -178,14 +194,10 @@ void usart1_enable(void)
 	stm32fxxx_usart1.wordlength = USART1_WordLength;
 	stm32fxxx_usart1.stopbits = USART1_StopBits;
 	stm32fxxx_usart1.samplingmode = USART1_SamplingMode;
-	stm32fxxx_usart1.tx_enable = USART1_TxEnable;
-	stm32fxxx_usart1.tx_disable = USART1_TxDisable;
-	stm32fxxx_usart1.rx_enable = USART1_RxEnable;
-	stm32fxxx_usart1.rx_disable = USART1_RxDisable;
-	stm32fxxx_usart1.tx_interruptenable = USART1_TxInterruptEnable;
-	stm32fxxx_usart1.tx_interruptdisable = USART1_TxInterruptDisable;
-	stm32fxxx_usart1.rx_interruptenable = USART1_RxInterruptEnable;
-	stm32fxxx_usart1.rx_interruptdisable = USART1_RxInterruptDisable;
+	stm32fxxx_usart1.tx = USART1_Tx;
+	stm32fxxx_usart1.rx = USART1_Rx;
+	stm32fxxx_usart1.tx_interrupt = USART1_Tx_Interrupt;
+	stm32fxxx_usart1.rx_interrupt = USART1_Rx_Interrupt;
 	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.rx_flush = USART1_RxFlush;

@@ -31,14 +31,10 @@ typedef struct
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
-	void (*tx_enable)(void);
-	void (*tx_disable)(void);
-	void (*rx_enable)(void);
-	void (*rx_disable)(void);
-	void (*tx_interruptenable)(void);
-	void (*tx_interruptdisable)(void);
-	void (*rx_interruptenable)(void);
-	void (*rx_interruptdisable)(void);
+	void (*tx)( uint8_t state );
+	void (*rx)( uint8_t state );
+	void (*tx_interrupt)( uint8_t state );
+	void (*rx_interrupt)( uint8_t state );
 	void (*transmit_char)(char c);
 	char (*receive_char)(void);
 	void (*rx_flush)(void);

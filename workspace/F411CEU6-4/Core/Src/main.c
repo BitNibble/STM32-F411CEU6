@@ -448,12 +448,12 @@ void setup_usart1(void){
 	usart1()->samplingmode( 0, MAIN_BAUD );
 
 	// Interrupt handler setup
-	usart1()->tx_interruptenable();
-	usart1()->rx_interruptenable();
+	usart1()->tx_interrupt(ON);
+	usart1()->rx_interrupt(ON);
 	usart1()->nvic(ON);
 
 	// Enable USART1, TX, RX
-	usart1()->tx_enable(); usart1()->rx_enable(); // Enable transmitter and receiver
+	usart1()->tx(ON); usart1()->rx(ON); // Enable transmitter and receiver
 	usart1()->start(); // Enable USART1
 }
 
