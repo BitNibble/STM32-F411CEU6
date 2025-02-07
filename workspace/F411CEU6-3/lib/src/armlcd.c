@@ -130,6 +130,7 @@ void ARMLCD0_inic(void)
 	ARMLCD0_clear();
 	ARMLCD0_gotoxy(0,0);
 }
+
 void ARMLCD0_write(char c, unsigned short D_I)
 { // write to LCD
 	clear_hpins(ireg, ARMLCD0_RW_Msk); // lcd as input
