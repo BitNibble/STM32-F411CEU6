@@ -33,8 +33,8 @@ typedef struct
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
 	void (*tx)( uint8_t state );
 	void (*rx)( uint8_t state );
-	void (*tx_interrupt)( uint8_t state );
-	void (*rx_interrupt)( uint8_t state );
+	void (*tx_einterrupt)( uint8_t state );
+	void (*rx_neinterrupt)( uint8_t state );
 	void (*transmit_char)(char c);
 	char (*receive_char)(void);
 	void (*rx_flush)(void);

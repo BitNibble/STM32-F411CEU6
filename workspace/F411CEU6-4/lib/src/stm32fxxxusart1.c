@@ -96,13 +96,13 @@ void USART1_Rx( uint8_t state ) {
 	else
 		USART1->CR1 &= ~USART_CR1_RE;
 }
-void USART1_Tx_Interrupt( uint8_t state ) {
+void USART1_Tx_EInterrupt( uint8_t state ) {
 	if( state )
 		USART1->CR1 |= USART_CR1_TXEIE;
 	else
 		USART1->CR1 &= ~USART_CR1_TXEIE;
 }
-void USART1_Rx_Interrupt( uint8_t state) {
+void USART1_Rx_NEInterrupt( uint8_t state) {
 	if ( state )
 		USART1->CR1 |= USART_CR1_RXNEIE;
 	else
@@ -118,6 +118,16 @@ char USART1_ReceiveChar(void) {
 	USART1->CR1 &= ~USART_CR1_RXNEIE;
     while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
     return (char)USART1->DR;               // Return the received character
+}
+void USART1_PutChar(char c) {
+	if ( USART1->SR & USART_SR_TXE ); // Wait until TX is empty
+    	USART1->DR = c;				  // Send the character
+}
+char USART1_GetChar(void) {
+	char ret = '\0'; // Empty flag
+    if ( USART1->SR & USART_SR_RXNE ) // Check if data is present
+    	ret = USART1->DR;			  // Return the received character
+    return ret;
 }
 void USART1_RxFlush(void) {
 	usart1_rx_index = 0;
@@ -137,7 +147,7 @@ void USART1_TransmitString(const char *str) {
     // Copy the string into the transmit buffer
     strncpy( (char *)usart1_tx_buffer, str, usart1_tx_buffer_size ); // Ensure tx_buffer is big enough
     // Enable the TXE interrupt to start sending data
-    USART1->CR1 |= USART_CR1_TXEIE;
+    USART1_Tx_EInterrupt( ON );
 }
 void USART1_ReceiveString(char* oneshot, char* rx, size_t size, const char* endl) {
 	const uint32_t buff_size = size - ONE;
@@ -196,8 +206,8 @@ void usart1_enable(void)
 	stm32fxxx_usart1.samplingmode = USART1_SamplingMode;
 	stm32fxxx_usart1.tx = USART1_Tx;
 	stm32fxxx_usart1.rx = USART1_Rx;
-	stm32fxxx_usart1.tx_interrupt = USART1_Tx_Interrupt;
-	stm32fxxx_usart1.rx_interrupt = USART1_Rx_Interrupt;
+	stm32fxxx_usart1.tx_einterrupt = USART1_Tx_EInterrupt;
+	stm32fxxx_usart1.rx_neinterrupt = USART1_Rx_NEInterrupt;
 	stm32fxxx_usart1.transmit_char = USART1_TransmitChar;
 	stm32fxxx_usart1.receive_char = USART1_ReceiveChar;
 	stm32fxxx_usart1.rx_flush = USART1_RxFlush;
@@ -219,27 +229,25 @@ void USART1_IRQHandler(void) {
 	uint32_t cr1 = USART1->CR1;
 
 	if(cr1 & USART_CR1_RXNEIE) {
+		char rx = USART1_GetChar();
 		// Check if the RXNE (Receive Not Empty) flag is set
-		if (sr & USART_SR_RXNE) {
+		if( rx ) {
 			if (usart1_rx_index < usart1_rx_buffer_size) {
-				usart1_rx_buffer[usart1_rx_index++] = USART1->DR;
+				usart1_rx_buffer[usart1_rx_index++] = rx;
 				usart1_rx_buffer[usart1_rx_index] = ZERO;
 			}
 		}
 	}
 
 	if(cr1 & USART_CR1_TXEIE) {
-		// Check if the TXE (Transmit Data Register Empty) flag is set
-		if (sr & USART_SR_TXE) {
-			if(usart1_tx_buffer[usart1_tx_index]) {
-				USART1->DR = usart1_tx_buffer[usart1_tx_index++];
-			}else{
-				USART1->CR1 &= ~USART_CR1_TXEIE;
-			}
+		if(usart1_tx_buffer[usart1_tx_index]) {
+			USART1_PutChar( usart1_tx_buffer[usart1_tx_index++] );
+		}else{
+			USART1->CR1 &= ~USART_CR1_TXEIE;
 		}
 	}
 
-	/***
+	/***/
 	if(cr1 & USART_CR1_TCIE) {
 		// Check if the TC (Transmission Complete) flag is set
 		if (sr & USART_SR_TC) {
@@ -254,7 +262,7 @@ void USART1_IRQHandler(void) {
     // Check for IDLE line detection
     if (sr & USART_SR_IDLE) {
         // Clear IDLE flag by reading SR and DR
-        volatile uint8_t dummy = USART1->DR;
+        volatile uint8_t dummy = USART1_GetChar();
         (void)dummy;  // Prevent unused variable warning
         // Handle idle condition (e.g., mark end of transmission)
     }
@@ -278,7 +286,7 @@ void USART1_IRQHandler(void) {
     if (sr & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
         if (sr & USART_SR_ORE) {
             // Overrun error: Clear ORE by reading DR
-            volatile uint8_t dummy = USART1->DR;
+            volatile uint8_t dummy = USART1_GetChar();
             (void)dummy;
             // Handle overrun error (e.g., discard data)
         }
@@ -294,7 +302,7 @@ void USART1_IRQHandler(void) {
 
         // Optionally reset USART or take corrective action based on error type
     }
-	***/
+	/***/
     // Wakeup from STOP mode (if enabled and used)
     //if (sr & USART_SR_WU) {
         // Clear wakeup flag by writing a 0
