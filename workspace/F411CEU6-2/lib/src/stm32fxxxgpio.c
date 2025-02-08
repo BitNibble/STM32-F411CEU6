@@ -25,10 +25,8 @@ Comment:
 #define NIBBLE_BITS 4
 #define BYTE_BITS 8
 #define WORD_BITS 16
-#define N_BITS 32
-#define N_LIMBITS 33
-#define H_BIT 31
-#define L_BIT 0
+#define DWORD_BITS 32
+#define QWORD_BITS 64
 #ifndef ON
 	#define ON 1
 #endif
@@ -125,8 +123,8 @@ void GPIOA_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
     	const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-    	const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-    	const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+    	const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+    	const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
     	af &= MASK;
     	if(index < TWO){
@@ -211,8 +209,8 @@ void GPIOB_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
@@ -298,8 +296,8 @@ void GPIOC_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
@@ -384,8 +382,8 @@ void GPIOD_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
@@ -471,8 +469,8 @@ void GPIOE_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
