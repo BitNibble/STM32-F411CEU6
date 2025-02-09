@@ -27,8 +27,8 @@ void TIM2_Nvic(uint8_t state)
 { // 28
 	if(state){set_bit_block(NVIC->ISER, 1, TIM2_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM2_IRQn, 1);}
 }
-void TIM2_start(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void TIM2_stop(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM2_start(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, ON); }
+void TIM2_stop(void){ set_reg_Msk(&TIM2->CR1, TIM_CR1_CEN_Msk, OFF); }
 /************/
 /*** TIM3 ***/
 /************/
@@ -40,8 +40,8 @@ void TIM3_Nvic(uint8_t state)
 { // 29
 	if(state){set_bit_block(NVIC->ISER, 1, TIM3_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM3_IRQn, 1);}
 }
-void TIM3_start(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void TIM3_stop(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM3_start(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, ON); }
+void TIM3_stop(void){ set_reg_Msk(&TIM3->CR1, TIM_CR1_CEN_Msk, OFF); }
 /************/
 /*** TIM4 ***/
 /************/
@@ -53,8 +53,8 @@ void TIM4_Nvic(uint8_t state)
 { // 30
 	if(state){set_bit_block(NVIC->ISER, 1, TIM4_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM4_IRQn, 1);}
 }
-void TIM4_start(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void TIM4_stop(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM4_start(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, ON); }
+void TIM4_stop(void){ set_reg_Msk(&TIM4->CR1, TIM_CR1_CEN_Msk, OFF); }
 /************/
 /*** TIM5 ***/
 /************/
@@ -66,8 +66,8 @@ void TIM5_Nvic(uint8_t state)
 { // 50
 	if(state){set_bit_block(NVIC->ISER, 1, TIM5_IRQn, 1);} else{set_bit_block(NVIC->ICER, 1, TIM5_IRQn, 1);}
 }
-void TIM5_start(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, ON); }
-void TIM5_stop(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, OFF); }
+void TIM5_start(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, ON); }
+void TIM5_stop(void){ set_reg_Msk(&TIM5->CR1, TIM_CR1_CEN_Msk, OFF); }
 /*** TIM2 INIC Procedure & Function Definition ***/
 void tim2_enable(void)
 {

@@ -611,7 +611,7 @@ void rtc_lenable(unsigned int lclock) {
 }
 static void set_rtc_clock_source(uint8_t clock_source) {
     RTC_WriteEnable();
-    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, RCC_BDCR_RTCSEL_Pos, clock_source);
+    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, clock_source);
     RTC_WriteDisable();
 }
 void rtc_lselect(uint8_t lclock) {
@@ -623,7 +623,7 @@ void rtc_lselect(uint8_t lclock) {
 
     // Clear previous RTC selection
     RTC_WriteEnable();
-    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, RCC_BDCR_RTCSEL_Pos, 0);
+    set_reg_Msk(&RCC->BDCR, RCC_BDCR_RTCSEL_Msk, 0);
     RTC_WriteDisable();
 
     // Set the selected clock source

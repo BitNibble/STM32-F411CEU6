@@ -102,9 +102,9 @@ typedef union{
 /*** Tools ***/
 void set_reg(volatile uint32_t* reg, uint32_t hbits);
 void clear_reg(volatile uint32_t* reg, uint32_t hbits);
-uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos);
-void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
-void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data);
+uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk);
+void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data);
+void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data);
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n);
 void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);
 void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data);

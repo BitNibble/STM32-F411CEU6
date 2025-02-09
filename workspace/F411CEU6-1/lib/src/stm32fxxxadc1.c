@@ -20,25 +20,25 @@ static STM32FXXX_ADC1 stm32fxxx_adc1 = {0};
 /*** ADC1 ***/
 void ADC1_Clock(uint8_t state)
 {
-	if(state){ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, ON); }
-	else{ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, RCC_APB2ENR_ADC1EN_Pos, OFF); }
+	if(state){ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, ON); }
+	else{ set_reg_Msk(&RCC->APB2ENR , RCC_APB2ENR_ADC1EN_Msk, OFF); }
 
 }
 void ADC1_Nvic(uint8_t state) {
 	if(state){ set_bit_block(NVIC->ISER, 1, ADC_IRQn, 1); } else{ set_bit_block(NVIC->ICER, 1, ADC_IRQn, 1); }
 }
 void ADC1_StartConversion(void) {
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_SWSTART, ADC_CR2_SWSTART_Pos, ON);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_SWSTART, ON);
 }
 void ADC1_WaitEndOfConversion(void) {
-	for (uint32_t time_out = END_OF_CONVERSION_TIME_OUT; !get_reg_Msk(ADC1->SR, ADC_SR_EOC, ADC_SR_EOC_Pos) && time_out; time_out-- );
+	for (uint32_t time_out = END_OF_CONVERSION_TIME_OUT; !get_reg_Msk(ADC1->SR, ADC_SR_EOC) && time_out; time_out-- );
 }
 void ADC1_Start(void) {
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, ON);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ON);
 	for(uint8_t countdown = ADC_STAB_DELAY; countdown; countdown--); // Stabilization delay
 }
 void ADC1_Stop(void) {
-	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, ADC_CR2_ADON_Pos, OFF);
+	set_reg_Msk(&ADC1->CR2, ADC_CR2_ADON, OFF);
 }
 void ADC1_TemperatureSetup(void) {
     // Enable ADC1 clock
@@ -46,12 +46,12 @@ void ADC1_TemperatureSetup(void) {
 
     // Configure ADC1 parameters
     ADC1->CR1 = 0; // Clear control register
-    set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, ADC_SQR1_L_Pos, 0);
-    set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, ADC_SQR3_SQ1_Pos, 18);
-    set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, ADC_SMPR1_SMP18_Pos, 3);
+    set_reg_Msk(&ADC1->SQR1, ADC_SQR1_L, 0);
+    set_reg_Msk(&ADC1->SQR3, ADC_SQR3_SQ1, 18);
+    set_reg_Msk(&ADC1->SMPR1, ADC_SMPR1_SMP18, 3);
 
     // Enable temperature sensor
-    set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE, ADC_CCR_TSVREFE_Pos, ON);
+    set_reg_Msk(&ADC->CCR, ADC_CCR_TSVREFE, ON);
     ADC1_Start();
 }
 uint16_t ADC1_ReadTemperature(void) {

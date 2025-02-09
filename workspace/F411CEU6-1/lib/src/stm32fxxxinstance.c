@@ -19,37 +19,34 @@ unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
 
 /*** Tools ***/
+uint8_t Msk_Pos(uint32_t Msk){
+	uint8_t Pos = 32;
+	if( Msk ){
+		for( Pos = 0; !(Msk & 1); Msk >>= 1, Pos++ );
+	}
+	return Pos;
+}
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
 }
 inline void clear_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg &= ~hbits;
 }
-inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk, uint8_t Pos)
+inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk)
 {
-	uint32_t filter = ONE << Pos;
-	uint32_t Msk2 = Msk << ONE;
-	if((Msk & filter) && !(Msk2 & filter)){
-		reg = (reg & Msk) >> Pos;
-	}
+	reg = (reg & Msk) >> Msk_Pos(Msk);
 	return reg;
 }
-inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
 	uint32_t value = *reg;
-	uint32_t filter = ONE << Pos;
-	uint32_t Msk2 = Msk << ONE;
-	if((Msk & filter) && !(Msk2 & filter)){
-		data = (data << Pos) & Msk; value &= ~(Msk); value |= data; *reg = value;
-	}
+	uint8_t Pos = Msk_Pos(Msk);
+	data = (data << Pos) & Msk; value &= ~(Msk); value |= data; *reg = value;
 }
-inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint8_t Pos, uint32_t data)
+inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
-	uint32_t filter = ONE << Pos;
-	uint32_t Msk2 = Msk << ONE;
-	if((Msk & filter) && !(Msk2 & filter)){
-		data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
-	}
+	uint8_t Pos = Msk_Pos(Msk);
+	data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
