@@ -20,9 +20,9 @@ unsigned int ftCounter[FTDELAY_SIZE] = {0};
 
 /*** Tools ***/
 uint8_t Msk_Pos(uint32_t Msk){
-	uint8_t Pos = 32;
+	uint8_t Pos = ZERO;
 	if( Msk ){
-		for( Pos = 0; !(Msk & 1); Msk >>= 1, Pos++ );
+		for( ; !(Msk & 1); Msk >>= 1, Pos++ );
 	}
 	return Pos;
 }
