@@ -89,7 +89,7 @@ int main(void)
 
 	//setup i2c io
 	//rcc()->instance->apb1enr.par.i2c1en = 1;
-	set_reg_Msk(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN_Msk, RCC_APB1ENR_I2C1EN_Pos, 1);
+	set_reg_Msk(&RCC->APB1ENR, RCC_APB1ENR_I2C1EN_Msk, 1);
 	//PB5 I2C1_SMBA
 	//gpiob()->instance->afr.par.pin_6 = 4; // PB6 AF4 (I2C1..3) I2C1_SCL
 	//gpiob()->instance->afr.par.pin_7 = 4; // PB7 AF4 (I2C1..3) I2C1_SDA
@@ -120,21 +120,21 @@ int main(void)
 	FUNC_enable();
 
 	//gpioc()->instance->moder.par.pin_1 = 1;
-	set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODE13_Msk, GPIO_MODER_MODE13_Pos, 1);
+	set_reg_Msk(&GPIOC->MODER, GPIO_MODER_MODE13_Msk, 1);
 
 	tim1()->nvic(1);
 	//stm()->tim1->nvic(17);
 	tim1()->clock(ON);
 
-	set_reg_Msk(&GPIOA->AFR[0], GPIO_AFRL_AFSEL7_Msk, GPIO_AFRL_AFSEL7_Pos, 1); // pin 7 af tim1ch1n
-	set_reg_Msk(&GPIOA->AFR[1], GPIO_AFRH_AFSEL8_Msk, GPIO_AFRH_AFSEL8_Pos, 1); // pin 8 af tim1ch1
-	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE7_Msk, GPIO_MODER_MODE7_Pos, 2); // AF enable
-	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE8_Msk, GPIO_MODER_MODE8_Pos, 2); // AF enable
+	set_reg_Msk(&GPIOA->AFR[0], GPIO_AFRL_AFSEL7_Msk, 1); // pin 7 af tim1ch1n
+	set_reg_Msk(&GPIOA->AFR[1], GPIO_AFRH_AFSEL8_Msk, 1); // pin 8 af tim1ch1
+	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE7_Msk, 2); // AF enable
+	set_reg_Msk(&GPIOA->MODER, GPIO_MODER_MODE8_Msk, 2); // AF enable
 
-	set_reg_Msk(&TIM1->CCMR1, TIM_CCMR1_OC1M_Msk, TIM_CCMR1_OC1M_Pos, 6);
-	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1NE_Msk, TIM_CCER_CC1NE_Pos, 1);
-	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1E_Msk, TIM_CCER_CC1E_Pos, 1);
-	set_reg_Msk(&TIM1->BDTR, TIM_BDTR_MOE_Msk, TIM_BDTR_MOE_Pos, 1);
+	set_reg_Msk(&TIM1->CCMR1, TIM_CCMR1_OC1M_Msk, 6);
+	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1NE_Msk, 1);
+	set_reg_Msk(&TIM1->CCER, TIM_CCER_CC1E_Msk, 1);
+	set_reg_Msk(&TIM1->BDTR, TIM_BDTR_MOE_Msk, 1);
 	TIM1->ARR = 0xFFFF;
 	// Compare
 	TIM1->CCR1 = 1000;
@@ -142,8 +142,8 @@ int main(void)
 	// pre-scaler
 	TIM1->PSC = 1;
 	// interrupt
-	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC1IE_Msk, TIM_DIER_CC1IE_Pos, 1);
-	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC2IE_Msk, TIM_DIER_CC2IE_Pos, 1);
+	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC1IE_Msk, 1);
+	set_reg_Msk(&TIM1->DIER, TIM_DIER_CC2IE_Msk, 1);
 	// other
 	//tim1()->instance->dier.tim1and8_par.comie = 1;
 	//tim1()->instance->dier.tim1and8_par.tie = 0;
@@ -153,8 +153,8 @@ int main(void)
 	//tim1()->instance->dier.tim1and8_par.cc1de = 1;
 
 	// Enable (Start/Stop)
-	set_reg_Msk(&TIM1->CR1, TIM_CR1_ARPE_Msk, TIM_CR1_ARPE_Pos, 1);
-	set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, TIM_CR1_CEN_Pos, 1);
+	set_reg_Msk(&TIM1->CR1, TIM_CR1_ARPE_Msk, 1);
+	set_reg_Msk(&TIM1->CR1, TIM_CR1_CEN_Msk, 1);
 
 	char vecT[8]; // for calendar
 	//char vecD[8]; // for calendar
