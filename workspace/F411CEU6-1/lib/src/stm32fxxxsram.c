@@ -11,13 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxsram.h"
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variable ***/
 static STM32FXXX_SRAM stm32fxxx_sram = {0};
 

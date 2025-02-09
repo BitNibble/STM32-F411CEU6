@@ -11,13 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxtim6and7.h"
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variable ***/
 static STM32FXXX_TIM6 stm32fxxx_tim6 = {0};
 static STM32FXXX_TIM7 stm32fxxx_tim7 = {0};

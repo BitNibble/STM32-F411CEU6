@@ -14,27 +14,6 @@ Comment:
 #include "stm32fxxxgpio.h"
 #include <math.h>
 
-/****************************************/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
-#define TWO 2
-#define NIBBLE_BITS 4
-#define BYTE_BITS 8
-#define WORD_BITS 16
-#define DWORD_BITS 32
-#define QWORD_BITS 64
-#ifndef ON
-	#define ON 1
-#endif
-#ifndef OFF
-	#define OFF 0
-#endif
-/****************************************/
-
 /*** File Variables ***/
 static STM32FXXX_GPIOA stm32fxxx_gpioa = {0};
 static STM32FXXX_GPIOB stm32fxxx_gpiob = {0};
@@ -557,8 +536,8 @@ void GPIOF_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
@@ -644,8 +623,8 @@ void GPIOG_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){
@@ -731,8 +710,8 @@ void GPIOH_af(uint8_t pin, uint8_t af)
 	if(pin < WORD_BITS && af < WORD_BITS){
 		const uint8_t BLOCK_SIZE = NIBBLE_BITS;
 		const uint8_t MASK = (1 << BLOCK_SIZE) - 1;
-		const uint8_t index = (pin * BLOCK_SIZE) / N_BITS;
-		const uint16_t Pos = (pin * BLOCK_SIZE) % N_BITS;
+		const uint8_t index = (pin * BLOCK_SIZE) / DWORD_BITS;
+		const uint16_t Pos = (pin * BLOCK_SIZE) % DWORD_BITS;
 
 		af &= MASK;
 		if(index < TWO){

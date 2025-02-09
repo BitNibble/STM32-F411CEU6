@@ -12,13 +12,6 @@ Comment:
 #include "stm32fxxxtim1and8.h"
 #include "stm32fxxxnvic.h"
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variables ***/
 static STM32FXXX_TIM1 stm32fxxx_tim1 = {0};
 static STM32FXXX_TIM8 stm32fxxx_tim8 = {0};

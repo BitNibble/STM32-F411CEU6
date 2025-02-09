@@ -12,7 +12,6 @@ Comment:
 #include "stm32fxxxrtc.h"
 
 /*** Define and Macro ***/
-#define BYTE_BITS 8
 #define MAX_BACKUP_REGISTERS 80
 #define MAX_HOUR 23
 #define MAX_MINUTE 59
@@ -28,12 +27,6 @@ Comment:
 #define RTCSEL_LSI    0x02 // LSI oscillator clock
 #define RTCSEL_LSE    0x01 // LSE oscillator clock
 #define RTCSEL_HSE    0x03 // HSE oscillator clock
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 
 static STM32FXXX_RTC stm32fxxx_rtc = {0};
 static uint32_t rtc_time_out;

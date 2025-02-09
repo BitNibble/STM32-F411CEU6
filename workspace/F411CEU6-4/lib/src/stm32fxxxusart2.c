@@ -13,24 +13,17 @@ Comment:
 #include <string.h>
 #include <math.h>
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variable ***/
 static STM32FXXX_USART2 stm32fxxx_usart2 = {ZERO};
 /******/
 // Buffer for received and transmit data
 uint8_t usart2_rx_buffer[USART2_RX_BUFFER_SIZE];
 volatile uint16_t usart2_rx_index = ZERO;
-static uint8_t usart2_flag = ZERO;
 uint8_t usart2_tx_buffer[USART2_TX_BUFFER_SIZE];
 volatile uint16_t usart2_tx_index = ZERO;
 const uint16_t usart2_rx_buffer_size = (USART2_RX_BUFFER_SIZE - ONE);
 const uint16_t usart2_tx_buffer_size = (USART2_TX_BUFFER_SIZE - ONE);
+static uint8_t usart2_flag = ZERO;
 /*** USART Procedure & Function Definition ***/
 /*** USART2 ***/
 void USART2_Clock( uint8_t state )

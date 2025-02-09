@@ -11,13 +11,6 @@ Comment:
 /*** File Library ***/
 #include <stm32fxxxrcc.h>
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variables ***/
 static STM32FXXX_RCC_PLL stm32fxxx_rcc_pll = {0};
 static STM32FXXX_RCC_PLLI2S stm32fxxx_rcc_plli2s = {0};

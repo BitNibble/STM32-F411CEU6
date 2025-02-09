@@ -35,18 +35,24 @@ Comment:
 #ifndef HSE_RTC
 	#define HSE_RTC 4000000UL
 #endif
-#ifndef ON
-	#define ON 1
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 #ifndef OFF
 	#define OFF 0
 #endif
 #ifndef ZERO
 	#define ZERO 0
 #endif
+#ifndef ON
+	#define ON 1
+#endif
+#ifndef ONE
+	#define ONE 1
+#endif
+#define TWO 2
+#define NIBBLE_BITS 4
+#define BYTE_BITS 8
+#define WORD_BITS 16
+#define DWORD_BITS 32
+#define QWORD_BITS 64
 /****************************************/
 /*******   0 -> HSI    1->HSE   *********/
 #define H_Clock_Source 1

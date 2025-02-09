@@ -12,17 +12,12 @@ Comment:
 #include <stdarg.h>
 #include <math.h>
 
-/****************************************/
-#define TWO 2
-#define NIBBLE_BITS 4
-#define BYTE_BITS 8
-#define WORD_BITS 16
-#define DWORD_BITS 32
-#define QWORD_BITS 64
+/*** Define and Macro ***/
 #define FTDELAY_SIZE 256
+
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
-/****************************************/
+
 /*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;

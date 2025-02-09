@@ -11,13 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxflash.h"
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variable ***/
 static STM32FXXX_FLASH_acr stm32fxxx_flash_acr = {0};
 static STM32FXXX_FLASH_sr stm32fxxx_flash_sr = {0};

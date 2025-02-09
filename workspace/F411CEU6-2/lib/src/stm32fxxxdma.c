@@ -11,13 +11,6 @@ Comment:
 /*** File Library ***/
 #include "stm32fxxxdma.h"
 
-/*** Define and Macro ***/
-#ifndef ZERO
-	#define ZERO 0
-#endif
-#ifndef ONE
-	#define ONE 1
-#endif
 /*** File Variables ***/
 // DMA1
 static STM32FXXX_DMA_sr stm32fxxx_dma1_sr;
