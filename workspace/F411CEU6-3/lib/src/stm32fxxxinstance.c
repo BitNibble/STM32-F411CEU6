@@ -14,7 +14,6 @@ Comment:
 
 /*** Define and Macro ***/
 #define FTDELAY_SIZE 256
-
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
 
@@ -156,7 +155,7 @@ void STM32446VecSetup( volatile uint32_t vec[], unsigned int size_block, unsigne
 /*** Clock ***/
 uint16_t gethpre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 4, RCC_CFGR_HPRE_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_HPRE);
 	switch(value)
 	{
 		case 0b1000:
@@ -191,7 +190,7 @@ uint16_t gethpre(void)
 }
 uint8_t gethppre1(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_PPRE1_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_PPRE1);
 	switch(value)
 	{
 		case 0b100:
@@ -214,7 +213,7 @@ uint8_t gethppre1(void)
 }
 uint8_t gethppre2(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_PPRE2_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_PPRE2);
 	switch(value)
 	{
 		case 0b100:
@@ -237,11 +236,11 @@ uint8_t gethppre2(void)
 }
 uint8_t getrtcpre(void)
 {
-	return get_reg_block(RCC->CFGR, 5, RCC_CFGR_RTCPRE_Pos);
+	return get_reg_Msk(RCC->CFGR, RCC_CFGR_RTCPRE);
 }
 uint8_t gethmco1pre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_MCO1PRE_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_MCO1PRE);
 	switch(value)
 	{
 		case 0b100:
@@ -264,7 +263,7 @@ uint8_t gethmco1pre(void)
 }
 uint8_t gethmco2pre(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 3, RCC_CFGR_MCO2PRE_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_MCO2PRE);
 	switch(value)
 	{
 		case 0b100:
@@ -287,15 +286,15 @@ uint8_t gethmco2pre(void)
 }
 uint8_t getpllm(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 6, RCC_PLLCFGR_PLLM_Pos);
+	return get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLM);
 }
 uint16_t getplln(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 9, RCC_PLLCFGR_PLLN_Pos);
+	return get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLN);
 }
 uint8_t getpllp(void)
 {
-	uint32_t value = get_reg_block(RCC->PLLCFGR, 2, RCC_PLLCFGR_PLLP_Pos);
+	uint32_t value = get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLP);
 	switch(value)
 	{
 		case 0b00:
@@ -317,18 +316,18 @@ uint8_t getpllp(void)
 }
 uint8_t getpllq(void)
 {
-	return get_reg_block(RCC->PLLCFGR, 4, RCC_PLLCFGR_PLLQ_Pos);
+	return get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLQ);
 }
 #ifdef STM32F446xx
 	uint8_t getpllr(void)
 	{
-		return get_reg_block(RCC->PLLCFGR, 3, RCC_PLLCFGR_PLLR_Pos);
+		return get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLR);
 	}
 #endif
 uint32_t getpllsourceclk(void)
 {
 	uint32_t source;
-	if( get_reg_block(RCC->PLLCFGR, 1, RCC_PLLCFGR_PLLSRC_Pos) ) source = HSE_OSC; else source = HSI_RC;
+	if( get_reg_Msk(RCC->PLLCFGR, RCC_PLLCFGR_PLLSRC) ) source = HSE_OSC; else source = HSI_RC;
 	return source;
 }
 uint32_t getpllclk(void)
@@ -341,7 +340,7 @@ uint32_t getpllclk(void)
 }
 uint32_t getsysclk(void)
 {
-	uint32_t value = get_reg_block(RCC->CFGR, 2, RCC_CFGR_SWS_Pos);
+	uint32_t value = get_reg_Msk(RCC->CFGR, RCC_CFGR_SWS);
 	switch(value) // SWS[2]: System clock switch status
 	{
 		case 0:

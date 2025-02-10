@@ -181,10 +181,6 @@ int main(void)
            }
        }
 
-        Turingi12to16_Wifi_Setting( );
-
-        Turingi17to22_Station_Mux0ClientSend_tcp( "thingspeak.com", webpage_ptr , webpage_size );
-
         Turingi23to25_Station_Mux1Server( );
 
         Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
