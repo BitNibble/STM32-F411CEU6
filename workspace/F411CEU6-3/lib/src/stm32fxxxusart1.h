@@ -31,6 +31,8 @@ typedef struct
 	void (*wordlength)(uint8_t wordlength);
 	void (*stopbits)(double stopbits);
 	void (*samplingmode)(uint8_t samplingmode, uint32_t baudrate);
+	uint32_t (*is_tx_complete)( void );
+	uint32_t (*is_rx_idle)( void );
 	void (*tx)( uint8_t state );
 	void (*rx)( uint8_t state );
 	void (*tx_einterrupt)( uint8_t state );

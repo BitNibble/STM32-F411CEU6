@@ -95,6 +95,12 @@ void USART1_Tx_EInterrupt( uint8_t state ) {
 	else
 		USART1->CR1 &= ~USART_CR1_TXEIE;
 }
+void USART1_Tx_CInterrupt( uint8_t state ) {
+	if( state )
+		USART1->CR1 |= USART_CR1_TCIE;
+	else
+		USART1->CR1 &= ~USART_CR1_TCIE;
+}
 void USART1_Rx_NEInterrupt( uint8_t state) {
 	if ( state )
 		USART1->CR1 |= USART_CR1_RXNEIE;
@@ -241,6 +247,8 @@ void usart1_enable(void)
 	stm32fxxx_usart1.wordlength = USART1_WordLength;
 	stm32fxxx_usart1.stopbits = USART1_StopBits;
 	stm32fxxx_usart1.samplingmode = USART1_SamplingMode;
+	stm32fxxx_usart1.is_tx_complete = is_SR_TC;
+	stm32fxxx_usart1.is_rx_idle = is_SR_IDLE;
 	stm32fxxx_usart1.tx = USART1_Tx;
 	stm32fxxx_usart1.rx = USART1_Rx;
 	stm32fxxx_usart1.tx_einterrupt = USART1_Tx_EInterrupt;
@@ -290,7 +298,6 @@ void USART1_IRQHandler(void) {
 		// Check if the TC (Transmission Complete) flag is set
 		if (is_SR_TC()) {
 			// Transmission complete
-			(void)USART1->SR;  // Read SR to acknowledge
 			USART1->DR = ZERO; // Write to DR to clear TC flag
 			// Optionally disable TC interrupt if no further action is needed
 			USART1->CR1 &= ~USART_CR1_TCIE;

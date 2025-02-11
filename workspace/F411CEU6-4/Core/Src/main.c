@@ -132,14 +132,14 @@ int main(void)
         PA.update(&PA.par, gpioa()->instance->IDR);
 
         /*** Magic ***/
-        if( !isPtrNull( usart1()->rxbuff ) ){
-        	if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
+        if( !isPtrNull( usart1()->rxbuff ) && usart1()->is_rx_idle() ){
+        	//if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
         		strncpy( parse, usart1()->rxbuff, 2048 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
         		strncpy( sub_parse, tokens[0], 512 ); // 0
         		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
         		usart1()->rx_purge();
-        	}
+        	//}
         }
 
        lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
