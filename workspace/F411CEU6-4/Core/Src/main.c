@@ -26,9 +26,8 @@ This program can run bluetooth module BLE05 or Z040, and it also can run
 ESP8266 as replacement, after reset. In ESP8266 it is a server that gives a webpage
 with two buttons, to turn on and off the gpioc13. Also the BLE does the same using the
 mobile phone application "Serial Bluetooth Terminal" the message to turn on is "s00.",
-and off "s01.". If use BLE can step down the time of reception considerably, since
-in server mode using esp8266 is quiet slow and 300 is used in the "Magic" section.
-Also "Serial WiFi Terminal" works, faster.
+and off "s01.".
+Also "Serial WiFi Terminal" works.
 Par ("192.168.1.53", "192.168.1.1", "255.255.255.0"), PORT 80.
 ****************************************************************/
 #include "main.h"
@@ -179,8 +178,6 @@ int main(void)
         Turingi23to25_Station_Mux1Server( );
 
         Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
-
-        Turingi500to505_Machine( );
 
         switch (Menu.nibble.n0) {
 
