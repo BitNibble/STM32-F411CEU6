@@ -221,7 +221,7 @@ void USART1_IRQHandler(void) {
 	uint32_t sr = USART1->SR;
 	uint32_t cr1 = USART1->CR1;
 
-	if(cr1 & USART_CR1_RXNEIE) {
+	if(sr & USART_SR_RXNE) {
 		char rx = USART1_GetChar();
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if( rx ) {
@@ -233,25 +233,25 @@ void USART1_IRQHandler(void) {
 	}
 
 	if(cr1 & USART_CR1_TXEIE) {
-		if(usart1_tx_buffer[usart1_tx_index]) {
-			USART1_PutChar( usart1_tx_buffer[usart1_tx_index++] );
-		}else{
-			USART1->CR1 &= ~USART_CR1_TXEIE;
+		if(sr & USART_SR_TXE) {
+			if(usart1_tx_buffer[usart1_tx_index]) {
+				USART1_PutChar( usart1_tx_buffer[usart1_tx_index++] );
+			}else{
+				USART1->CR1 &= ~USART_CR1_TXEIE;
+			}
 		}
 	}
-
 	/***/
 	if(cr1 & USART_CR1_TCIE) {
 		// Check if the TC (Transmission Complete) flag is set
 		if (sr & USART_SR_TC) {
 			// Transmission complete
 			(void)USART1->SR;  // Read SR to acknowledge
-			USART1->DR = ZERO;    // Write to DR to clear TC flag
+			USART1->DR = ZERO; // Write to DR to clear TC flag
 			// Optionally disable TC interrupt if no further action is needed
 			USART1->CR1 &= ~USART_CR1_TCIE;
 		}
 	}
-
     // Check for IDLE line detection
     if (sr & USART_SR_IDLE) {
         // Clear IDLE flag by reading SR and DR
@@ -259,7 +259,6 @@ void USART1_IRQHandler(void) {
         (void)dummy;  // Prevent unused variable warning
         // Handle idle condition (e.g., mark end of transmission)
     }
-
     // Check for CTS flag (if hardware flow control is enabled)
     if (sr & USART_SR_CTS) {
         // Clear CTS flag by reading SR
@@ -267,14 +266,12 @@ void USART1_IRQHandler(void) {
         (void)dummy;
         // Handle CTS change (e.g., pause/resume transmission)
     }
-
     // Check for LIN Break Detection (if LIN mode is enabled)
     if (sr & USART_SR_LBD) {
         // Clear LBD flag by writing a 0
         USART1->SR &= ~USART_SR_LBD;
         // Handle LIN break detection (e.g., reset communication)
     }
-
     // Error handling (Overrun, Noise, Framing, Parity)
     if (sr & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
         if (sr & USART_SR_ORE) {
