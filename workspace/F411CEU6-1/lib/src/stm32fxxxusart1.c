@@ -102,25 +102,22 @@ void USART1_Rx_NEInterrupt( uint8_t state) {
 		USART1->CR1 &= ~USART_CR1_RXNEIE;
 }
 /*****************************************************************************/
+void USART1_PutChar(char c) {
+    USART1->DR = c;	// Send the character
+}
+char USART1_GetChar(void) {
+    char ret = USART1->DR;	// Return the character
+    return ret;
+}
 void USART1_TransmitChar(char c) {
 	USART1->CR1 &= ~USART_CR1_TXEIE;
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
-    USART1->DR = c;                       // Send the character
+    USART1_PutChar(c);	// Send the character
 }
 char USART1_ReceiveChar(void) {
 	USART1->CR1 &= ~USART_CR1_RXNEIE;
     while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
-    return (char)USART1->DR;               // Return the received character
-}
-void USART1_PutChar(char c) {
-	if ( USART1->SR & USART_SR_TXE ); // Wait until TX is empty
-    	USART1->DR = c;				  // Send the character
-}
-char USART1_GetChar(void) {
-	char ret = '\0'; // Empty flag
-    if ( USART1->SR & USART_SR_RXNE ) // Check if data is present
-    	ret = USART1->DR;			  // Return the received character
-    return ret;
+    return USART1_GetChar();	// Return the received character
 }
 void USART1_RxFlush(void) {
 	usart1_rx_index = 0;
