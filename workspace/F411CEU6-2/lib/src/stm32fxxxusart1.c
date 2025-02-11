@@ -102,6 +102,53 @@ void USART1_Rx_NEInterrupt( uint8_t state) {
 		USART1->CR1 &= ~USART_CR1_RXNEIE;
 }
 /*****************************************************************************/
+uint32_t is_CR1_PEIE(void){
+	return USART1->CR1 & USART_CR1_PEIE;
+}
+uint32_t is_CR1_TXEIE(void){
+	return USART1->CR1 & USART_CR1_TXEIE;
+}
+uint32_t is_CR1_TCIE(void){
+	return USART1->CR1 & USART_CR1_TCIE;
+}
+uint32_t is_CR1_RXNEIE(void){
+	return USART1->CR1 & USART_CR1_RXNEIE;
+}
+uint32_t is_CR1_IDLEIE(void){
+	return USART1->CR1 & USART_CR1_IDLEIE;
+}
+/*****************************************************************************/
+uint32_t is_SR_CTS(void){
+	return USART1->SR & USART_SR_CTS;
+}
+uint32_t is_SR_LBD(void){
+	return USART1->SR & USART_SR_LBD;
+}
+uint32_t is_SR_TXE(void){
+	return USART1->SR & USART_SR_TXE;
+}
+uint32_t is_SR_TC(void){
+	return USART1->SR & USART_SR_TC;
+}
+uint32_t is_SR_RXNE(void){
+	return USART1->SR & USART_SR_RXNE;
+}
+uint32_t is_SR_IDLE(void){
+	return USART1->SR & USART_SR_IDLE;
+}
+uint32_t is_SR_ORE(void){
+	return USART1->SR & USART_SR_ORE;
+}
+uint32_t is_SR_NE(void){
+	return USART1->SR & USART_SR_NE;
+}
+uint32_t is_SR_FE(void){
+	return USART1->SR & USART_SR_FE;
+}
+uint32_t is_SR_PE(void){
+	return USART1->SR & USART_SR_PE;
+}
+/*****************************************************************************/
 void USART1_PutChar(char c) {
     USART1->DR = c;	// Send the character
 }
@@ -110,14 +157,14 @@ char USART1_GetChar(void) {
     return ret;
 }
 void USART1_TransmitChar(char c) {
-	USART1->CR1 &= ~USART_CR1_TXEIE;
     while (!(USART1->SR & USART_SR_TXE)); // Wait until TX is empty
     USART1_PutChar(c);	// Send the character
+    USART1->CR1 &= ~USART_CR1_TXEIE;
 }
 char USART1_ReceiveChar(void) {
-	USART1->CR1 &= ~USART_CR1_RXNEIE;
     while (!(USART1->SR & USART_SR_RXNE)); // Wait until RX is ready
     return USART1_GetChar();	// Return the received character
+    USART1->CR1 &= ~USART_CR1_RXNEIE;
 }
 void USART1_RxFlush(void) {
 	usart1_rx_index = 0;
@@ -215,10 +262,42 @@ STM32FXXX_USART1*  usart1(void){ return (STM32FXXX_USART1*) &stm32fxxx_usart1; }
 
 /*** Interrupt handler for USART1 ***/
 void USART1_IRQHandler(void) {
-	uint32_t sr = USART1->SR;
-	uint32_t cr1 = USART1->CR1;
+	// Check for CTS flag (if hardware flow control is enabled)
+	if (is_SR_CTS()) {
+		// Clear CTS flag by reading SR
+		volatile uint8_t dummy = USART1->SR;
+		(void)dummy;
+		// Handle CTS change (e.g., pause/resume transmission)
+	}
+	// Check for LIN Break Detection (if LIN mode is enabled)
+	if (is_SR_LBD()) {
+		// Clear LBD flag by writing a 0
+		USART1->SR &= ~USART_SR_LBD;
+		// Handle LIN break detection (e.g., reset communication)
+	}
 
-	if(sr & USART_SR_RXNE) {
+	if(is_CR1_TXEIE()) {
+		if(is_SR_TXE()) {
+			if(usart1_tx_buffer[usart1_tx_index]) {
+				USART1_PutChar( usart1_tx_buffer[usart1_tx_index++] );
+			}else{
+				USART1->CR1 &= ~USART_CR1_TXEIE;
+			}
+		}
+	}
+
+	if(is_CR1_TCIE()) {
+		// Check if the TC (Transmission Complete) flag is set
+		if (is_SR_TC()) {
+			// Transmission complete
+			(void)USART1->SR;  // Read SR to acknowledge
+			USART1->DR = ZERO; // Write to DR to clear TC flag
+			// Optionally disable TC interrupt if no further action is needed
+			USART1->CR1 &= ~USART_CR1_TCIE;
+		}
+	}
+
+	if(is_SR_RXNE()) {
 		char rx = USART1_GetChar();
 		// Check if the RXNE (Receive Not Empty) flag is set
 		if( rx ) {
@@ -228,67 +307,30 @@ void USART1_IRQHandler(void) {
 			}
 		}
 	}
-
-	if(cr1 & USART_CR1_TXEIE) {
-		if(sr & USART_SR_TXE) {
-			if(usart1_tx_buffer[usart1_tx_index]) {
-				USART1_PutChar( usart1_tx_buffer[usart1_tx_index++] );
-			}else{
-				USART1->CR1 &= ~USART_CR1_TXEIE;
-			}
-		}
-	}
-	/***/
-	if(cr1 & USART_CR1_TCIE) {
-		// Check if the TC (Transmission Complete) flag is set
-		if (sr & USART_SR_TC) {
-			// Transmission complete
-			(void)USART1->SR;  // Read SR to acknowledge
-			USART1->DR = ZERO; // Write to DR to clear TC flag
-			// Optionally disable TC interrupt if no further action is needed
-			USART1->CR1 &= ~USART_CR1_TCIE;
-		}
-	}
     // Check for IDLE line detection
-    if (sr & USART_SR_IDLE) {
+    if (is_SR_IDLE()) {
         // Clear IDLE flag by reading SR and DR
         volatile uint8_t dummy = USART1_GetChar();
         (void)dummy;  // Prevent unused variable warning
         // Handle idle condition (e.g., mark end of transmission)
     }
-    // Check for CTS flag (if hardware flow control is enabled)
-    if (sr & USART_SR_CTS) {
-        // Clear CTS flag by reading SR
-        volatile uint8_t dummy = USART1->SR;
-        (void)dummy;
-        // Handle CTS change (e.g., pause/resume transmission)
-    }
-    // Check for LIN Break Detection (if LIN mode is enabled)
-    if (sr & USART_SR_LBD) {
-        // Clear LBD flag by writing a 0
-        USART1->SR &= ~USART_SR_LBD;
-        // Handle LIN break detection (e.g., reset communication)
-    }
     // Error handling (Overrun, Noise, Framing, Parity)
-    if (sr & (USART_SR_ORE | USART_SR_NE | USART_SR_FE | USART_SR_PE)) {
-        if (sr & USART_SR_ORE) {
-            // Overrun error: Clear ORE by reading DR
-            volatile uint8_t dummy = USART1_GetChar();
-            (void)dummy;
-            // Handle overrun error (e.g., discard data)
-        }
-        if (sr & USART_SR_NE) {
-            // Noise error: Handle noise (e.g., log or recover from error)
-        }
-        if (sr & USART_SR_FE) {
-            // Framing error: Handle framing issues (e.g., re-sync communication)
-        }
-        if (sr & USART_SR_PE) {
-            // Parity error: Handle parity mismatch (e.g., request retransmission)
-        }
-
-        // Optionally reset USART or take corrective action based on error type
+    if (is_SR_ORE()) {
+    	// Overrun error: Clear ORE by reading DR
+    	volatile uint8_t dummy = USART1_GetChar();
+    	(void)dummy;
+    	// Handle overrun error (e.g., discard data)
     }
+    if (is_SR_NE()) {
+    	// Noise error: Handle noise (e.g., log or recover from error)
+    }
+    if (is_SR_FE()) {
+    	// Framing error: Handle framing issues (e.g., re-sync communication)
+    }
+    if (is_SR_PE()) {
+    	// Parity error: Handle parity mismatch (e.g., request retransmission)
+    }
+    // Optionally reset USART or take corrective action based on error type
 	/***/
     // Wakeup from STOP mode (if enabled and used)
     //if (sr & USART_SR_WU) {
