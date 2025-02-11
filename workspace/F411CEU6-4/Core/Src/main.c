@@ -132,7 +132,7 @@ int main(void)
         PA.update(&PA.par, gpioa()->instance->IDR);
 
         /*** Magic ***/
-        if( usart1()->rxbuff[0] && usart1()->is_rx_idle() ){
+        if( !isCharPtrFlush(usart1()->rxbuff) && usart1()->is_rx_idle() ){
         		strncpy( parse, usart1()->rxbuff, 2048 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
         		strncpy( sub_parse, tokens[0], 512 ); // 0

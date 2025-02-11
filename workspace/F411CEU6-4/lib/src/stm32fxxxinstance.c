@@ -380,7 +380,11 @@ uint32_t getpclk2(void){
 /****************************************/
 /*** NULL Check ***/
 int isPtrNull(void* ptr) {
-    return (ptr == NULL) ? 1 : 0; // Returns 1 if NULL, 0 otherwise
+    return ptr ? 0 : 1; // Returns 1 if NULL, 0 otherwise
+}
+int isCharPtrFlush(void* ptr) {
+    // Cast the void pointer to a char pointer to dereference it
+    return *((unsigned char*)ptr) ? 0 : 1; // Returns 1 if '\0', 0 otherwise
 }
 /*** FPU ***/
 void fpu_enable(void) {

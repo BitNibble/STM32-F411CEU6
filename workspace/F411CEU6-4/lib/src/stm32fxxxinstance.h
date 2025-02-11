@@ -143,6 +143,7 @@ uint8_t getpllr(void);
 /****************************************/
 /*** NULL Check ***/
 int isPtrNull(void* ptr);
+int isCharPtrFlush(void* ptr);
 /*** FPU ***/
 void fpu_enable(void);
 /*** ADC ***/
