@@ -133,13 +133,11 @@ int main(void)
 
         /*** Magic ***/
         if( usart1()->rxbuff[0] && usart1()->is_rx_idle() ){
-        	//if( ftdelayCycles( 2, 300 ) ) { // 300 or more for webpages (slow)
         		strncpy( parse, usart1()->rxbuff, 2048 );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
         		strncpy( sub_parse, tokens[0], 512 ); // 0
         		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
         		usart1()->rx_purge();
-        	//}
         }
 
        lcd0()->gotoxy(1, 0); lcd0()->string_size( tokens[0], 20 ); //3
@@ -147,32 +145,29 @@ int main(void)
 
        if (!tm_getstep()) { // avoid simultaneous calls
            /*** IPD || CONNECT ***/
+    	   char connectStr[10];
            for (int i = 0; i < 4; i++) {
-               char connectStr[10];
                sprintf(connectStr, "%d,CONNECT", i);
                if (strstr(tokens[0], connectStr) != NULL) {
                    link_ID = i;
                    break;
                }
            }
-           // Check for "GET / HTTP" in tokens[0], tokens[1], or tokens[2], or tokens[3]
-           if (strstr(tokens[0], "GET / HTTP") != NULL ||
-               strstr(tokens[1], "GET / HTTP") != NULL ||
-			   strstr(tokens[2], "GET / HTTP") != NULL ||
-               strstr(tokens[3], "GET / HTTP") != NULL) {
+           // Check for "GET / HTTP" in tokens[1]
+           if ( strstr(tokens[1], "GET / HTTP") != NULL ) {
                webpage_ptr = webpage_3().str;
                webpage_size = webpage_3().size;
                tm_setstep(26);
            }
            // Check for "Button%201" or "Button%202" in tokens[1]
-           else if (strstr(tokens[1], "Button%201")) {
+           else if ( strstr(tokens[1], "Button%201") ) {
                // Implement device ON functionality here
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
                gpioc()->clear_hpins(1 << 13);
                tm_setstep(26);
            }
-           else if (strstr(tokens[1], "Button%202")) {
+           else if ( strstr(tokens[1], "Button%202") ) {
                // Implement device OFF functionality here
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
