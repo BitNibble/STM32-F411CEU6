@@ -16,27 +16,30 @@ Comment:
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /*** SUB Tools ***/
-uint32_t size_to_block(uint32_t size_block){
-	return (uint32_t)((1U << size_block) - 1);
+uint32_t size_to_block(uint32_t size_block) {
+    return (size_block < 32) ? ((1U << size_block) - 1) : 0xFFFFFFFFU;
 }
 uint32_t block_to_size(uint32_t block) {
     uint32_t size_block = 0;
     for (; block; block >>= 1, size_block++);
     return size_block;
 }
-uint32_t get_Msk(uint32_t size_block, uint32_t Pos){
+uint32_t get_Msk(uint32_t size_block, uint32_t Pos) {
 	return size_to_block(size_block) << Pos;
 }
-uint32_t get_Pos(uint32_t size_block, uint32_t block_n){
+uint32_t get_Pos(uint32_t size_block, uint32_t block_n) {
 	return size_block * block_n;
 }
-uint32_t Msk_Pos(uint32_t Msk){
+uint32_t Msk_Pos(uint32_t Msk) {
 	uint32_t Pos = ZERO;
 	if( Msk ){
 		for( ; !(Msk & 1); Msk >>= 1, Pos++ );
 	}
 	return Pos;
 }
+//uint32_t Msk_Pos(uint32_t Msk) {
+//    return Msk ? __builtin_ctz(Msk) : 0;
+//}
 /*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
@@ -46,47 +49,61 @@ inline void clear_reg(volatile uint32_t* reg, uint32_t hbits){
 }
 inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk)
 {
-	reg = (reg & Msk) >> Msk_Pos(Msk);
-	return reg;
+    return Msk ? ((reg & Msk) >> Msk_Pos(Msk)) : 0;
 }
 inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
-	uint32_t value = *reg;
-	uint32_t Pos = Msk_Pos(Msk);
-	data = (data << Pos) & Msk; value &= ~(Msk); value |= data; *reg = value;
+    uint32_t value = *reg;
+    uint32_t Pos = Msk_Pos(Msk);
+    data = (data << Pos) & Msk;  // Align data and apply mask
+    value &= ~Msk;               // Clear target field
+    value |= data;                // Set new value
+    *reg = value;                 // Write back to register
 }
 inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
-	uint32_t Pos = Msk_Pos(Msk);
-	data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
+    uint32_t Pos = Msk_Pos(Msk);
+    data = (data << Pos) & Msk;  // Align data and apply mask
+    *reg &= ~Msk;                // Clear masked bits
+    *reg |= data;                 // Set new value
 }
-uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
+inline uint32_t get_reg_block_n(uint32_t reg, uint8_t size_block, uint8_t block_n)
 {
-	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
-		uint32_t Msk = get_Msk(size_block, bit_n);
-		reg = (reg & Msk) >> bit_n;
-	}
-	return reg;
+    if (size_block == 0) return 0;  // Prevents undefined shifts
+    uint32_t Pos = get_Pos(size_block, block_n);
+    if (Pos >= DWORD_BITS || (Pos + size_block) > DWORD_BITS)
+        return 0;  // Ensures we do not exceed the bit range
+    uint32_t Msk = get_Msk(size_block, Pos);
+    return (reg & Msk) >> Pos;
 }
-void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+inline uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
-	uint32_t value = *reg;
-	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
-		uint32_t block = size_to_block(size_block);
-		data &= block; value &= ~(block << bit_n);
-		data = (data << bit_n);
-		value |= data;
-		*reg = value;
-	}
+    if (size_block == 0) return 0;  // Prevent undefined shifts
+    if (bit_n >= DWORD_BITS || (bit_n + size_block) > DWORD_BITS)
+        return 0;  // Prevent out-of-bounds access
+    uint32_t Msk = get_Msk(size_block, bit_n);
+    return (reg & Msk) >> bit_n;
 }
-void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+inline void write_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
 {
-	if(bit_n < DWORD_BITS && size_block != 0 && bit_n + size_block <= DWORD_BITS) {
-		uint32_t block = size_to_block(size_block);
-		data &= block;
-		*reg &= ~(block << bit_n);
-		*reg |= (data << bit_n);
-	}
+    if (size_block == 0) return;  // Prevent undefined shifts
+    if (bit_n >= DWORD_BITS || (bit_n + size_block) > DWORD_BITS) return;  // Prevent out-of-bounds access
+    uint32_t block = size_to_block(size_block);
+    data &= block;  // Mask data to ensure only the relevant bits are kept
+    uint32_t value = *reg;
+    value &= ~(block << bit_n);  // Clear the target bits
+    data <<= bit_n;  // Align data to the target bit position
+    value |= data;  // Set the target bits
+    *reg = value;  // Write back to the register
+}
+inline void set_reg_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n, uint32_t data)
+{
+    if (size_block == 0) return;  // Prevent undefined shifts
+    if (bit_n >= DWORD_BITS || (bit_n + size_block) > DWORD_BITS) return;  // Prevent out-of-bounds access
+    uint32_t block = size_to_block(size_block);
+    data &= block;  // Mask the data to ensure only relevant bits are kept
+    *reg &= ~(block << bit_n);  // Clear the target bits in the register
+    *reg |= (data << bit_n);  // Set the target bits with the data
 }
 uint32_t get_bit_block(volatile uint32_t* reg, uint8_t size_block, uint8_t bit_n)
 {

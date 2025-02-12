@@ -19,6 +19,11 @@ unsigned int ftCounter[FTDELAY_SIZE] = {0};
 uint32_t size_to_block(uint32_t size_block){
 	return (uint32_t)((1U << size_block) - 1);
 }
+uint32_t block_to_size(uint32_t block) {
+    uint32_t size_block = 0;
+    for (; block; block >>= 1, size_block++);
+    return size_block;
+}
 uint32_t get_Msk(uint32_t size_block, uint32_t Pos){
 	return size_to_block(size_block) << Pos;
 }
@@ -54,15 +59,6 @@ inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
 	uint32_t Pos = Msk_Pos(Msk);
 	data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
-}
-uint32_t get_reg_block_n(uint32_t reg, uint8_t size_block, uint8_t block_n)
-{
-	uint32_t Pos = get_Pos(size_block, block_n);
-	if(Pos < DWORD_BITS && size_block != 0 && Pos + size_block <= DWORD_BITS) {
-		uint32_t Msk = get_Msk(size_block, Pos);
-		reg = (reg & Msk) >> Pos;
-	}
-	return reg;
 }
 uint32_t get_reg_block(uint32_t reg, uint8_t size_block, uint8_t bit_n)
 {
