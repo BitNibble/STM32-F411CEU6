@@ -153,7 +153,7 @@ int main(void)
                }
            }
            // Check for "GET / HTTP" in tokens[1]
-           if ( strstr(tokens[1], "GET / HTTP") != NULL ) {
+           if ( strstr(tokens[0], "GET / HTTP") != NULL || strstr(tokens[1], "GET / HTTP") != NULL ) {
                webpage_ptr = webpage_3().str;
                webpage_size = webpage_3().size;
                tm_setstep(26);

@@ -11,15 +11,13 @@ Comment:
 #include "stm32fxxxinstance.h"
 #include <stdarg.h>
 #include <math.h>
-
 /*** Define and Macro ***/
 #define FTDELAY_SIZE 256
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
-
-/*** Tools ***/
+/*** SUB Tools ***/
 uint32_t size_to_block(uint32_t size_block){
-	return ((1U << size_block) - 1);
+	return (uint32_t)((1U << size_block) - 1);
 }
 uint32_t get_Msk(uint32_t size_block, uint32_t Pos){
 	return size_to_block(size_block) << Pos;
@@ -27,13 +25,14 @@ uint32_t get_Msk(uint32_t size_block, uint32_t Pos){
 uint32_t get_Pos(uint32_t size_block, uint32_t block_n){
 	return size_block * block_n;
 }
-uint8_t Msk_Pos(uint32_t Msk){
-	uint8_t Pos = ZERO;
+uint32_t Msk_Pos(uint32_t Msk){
+	uint32_t Pos = ZERO;
 	if( Msk ){
 		for( ; !(Msk & 1); Msk >>= 1, Pos++ );
 	}
 	return Pos;
 }
+/*** Tools ***/
 inline void set_reg(volatile uint32_t* reg, uint32_t hbits){
 	*reg |= hbits;
 }
@@ -48,12 +47,12 @@ inline uint32_t get_reg_Msk(uint32_t reg, uint32_t Msk)
 inline void write_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
 	uint32_t value = *reg;
-	uint8_t Pos = Msk_Pos(Msk);
+	uint32_t Pos = Msk_Pos(Msk);
 	data = (data << Pos) & Msk; value &= ~(Msk); value |= data; *reg = value;
 }
 inline void set_reg_Msk(volatile uint32_t* reg, uint32_t Msk, uint32_t data)
 {
-	uint8_t Pos = Msk_Pos(Msk);
+	uint32_t Pos = Msk_Pos(Msk);
 	data = (data << Pos) & Msk; *reg &= ~(Msk); *reg |= data;
 }
 uint32_t get_reg_block_n(uint32_t reg, uint8_t size_block, uint8_t block_n)
