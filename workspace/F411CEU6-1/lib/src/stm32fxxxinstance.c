@@ -17,11 +17,11 @@ unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
 /*** SUB Tools ***/
 uint32_t size_to_block(uint32_t size_block){
-	return (uint32_t)((1U << size_block) - 1);
+	return ((1U << size_block) - 1);
 }
 uint32_t block_to_size(uint32_t block) {
     uint32_t size_block = 0;
-    for (; block; block >>= 1, size_block++);
+    for ( ; block; block >>= 1, size_block++);
     return size_block;
 }
 uint32_t get_Msk(uint32_t size_block, uint32_t Pos){
