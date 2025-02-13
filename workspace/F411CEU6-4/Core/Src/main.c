@@ -151,8 +151,15 @@ int main(void)
                    break;
                }
            }
+           for (int i = 0; i < 4; i++) {
+        	   sprintf(connectStr, "+IPD,%d", i);
+        	   if (strstr(tokens[0], connectStr)) {
+        		   link_ID = i;
+        		   break;
+        	   }
+           }
            // Check for "GET / HTTP" in tokens[1]
-           if ( strstr(tokens[1], "GET / HTTP") ) {
+           if ( strstr(tokens[0], "GET / HTTP") || strstr(tokens[1], "GET / HTTP") ) {
                webpage_ptr = webpage_3().str;
                webpage_size = webpage_3().size;
                tm_setstep(26);
