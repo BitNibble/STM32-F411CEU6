@@ -57,17 +57,11 @@ Par ("192.168.1.53", "192.168.1.1", "255.255.255.0"), PORT 80.
 #define MAX_TOKENS 10
 #define BUFF_SIZE 513
 #define MAIN_BAUD 38400
+#define PARSE_SIZE 2049
+#define SUBPARSE_SIZE 513
 
 EXPLODE PA;
-char ADC_msg[32];
 char str[32];
-
-char oneshot[BUFF_SIZE] = {0};
-char received[BUFF_SIZE] = {0};
-const uint32_t buff_size = (BUFF_SIZE - ONE);
-char* string = received;
-char parse[2049] = {0};
-char sub_parse[513] = {0};
 
 void setup_usart1(void);
 
@@ -103,6 +97,11 @@ int main(void)
     size_t webpage_size = 0;
     uint8_t link_ID = 0;
 
+    char parse[PARSE_SIZE] = {0};
+    const uint32_t parse_size = PARSE_SIZE - 1;
+    char sub_parse[SUBPARSE_SIZE] = {0};
+    const uint32_t subparse_size = SUBPARSE_SIZE - 1;
+
     const char unit = (char)0xDF;
     char *tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
     char *sub_tokens[MAX_TOKENS] = {NULL}; // Array of pointers to hold token addresses
@@ -132,9 +131,9 @@ int main(void)
 
         /*** Magic ***/
         if( !isCharPtrFlush(usart1()->rxbuff) && usart1()->is_rx_idle() ){
-        		strncpy( parse, usart1()->rxbuff, 2048 );
+        		strncpy( parse, usart1()->rxbuff, parse_size );
         		func()->tokenize_string( parse, tokens, MAX_TOKENS, "\r\n" );
-        		strncpy( sub_parse, tokens[0], 512 ); // 0
+        		strncpy( sub_parse, tokens[0], subparse_size ); // 0
         		func()->tokenize_string( sub_parse, sub_tokens, MAX_TOKENS, ",:" );
         		usart1()->rx_purge();
         }
