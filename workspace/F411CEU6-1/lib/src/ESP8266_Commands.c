@@ -74,7 +74,6 @@ const char* esp8266_cmd_set1ui82s2ui161ui8par(const char* cmd, uint8_t par1, con
 const char* esp8266_cmd_1ui16par(const char* cmd, uint16_t par1);
 const char* esp8266_cmd_1ui81ui16par(const char* cmd, uint8_t par1, uint16_t par2);
 void tm_atpurge( void );
-void tm_tc_timeout( uint32_t tc_timeout );
 void tm_delaystep( uint32_t tm_delay );
 /************************************************/
 /******************** TOOLS *********************/
@@ -923,17 +922,6 @@ void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
 		tm_par[DELAY]--;
 	}
 }
-void tm_tc_timeout( uint32_t tc_timeout ) {
-	if( tm_par[FEEDBACK] != TM_LOCKED ) {
-		tm_par[FEEDBACK] = TM_LOCKED;
-		tm_par[DELAY] = tc_timeout; // timeout
-	}else if( !tm_par[DELAY] ) {
-		tm_par[FEEDBACK] = TM_OPEN;
-	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
-		tm_par[DELAY]--;
-	}
-}
 void tm_delay( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ) {
 		tm_par[FEEDBACK] = TM_LOCKED;
@@ -941,6 +929,7 @@ void tm_delay( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN;
 	}else {
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -951,6 +940,7 @@ void tm_delaystep( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
 	}else {
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -989,7 +979,7 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	while( tm_par[STEP] < 12 ){
 		switch( tm_par[STEP] ) {
 			case 1:
-				tm_tc_timeout( 100 );
+				tm_delay( 100 );
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 3; // 3
@@ -1007,12 +997,11 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 4; // 4
 			break;
 			case 5:
-				//tm_delaystep( 0 ); // 0
-				tm_setstep(6); // 11
-			break;
-			case 6:
 				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
 				i_connect = 0; // 0
+			break;
+			case 6:
+				tm_setstep(11); // 11
 			break;
 			case 7:
 				tm_step( esp8266_cmd_querywmode(), 3000 ); // 3000
