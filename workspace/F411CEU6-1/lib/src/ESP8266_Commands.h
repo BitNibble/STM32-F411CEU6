@@ -136,10 +136,9 @@ void tm_setstep( uint32_t tm_step );
 void tm_jumpstep( uint32_t from, uint32_t to );
 void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* password );
 void Turingi12to16_Wifi_Setting( void );
-void Turingi17to22_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
-void Turingi23to25_Station_Mux1Server( void );
-void Turingi26to30_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
-void Turingi31to35_Station_Mux1Servereceive_tcp( uint8_t link_ID, const char * send, size_t size );
+void Turingi17to21_Station_Mux0ClientSend_tcp( const char* server, const char * send, size_t size );
+void Turingi22to24_Station_Mux1Server( void );
+void Turingi25to28_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * send, size_t size );
 void Turingi500to505_Machine( void );
 
 #endif

@@ -55,7 +55,6 @@ Par ("192.168.1.53", "192.168.1.1", "255.255.255.0"), PORT 80.
 #define STEP_DELAY 300
 #define MAIN_MENU_DELAY 600
 #define MAX_TOKENS 10
-#define BUFF_SIZE 513
 #define MAIN_BAUD 38400
 #define PARSE_SIZE 2049
 #define SUBPARSE_SIZE 513
@@ -122,11 +121,13 @@ int main(void)
     gpioc()->instance->BSRR = GPIO_BSRR_BS13;
 
     Turingi1to11_Wifi_Connect(1, "NOS-9C64", "RUSXRCKL" ); // wmode 1 and 3
-    tm_jumpstep( 0, 23 );
+    tm_jumpstep( 0, 22 );
 /*****************************************************************************/
 /*****************************************************************************/
     while (ONE)  // Infinite loop
     {
+    	Turingi22to24_Station_Mux1Server( );
+
         PA.update(&PA.par, gpioa()->instance->IDR);
 
         /*** Magic ***/
@@ -162,7 +163,7 @@ int main(void)
            if ( strstr(tokens[0], "GET / HTTP") || strstr(tokens[1], "GET / HTTP") ) {
                webpage_ptr = webpage_3().str;
                webpage_size = webpage_3().size;
-               tm_setstep(26);
+               tm_setstep(25);
            }
            // Check for "Button%201" or "Button%202" in tokens[1]
            else if ( strstr(tokens[1], "Button%201") ) {
@@ -170,20 +171,18 @@ int main(void)
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
                gpioc()->clear_hpins(1 << 13);
-               tm_setstep(26);
+               tm_setstep(25);
            }
            else if ( strstr(tokens[1], "Button%202") ) {
                // Implement device OFF functionality here
                webpage_ptr = webpage_200().str;
                webpage_size = webpage_200().size;
                gpioc()->set_hpins(1 << 13);
-               tm_setstep(26);
+               tm_setstep(25);
            }
        }
 
-        Turingi23to25_Station_Mux1Server( );
-
-        Turingi26to30_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
+        Turingi25to28_Station_Mux1ServerSend_tcp( link_ID, (const char*)webpage_ptr , webpage_size ); // link_ID
 
         switch (Menu.nibble.n0) {
 
