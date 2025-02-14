@@ -895,7 +895,7 @@ void tm_delay( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN;
 	}else {
-		//if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -906,7 +906,7 @@ void tm_delaystep( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
 	}else {
-		//if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -945,7 +945,7 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	while( tm_par[STEP] < 12 ){
 		switch( tm_par[STEP] ) {
 			case 1:
-				tm_delay( 100 ); // 100
+				tm_delay(100);
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 3; // 3
