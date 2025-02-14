@@ -151,13 +151,11 @@ int main(void)
                    link_ID = i;
                    break;
                }
-           }
-           for (int i = 0; i < 4; i++) {
-        	   sprintf(connectStr, "+IPD,%d", i);
-        	   if (strstr(tokens[0], connectStr)) {
-        		   link_ID = i;
-        		   break;
-        	   }
+               sprintf(connectStr, "+IPD,%d", i);
+               if (strstr(tokens[0], connectStr)) {
+            	   link_ID = i;
+            	   break;
+               }
            }
            // Check for "GET / HTTP" in tokens[1]
            if ( strstr(tokens[0], "GET / HTTP") || strstr(tokens[1], "GET / HTTP") ) {
