@@ -997,11 +997,11 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 4; // 4
 			break;
 			case 5:
-				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
-				i_connect = 0; // 0
+				tm_setstep(11); // 11
 			break;
 			case 6:
-				tm_setstep(11); // 11
+				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
+				i_connect = 0; // 0
 			break;
 			case 7:
 				tm_step( esp8266_cmd_querywmode(), 3000 ); // 3000
