@@ -40,7 +40,42 @@ static uint32_t tm_par[3] = {TM_OPEN,1,0};
 
 static unsigned int tm_func_id = 0;
 volatile unsigned int test_counter = 0;
-
+/****** Local ***/
+// EXECUTE
+const char* esp8266_cmd_execute(const char* cmd);
+// QUERY
+const char* esp8266_cmd_query(const char* cmd);
+// QUERY PAR
+const char* esp8266_cmd_querypar(const char* cmd);
+// SET
+const char* esp8266_cmd_set1spar(const char* cmd, const char* par1);
+const char* esp8266_cmd_set1ui8par(const char* cmd, uint8_t par1);
+const char* esp8266_cmd_set1ui16par(const char* cmd, uint16_t par1);
+const char* esp8266_cmd_set1ui81ui16par(const char* cmd, uint8_t par1, uint16_t par2);
+const char* esp8266_cmd_set2spar(const char* cmd, const char* par1, const char* par2);
+const char* esp8266_cmd_set2s1ui8par(const char* cmd, const char* par1, const char* par2, uint8_t par3);
+const char* esp8266_cmd_set2s2ui8par(const char* cmd, const char* par1, const char* par2, uint8_t par3, uint8_t par4);
+const char* esp8266_cmd_set2ui82spar(const char* cmd, uint8_t par1, uint8_t par2, const char* par3, const char* par4);
+const char* esp8266_cmd_set2ui8par(const char* cmd, uint8_t par1, uint8_t par2);
+const char* esp8266_cmd_set1s1ui16par(const char* cmd, const char* par1, uint16_t par2);
+const char* esp8266_cmd_set3spar(const char* cmd, const char* par1, const char* par2, const char* par3);
+const char* esp8266_cmd_set2s1ui16par(const char* cmd, const char* par1, const char* par2, uint16_t par3);
+const char* esp8266_cmd_set3ui8par(const char* cmd, uint8_t par1, uint8_t par2, uint8_t par3);
+const char* esp8266_cmd_set4spar(const char* cmd, const char* par1, const char* par2, const char* par3, const char* par4);
+const char* esp8266_cmd_set1ui81s1ui161spar(const char* cmd, uint8_t par1, const char* par2, uint16_t par3, const char* par4);
+const char* esp8266_cmd_set1ui81ui161s1ui16par(const char* cmd, uint8_t par1, uint16_t par2, const char* par3, uint16_t par4);
+const char* esp8266_cmd_set1ui82s1ui16par(const char* cmd, uint8_t par1, const char* par2, const char* par3, uint16_t par4);
+const char* esp8266_cmd_set5spar(const char* cmd, const char* par1, const char* par2, const char* par3, const char* par4, const char* par5);
+const char* esp8266_cmd_set1ui81s1ui161s1ui16par(const char* cmd, uint8_t par1, const char* par2, uint16_t par3, const char* par4, uint16_t par5);
+const char* esp8266_cmd_set2s2ui161ui8par(const char* cmd, const char* par1, const char* par2, uint16_t par3, uint16_t par4, uint8_t par5);
+const char* esp8266_cmd_set1ui324ui8par(const char* cmd, unsigned int par1, uint8_t par2, uint8_t par3, uint8_t par4, uint8_t par5);
+const char* esp8266_cmd_set6spar(const char* cmd, const char* par1, const char* par2, const char* par3, const char* par4, const char* par5, const char* par6);
+const char* esp8266_cmd_set1ui82s2ui161ui8par(const char* cmd, uint8_t par1, const char* par2, const char* par3, uint16_t par4, uint16_t par5, uint8_t par6);
+const char* esp8266_cmd_1ui16par(const char* cmd, uint16_t par1);
+const char* esp8266_cmd_1ui81ui16par(const char* cmd, uint8_t par1, uint16_t par2);
+void tm_atpurge( void );
+void tm_tc_timeout( uint32_t tc_timeout );
+void tm_delaystep( uint32_t tm_delay );
 /************************************************/
 /******************** TOOLS *********************/
 /************************************************/
@@ -888,6 +923,17 @@ void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
 		tm_par[DELAY]--;
 	}
 }
+void tm_tc_timeout( uint32_t tc_timeout ) {
+	if( tm_par[FEEDBACK] != TM_LOCKED ) {
+		tm_par[FEEDBACK] = TM_LOCKED;
+		tm_par[DELAY] = tc_timeout; // timeout
+	}else if( !tm_par[DELAY] ) {
+		tm_par[FEEDBACK] = TM_OPEN;
+	}else {
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		tm_par[DELAY]--;
+	}
+}
 void tm_delay( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ) {
 		tm_par[FEEDBACK] = TM_LOCKED;
@@ -895,7 +941,6 @@ void tm_delay( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -906,7 +951,6 @@ void tm_delaystep( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -945,7 +989,7 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	while( tm_par[STEP] < 12 ){
 		switch( tm_par[STEP] ) {
 			case 1:
-				tm_delay(100);
+				tm_tc_timeout( 100 );
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 3; // 3

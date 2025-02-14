@@ -15,6 +15,12 @@ Comment:
 #define FTDELAY_SIZE 256
 unsigned int ft_Delay_Lock[FTDELAY_SIZE] = {0};
 unsigned int ftCounter[FTDELAY_SIZE] = {0};
+/*** Local ***/
+uint32_t size_to_block(uint32_t size_block);
+uint32_t block_to_size(uint32_t block);
+uint32_t get_Msk(uint32_t size_block, uint32_t Pos);
+uint32_t get_Pos(uint32_t size_block, uint32_t block_n);
+uint32_t Msk_Pos(uint32_t Msk);
 /*** SUB Tools ***/
 uint32_t size_to_block(uint32_t size_block){
 	return ((1U << size_block) - 1);
