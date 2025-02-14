@@ -41,13 +41,9 @@ static uint32_t tm_par[3] = {TM_OPEN,1,0};
 static unsigned int tm_func_id = 0;
 volatile unsigned int test_counter = 0;
 /****** Local ***/
-// EXECUTE
 const char* esp8266_cmd_execute(const char* cmd);
-// QUERY
 const char* esp8266_cmd_query(const char* cmd);
-// QUERY PAR
 const char* esp8266_cmd_querypar(const char* cmd);
-// SET
 const char* esp8266_cmd_set1spar(const char* cmd, const char* par1);
 const char* esp8266_cmd_set1ui8par(const char* cmd, uint8_t par1);
 const char* esp8266_cmd_set1ui16par(const char* cmd, uint16_t par1);
@@ -74,6 +70,7 @@ const char* esp8266_cmd_set1ui82s2ui161ui8par(const char* cmd, uint8_t par1, con
 const char* esp8266_cmd_1ui16par(const char* cmd, uint16_t par1);
 const char* esp8266_cmd_1ui81ui16par(const char* cmd, uint8_t par1, uint16_t par2);
 void tm_atpurge( void );
+void tm_tx_complete( uint32_t tm_timeout );
 void tm_delaystep( uint32_t tm_delay );
 /************************************************/
 /******************** TOOLS *********************/
@@ -922,6 +919,17 @@ void tm_step( const char* tm_cmd, uint32_t tm_delay ) {
 		tm_par[DELAY]--;
 	}
 }
+void tm_tx_complete( uint32_t tm_timeout ) {
+	if( tm_par[FEEDBACK] != TM_LOCKED ) {
+		tm_par[FEEDBACK] = TM_LOCKED;
+		tm_par[DELAY] = tm_timeout; // wait com
+	}else if( !tm_par[DELAY] ) {
+		tm_par[FEEDBACK] = TM_OPEN;
+	}else {
+		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		tm_par[DELAY]--;
+	}
+}
 void tm_delay( uint32_t tm_delay ) {
 	if( tm_par[FEEDBACK] != TM_LOCKED ) {
 		tm_par[FEEDBACK] = TM_LOCKED;
@@ -929,7 +937,6 @@ void tm_delay( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -940,7 +947,6 @@ void tm_delaystep( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -979,7 +985,7 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	while( tm_par[STEP] < 12 ){
 		switch( tm_par[STEP] ) {
 			case 1:
-				tm_delay( 100 );
+				tm_tx_complete( 100 );
 				tm_step( esp8266_cmd_setuart_def( TM_BAUD, 8, 1, 0, 0), 3000 );
 				//tm_step( esp8266_cmd_version(), 2400 );
 				i_connect = 3; // 3
@@ -1000,6 +1006,8 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				tm_setstep(11); // 11
 			break;
 			case 6:
+				// This should only be executed once, since it is stored in memory, maybe a query should be done before executing,
+				// to filter out duplicate calls.
 				tm_step( esp8266_cmd_setwjap_cur( ssid, password ), 14000 ); // 14000
 				i_connect = 0; // 0
 			break;
@@ -1083,7 +1091,7 @@ void Turingi17to21_Station_Mux0ClientSend_tcp( const char* server, const char * 
 			if( server != NULL ) {
 				tm_step( esp8266_cmd_muxipstart_tcp(server, PORT_NUMBER), 900 ); // 900
 			}else
-				tm_setstep( 21 ); // ##  22 do not change!  ##
+				tm_setstep( 21 ); // ##  21 do not change!  ##
 		break;
 		case 18:
 			if( size > 0 ) {
@@ -1129,14 +1137,14 @@ void Turingi25to28_Station_Mux1ServerSend_tcp( uint8_t link_ID, const char * sen
 			if( link_ID < 4 && size > 0 )
 				tm_step( esp8266_cmd_mux1ipsend_tcp( link_ID, size ), 300 ); // 300
 			else
-				tm_setstep( 28 ); // ##  30 do not change!  ##
+				tm_setstep( 28 ); // ##  28 do not change!  ##
 		break;
 		case 26:
 			// Transmit data
 			if(send != NULL){
 				tm_step( send, 600 ); // 300
 			}else
-				tm_setstep( 27 ); // ##  29 do not change!  ##
+				tm_setstep( 27 ); // ##  27 do not change!  ##
 		break;
 		case 27:
 			tm_step( esp8266_cmd_multipclose( link_ID ), 20 ); // 20

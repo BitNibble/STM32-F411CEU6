@@ -144,7 +144,7 @@ int main(void)
 
        if (!tm_getstep()) { // avoid simultaneous calls
            /*** IPD || CONNECT ***/
-    	   char connectStr[10];
+    	   char connectStr[12];
            for (int i = 0; i < 4; i++) {
                sprintf(connectStr, "%d,CONNECT", i);
                if (strstr(tokens[0], connectStr)) {
