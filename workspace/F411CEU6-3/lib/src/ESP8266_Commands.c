@@ -895,7 +895,7 @@ void tm_delay( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		//if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
@@ -906,7 +906,7 @@ void tm_delaystep( uint32_t tm_delay ) {
 	}else if( !tm_par[DELAY] ) {
 		tm_par[FEEDBACK] = TM_OPEN; tm_par[STEP]++;
 	}else {
-		if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
+		//if( usart1()->is_tx_complete() ) tm_par[DELAY] = 1;
 		tm_par[DELAY]--;
 	}
 }
