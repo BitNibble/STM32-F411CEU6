@@ -17,7 +17,7 @@ Comment:
 #include <inttypes.h>
 #include "armlcd.h"
 /*** Global Define & Macro ***/
-#define FUNCSTRSIZE 32
+#define FUNCSTRSIZE 33
 /*** Typedef ***/
 typedef struct {
     unsigned int Numerator;   // The numerator of the fraction

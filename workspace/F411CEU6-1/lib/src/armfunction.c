@@ -24,7 +24,6 @@ Comment:
 #include <stdarg.h>
 #include <math.h>
 
-#define MAX_FUNCSTR_LEN (FUNCSTRSIZE + 1)
 #define SUCCESS 0
 #define ERROR_BUFFER_OVERFLOW 1
 #define ERROR_FORMATTING 2
@@ -34,7 +33,9 @@ Comment:
 static FUNC setup_func;
 static ARM_FUNC setup_arm_func;
 
-static char FUNCstr[MAX_FUNCSTR_LEN];
+
+static char FUNCstr[FUNCSTRSIZE] = {0};
+const uint32_t funcstrsize = FUNCSTRSIZE - 1;
 static uint32_t mem[4];
 static uint32_t nen[4];
 static char* function_token_default = ":";
@@ -166,7 +167,6 @@ FUNC* func(void){ return &setup_func; }
 
 void FUNC_var(void)
 {
-	FUNCstr[FUNCSTRSIZE] = '\0';
 	mem[0] = 0; nen[0] = 0;
 }
 ARM_FUNC* arm_func_inic(void)

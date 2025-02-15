@@ -34,7 +34,6 @@ Comment:
 // Static buffer for command strings
 static char ESP8266AT[ESP8266AT_BUFF_SIZE] = {0};
 const uint32_t esp8266at_buff_size = (ESP8266AT_BUFF_SIZE - 1);
-
 // Turing parameters
 static uint32_t tm_par[3] = {TM_OPEN,1,0};
 
@@ -974,7 +973,6 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 	tm_par[STEP] = 1; tm_par[DELAY] = 0;
 	unsigned int fastboot = 1;
 	char str[ESP8266AT_BUFF_SIZE] = {0};
-	const size_t str_size = ESP8266AT_BUFF_SIZE - 1;
 	uint8_t i_connect = 0;
 	if( mode == 1 || mode == 3 ) { // Filter par
 		mode &= 0x03;
@@ -1034,11 +1032,11 @@ void Turingi1to11_Wifi_Connect( uint8_t mode, const char* ssid, const char* pass
 				i_connect = 0; // 0
 			break;
 		}
-		usart1()->receive_rxstring( str, str_size, "\r\n" );
+		usart1()->receive_rxstring( str, esp8266at_buff_size, "\r\n" );
 		lcd0()->gotoxy( 0, 0 );
 		lcd0()->string_size( str + i_connect, 20 );
 		if( strstr( str, "OK" ) != NULL && fastboot){
-			memset(str,0,str_size); tm_par[FEEDBACK] = TM_OPEN; tm_par[DELAY] = 0; tm_par[STEP]++;
+			memset(str,0,esp8266at_buff_size); tm_par[FEEDBACK] = TM_OPEN; tm_par[DELAY] = 0; tm_par[STEP]++;
 		}
 	}
 	tm_atpurge();
