@@ -9,39 +9,37 @@ Comment:
 	Pin Analysis
 	Tested Atemga128 16Mhz and Atmega328 8Mhz and STM32F446RE
 ********************************************************************/
-/*** File Library ***/
 #include "explode.h"
 
-/*** File Header ***/
 void EXPLODE_update(explode_parameter* par, IO_var x);
 IO_var EXPLODEhh(explode_parameter* par);
 IO_var EXPLODEll(explode_parameter* par);
 IO_var EXPLODElh(explode_parameter* par);
 IO_var EXPLODEhl(explode_parameter* par);
 explode_parameter explode_par_inic(void);
-
-/*** EXPLODE Auxilar ***/
-explode_parameter explode_par_inic(void)
-{
-	explode_parameter setup_explode_par;
-
-	setup_explode_par.XI = 0;
-	setup_explode_par.XF = 0;
-
-	return setup_explode_par;
-}
 /*** EXPLODE Procedure & Function Definition ***/
 EXPLODE EXPLODE_enable( void )
 {
-	// struct object
+	// Dummy
 	EXPLODE setup_explode;
-
-	// inic VAR
 	setup_explode.par = explode_par_inic();
-	// function pointers
 	setup_explode.update = EXPLODE_update;
-
+	// Control Copy
 	return setup_explode;
+}
+/*** Auxilar ***/
+explode_parameter explode_par_inic(void)
+{
+	// Dummy
+	explode_parameter setup_explode_par;
+	setup_explode_par.XI = 0;
+	setup_explode_par.XF = 0;
+	setup_explode_par.HH = 0;
+	setup_explode_par.LL = 0;
+	setup_explode_par.LH = 0;
+	setup_explode_par.HL = 0;
+	// Dummy Copy
+	return setup_explode_par;
 }
 // boot
 void EXPLODE_update(explode_parameter* par, IO_var x)
@@ -66,19 +64,12 @@ IO_var EXPLODEll(explode_parameter* par)
 // lh
 IO_var EXPLODElh(explode_parameter* par)
 {
-	IO_var i;
-	i = par->XI ^ par->XF;
-	i &= par->XF;
-	return i;
+	return ((par->XI ^ par->XF) & par->XF);
 }
 // hl
 IO_var EXPLODEhl(explode_parameter* par)
 {
-	IO_var i;
-	i = par->XF ^ par->XI;
-	i &= par->XI;
-	return i;
+	return ((par->XF ^ par->XI) & par->XI);
 }
-
 /***EOF***/
 
