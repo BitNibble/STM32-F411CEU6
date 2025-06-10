@@ -13,16 +13,17 @@ Comment:
 #include "74hc595.h"
 
 /*** File Header ***/
-void HC595_shift_bit(hc595_parameter* par, uint8_t bool);
-void HC595_shift_ibyte(hc595_parameter* par, uint8_t byte);
-void HC595_shift_byte(hc595_parameter* par, uint8_t byte);
-void HC595_shift_out(hc595_parameter* par);
-hc595_parameter hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin);
+hc595_par* HC595_par(hc595_par* par);
+void HC595_shift_bit(hc595_par* par, uint8_t bool);
+void HC595_shift_ibyte(hc595_par* par, uint8_t byte);
+void HC595_shift_byte(hc595_par* par, uint8_t byte);
+void HC595_shift_out(hc595_par* par);
+hc595_par hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin);
 
 /*** 74HC595 Auxiliar ***/
-hc595_parameter hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin)
+hc595_par hc595_par_inic(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin, uint8_t clkpin, uint8_t outpin)
 {
-	hc595_parameter setup_hc595_par;
+	hc595_par setup_hc595_par;
 
 	setup_hc595_par.hc595_DDR = ddr;
 	setup_hc595_par.hc595_PORT = port;
@@ -47,6 +48,7 @@ HC595 HC595_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin,
 	HC595 setup_hc595;
 
 	setup_hc595.par = hc595_par_inic(ddr, port, datapin, clkpin, outpin);
+	setup_hc595.parameter = HC595_par;
 	// Direccionar apontadores para PROTOTIPOS
 	setup_hc595.bit = HC595_shift_bit;
 	setup_hc595.ibyte = HC595_shift_ibyte;
@@ -56,7 +58,12 @@ HC595 HC595_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin,
 	return setup_hc595;
 }
 
-void HC595_shift_bit(hc595_parameter* par, uint8_t bool)
+hc595_par* HC595_par(hc595_par* par)
+{
+		return par;
+}
+
+void HC595_shift_bit(hc595_par* par, uint8_t bool)
 {
 	if (bool)
 		*par->hc595_PORT |= (1 << par->HC595_datapin); // Data bit HIGH
@@ -66,7 +73,7 @@ void HC595_shift_bit(hc595_parameter* par, uint8_t bool)
 	*par->hc595_PORT &= ~(1 << par->HC595_clkpin); //Shift disable
 }
 
-void HC595_shift_ibyte(hc595_parameter* par, uint8_t byte)
+void HC595_shift_ibyte(hc595_par* par, uint8_t byte)
 {
 	uint8_t i;
 	for(i = 0; i < 8; i++)
@@ -74,7 +81,7 @@ void HC595_shift_ibyte(hc595_parameter* par, uint8_t byte)
 	HC595_shift_out(par);
 }
 
-void HC595_shift_byte(hc595_parameter* par, uint8_t byte)
+void HC595_shift_byte(hc595_par* par, uint8_t byte)
 {
 	uint8_t i;
 	for(i = 0; i < 8; i++)
@@ -82,7 +89,7 @@ void HC595_shift_byte(hc595_parameter* par, uint8_t byte)
 	HC595_shift_out(par);
 }
 
-void HC595_shift_out(hc595_parameter* par)
+void HC595_shift_out(hc595_par* par)
 {
 	*par->hc595_PORT |= (1 << par->HC595_outpin); // Output enable
 	*par->hc595_PORT &= ~(1 << par->HC595_outpin); // Output disable

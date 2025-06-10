@@ -29,11 +29,12 @@ typedef struct {
 	IO_var LL;
 	IO_var LH;
 	IO_var HL;
-}explode_parameter;
+}explode_par;
 
 typedef struct {
-	explode_parameter par;
-	void (*update)(explode_parameter* par, IO_var x);
+	explode_par par;
+	explode_par* (*parameter)(explode_par* par);
+	void (*update)(explode_par* par, IO_var x);
 }EXPLODE;
 
 EXPLODE EXPLODE_enable(void);
