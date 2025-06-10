@@ -33,7 +33,6 @@ typedef struct {
 
 typedef struct {
 	explode_par par;
-	explode_par* (*parameter)(explode_par* par);
 	void (*update)(explode_par* par, IO_var x);
 }EXPLODE;
 
