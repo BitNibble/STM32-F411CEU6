@@ -13,7 +13,6 @@ Comment:
 #include "74hc595.h"
 
 /*** File Header ***/
-hc595_par* HC595_par(hc595_par* par);
 void HC595_shift_bit(hc595_par* par, uint8_t bool);
 void HC595_shift_ibyte(hc595_par* par, uint8_t byte);
 void HC595_shift_byte(hc595_par* par, uint8_t byte);
@@ -48,7 +47,6 @@ HC595 HC595_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin,
 	HC595 setup_hc595;
 
 	setup_hc595.par = hc595_par_inic(ddr, port, datapin, clkpin, outpin);
-	setup_hc595.parameter = HC595_par;
 	// Direccionar apontadores para PROTOTIPOS
 	setup_hc595.bit = HC595_shift_bit;
 	setup_hc595.ibyte = HC595_shift_ibyte;
@@ -56,11 +54,6 @@ HC595 HC595_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t datapin,
 	setup_hc595.out = HC595_shift_out;
 	
 	return setup_hc595;
-}
-
-hc595_par* HC595_par(hc595_par* par)
-{
-		return par;
 }
 
 void HC595_shift_bit(hc595_par* par, uint8_t bool)

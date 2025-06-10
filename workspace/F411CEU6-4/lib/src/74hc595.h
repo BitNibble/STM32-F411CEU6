@@ -32,7 +32,6 @@ typedef struct{
 typedef struct
 {
 	hc595_par par;
-	hc595_par* (*parameter)(hc595_par* par);
 	/******/
 	void (*bit)(hc595_par* par, uint8_t bool);
 	void (*ibyte)(hc595_par* par, uint8_t byte);
