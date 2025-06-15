@@ -1,8 +1,7 @@
 /********************************************************************
 	EXPLODE
-Author: Sergio Santos
-	<sergio.salazar.santos@gmail.com> 
-License: GNU General Public License
+Author: <sergio.salazar.santos@gmail.com>
+License: Free beer
 Hardware: all
 Date: 16032021
 Comment:
@@ -16,30 +15,29 @@ IO_var EXPLODEhh(explode_par* par);
 IO_var EXPLODEll(explode_par* par);
 IO_var EXPLODElh(explode_par* par);
 IO_var EXPLODEhl(explode_par* par);
-explode_par explode_par_inic(void);
+explode_par setup_explode_par(void);
+
 /*** EXPLODE Procedure & Function Definition ***/
 EXPLODE EXPLODE_enable( void )
 {
-	// Dummy
-	EXPLODE setup_explode;
-	setup_explode.par = explode_par_inic();
-	setup_explode.update = EXPLODE_update;
-	// Control Copy
-	return setup_explode;
+	EXPLODE setup = {
+		.par = setup_explode_par(),
+		.update = EXPLODE_update
+	};
+	return setup;
 }
 /*** Auxilar ***/
-explode_par explode_par_inic(void)
+explode_par setup_explode_par(void)
 {
-	// Dummy
-	explode_par setup_explode_par;
-	setup_explode_par.XI = 0;
-	setup_explode_par.XF = 0;
-	setup_explode_par.HH = 0;
-	setup_explode_par.LL = 0;
-	setup_explode_par.LH = 0;
-	setup_explode_par.HL = 0;
-	// Dummy Copy
-	return setup_explode_par;
+	explode_par setup = {
+		.XI = 0,
+		.XF = 0,
+		.HH = 0,
+		.LL = 0,
+		.LH = 0,
+		.HL = 0
+	};
+	return setup;
 }
 // boot
 void EXPLODE_update(explode_par* par, IO_var x)
