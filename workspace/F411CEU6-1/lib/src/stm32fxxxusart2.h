@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX USART2
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 24022024
+Date:     24022024
 Comment:
 	
 *******************************************************************************/

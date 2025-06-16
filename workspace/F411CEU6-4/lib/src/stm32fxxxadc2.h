@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX ADC2
-Author: Sergio Santos
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 28022024
+Date:     28022024
 Comment:
 	
 *******************************************************************************/

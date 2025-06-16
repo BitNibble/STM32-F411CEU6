@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 FXXX RCC
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-FXXX
-Date: 07032024
+Date:     07032024
 Comment:
 	
 *******************************************************************************/

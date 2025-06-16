@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX I2C
-Author: Sergio Manuel Santos
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 04102024
+Date:     04102024
 Comment:
 
 *******************************************************************************/

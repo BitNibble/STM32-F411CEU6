@@ -1,10 +1,9 @@
 /*************************************************************************
 	ARMLCD
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32F4
-Date: 28052023
+Date:     28052023
 Comment:
 	STM32F446RE || STM32F411CEU6
 ************************************************************************/

@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX TIM 9 to 14
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 22062023
+Date:     22062023
 Comment:
 	
 *******************************************************************************/

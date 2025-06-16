@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX TIM IRQ
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 08102024
+Date:     08102024
 Comment:
 	
 *******************************************************************************/

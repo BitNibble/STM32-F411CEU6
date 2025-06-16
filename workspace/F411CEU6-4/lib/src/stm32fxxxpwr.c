@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX PWR
-Author: Sergio Santos
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 19062023
+Date:     19062023
 Comment:
 	
 *******************************************************************************/

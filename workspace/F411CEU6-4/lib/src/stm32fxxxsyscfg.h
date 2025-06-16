@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX SYSCFG
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 23062023
+Date:     23062023
 Comment:
 	
 *******************************************************************************/

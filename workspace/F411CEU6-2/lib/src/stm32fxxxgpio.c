@@ -1,11 +1,10 @@
 /******************************************************************************
 	STM32 XXX GPIO
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Date: 19/06/2023
-Update: 28/02/2024
+Date:     19/06/2023
+Update:   28/02/2024
 Comment:
 	File Vars, File Function Header, Library Function Definitions.
 	

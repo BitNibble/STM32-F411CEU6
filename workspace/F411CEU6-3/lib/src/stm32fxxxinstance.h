@@ -1,10 +1,9 @@
 /***************************************************
 	STM32FXXX INSTANCE
-Author: Sergio Manuel Santos
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32FXXX
-Update: 07/01/2024
+Update:   07/01/2024
 Comment:
 (root)		MAIN HEADER FILE!
 ****************************************************/

@@ -1,10 +1,9 @@
 /******************************************************************************
 	STM32 XXX systick
-Author: Sergio Santos 
-	<sergio.salazar.santos@gmail.com>
-License: GNU General Public License
+Author:   <sergio.salazar.santos@gmail.com>
+License:  GNU General Public License
 Hardware: STM32-XXX
-Update: 16012024
+Update:   16012024
 Comment:
 	
 *******************************************************************************/
