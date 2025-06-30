@@ -37,6 +37,7 @@ Par ("192.168.1.53", "192.168.1.1", "255.255.255.0"), PORT 80.
 #include "stm32fxxxrtc.h"
 #include "stm32fxxxadc1.h"
 #include "stm32fxxxusart1.h"
+#include "stm32fxxxtim1and8.h"
 /******/
 #include "BT_Commands.h"
 #include "ESP8266_Commands.h"
@@ -455,5 +456,6 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
 }
+
 #endif
 
