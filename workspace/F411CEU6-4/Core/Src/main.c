@@ -75,7 +75,7 @@ int main(void)
 
     rtc_enable();
     adc1_enable();
-    gpioa_enable(); // button k0 gpioa0
+    gpioa()->clock(ON);
     gpiob_enable(); // lcd0
     gpioc_enable(); // gpioc13
 

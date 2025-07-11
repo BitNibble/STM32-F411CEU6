@@ -494,17 +494,13 @@ int function_format_string(char *buffer, size_t size, const char *format, ...) {
     va_start(args, format);
 
     // Use vsnprintf to format the string and get the number of characters that would be written
-    int written = vsnprintf(buffer, size, format, args);
+    int written = vsnprintf(buffer, (size - 1), format, args);
 
     va_end(args);
 
     // Check for errors
-    if (written < 0) {
+    if (written < 0)
         return ERROR_FORMATTING; // Formatting error
-    } else if ((size_t)written >= size) {
-        buffer[size - 1] = '\0'; // Ensure null-termination
-        return ERROR_BUFFER_OVERFLOW; // Buffer was too small
-    }
 
     return SUCCESS; // Successful formatting
 }
@@ -647,7 +643,7 @@ char* function_ftoa(double num, unsigned int decimal)
 	}
 	return FUNCstr;
 }
-/******/
+
 long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max) {
     // Check for valid input range to prevent division by zero
     if (in_max == in_min) {
@@ -699,7 +695,7 @@ long function_gcd_v2(long a, long b) {
 
     return b; // Return the GCD
 }
-/******/
+
 int function_StrToInt(const char string[]) {
     int i = 0;
     int result = 0;
@@ -733,7 +729,7 @@ int function_StrToInt(const char string[]) {
 
     return isNegative ? -result : result;
 }
-/********************************************************************/
+
 // Function to convert a signed integer to a string
 void int_to_string(int value, char* buffer, size_t buffer_size) {
     if (buffer_size > 0) {
@@ -804,7 +800,7 @@ void function_nullify_last_n_chars(char *str, int n) {
     }
 }
 
-/******/
+
 // triggerA
 uint32_t function_triggerA(uint32_t ll_io, uint8_t pin, uint32_t counter)
 {
@@ -860,7 +856,7 @@ uint32_t function_triggerB(uint32_t hl_io, uint32_t lh_io, uint8_t pin, uint32_t
 }
 
 uint32_t function_read_value(void){ return mem[2];}
-/*** Not Used ***/
+
 unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 {
 	unsigned int diff;
@@ -878,6 +874,7 @@ uint8_t function_leap_year_check(uint16_t year) {
     else i = 0;
     return i;  // Added return statement
 }
+
 /***EOF***/
 
 /******

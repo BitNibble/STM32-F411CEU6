@@ -72,7 +72,6 @@ int main(void)
 	rcc_start();
 	systick_start();
 	rtc_enable();
-	gpioa_enable();
 	gpiob_enable();
 	gpioc_enable();
 	tim1_enable();

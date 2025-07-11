@@ -42,7 +42,7 @@ typedef struct
  STM32FXXX_GPIOD, STM32FXXX_GPIOE, STM32FXXX_GPIOF, \
  STM32FXXX_GPIOG, STM32FXXX_GPIOH;
 // INIC
-void gpioa_enable(void); STM32FXXX_GPIOA* gpioa(void);
+STM32FXXX_GPIOA* gpioa(void);
 void gpiob_enable(void); STM32FXXX_GPIOB* gpiob(void);
 void gpioc_enable(void); STM32FXXX_GPIOC* gpioc(void);
 void gpiod_enable(void); STM32FXXX_GPIOD* gpiod(void);

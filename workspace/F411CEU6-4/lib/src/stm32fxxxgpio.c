@@ -14,7 +14,7 @@ Comment:
 #include <math.h>
 
 /*** File Variables ***/
-static STM32FXXX_GPIOA stm32fxxx_gpioa = {0};
+//static STM32FXXX_GPIOA stm32fxxx_gpioa = {0};
 static STM32FXXX_GPIOB stm32fxxx_gpiob = {0};
 static STM32FXXX_GPIOC stm32fxxx_gpioc = {0};
 static STM32FXXX_GPIOD stm32fxxx_gpiod = {0};
@@ -24,8 +24,8 @@ static STM32FXXX_GPIOE stm32fxxx_gpioe = {0};
 	static STM32FXXX_GPIOG stm32fxxx_gpiog = {0};
 	static STM32FXXX_GPIOH stm32fxxx_gpioh = {0};
 #endif
-/*** GPIO Procedure & Function Definition ***/
-/*** GPIOA ***/
+
+/*** GPIOA Procedure & Function Definition ***/
 void GPIOA_clock(uint8_t enable)
 {
     if (enable) {
@@ -48,6 +48,7 @@ void GPIOA_moder( uint8_t pin, uint8_t mode )
 void GPIOA_otype(uint8_t pin, uint8_t otype)
 {
     if(pin < WORD_BITS && otype < TWO){
+    	GPIOA->OTYPER &= ~(1 << pin);
     	GPIOA->OTYPER |= ( otype << pin );
     }
 }
@@ -111,6 +112,24 @@ void GPIOA_af(uint8_t pin, uint8_t af)
     	}
 	}
 }
+
+/*** HANDLER ***/
+static STM32FXXX_GPIOA stm32fxxx_gpioa = {
+    /*** GPIOA TypeDef ***/
+	.instance = GPIOA,
+    // V-table
+    .clock = GPIOA_clock,
+    .moder = GPIOA_moder,
+    .otype = GPIOA_otype,
+    .ospeed = GPIOA_ospeed,
+    .pupd = GPIOA_pupd,
+    .set_hpins = GPIOA_set_hpins,
+    .clear_hpins = GPIOA_clear_hpins,
+    .lck = GPIOA_lck,
+    .af = GPIOA_af
+};
+
+STM32FXXX_GPIOA* gpioa(void) { return &stm32fxxx_gpioa; }
 
 /*** GPIOB ***/
 void GPIOB_clock(uint8_t enable)
@@ -720,29 +739,6 @@ void GPIOH_af(uint8_t pin, uint8_t af)
 	}
 }
 #endif
-/*** Initialization Procedures & Function Definitions ***/
-void gpioa_enable(void)
-{
-	/*** Enable Clock ***/
-	GPIOA_clock(ON);
-    /*** GPIOA TypeDef ***/
-	stm32fxxx_gpioa.instance = GPIOA;
-    /*** GPIOA RCC Clock Enable ***/
-    stm32fxxx_gpioa.clock = GPIOA_clock;
-	/*** Procedures ***/
-	/*** Other ***/
-    stm32fxxx_gpioa.moder = GPIOA_moder;
-    stm32fxxx_gpioa.otype = GPIOA_otype;
-    stm32fxxx_gpioa.ospeed = GPIOA_ospeed;
-    stm32fxxx_gpioa.pupd = GPIOA_pupd;
-    stm32fxxx_gpioa.set_hpins = GPIOA_set_hpins;
-    stm32fxxx_gpioa.clear_hpins = GPIOA_clear_hpins;
-    stm32fxxx_gpioa.lck = GPIOA_lck;
-    stm32fxxx_gpioa.af = GPIOA_af;
-    //return &stm32fxxx_gpioa;
-}
-
-STM32FXXX_GPIOA* gpioa(void) { return &stm32fxxx_gpioa; }
 
 void gpiob_enable(void)
 {
