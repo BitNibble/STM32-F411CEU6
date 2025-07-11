@@ -419,7 +419,7 @@ int main(void)
 }
 
 void setup_usart1(void){
-	usart1_enable();
+	usart1()->clock(ON);
 
 	// Set PA9 and PA10 to alternate function mode
 	gpioa()->moder(9,MODE_AF); gpioa()->moder(10,MODE_AF);

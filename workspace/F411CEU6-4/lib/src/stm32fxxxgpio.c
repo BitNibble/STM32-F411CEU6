@@ -154,6 +154,7 @@ void GPIOB_moder( uint8_t pin, uint8_t mode )
 void GPIOB_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOB->OTYPER &= ~(1 << pin);
 		GPIOB->OTYPER |= ( otype << pin );
 	}
 }
@@ -240,6 +241,7 @@ void GPIOC_moder( uint8_t pin, uint8_t mode )
 void GPIOC_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOC->OTYPER &= ~(1 << pin);
     	GPIOC->OTYPER |= ( otype << pin );
 	}
 }
@@ -327,6 +329,7 @@ void GPIOD_moder( uint8_t pin, uint8_t mode )
 void GPIOD_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOD->OTYPER &= ~(1 << pin);
 		GPIOD->OTYPER |= ( otype << pin );
 	}
 }
@@ -413,6 +416,7 @@ void GPIOE_moder( uint8_t pin, uint8_t mode )
 void GPIOE_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOE->OTYPER &= ~(1 << pin);
 		GPIOE->OTYPER |= ( otype << pin );
 	}
 }
@@ -501,6 +505,7 @@ void GPIOF_moder( uint8_t pin, uint8_t mode )
 void GPIOF_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOF->OTYPER &= ~(1 << pin);
 		GPIOF->OTYPER |= ( otype << pin );
 	}
 }
@@ -588,6 +593,7 @@ void GPIOG_moder( uint8_t pin, uint8_t mode )
 void GPIOG_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOG->OTYPER &= ~(1 << pin);
 		GPIOG->OTYPER |= ( otype << pin );
 	}
 }
@@ -675,6 +681,7 @@ void GPIOH_moder( uint8_t pin, uint8_t mode )
 void GPIOH_otype(uint8_t pin, uint8_t otype)
 {
 	if(pin < WORD_BITS && otype < TWO){
+		GPIOH->OTYPER &= ~(1 << pin);
 		GPIOH->OTYPER |= ( otype << pin );
 	}
 }

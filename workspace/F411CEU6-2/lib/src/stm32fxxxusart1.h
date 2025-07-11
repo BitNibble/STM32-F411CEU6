@@ -45,9 +45,20 @@ typedef struct
 	void (*receive_rxstring)(char* rx, size_t size, const char* endl);
 	void (*start)(void);
 	void (*stop)(void);
+	// CALLBACK
+	void (*callback_cts)(void);
+	void (*callback_lbd)(void);
+	void (*callback_txe)(void);
+	void (*callback_tc)(void);
+	void (*callback_rxne)(void);
+	void (*callback_idle)(void);
+	void (*callback_ore)(void);
+	void (*callback_ne)(void);
+	void (*callback_fe)(void);
+	void (*callback_pe)(void);
 }STM32FXXX_USART1;
 
-void usart1_enable(void); STM32FXXX_USART1*  usart1(void);
+STM32FXXX_USART1*  usart1(void);
 
 #endif
 
