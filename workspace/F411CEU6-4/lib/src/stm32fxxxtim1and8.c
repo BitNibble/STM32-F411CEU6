@@ -12,8 +12,8 @@ Comment:
 #include "stm32fxxxnvic.h"
 
 /*** File Variables ***/
-static STM32FXXX_TIM1 stm32fxxx_tim1 = {0};
 static STM32FXXX_TIM8 stm32fxxx_tim8 = {0};
+
 /************/
 /*** TIM1 ***/
 /************/
@@ -141,22 +141,14 @@ void TIM8_stop(void) {
 #endif
 
 /*** TIM1 INIC Procedure & Function Definition ***/
-void tim1_enable(void)
-{
-	TIM1_Clock(ON);
-	/*** TIM1 Bit Field ***/
-	stm32fxxx_tim1.instance = TIM1;
-	// CLOCK
-	stm32fxxx_tim1.clock = TIM1_Clock;
-	// NVIC
-	stm32fxxx_tim1.nvic = TIM1_Nvic;
-	/*** Procedures ***/
-	/*** Other ***/
-	stm32fxxx_tim1.start = TIM1_start;
-	stm32fxxx_tim1.stop = TIM1_stop;
-
-	//return &stm32fxxx_tim1;
-}
+static STM32FXXX_TIM1 stm32fxxx_tim1 = {
+	.reg = TIM1,
+	.clock = TIM1_Clock,
+	.nvic = TIM1_Nvic,
+	.start = TIM1_start,
+	.stop = TIM1_stop,
+	.callback = {0}
+};
 
 STM32FXXX_TIM1* tim1(void){ return (STM32FXXX_TIM1*) &stm32fxxx_tim1;}
 
@@ -165,7 +157,8 @@ void tim8_enable(void)
 {
 	#ifdef STM32F446xx
 		TIM8_Clock(ON);
-		stm32fxxx_tim8.instance = TIM8;
+		tim8_callback callback = {0};
+		stm32fxxx_tim8.reg = TIM8;
 		// CLOCK
 		stm32fxxx_tim8.clock = TIM8_Clock;
 		// NVIC

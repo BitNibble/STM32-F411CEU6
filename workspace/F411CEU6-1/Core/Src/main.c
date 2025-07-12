@@ -37,7 +37,7 @@ int main(void)
 	rtc_enable(); // Real Time Clock
 	gpiob_enable(); // LCD display 4x20
 	gpioc_enable(); // Gpioc13
-	tim1_enable(); // Blink led at uie (4)
+	tim1()->clock(ON); // Blink led at uie (4)
 
 	rtc()->inic(1);
 
@@ -48,8 +48,8 @@ int main(void)
 
 	GPIOC->MODER |= GPIO_MODER_MODER13_0;
 
-	tim1()->instance->ARR = 0xFFFF;
-	tim1()->instance->PSC = 100;
+	tim1()->reg->ARR = 0xFFFF;
+	tim1()->reg->PSC = 100;
 	tim1()->nvic(4);
 	tim1()->start();
 

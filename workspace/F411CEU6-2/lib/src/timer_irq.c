@@ -13,14 +13,6 @@ Comment:
 #include "stm32fxxxinstance.h"
 
 /*** Default Callback Implementations ***/
-void tim1_b_callback(void) {}
-void tim1_u_callback(void) {}
-void tim1_t_callback(void) {}
-void tim1_cc1_callback(void) {}
-void tim1_cc2_callback(void) {}
-void tim1_cc3_callback(void) {}
-void tim1_cc4_callback(void) {}
-
 void tim2_b_callback(void) {}
 void tim2_u_callback(void) {}
 void tim2_t_callback(void) {}
@@ -86,8 +78,8 @@ void tim14_t_callback(void) {}
 /*** Timer IRQ Handlers ***/
 void TIM1_BRK_TIM9_IRQHandler(void) {
     if (TIM1->SR & TIM_SR_BIF) {
-        tim1_b_callback();
         TIM1->SR &= ~TIM_SR_BIF;
+        if(tim1()->callback.b){ tim1()->callback.b(); }
     }
     if (TIM9->SR & TIM_SR_UIF) {
         tim9_u_callback();
@@ -97,8 +89,8 @@ void TIM1_BRK_TIM9_IRQHandler(void) {
 
 void TIM1_UP_TIM10_IRQHandler(void) {
     if (TIM1->SR & TIM_SR_UIF) {
-        tim1_u_callback();
         TIM1->SR &= ~TIM_SR_UIF;
+        if(tim1()->callback.u){ tim1()->callback.u(); }
     }
     if (TIM10->SR & TIM_SR_UIF) {
         tim10_u_callback();
@@ -108,8 +100,8 @@ void TIM1_UP_TIM10_IRQHandler(void) {
 
 void TIM1_TRG_COM_TIM11_IRQHandler(void) {
     if (TIM1->SR & TIM_SR_TIF) {
-        tim1_t_callback();
         TIM1->SR &= ~TIM_SR_TIF;
+        if(tim1()->callback.t){ tim1()->callback.t(); }
     }
     if (TIM11->SR & TIM_SR_UIF) {
         tim11_u_callback();
@@ -119,20 +111,20 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void) {
 
 void TIM1_CC_IRQHandler(void) {
     if (TIM1->SR & TIM_SR_CC1IF) {
-        tim1_cc1_callback();
         TIM1->SR &= ~TIM_SR_CC1IF;
+        if(tim1()->callback.cc1){ tim1()->callback.cc1(); }
     }
     if (TIM1->SR & TIM_SR_CC2IF) {
-        tim1_cc2_callback();
         TIM1->SR &= ~TIM_SR_CC2IF;
+        if(tim1()->callback.cc2){ tim1()->callback.cc2(); }
     }
     if (TIM1->SR & TIM_SR_CC3IF) {
-        tim1_cc3_callback();
         TIM1->SR &= ~TIM_SR_CC3IF;
+        if(tim1()->callback.cc3){ tim1()->callback.cc3(); }
     }
     if (TIM1->SR & TIM_SR_CC4IF) {
-        tim1_cc4_callback();
         TIM1->SR &= ~TIM_SR_CC4IF;
+        if(tim1()->callback.cc4){ tim1()->callback.cc4(); }
     }
 }
 

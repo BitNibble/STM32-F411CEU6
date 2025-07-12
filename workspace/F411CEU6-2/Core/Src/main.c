@@ -74,7 +74,7 @@ int main(void)
 	rtc_enable();
 	gpiob_enable();
 	gpioc_enable();
-	tim1_enable();
+	tim1()->clock(ON);
 
 	rtc()->inic(1);
 

@@ -16,16 +16,24 @@ Comment:
 /*************************/
 /*** TIMER1and8 TypeDef***/
 /*************************/
+typedef struct{
+	void (*b)(void);
+	void (*u)(void);
+	void (*t)(void);
+	void (*cc1)(void);
+	void (*cc2)(void);
+	void (*cc3)(void);
+	void (*cc4)(void);
+} tim1and8_callback;
+
 typedef struct
 {
-	/*** Bit Field ***/
-	TIM_TypeDef* instance;
-	/*** Clock and Nvic ***/
+	TIM_TypeDef* reg;
 	void (*clock)(uint8_t state);
 	void (*nvic)(uint8_t value);
-	/*** Other ***/
 	void (*start)(void);
 	void (*stop)(void);
+	tim1and8_callback callback;
 }STM32FXXX_TIM1, STM32FXXX_TIM8;
 
 void tim1_enable(void); STM32FXXX_TIM1* tim1(void);
